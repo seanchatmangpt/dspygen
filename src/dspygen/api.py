@@ -22,3 +22,9 @@ def startup_event() -> None:
 def read_root() -> str:
     """Read root."""
     return "Hello world"
+
+
+# Define endpoint
+@app.get("/pingpong")
+def ping_pong():
+    return {"message": "pong"}

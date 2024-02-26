@@ -2,11 +2,7 @@ import dspy
 from typer import Typer
 
 
-app = Typer()
-
-
-lm = dspy.OpenAI(max_tokens=500)
-dspy.settings.configure(lm=lm)        
+app = Typer(help="Create React JSX source code.")
 
 
 class PromptReactJsxModule(dspy.Module):
@@ -19,6 +15,9 @@ class PromptReactJsxModule(dspy.Module):
 
 
 def main():
+    lm = dspy.OpenAI(max_tokens=500)
+    dspy.settings.configure(lm=lm)
+
     prompt = "Hello World Functional Component"
 
     prompt_react_jsx = PromptReactJsxModule()
