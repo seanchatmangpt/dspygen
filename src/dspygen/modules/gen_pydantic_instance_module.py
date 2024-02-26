@@ -145,10 +145,10 @@ class GenPydanticInstance(dspy.Module):
         return self.forward(prompt=prompt)
 
 
-def gen_pydantic_instance_call(prompt, root_model, child_model=None):
+def gen_pydantic_instance_call(prompt, root_model, child_models=None):
     model_module = GenPydanticInstance(
         root_model=root_model,
-        child_models=child_model
+        child_models=child_models
     )
     model_inst = model_module(prompt)
     return model_inst

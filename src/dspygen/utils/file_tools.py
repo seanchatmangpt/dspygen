@@ -211,6 +211,10 @@ def dspy_modules_dir() -> Path:
     return source_dir() / "modules"
 
 
+def signatures_dir() -> Path:
+    return source_dir() / "signatures"
+
+
 def main():
     print(subcommands_dir())
 
