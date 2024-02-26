@@ -1,0 +1,32 @@
+{
+  "template": "https://github.com/radix-ai/poetry-cookiecutter",
+  "commit": "59ba8784203b4ce01622a98c41ae37489fa22b2f",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "package_name": "dspygen",
+      "package_description": "A Ruby on Rails style framework for the DSPy (Demonstrate, Search, Predict) project for Language Models like GPT, BERT, and LLama.",
+      "package_url": "https://github.com/user/my-package",
+      "author_name": "Sean Chatman",
+      "author_email": "info@chatmangpt.com",
+      "python_version": "3.10",
+      "docker_image": "python:$PYTHON_VERSION-slim",
+      "development_environment": "simple",
+      "with_conventional_commits": "0",
+      "with_fastapi_api": "1",
+      "with_jupyter_lab": "1",
+      "with_pydantic_typing": "1",
+      "with_sentry_logging": "0",
+      "with_streamlit_app": "1",
+      "with_typer_cli": "1",
+      "continuous_integration": "GitHub",
+      "docstring_style": "Google",
+      "private_package_repository_name": "",
+      "private_package_repository_url": "",
+      "__package_name_kebab_case": "dspygen",
+      "__package_name_snake_case": "dspygen",
+      "_template": "https://github.com/radix-ai/poetry-cookiecutter"
+    }
+  },
+  "directory": null
+}

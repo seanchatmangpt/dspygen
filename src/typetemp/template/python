@@ -1,0 +1,1 @@
+hello world -m smart_template --hygen-vars {"hello": "world"} --to my-project/readme.md --from- shared/docs/readme.md --force --unless-exists --inject --after devDependencies --skip-if myPackage --sh echo 'Hello this is a shell command!''''
