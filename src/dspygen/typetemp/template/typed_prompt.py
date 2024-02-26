@@ -1,7 +1,7 @@
 from typing import Union
 
-from typetemp.template.render_mixin import RenderMixin
-from utils.complete import create
+from dspygen.typetemp.template.render_mixin import RenderMixin
+from dspygen.utils.complete import create
 
 
 class TypedPrompt(RenderMixin):

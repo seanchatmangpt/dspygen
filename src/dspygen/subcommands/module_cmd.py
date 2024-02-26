@@ -4,12 +4,9 @@ from importlib import import_module
 import os
 
 import typer
-from pydantic import BaseModel, Field
 
 from dspygen.modules.gen_dspy_module import gen_dspy_module_call
-from dspygen.modules.gen_pydantic_instance_module import gen_pydantic_instance_call
 from dspygen.modules.file_name_module import file_name_call
-from typetemp.functional import render
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.utils.file_tools import dspy_modules_dir, source_dir
 

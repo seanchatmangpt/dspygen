@@ -7,9 +7,9 @@ from textwrap import dedent
 import typer
 
 from dspygen.async_typer import AsyncTyper
-from typetemp.template.async_render_mixin import AsyncRenderMixin
-from utils.complete import LLMConfig
-from utils.file_tools import write
+from dspygen.typetemp.template.async_render_mixin import AsyncRenderMixin
+from dspygen.utils.complete import LLMConfig
+from dspygen.utils.file_tools import write
 
 app = AsyncTyper()
 

@@ -5,7 +5,7 @@ from typer import Typer
 from dspygen.modules.gen_pydantic_instance_module import gen_pydantic_instance_call
 from dspygen.modules.source_code_pep8_docs_module import source_code_docs_call
 from dspygen.utils.dspy_tools import init_dspy
-from typetemp.functional import render
+from dspygen.typetemp.functional import render
 
 app = Typer()
 

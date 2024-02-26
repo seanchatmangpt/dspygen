@@ -1,8 +1,8 @@
 from jinja2 import FileSystemLoader
 from jinja2.nativetypes import NativeEnvironment
 
-from typetemp.extension.faker_extension import FakerExtension
-from typetemp.extension.inflection_extension import InflectionExtension
+from dspygen.typetemp.extension.faker_extension import FakerExtension
+from dspygen.typetemp.extension.inflection_extension import InflectionExtension
 
 
 class TypedNativeEnvironment(NativeEnvironment):

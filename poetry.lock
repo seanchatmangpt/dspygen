@@ -1383,6 +1383,25 @@ docs = ["Sphinx", "furo"]
 test = ["objgraph", "psutil"]
 
 [[package]]
+name = "groq"
+version = "0.4.1"
+description = "The official Python library for the groq API"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "groq-0.4.1-py3-none-any.whl", hash = "sha256:2939ff96e3fc633416e5d9ab26bbfd63c70b2226338a507f8c2b0b3aa27c9dec"},
+    {file = "groq-0.4.1.tar.gz", hash = "sha256:f2285c0a7d64abefcdec3d61e8bc1a61ff04d887ed30b991ac7fe53ae1e10251"},
+]
+
+[package.dependencies]
+anyio = ">=3.5.0,<5"
+distro = ">=1.7.0,<2"
+httpx = ">=0.23.0,<1"
+pydantic = ">=1.9.0,<3"
+sniffio = "*"
+typing-extensions = ">=4.7,<5"
+
+[[package]]
 name = "gunicorn"
 version = "21.2.0"
 description = "WSGI HTTP Server for UNIX"
@@ -5265,4 +5284,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "4bdc172b18ea1bae17308051c3848966ece2709966feeee8e5b0df318c0c85d6"
+content-hash = "b4495d13cabe3f7b92ba0953c4a0b12567cc859ac59cf3c2aec84cad8561b978"

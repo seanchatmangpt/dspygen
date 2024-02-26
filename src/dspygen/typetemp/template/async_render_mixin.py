@@ -2,11 +2,11 @@ from typing import Any
 
 import anyio
 
-from typetemp.environment.typed_environment import async_environment
-from typetemp.environment.typed_native_environment import async_native_environment
-from typetemp.template.render_funcs import arender_str
-from utils.complete import acreate
-from utils.file_tools import write
+from dspygen.typetemp.environment.typed_environment import async_environment
+from dspygen.typetemp.environment.typed_native_environment import async_native_environment
+from dspygen.typetemp.template.render_funcs import arender_str
+from dspygen.utils.complete import acreate
+from dspygen.utils.file_tools import write
 
 
 class AsyncRenderMixin:

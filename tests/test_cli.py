@@ -7,9 +7,12 @@ from dspygen.cli import app
 runner = CliRunner()
 
 
-def test_say() -> None:
+def test_init() -> None:
     """Test that the say command works as expected."""
-    message = "Hello world"
-    result = runner.invoke(app, ["--message", message])
+    result = runner.invoke(app, ["init", "hello-world-project"])
     assert result.exit_code == 0
-    assert message in result.stdout
+
+def test_bad_init() -> None:
+    """Test that the say command works as expected."""
+    result = runner.invoke(app, ["init"])
+    assert result.exit_code == 2

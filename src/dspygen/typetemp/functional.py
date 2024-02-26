@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
-from typetemp.environment.typed_environment import environment
-from typetemp.environment.typed_native_environment import native_environment
+from dspygen.typetemp.environment.typed_environment import environment
+from dspygen.typetemp.environment.typed_native_environment import native_environment
 
 _env = environment
 _native_env = native_environment

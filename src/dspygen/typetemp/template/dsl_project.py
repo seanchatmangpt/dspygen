@@ -5,7 +5,7 @@ from typing import Optional
 
 import yaml
 
-from typetemp.template.typed_prompt import TypedPrompt
+from dspygen.typetemp.template.typed_prompt import TypedPrompt
 
 
 @dataclass

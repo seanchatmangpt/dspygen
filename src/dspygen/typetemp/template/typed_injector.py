@@ -3,7 +3,7 @@ import os
 import re
 from dataclasses import is_dataclass
 
-from typetemp.environment.typed_environment import environment
+from dspygen.typetemp.environment.typed_environment import environment
 
 
 class TypedInjector:

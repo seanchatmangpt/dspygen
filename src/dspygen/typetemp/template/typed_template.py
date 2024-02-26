@@ -1,4 +1,4 @@
-from typetemp.template.render_mixin import RenderMixin
+from dspygen.typetemp.template.render_mixin import RenderMixin
 
 
 class TypedTemplate(RenderMixin):

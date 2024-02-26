@@ -6,13 +6,11 @@ from textwrap import dedent
 from typing import Optional
 
 import loguru
-from icontract import ensure, require
 
-from typetemp.template.typed_template import TypedTemplate
-from utils.complete import achat, create
-from utils.file_tools import write
-from utils.models import get_model
-from utils.radon_workbench import fix_code
+from dspygen.typetemp.template.typed_template import TypedTemplate
+from dspygen.utils.complete import achat, create
+from dspygen.utils.file_tools import write
+from dspygen.utils.models import get_model
 
 create_jinja_template = """
 Objective:
@@ -440,8 +438,6 @@ def create_tailwind_landing(
             f.write(markup)
 
 
-@require(lambda prompt: isinstance(prompt, str))
-@require(lambda cls: issubclass(cls, object))
 def create_data(
     prompt: str, cls: type, model: Optional[str] = None, max_tokens: int = 2000
 ) -> dict:
@@ -497,9 +493,6 @@ def create_data(
         return json.loads("{" + corrected_result.replace("\n", ""))
 
 
-@require(lambda prompt: isinstance(prompt, str))
-@require(lambda cabal: isinstance(cabal, Callable))
-@ensure(lambda result: isinstance(result, dict))
 def create_kwargs(prompt: str, cabal: Callable) -> dict:
     """Create a dict of data from a prompt that can be passed to the given class as kwargs"""
     instructions = dedent(
@@ -630,7 +623,7 @@ The name is: """
     cls_code = f"""from pydantic import BaseModel\n\n
     class {class_name}(BaseModel):\n{result}"""
 
-    cls_code = fix_code(cls_code)
+    # cls_code = fix_code(cls_code)
 
     if file_path:
         write(contents=cls_code, filename=file_path)

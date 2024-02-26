@@ -2,7 +2,7 @@ from pathlib import Path
 
 import typer
 
-from typetemp.functional import render
+from dspygen.typetemp.functional import render
 
 app = typer.Typer(help="""Generate new sub commands or add to existing ones.""")
 

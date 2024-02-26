@@ -3,9 +3,9 @@ from ast import parse
 from dataclasses import dataclass
 from typing import Optional
 
-from typetemp.environment.typed_environment import TypedEnvironment
-from typetemp.environment.typed_native_environment import TypedNativeEnvironment
-from typetemp.template.render_mixin import RenderMixin
+from dspygen.typetemp.environment.typed_environment import TypedEnvironment
+from dspygen.typetemp.environment.typed_native_environment import TypedNativeEnvironment
+from dspygen.typetemp.template.render_mixin import RenderMixin
 
 _env = TypedEnvironment()
 _native_env = TypedNativeEnvironment()
