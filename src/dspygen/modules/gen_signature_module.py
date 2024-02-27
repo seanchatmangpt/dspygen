@@ -8,7 +8,7 @@ from dspygen.modules.signature_renderer import generate_signature_from_prompt
 from dspygen.utils.dspy_tools import init_dspy
 
 
-app = Typer()        
+app = Typer()
 
 
 class GenSignatureModule(dspy.Module):
@@ -27,7 +27,7 @@ def gen_signature_call(signature):
 def call(signature):
     """GenSignatureModule"""
     init_dspy()
-    
+
     print(gen_signature_call(signature))
 
 

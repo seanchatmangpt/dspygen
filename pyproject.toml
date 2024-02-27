@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]  # https://python-poetry.org/docs/pyproject/
 name = "dspygen"
-version = "2024.2.26"
+version = "2024.2.27"
 description = "A Ruby on Rails style framework for the DSPy (Demonstrate, Search, Predict) project for Language Models like GPT, BERT, and LLama."
 authors = ["Sean Chatman <info@chatmangpt.com>"]
 readme = "README.md"

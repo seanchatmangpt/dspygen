@@ -219,5 +219,5 @@ def main():
     print(subcommands_dir())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -81,7 +81,11 @@ def add_command(sub_command_name: str, new_command_name: str):
 
     # Append the code to the existing subcommand module file
     with open(module_path, "a") as module_file:
-        new_command_code = render(add_template, sub_command_name=sub_command_name, new_command_name=new_command_name)
+        new_command_code = render(
+            add_template,
+            sub_command_name=sub_command_name,
+            new_command_name=new_command_name,
+        )
         module_file.write(new_command_code)
 
     typer.echo(

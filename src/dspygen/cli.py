@@ -62,12 +62,12 @@ def gbot(question, context):
         messages=[
             {
                 "role": "system",
-                "content": f"you are a helpful assistant. This is what you help with: {context}"
+                "content": f"you are a helpful assistant. This is what you help with: {context}",
             },
             {
                 "role": "user",
                 "content": f"{question}",
-            }
+            },
         ],
         model="llama2-70b-4096",
     )
@@ -99,4 +99,3 @@ def chatbot(question, context, history=""):
             print(f"Chatbot: {response}")
 
     return history
-

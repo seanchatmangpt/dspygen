@@ -27,7 +27,7 @@ class SourceCodePep8DocsModule(dspy.Module):
 def source_code_docs_call(source_code):
     source_code_pep8_docs = SourceCodePep8DocsModule()
     return source_code_pep8_docs.forward(source_code=source_code)
- 
+
 
 @app.command()
 def call(source_code=pyperclip.paste()):
@@ -38,7 +38,7 @@ def call(source_code=pyperclip.paste()):
     typer.echo(result)
     pyperclip.copy(result)
 
-    
+
 def main():
     init_dspy(max_tokens=3000)
 

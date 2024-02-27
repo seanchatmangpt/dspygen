@@ -3,7 +3,9 @@ import pyperclip
 from typer import Typer
 from inflection import underscore
 
-app = Typer(help="Generate a file name from any text if no text is provided it will use clipboard.")
+app = Typer(
+    help="Generate a file name from any text if no text is provided it will use clipboard."
+)
 
 
 class FileContentToFileNameModule(dspy.Module):
@@ -30,7 +32,9 @@ def file_name_call(file_content, extension: str = None):
 
 
 def main():
-    file_content = pyperclip.paste()  # Initialize your inputs here. Adjust as necessary.
+    file_content = (
+        pyperclip.paste()
+    )  # Initialize your inputs here. Adjust as necessary.
 
     print(file_name_call(file_content=file_content))
 

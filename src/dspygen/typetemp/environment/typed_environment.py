@@ -18,7 +18,7 @@ class TypedEnvironment(Environment):
         self.add_extension("jinja2.ext.do")
         self.add_extension("jinja2.ext.loopcontrols")
 
-        self.filters['to_kwarg'] = lambda input_name: f"{input_name}={input_name}"
+        self.filters["to_kwarg"] = lambda input_name: f"{input_name}={input_name}"
 
 
 file_loader = FileSystemLoader("./templates")

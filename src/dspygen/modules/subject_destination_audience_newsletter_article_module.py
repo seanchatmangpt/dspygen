@@ -9,7 +9,7 @@ from typer import Typer
 from dspygen.utils.dspy_tools import init_dspy
 
 
-app = Typer()        
+app = Typer()
 
 
 class SubjectDestinationAudienceNewsletterArticleModule(dspy.Module):
@@ -17,21 +17,33 @@ class SubjectDestinationAudienceNewsletterArticleModule(dspy.Module):
 
     def forward(self, subject, destination, audience):
         pred = dspy.Predict("subject, destination, audience -> newsletter_article")
-        result = pred(subject=subject, destination=destination, audience=audience).newsletter_article
+        result = pred(
+            subject=subject, destination=destination, audience=audience
+        ).newsletter_article
         return result
 
 
-def subject_destination_audience_newsletter_article_call(subject, destination, audience):
-    subject_destination_audience_newsletter_article = SubjectDestinationAudienceNewsletterArticleModule()
-    return subject_destination_audience_newsletter_article.forward(subject=subject, destination=destination, audience=audience)
+def subject_destination_audience_newsletter_article_call(
+    subject, destination, audience
+):
+    subject_destination_audience_newsletter_article = (
+        SubjectDestinationAudienceNewsletterArticleModule()
+    )
+    return subject_destination_audience_newsletter_article.forward(
+        subject=subject, destination=destination, audience=audience
+    )
 
 
 @app.command()
 def call(subject, destination, audience):
     """SubjectDestinationAudienceNewsletterArticleModule"""
     init_dspy()
-    
-    print(subject_destination_audience_newsletter_article_call(subject=subject, destination=destination, audience=audience))
+
+    print(
+        subject_destination_audience_newsletter_article_call(
+            subject=subject, destination=destination, audience=audience
+        )
+    )
 
 
 def main():
@@ -39,7 +51,11 @@ def main():
     subject = "Language Models in the year 2050"
     destination = "LinkedIn"
     audience = "Non technical people over the age of 60"
-    print(subject_destination_audience_newsletter_article_call(subject=subject, destination=destination, audience=audience))
+    print(
+        subject_destination_audience_newsletter_article_call(
+            subject=subject, destination=destination, audience=audience
+        )
+    )
 
 
 if __name__ == "__main__":

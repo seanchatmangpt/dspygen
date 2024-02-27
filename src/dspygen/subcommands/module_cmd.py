@@ -42,10 +42,10 @@ def load_commands(directory: str = "modules"):
 
 
 def main():
-    print('main')
+    print("main")
 
 
 load_commands()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

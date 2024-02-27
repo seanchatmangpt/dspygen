@@ -5,7 +5,6 @@ from typer import Typer
 app = Typer()
 
 
-
 class TextSummaryModuleModule(dspy.Module):
     """A DSPy Module that takes in text and produces a summary."""
 
@@ -18,7 +17,7 @@ class TextSummaryModuleModule(dspy.Module):
 def text_summary_module_call(text):
     text_summary_module = TextSummaryModuleModule()
     return text_summary_module.forward(text=text)
- 
+
 
 def main():
     lm = dspy.OpenAI(max_tokens=500)

@@ -8,7 +8,6 @@ from dspygen.modules.gen_pydantic_instance_module import gen_pydantic_instance_c
 from dspygen.typetemp.template.typed_template import TypedTemplate
 
 
-
 class InputFieldTemplateSpecModel(BaseModel):
     """Defines an input field for a DSPy Signature."""
 

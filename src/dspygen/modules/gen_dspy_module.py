@@ -12,9 +12,12 @@ app = Typer()
 
 class DSPyModuleTemplate(BaseModel):
     """{{ inputs }} -> {{ outputs }}"""
+
     inputs: list[str] = Field(..., description="Inputs for dspy.Module jinja template.")
     output: str = Field(..., description="Output for dspy.Module jinja template.")
-    class_name: str = Field(..., description="Class name combining the inputs and outputs")
+    class_name: str = Field(
+        ..., description="Class name combining the inputs and outputs"
+    )
 
 
 dspy_module_template = '''"""
@@ -64,6 +67,12 @@ def main():
     print({{ var_name }}_call({{ inputs_join_kwargs }}))
 
 
+# TODO: Add streamlit component
+
+
+# TODO: Add FastAPI Route
+
+
 if __name__ == "__main__":
     main()
 
@@ -88,7 +97,7 @@ class SignatureDspyModuleModule(dspy.Module):
 def gen_dspy_module_call(signature):
     signature_dspy_module = SignatureDspyModuleModule()
     return signature_dspy_module.forward(signature=signature)
- 
+
 
 @app.command()
 def call(signature):
@@ -96,8 +105,8 @@ def call(signature):
     init_dspy()
 
     print(gen_dspy_module_call(signature=signature))
-    
-    
+
+
 def main():
     init_dspy()
 

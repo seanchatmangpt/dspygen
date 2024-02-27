@@ -24,4 +24,3 @@ def sig(prompt: str):
     print(source)
 
     print(f"Module saved to {signatures_dir() / file_name}")
-    

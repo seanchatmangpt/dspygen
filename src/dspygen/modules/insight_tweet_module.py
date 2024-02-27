@@ -7,7 +7,7 @@ from typer import Typer
 from dspygen.utils.dspy_tools import init_dspy
 
 
-app = Typer()        
+app = Typer()
 
 
 class InsightTweetModule(dspy.Module):
@@ -28,7 +28,7 @@ def insight_tweet_call(insight):
 def call(insight):
     """InsightTweetModule"""
     init_dspy()
-    
+
     print(insight_tweet_call(insight=insight))
 
 
