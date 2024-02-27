@@ -11,7 +11,7 @@ app = Typer()
 
 
 class DSPyModuleTemplate(BaseModel):
-    """{{ inputs }} -> {{ outputs }}"""
+    """{{ input or list of inputs }} -> {{ outputs }}"""
 
     inputs: list[str] = Field(..., description="Inputs for dspy.Module jinja template.")
     output: str = Field(..., description="Output for dspy.Module jinja template.")
@@ -82,8 +82,11 @@ if __name__ == "__main__":
 class SignatureDspyModuleModule(dspy.Module):
     """SignatureDspyModuleModule"""
 
-    def forward(self, signature):
+    def forward(self, signature, class_name = ""):
         tmpl_model = gen_pydantic_instance_call(signature, DSPyModuleTemplate)
+
+        if class_name:
+            tmpl_model.class_name = class_name
 
         source = render(dspy_module_template, model=tmpl_model, docstring="")
 
@@ -94,9 +97,9 @@ class SignatureDspyModuleModule(dspy.Module):
         return source
 
 
-def gen_dspy_module_call(signature):
+def gen_dspy_module_call(signature, class_name = ""):
     signature_dspy_module = SignatureDspyModuleModule()
-    return signature_dspy_module.forward(signature=signature)
+    return signature_dspy_module.forward(signature=signature, class_name=class_name)
 
 
 @app.command()
@@ -110,8 +113,9 @@ def call(signature):
 def main():
     init_dspy()
 
-    signature = "subject -> newsletter_article"
-    print(gen_dspy_module_call(signature=signature))
+    signature = "prompt, function_list -> function_name"
+    class_name = "ChooseFunction"
+    print(gen_dspy_module_call(signature=signature, class_name=class_name))
 
 
 if __name__ == "__main__":

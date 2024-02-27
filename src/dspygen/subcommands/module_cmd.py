@@ -14,11 +14,11 @@ app = typer.Typer(help="Generate DSPy Modules or call exist ones.")
 
 
 @app.command(name="new")
-def new_module(signature: str):
+def new_module(signature: str, class_name: str = ""):
     """Generate a new dspy.Module. Example: dspygen module new 'text -> summary'"""
     init_dspy()
 
-    source = gen_dspy_module_call(signature)
+    source = gen_dspy_module_call(signature, class_name)
 
     file_name = file_name_call(source + "\nName the file by the class name.", "py")
 
