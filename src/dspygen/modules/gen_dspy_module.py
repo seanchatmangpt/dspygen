@@ -70,7 +70,16 @@ def main():
 # TODO: Add streamlit component
 
 
-# TODO: Add FastAPI Route
+from fastapi import APIRouter
+router = APIRouter()
+
+@router.post("/{{ var_name }}/")
+async def {{ var_name }}_route(data: dict):
+    # Your code generation logic here
+    init_dspy()
+    
+    print(data)
+    return {{ var_name }}_call(**data)
 
 
 if __name__ == "__main__":

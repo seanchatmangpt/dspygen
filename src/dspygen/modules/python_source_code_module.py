@@ -28,6 +28,26 @@ def module_test(prompt):
     print(python_source_code_call(prompt=prompt))
 
 
+from fastapi import APIRouter
+from pydantic import BaseModel
+
+router = APIRouter()
+
+
+class CodePrompt(BaseModel):
+    prompt: str
+
+
+@router.post("/generate-code/")
+async def generate_code(code_prompt: CodePrompt):
+    # Your code generation logic here
+    init_dspy()
+    try:
+        return {"code": python_source_code_call(code_prompt.prompt)}
+    except Exception as e:
+        return {"code": e}
+
+
 def main():
     init_dspy()
 

@@ -1,0 +1,15 @@
+POST http://127.0.0.1:888/book_appointment/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "requested_date": "friday",
+  "availability": "saturday"
+}
+###
+POST http://127.0.0.1:888/book_appointment/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "requested_date": "friday",
+  "availability": "friday"
+}

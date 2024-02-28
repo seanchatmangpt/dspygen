@@ -130,10 +130,10 @@ convention = "google"
     default = "0.0.0.0"
 
     [[tool.poe.tasks.api.args]]
-    help = "Bind socket to this port (default: 8888)"
+    help = "Bind socket to this port (default: 888)"
     name = "port"
     options = ["--port"]
-    default = "8888"
+    default = "888"
 
     [[tool.poe.tasks.api.args]]
     help = "Enable development mode"
