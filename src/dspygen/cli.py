@@ -1,4 +1,5 @@
 """dspygen CLI."""
+import sys
 from importlib import import_module
 
 import dspy
@@ -9,6 +10,7 @@ from pathlib import Path
 import typer
 
 from dspygen.utils.dspy_tools import init_dspy
+from dspygen.utils.module_tools import module_to_dict
 
 app = typer.Typer()
 
@@ -26,7 +28,6 @@ def load_commands(directory: str = "subcommands"):
                 app.add_typer(module.app, name=filename[:-7])
 
 
-load_commands()
 
 
 @app.command("init")
@@ -108,3 +109,18 @@ def chatbot(question, context, history=""):
 
 
 # @app.command(name="tutor", help="Guide you through developing a project with DSPyGen.")
+
+def main():
+    import json
+    import yaml
+
+    current_module = sys.modules[__name__]
+    module_dict = module_to_dict(current_module, include_docstring=False)
+    print(yaml.dump(module_dict))
+    # print(json.dumps(module_dict, indent=2))
+
+
+if __name__ == '__main__':
+    main()
+else:
+    load_commands()

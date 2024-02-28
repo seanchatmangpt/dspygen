@@ -19,8 +19,8 @@ class SourceCodePep8DocsModule(dspy.Module):
     """SourceCodePep8DocsModule"""
 
     def forward(self, source_code):
-        pred = dspy.Predict("source_code -> documentation")
-        result = pred(source_code=source_code).documentation
+        pred = dspy.Predict("source_code -> simple_documentation")
+        result = pred(source_code=source_code).simple_documentation
         return result
 
 

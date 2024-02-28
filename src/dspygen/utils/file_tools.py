@@ -233,9 +233,10 @@ def count_tokens(text: str, model: str = "gpt-4") -> int:
     enc = tiktoken.encoding_for_model("gpt-4")
     return len(enc.encode(text))
 
+
 # Test the function
 def main():
-    print(count_tokens(get_current_module_source()))
+    print(count_tokens(get_source(__file__)))
 
 
 if __name__ == "__main__":

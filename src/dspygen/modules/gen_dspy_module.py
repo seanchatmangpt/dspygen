@@ -59,12 +59,7 @@ def call({{ inputs_join }}):
     print({{ var_name }}_call({{ inputs_join_kwargs }}))
 
 
-def main():
-    init_dspy()
-{% for input in model.inputs %}
-    {{ input }} = ""
-{% endfor %}
-    print({{ var_name }}_call({{ inputs_join_kwargs }}))
+
 
 
 # TODO: Add streamlit component
@@ -81,6 +76,14 @@ async def {{ var_name }}_route(data: dict):
     print(data)
     return {{ var_name }}_call(**data)
 
+
+def main():
+    init_dspy()
+{% for input in model.inputs %}
+    {{ input }} = ""
+{% endfor %}
+    print({{ var_name }}_call({{ inputs_join_kwargs }}))
+    
 
 if __name__ == "__main__":
     main()

@@ -13,11 +13,8 @@ T = TypeVar("T", bound="YAMLMixin")
 # Define a mixin for YAML serialization and deserialization
 class YAMLMixin:
     def to_yaml(self: BaseModel, file_path: Optional[str] = None) -> str:
-        print("to yaml")
-        data = json.loads(self.json())
-        yaml_content = yaml.dump(data, default_flow_style=False, width=1000)
+        yaml_content = yaml.dump(self.model_dump(), default_flow_style=False, width=1000)
         if file_path:
-            print("if filepath")
             with open(file_path, "w") as yaml_file:
                 yaml_file.write(yaml_content)
                 print(f"Wrote {file_path} to {yaml_content}")
