@@ -31,12 +31,6 @@ def call(module_dict, context):
     print(module_docstring_call(module_dict=module_dict, context=context))
 
 
-def main():
-    init_dspy()
-    module_dict = ""
-    context = ""
-    print(module_docstring_call(module_dict=module_dict, context=context))
-
 
 # TODO: Add streamlit component
 
@@ -51,6 +45,13 @@ async def module_docstring_route(data: dict):
     
     print(data)
     return module_docstring_call(**data)
+
+
+def main():
+    init_dspy()
+    module_dict = ""
+    context = ""
+    print(module_docstring_call(module_dict=module_dict, context=context))
 
 
 if __name__ == "__main__":
