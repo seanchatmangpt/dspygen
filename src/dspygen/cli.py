@@ -36,13 +36,19 @@ def init(project_name: str):
 
 
 README = """DSPyGen: Streamlining AI Development
-DSPyGen, influenced by the efficiency and modularity of Ruby on Rails, is a powerful command-line interface (CLI) designed to revolutionize AI development by leveraging DSPy modules. This tool simplifies the process of creating, developing, and deploying language model (LM) pipelines, embodying the Ruby on Rails philosophy of "Convention over Configuration" for AI projects.
+DSPyGen, influenced by the efficiency and modularity of Ruby on Rails, is a powerful command-line interface (CLI) 
+designed to revolutionize AI development by leveraging DSPy modules. This tool simplifies the process of creating, 
+developing, and deploying language model (LM) pipelines, embodying the Ruby on Rails philosophy of 
+"Convention over Configuration" for AI projects.
 
 Features
 Quick Initialization: Set up your DSPyGen project in seconds, echoing Ruby on Rails' ease of starting new projects.
-Modular Approach: Inspired by Ruby on Rails' modular design, DSPyGen allows for the easy generation and enhancement of DSPy modules.
-Intuitive Command Structure: With user-friendly commands, managing your AI development workflow becomes as straightforward as web development with Ruby on Rails.
-Embedded Chatbot Assistance: For guidance and support, DSPyGen includes a chatbot, making it easier to navigate through your development process."""
+Modular Approach: Inspired by Ruby on Rails' modular design, DSPyGen allows for the easy generation and enhancement of 
+DSPy modules.
+Intuitive Command Structure: With user-friendly commands, managing your AI development workflow becomes as 
+straightforward as web development with Ruby on Rails.
+Embedded Chatbot Assistance: For guidance and support, DSPyGen includes a chatbot, making it easier to navigate 
+through your development process."""
 
 
 @app.command("help")
@@ -99,3 +105,6 @@ def chatbot(question, context, history=""):
             print(f"Chatbot: {response}")
 
     return history
+
+
+# @app.command(name="tutor", help="Guide you through developing a project with DSPyGen.")

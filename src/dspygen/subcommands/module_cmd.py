@@ -7,8 +7,9 @@ import typer
 
 from dspygen.modules.gen_dspy_module import gen_dspy_module_call
 from dspygen.modules.file_name_module import file_name_call
+from dspygen.utils.cli_tools import chatbot
 from dspygen.utils.dspy_tools import init_dspy
-from dspygen.utils.file_tools import dspy_modules_dir, source_dir
+from dspygen.utils.file_tools import dspy_modules_dir, source_dir, get_source
 
 app = typer.Typer(help="Generate DSPy Modules or call exist ones.")
 
@@ -42,10 +43,16 @@ def load_commands(directory: str = "modules"):
 
 
 def main():
-    print("main")
+    print(get_source(__file__))
 
-
-load_commands()
 
 if __name__ == "__main__":
     main()
+else:
+    load_commands()
+
+
+@app.command("help")
+def cli_help(question: str):
+    """Answers the user questions with a helpful chatbot."""
+    chatbot(question, get_source(__file__))

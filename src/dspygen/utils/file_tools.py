@@ -219,8 +219,23 @@ def lm_dir() -> Path:
     return source_dir() / "lm"
 
 
+def get_source(filename):
+    # Read the source code from the file
+    with open(filename, 'r') as file:
+        source_code = file.read().replace(" ", "")
+
+    return source_code
+
+import tiktoken
+
+
+def count_tokens(text: str, model: str = "gpt-4") -> int:
+    enc = tiktoken.encoding_for_model("gpt-4")
+    return len(enc.encode(text))
+
+# Test the function
 def main():
-    print(subcommands_dir())
+    print(count_tokens(get_current_module_source()))
 
 
 if __name__ == "__main__":
