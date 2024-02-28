@@ -13,3 +13,12 @@ Content-Type: application/json
   "requested_date": "friday",
   "availability": "friday"
 }
+###
+POST http://127.0.0.1:888/chat_bot/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "message": "I have a problem with my order? Where is it?",
+  "history": "Order # 234293847, Gallon of Personal Lubricant. Delayed due to shipping container in customs",
+  "context": "customer service bot conversation"
+}

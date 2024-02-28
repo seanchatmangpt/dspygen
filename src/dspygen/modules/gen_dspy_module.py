@@ -59,9 +59,6 @@ def call({{ inputs_join }}):
     print({{ var_name }}_call({{ inputs_join_kwargs }}))
 
 
-
-
-
 # TODO: Add streamlit component
 
 

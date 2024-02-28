@@ -27,7 +27,7 @@ def function_to_dict(func: Callable) -> dict:
         "keyword_arguments": func.__annotations__,
     }
 
-    if output["keyword_arguments"]["return"]:
+    if hasattr(output["keyword_arguments"],"return"):
         del output["keyword_arguments"]["return"]
 
     return output
@@ -52,20 +52,17 @@ class GenKeywordArgumentsModule(dspy.Module):
                 if not isinstance(kwargs[name], expected_type):
                     dspy.Assert(False, f"Argument '{name}' expected type {expected_type}, got {type(kwargs[name])}")
 
-        # Optional: Check for extraneous arguments
-        for kwarg in kwargs:
-            if kwarg not in params:
-                dspy.Assert(False, f"Unexpected argument: {kwarg}")
-
         return True
 
     def forward(self, prompt: str, function: Callable) -> dict:
-        pred = dspy.Predict("prompt, function -> keyword_arguments_dict_for_function")
+        pred = dspy.ChainOfThought("prompt, function -> keyword_arguments_dict_for_function")
         result = pred(prompt=prompt, function=str(function_to_dict(function))).keyword_arguments_dict_for_function
 
         # Validate the output
         try:
             kwargs = eval_dict_str(result)
+            if "return" in kwargs.keys():
+                del kwargs["return"]
 
             if self.validate_output(kwargs, function):
                 return kwargs
@@ -87,7 +84,7 @@ def gen_keyword_arguments_call(prompt: str, function: Callable) -> dict:
     return gen_keyword_arguments.forward(prompt=prompt, function=function)
 
 
-def invoke(prompt: str, fn: Callable):
+def invoke(fn: Callable, prompt: str):
     kwargs = gen_keyword_arguments_call(prompt, fn)
     return fn(**kwargs)
 
