@@ -71,8 +71,8 @@ class GenKeywordArgumentsModule(dspy.Module):
                 return kwargs
         except (AssertionError, SyntaxError) as e:
             # Handle the failure by attempting recovery or fallback logic
-            pred = dspy.ChainOfThought("prompt, function, error -> keyword_arguments_dict")
-            result = pred(prompt=prompt, function=str(function_to_dict(function)), error=str(e)).keyword_arguments_dict
+            pred = dspy.ChainOfThought("prompt, function, error -> keyword_arguments_dict_for_function")
+            result = pred(prompt=prompt, function=str(function_to_dict(function)), error=str(e)).keyword_arguments_dict_for_function
             kwargs = eval_dict_str(result)
 
             if self.validate_output(kwargs, function):

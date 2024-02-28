@@ -1,52 +1,28 @@
 """lm"""
 import typer
 
+from dspygen.typetemp.functional import render
+from dspygen.utils.file_tools import lm_dir
 
 app = typer.Typer(help="Generate Language Models")
 
 
-lm_template = """
-class GPT3(LM):
-    def __init__(
-        self,
-        model: str = "",
-        api_key: Optional[str] = None,
-        api_provider: str,
-        api_base: Optional[str] = None,
-        model_type: Literal["chat", "text"] = None,
-        **kwargs,
-    ):
+lm_template = """from dsp import LM
+
+
+class {{ name }}(LM):
+    def __init__(self):
         super().__init__(model)
-        self.provider = api_provider
+        
+        self.provider = "default"
 
-        default_model_type = (
-            "chat"
-            else "text"
-        )
-        self.model_type = model_type if model_type else default_model_type
+        self.history = []
 
-        if api_key:
-            openai.api_key = api_key
+    def basic_request(self, prompt, **kwargs):
+        pass
 
-        if api_base:
-            if OPENAI_LEGACY:
-                openai.api_base = api_base
-            else:       
-                openai.base_url = api_base
-
-        self.kwargs = {
-            "temperature": 0.0,
-            "max_tokens": 150,
-            "top_p": 1,
-            "frequency_penalty": 0,
-            "presence_penalty": 0,
-            "n": 1,
-            **kwargs,
-        }  # TODO: add kwargs above for </s>
-
-        if api_provider != "azure":
-            self.kwargs["model"] = model
-        self.history: list[dict[str, Any]] = [
+    def __call__(self, prompt, only_completed=True, return_sorted=False, **kwargs):
+        pass
 """
 
 
@@ -54,4 +30,15 @@ class GPT3(LM):
 def new_lm():
     """Generates a new language model."""
     typer.echo("Uses jinja and dspy module to create a language model.")
-    
+
+
+def main():
+    print('main')
+    name = "Groq"
+    to = f"{lm_dir()}/"
+    source = render(lm_template, name=name, to=to + "{{ name | underscore }}_lm.py")
+    print(source)
+
+
+if __name__ == '__main__':
+    main()

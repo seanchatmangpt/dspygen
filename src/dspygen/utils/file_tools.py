@@ -215,6 +215,10 @@ def signatures_dir() -> Path:
     return source_dir() / "signatures"
 
 
+def lm_dir() -> Path:
+    return source_dir() / "lm"
+
+
 def main():
     print(subcommands_dir())
 
