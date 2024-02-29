@@ -18,6 +18,7 @@ data/
 
 # dotenv
 .env
+.env.local
 
 # Hypothesis
 .hypothesis/

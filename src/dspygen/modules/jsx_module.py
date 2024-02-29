@@ -13,8 +13,8 @@ class JSXModule(dspy.Module):
     """JSXModule"""
 
     def forward(self, story):
-        pred = dspy.Predict("story -> react_tailwind_tsx")
-        result = pred(story=story).react_tailwind_tsx
+        pred = dspy.ChainOfThought("story -> react_tailwind_tsx_source_code")
+        result = pred(story=story).react_tailwind_tsx_source_code
         return result
 
 

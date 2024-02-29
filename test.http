@@ -22,3 +22,10 @@ Content-Type: application/json
   "history": "Order # 234293847, Gallon of Personal Lubricant. Delayed due to shipping container in customs",
   "context": "customer service bot conversation"
 }
+###
+POST http://127.0.0.1:888/jsx/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "story": "Newsletter contact signup form JSX source code"
+}

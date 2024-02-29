@@ -2,13 +2,18 @@
 import importlib
 import logging
 import os
+from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
+
 
 import coloredlogs
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
+
 
 from dspygen.utils.file_tools import dspy_modules_dir
 
 app = FastAPI()
+
 
 from importlib import import_module
 import os
@@ -45,3 +50,13 @@ def read_root() -> str:
 @app.get("/pingpong")
 def ping_pong():
     return {"message": "pong"}
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust this to your specific origins if needed
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # Adjust as per your requirements
+    allow_headers=["*"],  # Adjust this to your specific headers if needed
+)
+
