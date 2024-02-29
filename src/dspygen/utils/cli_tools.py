@@ -7,6 +7,9 @@ from dspygen.utils.dspy_tools import init_dspy
 def chatbot(question, context, history=""):
     init_dspy(max_tokens=3000)
 
+    if not question:
+        question = typer.prompt("How can I help you?")
+
     qa = dspy.ChainOfThought("question, context -> answer")
     response = qa(question=question, context=context).answer
     history += response

@@ -9,6 +9,7 @@ from pathlib import Path
 
 import typer
 
+from dspygen.utils.cli_tools import chatbot
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.utils.module_tools import module_to_dict
 
@@ -53,62 +54,33 @@ through your development process."""
 
 
 @app.command("help")
-def cli_help(question: str):
+def cli_help(question: str = ""):
     """Answers the user questions with a helpful chatbot."""
     chatbot(question, README)
 
 
-def gbot(question, context):
-    from groq import Groq
+TUTOR_CONTEXT = """DSPyGen: AI Development Simplified
+DSPyGen revolutionizes AI development by bringing the "Convention over Configuration" philosophy to language model (LM) pipelines. Inspired by Ruby on Rails, it offers a CLI for creating, developing, and deploying with DSPy modules, emphasizing quick setup and modular design for streamlined project workflows.
 
-    client = Groq(
-        api_key=os.environ.get("GROQ_API_KEY"),
-    )
+Key Features:
 
-    chat_completion = client.chat.completions.create(
-        messages=[
-            {
-                "role": "system",
-                "content": f"you are a helpful assistant. This is what you help with: {context}",
-            },
-            {
-                "role": "user",
-                "content": f"{question}",
-            },
-        ],
-        model="llama2-70b-4096",
-    )
+Quick Initialization: Rapidly configure your AI project, mirroring the simplicity of Ruby on Rails.
+Modular Design: Generate and enhance DSPy modules with ease, promoting a scalable and flexible development environment.
+User-Friendly Commands: Manage your AI projects effortlessly through an intuitive command structure.
+Chatbot Assistance: Embedded support to guide through the development process, enhancing user experience.
+Using DSPyGen Modules:
+DSPyGen's core lies in its modules, designed for seamless integration and code optimization. Here’s how to leverage them:
 
-    print(chat_completion.choices[0].message.content.rstrip())
+Generate New Modules: Use dspygen module new "<inputs -> outputs>" --class-name="<ClassName>" to create modules tailored to specific functionalities.
+Optimize Python Code: Beautify and adhere to PEP8 standards using dspygen module python_source_code call "<code>".
+Integrate with Web Apps: Employ dspygen module react_jsx call "ComponentName" for React app development with AI features.
+Engage on Social Media: Transform insights into engaging content with dspygen module insight_tweet call "Message"."""
 
+@app.command(name="tutor")
+def tutor(question: str = ""):
+    """Guide you through developing a project with DSPyGen."""
+    chatbot(question, TUTOR_CONTEXT)
 
-def chatbot(question, context, history=""):
-    init_dspy(max_tokens=2000)
-
-    qa = dspy.ChainOfThought("question, context -> answer")
-    response = qa(question=question, context=context).answer
-    history += response
-    print(f"Chatbot: {response}")
-    confirmed = False
-    while not confirmed:
-        confirm = typer.prompt("Did this answer your question? [y/N]", default="N")
-
-        if confirm.lower() in ["y", "yes"]:
-            confirmed = True
-        else:
-            want = typer.prompt("How can I help more?")
-
-            question = f"{history}\n{want}"
-            question = question[-1000:]
-
-            response = qa(question=question, context=README).answer
-            history += response
-            print(f"Chatbot: {response}")
-
-    return history
-
-
-# @app.command(name="tutor", help="Guide you through developing a project with DSPyGen.")
 
 def main():
     import json

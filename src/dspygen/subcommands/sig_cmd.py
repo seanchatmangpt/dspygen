@@ -6,7 +6,7 @@ from dspygen.modules.gen_signature_module import gen_signature_call
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.utils.file_tools import signatures_dir
 
-app = typer.Typer()
+app = typer.Typer(help="Generate dspy.Signatures")
 
 
 @app.command(name="new")
