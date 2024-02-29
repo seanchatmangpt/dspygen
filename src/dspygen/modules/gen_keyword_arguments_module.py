@@ -12,6 +12,19 @@ from dspygen.experiments.function_call import get_current_weather, get_n_day_wea
 from dspygen.utils.dspy_tools import init_dspy
 
 
+class GenerateKeywordArgumentsSignature(dspy.Signature):
+    """
+    A Signature class designed to generate keyword arguments for a function call
+    based on a given prompt and the function's signature.
+    """
+    prompt = dspy.InputField(desc="Description or context to generate the keyword arguments.")
+    function_signature = dspy.InputField(desc="A dictionary representing the function's signature, including name, docstring, and keyword arguments.")
+
+    keyword_arguments_dict_for_function = dspy.OutputField(desc="A dictionary containing the generated keyword arguments for the specified function.",
+                                                           prefix="kwargs_for_function: dict = ")
+
+
+
 app = Typer()
 
 
@@ -24,10 +37,19 @@ def function_to_dict(func: Callable) -> dict:
     output = {
         "function__name__": func.__name__,
         "docstring": func.__doc__,
-        "keyword_arguments": func.__annotations__,
+        "keyword_arguments": {},
     }
 
-    if hasattr(output["keyword_arguments"],"return"):
+    sig = inspect.signature(func)
+    params = sig.parameters
+
+    for name, param in params.items():
+        # Check if the parameter has a type annotation; if not, default to str
+        param_type = param.annotation if param.annotation is not inspect.Parameter.empty else str
+        output["keyword_arguments"][name] = param_type.__name__  # Store the name of the type
+
+    # Remove the return type annotation if present
+    if "return" in output["keyword_arguments"]:
         del output["keyword_arguments"]["return"]
 
     return output
@@ -55,8 +77,8 @@ class GenKeywordArgumentsModule(dspy.Module):
         return True
 
     def forward(self, prompt: str, function: Callable) -> dict:
-        pred = dspy.ChainOfThought("prompt, function -> keyword_arguments_dict_for_function")
-        result = pred(prompt=prompt, function=str(function_to_dict(function))).keyword_arguments_dict_for_function
+        pred = dspy.ChainOfThought(GenerateKeywordArgumentsSignature)
+        result = pred(prompt=prompt, function_signature=str(function_to_dict(function))).keyword_arguments_dict_for_function
 
         # Validate the output
         try:

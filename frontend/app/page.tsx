@@ -34,7 +34,7 @@ export default function Page() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            story: `${story} return only the jsx tags. NO TYPESCRIPT!!!`, // Use state value
+            story: `${story} return only the html tags. NO TYPESCRIPT!!!`, // Use state value
           }),
         });
 

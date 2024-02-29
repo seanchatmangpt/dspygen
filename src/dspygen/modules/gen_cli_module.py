@@ -77,7 +77,7 @@ if __name__ == "__main__":
 pytest_template = """
 import pytest
 from typer.testing import CliRunner
-from metadspy.cli import app  # Updated import statement
+from dspygen.cli import app  # Updated import statement
 
 runner = CliRunner()
 
@@ -94,7 +94,7 @@ def test_{{ command.name }}():
 def main():
     init_dspy()
 
-    concept = gen_concept("7 Command Ruby on Rails CLI for OpenAI name openai_ror")
+    concept = gen_concept("7 Command Expert Python ChatBot with OpenAI calls")
 
     print(concept)
 
