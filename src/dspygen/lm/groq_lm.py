@@ -15,6 +15,11 @@ class Groq(LM):
 
         self.history = []
 
+        groq_api_key = os.environ.get("GROQ_API_KEY")
+
+        if groq_api_key is None:
+            raise ValueError("GROQ_API_KEY environment variable not found")
+
         self.client = GroqClient(api_key=os.environ.get("GROQ_API_KEY"))
 
     def basic_request(self, prompt, **kwargs):

@@ -8,13 +8,25 @@ from dspygen.utils.dspy_tools import init_dspy
 
 app = Typer()        
 
+class GeneratePureJSX(dspy.Signature):
+    """
+    Generate clean JSX code based on the provided context and requirements,
+    ensuring compatibility with react-live environments.
+    """
+    context = dspy.InputField(desc="A brief description of the desired component and its functionality.")
+    requirements = dspy.InputField(desc="Specific requirements or features the JSX should include.")
+
+    pure_jsx = dspy.OutputField(desc="Clean JSX code without {}, ready for react-live.")
+
+
 
 class JSXModule(dspy.Module):
     """JSXModule"""
 
     def forward(self, story):
-        pred = dspy.ChainOfThought("story -> react_tailwind_tsx_source_code")
-        result = pred(story=story).react_tailwind_tsx_source_code
+        context = "JSX without script tags or bindings, ready for react-live"
+        pred = dspy.ChainOfThought(GeneratePureJSX)
+        result = pred(requirements=story,context=context).pure_jsx
         return result
 
 
@@ -48,7 +60,7 @@ async def jsx_route(data: dict):
 
 def main():
     init_dspy()
-    story = ""
+    story = "Tax form input"
     print(jsx_call(story=story))
     
 

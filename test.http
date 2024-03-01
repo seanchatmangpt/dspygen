@@ -37,3 +37,11 @@ Content-Type: application/json
 {
   "js_source": "Booking appointment"
 }
+
+###
+POST http://127.0.0.1:888/html/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "user_input": "Newsletter contact signup form"
+}
