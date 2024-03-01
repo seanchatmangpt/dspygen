@@ -1,0 +1,95 @@
+{
+  "contracts": [
+    {
+      "id": "2",
+      "title": "Contract 2",
+      "client": "Client B",
+      "status": "Approved"
+    },
+    {
+      "id": "3",
+      "title": "Contract 3",
+      "client": "Client C",
+      "status": "Rejected"
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "text": "A comment about Contract 1",
+      "contractId": null
+    },
+    {
+      "id": "2",
+      "text": "Another comment about Contract 1",
+      "contractId": null
+    },
+    {
+      "id": "3",
+      "text": "A comment about Contract 2",
+      "contractId": "2"
+    },
+    {
+      "id": "e3ce",
+      "text": "Test123",
+      "contractId": "1111"
+    }
+  ],
+  "profile": {
+    "name": "contractManagementApp"
+  },
+  "users": [
+    {
+      "id": "1",
+      "username": "user1",
+      "email": "user1@example.com"
+    },
+    {
+      "id": "2",
+      "username": "user2",
+      "email": "user2@example.com"
+    }
+  ],
+  "documents": [
+    {
+      "id": "1",
+      "name": "Document 1",
+      "type": "pdf",
+      "size": "2MB",
+      "contractId": "6"
+    },
+    {
+      "id": "2",
+      "name": "Document 2",
+      "type": "docx",
+      "size": "1.5MB",
+      "contractId": "7"
+    },
+    {
+      "id": "3",
+      "name": "DSPyGen Crew",
+      "type": "pdf",
+      "size": "900Kb",
+      "contractId": "123"
+    }
+  ],
+  "task": [
+    {
+      "id": "1",
+      "description": "Hello World",
+      "dueDate": "3/1/2024"
+    },
+    {
+      "id": "2",
+      "description": "E Signature component"
+    },
+    {
+      "id": "ddfe",
+      "description": "List of contracts"
+    },
+    {
+      "id": "f078",
+      "description": "who has signed"
+    }
+  ]
+}
