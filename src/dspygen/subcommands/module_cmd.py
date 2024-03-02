@@ -22,7 +22,7 @@ def new_module(
         inputs: str = typer.Option(None, "--inputs", "-i", help="A comma-separated list of input names"),
         output: str = typer.Option(None, "--output", "-o", help="Output name for the module"),
 ):
-    """Generate a new dspy.Module. Signature will generate using Language Model. Inputs and output will be static."""
+    """Generate a new dspy.Module. Inputs and output will be static."""
     if len(inputs) == 0 or output is None:
         raise ValueError("Please provide a signature or input and output.")
 

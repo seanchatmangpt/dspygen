@@ -20,7 +20,7 @@ def function_to_dict(func: Callable) -> dict:
     output = {
         "function__name__": func.__name__,
         "docstring": func.__doc__,
-        "annotations": func.__annotations__,
+        "annotations": func.__annotations__
     }
     return output
 

@@ -60,3 +60,89 @@ __pycache__/
 .vscode/
 
 *.log
+
+
+# Ignore bundler config
+/.bundle
+
+# Ignore the default SQLite database
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Ignore all logfiles and tempfiles
+/log/*
+!/log/.keep
+/tmp
+/storage/*
+
+# Ignore uploaded files in development
+/storage/*
+!/storage/.keep
+
+# Ignore master key for decrypting credentials and more
+/config/master.key
+
+# Ignore pidfiles, but keep the directory
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+
+# Ignore cached HTML files (comment this line if you are not using Rails views)
+/public/assets
+/bundle
+/vendor/bundle
+
+# Ignore pack files (Webpacker)
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+
+# Ignore IDE and editor files
+.idea/
+*.swp
+*.swo
+*.rbc
+.c9/
+*.rvmrc
+.rspec
+/.config
+/coverage/
+/vendor/bundle
+/vendor/ruby/
+lib/capybara/**/*.html
+*.gem
+*.rbc
+/.bundle
+/.yardoc
+/_yardoc/
+/doc/
+/tmp
+.DS_Store
+/*.gem
+/.byebug_history
+.project
+.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+.rspec
+.rvmrc
+.bundle
+/vendor/bundle
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+node_modules/
+/yarn-error.log
+.env
+.env.development.local
+.env.local
+.env.test.local
+.capybara-*.html
+.rspec_failed
+.rubocop.yml
+.rubocop_*.yml

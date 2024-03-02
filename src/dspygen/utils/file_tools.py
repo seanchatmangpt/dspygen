@@ -195,6 +195,21 @@ def slugify(text):
     return text
 
 
+def find_project_root(current_path: Path = Path(__file__)) -> Path:
+    """
+    Traverse up from the current path to find the project root marker.
+    """
+    # Define the name of your project root marker
+    marker = ".projectroot"
+    # Start from the current file's directory
+    current_dir = current_path.parent
+    while current_dir != current_dir.parent:  # stop at the root of the filesystem
+        if (current_dir / marker).exists():
+            return current_dir
+        current_dir = current_dir.parent
+    raise FileNotFoundError(f"Project root marker '{marker}' not found.")
+
+
 def project_root() -> Path:
     return Path(__file__).parent.parent.parent.parent
 
