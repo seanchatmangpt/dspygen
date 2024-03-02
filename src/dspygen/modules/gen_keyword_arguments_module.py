@@ -124,15 +124,11 @@ def main():
 
     prompt = "Today's weather in los angeles"
 
-    keyword_arguments = gen_keyword_arguments_call(prompt=prompt, function=get_current_weather)
-
-    get_current_weather(**keyword_arguments)
+    invoke(get_current_weather, prompt)
 
     prompt = "Years weather in paris, france"
 
-    keyword_arguments = gen_keyword_arguments_call(prompt=prompt, function=get_n_day_weather_forecast)
-
-    get_n_day_weather_forecast(**keyword_arguments)
+    invoke(get_n_day_weather_forecast, prompt)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Signatures</h1>
+
+<div id="signatures">
+  <% @signatures.each do |signature| %>
+    <%= render signature %>
+    <p>
+      <%= link_to "Show this signature", signature %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New signature", new_signature_path %>
