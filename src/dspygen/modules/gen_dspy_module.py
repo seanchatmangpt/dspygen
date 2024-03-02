@@ -2,9 +2,6 @@ import dspy
 from pydantic import BaseModel, Field
 from typer import Typer
 
-from dspygen.modules.gen_pydantic_instance_module import gen_pydantic_instance_call
-from dspygen.modules.source_code_pep8_docs_module import source_code_docs_call
-from dspygen.utils.dspy_tools import init_dspy
 from dspygen.typetemp.functional import render
 
 app = Typer()
@@ -59,9 +56,6 @@ def call({{ inputs_join }}):
     print({{ var_name }}_call({{ inputs_join_kwargs }}))
 
 
-# TODO: Add streamlit component
-
-
 from fastapi import APIRouter
 router = APIRouter()
 
@@ -91,41 +85,8 @@ if __name__ == "__main__":
 class SignatureDspyModuleModule(dspy.Module):
     """SignatureDspyModuleModule"""
 
-    def forward(self, signature, class_name = ""):
-        tmpl_model = gen_pydantic_instance_call(signature, DSPyModuleTemplate)
-
-        if class_name:
-            tmpl_model.class_name = class_name
-
+    def forward(self, tmpl_model):
         source = render(dspy_module_template, model=tmpl_model, docstring="")
-
-        docs = source_code_docs_call(source)
-
-        source = render(dspy_module_template, model=tmpl_model, docstring=docs)
 
         return source
 
-
-def gen_dspy_module_call(signature, class_name = ""):
-    signature_dspy_module = SignatureDspyModuleModule()
-    return signature_dspy_module.forward(signature=signature, class_name=class_name)
-
-
-@app.command()
-def call(signature):
-    """SignatureDspyModuleModule"""
-    init_dspy()
-
-    print(gen_dspy_module_call(signature=signature))
-
-
-def main():
-    init_dspy()
-
-    signature = "prompt, function_list -> function_name"
-    class_name = "ChooseFunction"
-    print(gen_dspy_module_call(signature=signature, class_name=class_name))
-
-
-if __name__ == "__main__":
-    main()

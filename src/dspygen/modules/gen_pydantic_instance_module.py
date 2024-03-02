@@ -2,7 +2,7 @@ import ast
 import dspy
 import inspect
 import logging
-from typing import Optional, TypeVar
+from typing import Optional, TypeVar, cast
 
 from pydantic import BaseModel, ValidationError
 

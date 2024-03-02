@@ -3,10 +3,12 @@ from importlib import import_module
 
 import os
 
+import inflection
 import typer
 
-from dspygen.modules.gen_dspy_module import gen_dspy_module_call
+from dspygen.modules.gen_dspy_module import  DSPyModuleTemplate, SignatureDspyModuleModule
 from dspygen.modules.file_name_module import file_name_call
+from dspygen.modules.gen_pydantic_instance_module import gen_pydantic_instance_call
 from dspygen.utils.cli_tools import chatbot
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.utils.file_tools import dspy_modules_dir, source_dir, get_source
@@ -15,13 +17,22 @@ app = typer.Typer(help="Generate DSPy Modules or call exist ones.")
 
 
 @app.command(name="new")
-def new_module(signature: str, class_name: str = ""):
-    """Generate a new dspy.Module. Example: dspygen module new 'text -> summary'"""
-    init_dspy()
+def new_module(
+        class_name: str = typer.Option(..., "--class-name", "-cn", help="The name of the module class"),
+        inputs: str = typer.Option(None, "--inputs", "-i", help="A comma-separated list of input names"),
+        output: str = typer.Option(None, "--output", "-o", help="Output name for the module"),
+):
+    """Generate a new dspy.Module. Signature will generate using Language Model. Inputs and output will be static."""
+    if len(inputs) == 0 or output is None:
+        raise ValueError("Please provide a signature or input and output.")
 
-    source = gen_dspy_module_call(signature, class_name)
+    mdl = DSPyModuleTemplate(class_name=class_name, inputs=inputs.split(','), output=output)
 
-    file_name = file_name_call(source + "\nName the file by the class name.", "py")
+    print(mdl)
+
+    source = SignatureDspyModuleModule().forward(mdl)
+
+    file_name = f"{inflection.underscore(class_name)}.py"
 
     with open(dspy_modules_dir() / file_name, "w") as file:
         file.write(source)
@@ -43,7 +54,9 @@ def load_commands(directory: str = "modules"):
 
 
 def main():
-    print(get_source(__file__))
+    inputs = ["input1", "input2", "input3"]
+    output = "output"
+    print()
 
 
 if __name__ == "__main__":

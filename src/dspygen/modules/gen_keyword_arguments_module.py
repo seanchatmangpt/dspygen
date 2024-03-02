@@ -21,7 +21,7 @@ class GenerateKeywordArgumentsSignature(dspy.Signature):
     function_signature = dspy.InputField(desc="A dictionary representing the function's signature, including name, docstring, and keyword arguments.")
 
     keyword_arguments_dict_for_function = dspy.OutputField(desc="A dictionary containing the generated keyword arguments for the specified function.",
-                                                           prefix="kwargs_for_function: dict = ")
+                                                           prefix="kwargs_for_function_from_prompt: dict = ")
 
 
 
