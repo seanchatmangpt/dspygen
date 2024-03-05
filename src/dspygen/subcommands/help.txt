@@ -1,0 +1,22 @@
+                                                                                
+ Usage: dspygen [OPTIONS] COMMAND [ARGS]...                                     
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.      │
+│ --show-completion             Show completion for the current shell, to copy │
+│                               it or customize the installation.              │
+│ --help                        Show this message and exit.                    │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ assert     Generate assertions for dspy.                                     │
+│ command    Generate new sub commands or add to existing ones.                │
+│ help       Help chatbot and realtime help file update.                       │
+│ init       Initialize the DSPygen project.                                   │
+│ lm         Generate Language Models                                          │
+│ module     Generate DSPy Modules or call exist ones.                         │
+│ sig        Generate dspy.Signatures                                          │
+│ tutor      Guide you through developing a project with DSPyGen.              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+

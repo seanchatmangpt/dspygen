@@ -54,7 +54,6 @@ async def jsx_route(data: dict):
     # Your code generation logic here
     init_dspy(max_tokens=3000)
     
-    print(data)
     return jsx_call(**data)
 
 

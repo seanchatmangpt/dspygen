@@ -12,7 +12,7 @@ function CodeEditor({ code, onChange }) {
   return (
     <Editor
       height="50vh" // Adjust as needed
-      width="50vh"
+      width="600px"
       defaultLanguage="javascript"
       defaultValue="// Write your component code here"
       value={code}
@@ -39,7 +39,7 @@ export default function Page() {
   useEffect(() => {
     const fetchCode = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:888/jsx/', {
+        const response = await fetch('http://127.0.0.1:8000/jsx/', {
           // Ensure this URL is correct and accessible
           method: 'POST',
           headers: {
@@ -109,21 +109,22 @@ export default function Page() {
           type="text"
           name="story"
           defaultValue={story}
-          value={story}
           className="input input-bordered w-full max-w-xs"
         />
         <button type="submit" className="btn btn-primary">
           Update Story
         </button>
       </form>
-      <div className="flex-1">
-        <CodeEditor code={code} onChange={(newCode) => setData(newCode)} />
-      </div>
-      <div className="flex-1">
-        <LiveProvider code={data}>
-          <LiveError />
-          <LivePreview className="rounded-lg border border-gray-200 p-4 shadow" />
-        </LiveProvider>
+      <div className="flex-col">
+        <div className="mb-4 flex-1">
+          <CodeEditor code={code} onChange={(newCode) => setData(newCode)} />
+        </div>
+        <div className="mt-4 flex-1">
+          <LiveProvider code={data}>
+            <LiveError />
+            <LivePreview className="rounded-lg border border-gray-200 p-4 shadow" />
+          </LiveProvider>
+        </div>
       </div>
     </main>
   );

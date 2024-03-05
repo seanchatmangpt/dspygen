@@ -14,10 +14,10 @@ import typer
 app = typer.Typer()
 
 
-@app.command(name="{{ subcommand_name }}")
-def {{ subcommand_name }}():
-    """{{ subcommand_name }}"""
-    typer.echo("Running {{ subcommand_name }} subcommand.")
+@app.command(name="{{ new_command_name }}")
+def {{ sub_command_name }}_{{ new_command_name }}():
+    """{{ new_command_name }}"""
+    typer.echo("Running {{ new_command_name }} subcommand.")
     
 '''
 
@@ -26,7 +26,7 @@ def {{ subcommand_name }}():
 @app.command(
     name="new",
 )
-def module(subcommand_name: str):
+def module(subcommand_name: str, new_command_name: str):
     """
     Generate a new subcommand module with the given name.
     Example usage: dspygen command new new_command
@@ -45,7 +45,7 @@ def module(subcommand_name: str):
     # Create the subcommand module file
     with open(script_dir / filename, "w") as file:
         # You can customize the content of the module here
-        source = render(subcommand_template, subcommand_name=subcommand_name)
+        source = render(subcommand_template, subcommand_name=subcommand_name, new_command_name=new_command_name)
         file.write(source)
 
     typer.echo(f"Subcommand module '{subcommand_name}' generated successfully!")

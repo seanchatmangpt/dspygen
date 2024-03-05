@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]  # https://python-poetry.org/docs/pyproject/
 name = "dspygen"
-version = "2024.2.28.4"
+version = "2024.3.2"
 description = "A Ruby on Rails style framework for the DSPy (Demonstrate, Search, Predict) project for Language Models like GPT, BERT, and LLama."
 authors = ["Sean Chatman <info@chatmangpt.com>"]
 readme = "README.md"
@@ -35,6 +35,11 @@ asyncer = "^0.0.5"
 loguru = "^0.7.2"
 groq = "^0.4.1"
 tiktoken = "^0.6.0"
+reactivex = "^4.0.4"
+pytest-asyncio = "^0.23.5"
+playwright = "^1.41.2"
+python-dotenv = "^1.0.1"
+paho-mqtt = "^2.0.0"
 
 [tool.poetry.group.test.dependencies]  # https://python-poetry.org/docs/master/managing-dependencies/
 coverage = { extras = ["toml"], version = ">=7.2.5" }

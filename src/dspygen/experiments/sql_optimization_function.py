@@ -71,7 +71,6 @@ JOIN
 def sql_query_optimizer(original_sql_query: str, optimization_recommendations: str, optimized_query: str) -> tuple[
     str, str]:
     """Optimize the given SQL query"""
-    # print(optimization_recommendations)
     return optimization_recommendations, optimized_query
 
 

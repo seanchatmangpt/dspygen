@@ -13,12 +13,22 @@ def main():
 #
 #     # print(cmd_list)
 #
-    rails_cmds = ['rails new docusign_clone', 'cd docusign_clone', 'bundle install',
+    project_name = "docusign_clone"
+
+    model_list = ['Document', 'User', 'Signature']
+
+    rails_cmds = [f'rails new {project_name}',
+                  f'cd {project_name}',
+                  'bundle install',
                   'rails generate scaffold Document name:string content:text',
                   'rails generate scaffold User name:string email:string',
-                  'rails generate scaffold Signature user:references document:references', 'rake db:migrate',
+                  'rails generate scaffold Signature user:references document:references',
+                  'rake db:migrate',
                   'rails server',
                   'git init', 'git add .', 'git commit -m "Initial commit"']
+
+    for model in model_list:
+        f"rails generate scaffold {model} name:string"
 #
 #
     # print(f"{command} command to be run with CLI")

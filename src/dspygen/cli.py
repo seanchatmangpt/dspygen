@@ -37,26 +37,7 @@ def init(project_name: str):
     typer.echo(f"Initializing {project_name}.")
 
 
-README = """DSPyGen: Streamlining AI Development
-DSPyGen, influenced by the efficiency and modularity of Ruby on Rails, is a powerful command-line interface (CLI) 
-designed to revolutionize AI development by leveraging DSPy modules. This tool simplifies the process of creating, 
-developing, and deploying language model (LM) pipelines, embodying the Ruby on Rails philosophy of 
-"Convention over Configuration" for AI projects.
 
-Features
-Quick Initialization: Set up your DSPyGen project in seconds, echoing Ruby on Rails' ease of starting new projects.
-Modular Approach: Inspired by Ruby on Rails' modular design, DSPyGen allows for the easy generation and enhancement of 
-DSPy modules.
-Intuitive Command Structure: With user-friendly commands, managing your AI development workflow becomes as 
-straightforward as web development with Ruby on Rails.
-Embedded Chatbot Assistance: For guidance and support, DSPyGen includes a chatbot, making it easier to navigate 
-through your development process."""
-
-
-@app.command("help")
-def cli_help(question: str = ""):
-    """Answers the user questions with a helpful chatbot."""
-    chatbot(question, README)
 
 
 TUTOR_CONTEXT = """DSPyGen: AI Development Simplified
@@ -90,6 +71,7 @@ def main():
     module_dict = module_to_dict(current_module, include_docstring=False)
     print(yaml.dump(module_dict))
     # print(json.dumps(module_dict, indent=2))
+
 
 
 if __name__ == '__main__':
