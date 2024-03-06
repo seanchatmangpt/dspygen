@@ -3,6 +3,7 @@ from jinja2.nativetypes import NativeEnvironment
 
 from dspygen.typetemp.extension.faker_extension import FakerExtension
 from dspygen.typetemp.extension.inflection_extension import InflectionExtension
+from dspygen.utils.file_tools import templates_dir
 
 
 class TypedNativeEnvironment(NativeEnvironment):
@@ -18,7 +19,7 @@ class TypedNativeEnvironment(NativeEnvironment):
         self.add_extension("jinja2.ext.loopcontrols")
 
 
-file_loader = FileSystemLoader("./templates")
+file_loader = FileSystemLoader(templates_dir())
 
 native_environment = TypedNativeEnvironment(loader=file_loader)
 

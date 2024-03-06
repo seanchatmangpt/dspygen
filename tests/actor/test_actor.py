@@ -4,7 +4,7 @@ import pytest
 
 from dspygen.rdddy.abstract_actor import *
 from dspygen.rdddy.actor_system import ActorSystem
-from dspygen.rdddy.messages import *
+from dspygen.rdddy.abstract_message import *
 
 
 @pytest.fixture()

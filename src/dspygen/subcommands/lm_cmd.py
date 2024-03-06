@@ -23,6 +23,7 @@ class {{ name }}(LM):
 
     def __call__(self, prompt, only_completed=True, return_sorted=False, **kwargs):
         pass
+        
 """
 
 

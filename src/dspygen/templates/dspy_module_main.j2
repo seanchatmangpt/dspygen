@@ -1,0 +1,7 @@
+def main():
+    init_dspy()
+{% for input in model.inputs %}
+    {{ input }} = ""
+{% endfor %}
+    print({{ var_name }}_call({{ inputs_join_kwargs }}))
+

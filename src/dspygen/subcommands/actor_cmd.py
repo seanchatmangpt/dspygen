@@ -6,10 +6,10 @@ import os
 import signal
 
 from dspygen.async_typer import AsyncTyper
+from dspygen.rdddy.abstract_command import AbstractCommand
 from dspygen.rdddy.actor_system import ActorSystem
-from dspygen.rdddy.messages import AbstractCommand
 
-app = AsyncTyper()
+app = AsyncTyper(help="")
 
 MOSQUITTO_BINARY = os.getenv("MOSQUITTO_BINARY", default="/usr/sbin/mosquitto")
 MOSQUITTO_CONF = os.getenv("MOSQUITTO_CONF", default="/etc/mosquitto/mosquitto.conf")
@@ -55,6 +55,7 @@ async def start_mqtt(broker_path: str = MOSQUITTO_BINARY, config_path: str = MOS
 
 @app.command(name="sys")
 async def sys_cmd():
+    """Starts the ActorSystem."""
     actor_system = ActorSystem()
 
     while True:
@@ -81,11 +82,11 @@ def stop_mqtt():
 
 
 @app.command(name="msg")
-async def start_actor_system():
+async def start_actor_system(message: str):
     """Starts the actor system with MQTT integration."""
     actor_system = ActorSystem()
 
-    await actor_system.publish(AbstractCommand(content="Hello World!"))
+    await actor_system.publish(AbstractCommand(content=message))
 
 
 if __name__ == "__main__":

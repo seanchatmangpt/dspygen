@@ -1,0 +1,4 @@
+def {{ var_name }}_call({{ inputs_join }}):
+    {{ var_name }} = {{ module_name }}()
+    return {{ var_name }}.forward({{ inputs_join_kwargs }})
+

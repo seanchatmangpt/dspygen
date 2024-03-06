@@ -2,6 +2,7 @@ from jinja2 import Environment, FileSystemLoader
 
 from dspygen.typetemp.extension.faker_extension import FakerExtension
 from dspygen.typetemp.extension.inflection_extension import InflectionExtension
+from dspygen.utils.file_tools import templates_dir
 
 
 class TypedEnvironment(Environment):
@@ -21,7 +22,7 @@ class TypedEnvironment(Environment):
         self.filters["to_kwarg"] = lambda input_name: f"{input_name}={input_name}"
 
 
-file_loader = FileSystemLoader("./templates")
+file_loader = FileSystemLoader(templates_dir())
 
 environment = TypedEnvironment(loader=file_loader)
 

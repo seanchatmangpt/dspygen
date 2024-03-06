@@ -58,7 +58,8 @@ from loguru import logger
 from reactivex import operators as ops
 from reactivex.scheduler.eventloop import AsyncIOScheduler
 
-from dspygen.rdddy.messages import *
+from dspygen.rdddy.abstract_event import AbstractEvent
+from dspygen.rdddy.abstract_message import *
 
 if TYPE_CHECKING:
     from dspygen.rdddy.actor_system import ActorSystem

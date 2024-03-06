@@ -1,5 +1,6 @@
 import asyncio
 import os
+import psutil
 from asyncio.subprocess import Process
 
 from loguru import logger
@@ -31,7 +32,8 @@ class BrowserProcessSupervisor(AbstractActor):
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
         )
-        await self.start_health_check()
+        await asyncio.sleep(10)
+        # await self.start_health_check()
         logger.info(f"Started browser process with ID {cmd.browser_id}.")
 
     async def stop_browser_process(self, cmd: StopBrowserCommand):
@@ -60,6 +62,10 @@ class BrowserProcessSupervisor(AbstractActor):
 
         while self.health_check_running:
             for browser_id, process in self.processes.items():
+                stdout, stderr = await process.communicate()
+                stdout_buffer_string = stdout.decode().strip()
+
+                logger.debug(f"Starting health check for ID {browser_id}. Process Return: {process.returncode}")
                 if process.returncode is None:
                     logger.info(f"Browser process {browser_id} is alive.")
                     await self.publish(BrowserStatusEvent(status="alive"))
@@ -69,7 +75,7 @@ class BrowserProcessSupervisor(AbstractActor):
                     )
                     await self.publish(BrowserStatusEvent(status="dead"))
                     await self.publish(RestartBrowserCommand())
-            await asyncio.sleep(10)  # Sleep for 60 seconds before the next check
+            await asyncio.sleep(10)
 
     async def stop_health_check(self):
         self.health_check_running = False

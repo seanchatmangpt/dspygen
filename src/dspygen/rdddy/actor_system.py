@@ -54,7 +54,7 @@ from paho.mqtt.enums import CallbackAPIVersion
 from reactivex import operators as ops
 from reactivex.scheduler.eventloop import AsyncIOScheduler
 
-from dspygen.rdddy.messages import AbstractMessage
+from dspygen.rdddy.abstract_message import AbstractMessage
 
 if TYPE_CHECKING:
     from dspygen.rdddy.abstract_actor import AbstractActor

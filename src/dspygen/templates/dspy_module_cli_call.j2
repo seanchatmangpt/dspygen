@@ -1,0 +1,11 @@
+from typer import Typer
+app = Typer()
+
+
+@app.command()
+def call({{ inputs_join }}):
+    """{{ module_name }}"""
+    init_dspy()
+
+    print({{ var_name }}_call({{ inputs_join_kwargs }}))
+

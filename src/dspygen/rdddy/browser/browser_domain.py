@@ -1,12 +1,14 @@
 from playwright.async_api import Page
 
-from dspygen.rdddy.messages import *
+from dspygen.rdddy.abstract_command import AbstractCommand
+from dspygen.rdddy.abstract_event import AbstractEvent
+from dspygen.rdddy.abstract_message import *
 
 
 # Define commands and events
 class StartBrowserCommand(AbstractCommand):
     browser_id: str = "default"
-    custom_args: list[str] = []
+    custom_args: list[str] = None
 
 
 class BrowserStartedEvent(AbstractEvent):
@@ -32,30 +34,27 @@ class BrowserStatusEvent(AbstractEvent):
 
 
 class Click(AbstractCommand):
-    """Matches the pyppeteer component click exactly"""
-
+    """Matches the playwright component click exactly"""
     selector: str
-    options: dict
+    options: dict = {}
 
 
 class Goto(AbstractCommand):
-    """Matches the pyppeteer component goto exactly"""
-
+    """Matches the playwright component goto exactly"""
     url: str
-    options: dict
+    options: dict = {}
 
 
 class TypeText(AbstractCommand):
-    """Matches the pyppeteer component type exactly"""
+    """Matches the playwright component type exactly"""
 
     selector: str
     text: str
-    options: dict
+    options: dict = {}
 
 
 class SendChatGPT(AbstractCommand):
     prompt: str
-    page: Page
 
 
 class ChatGPTResponse(AbstractEvent):

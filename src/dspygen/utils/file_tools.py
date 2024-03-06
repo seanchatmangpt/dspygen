@@ -234,6 +234,10 @@ def lm_dir() -> Path:
     return source_dir() / "lm"
 
 
+def templates_dir() -> Path:
+    return source_dir() / "templates"
+
+
 def get_source(filename):
     # Read the source code from the file
     with open(filename, 'r') as file:

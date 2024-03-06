@@ -21,12 +21,7 @@ dspy_module_template = '''"""
 {{ docstring }}
 """
 import dspy
-from typer import Typer
 from dspygen.utils.dspy_tools import init_dspy
-
-
-app = Typer()
-
 
 {%- set module_name = model.class_name | class_name ~ "Module" %}
 {%- set inputs_join = model.inputs | join(', ') %}    
@@ -43,38 +38,21 @@ class {{ module_name }}(dspy.Module):
         return result
 
 
-def {{ var_name }}_call({{ inputs_join }}):
-    {{ var_name }} = {{ module_name }}()
-    return {{ var_name }}.forward({{ inputs_join_kwargs }})
+{% include 'dspy_module_cli_call.j2' %}
 
 
-@app.command()
-def call({{ inputs_join }}):
-    """{{ module_name }}"""
-    init_dspy()
-    
-    print({{ var_name }}_call({{ inputs_join_kwargs }}))
+
+{% include 'dspy_module_def_call.j2' %}
 
 
-from fastapi import APIRouter
-router = APIRouter()
 
-@router.post("/{{ var_name }}/")
-async def {{ var_name }}_route(data: dict):
-    # Your code generation logic here
-    init_dspy()
-    
-    print(data)
-    return {{ var_name }}_call(**data)
+{% include 'dspy_module_main.j2' %}
 
 
-def main():
-    init_dspy()
-{% for input in model.inputs %}
-    {{ input }} = ""
-{% endfor %}
-    print({{ var_name }}_call({{ inputs_join_kwargs }}))
-    
+
+{% include 'dspy_module_route.j2' %}
+
+
 
 if __name__ == "__main__":
     main()

@@ -5,7 +5,7 @@ from loguru import logger
 
 from dspygen.rdddy.abstract_actor import AbstractActor
 from dspygen.rdddy.actor_system import ActorSystem
-from dspygen.rdddy.messages import AbstractEvent, AbstractMessage
+from dspygen.rdddy.abstract_message import AbstractEvent, AbstractMessage
 
 
 class LogSink:

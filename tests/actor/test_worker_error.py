@@ -2,7 +2,7 @@ import asyncio
 
 from dspygen.rdddy.abstract_actor import AbstractActor
 from dspygen.rdddy.actor_system import ActorSystem
-from dspygen.rdddy.messages import ExceptionMessage, TerminationMessage
+from dspygen.rdddy.abstract_message import ExceptionMessage, TerminationMessage
 
 
 class WorkerActor(AbstractActor):

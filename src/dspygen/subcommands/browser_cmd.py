@@ -18,9 +18,9 @@ def browser():
     typer.echo("Running browser subcommand.")
 
 
-@app.command(name="open")
-async def browser_open(lifetime: int = 60*60):
-    """Open a browser with the given lifetime with a browser process supervisor."""
+@app.command(name="start")
+async def browser_start():
+    """Start a browser with a browser process supervisor."""
     actor_system = ActorSystem()
     proc_supervisor = await actor_system.actor_of(BrowserProcessSupervisor)
     browser_actor = await actor_system.actor_of(BrowserWorker)
@@ -28,10 +28,8 @@ async def browser_open(lifetime: int = 60*60):
     # Start Chrome Browser
     await actor_system.publish(StartBrowserCommand())
 
-    # await actor_system.publish(StopBrowserCommand())
-
     # Perform browser actions using BrowserActor
     typer.echo("Main function done.")
 
-    # Stop Chrome Browser
-    await asyncio.sleep(lifetime)
+    while True:
+        await asyncio.sleep(5)

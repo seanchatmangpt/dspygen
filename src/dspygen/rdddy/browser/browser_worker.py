@@ -7,7 +7,7 @@ from playwright.async_api import async_playwright
 from dspygen.rdddy.abstract_actor import AbstractActor
 from dspygen.rdddy.actor_system import ActorSystem
 from dspygen.rdddy.browser.browser_domain import *
-from dspygen.rdddy.messages import *
+from dspygen.rdddy.abstract_message import *
 
 
 class BrowserWorker(AbstractActor):
@@ -16,35 +16,33 @@ class BrowserWorker(AbstractActor):
         actor_system: ActorSystem,
         actor_id: Optional[int] = None,
         page: Optional[Page] = None,
+        browser=None
     ):
         super().__init__(actor_system, actor_id)
         self.page = page
+        self.browser = browser
 
     async def handle_click(self, click_cmd: Click) -> None:
         await self.page.click(
             selector=click_cmd.selector,
-            options=click_cmd.options,
-            **click_cmd.kwargs,
         )
 
     async def handle_goto(self, goto_cmd: Goto) -> None:
         await self.page.goto(
-            url=goto_cmd.url, options=goto_cmd.options, **goto_cmd.kwargs
+            url=goto_cmd.url
         )
 
     async def handle_type(self, type_cmd: TypeText) -> None:
         await self.page.type(
             selector=type_cmd.selector,
             text=type_cmd.text,
-            options=type_cmd.options,
-            **type_cmd.kwargs,
         )
 
     async def handle_send_chatgpt(self, send_cmd: SendChatGPT) -> None:
         SLEEP = 2
         #
         await asyncio.sleep(SLEEP)
-        await self.publish(self.actor_id, Click(selector="#prompt-textarea"))
+        await self.publish(Click(selector="#prompt-textarea"))
         # # pyperclip.copy(publish_cmd.prompt)
         # # pyperclip.paste()
         await self.publish(TypeText(selector="#prompt-textarea", text=send_cmd.prompt))
@@ -129,13 +127,13 @@ async def main():
 
         # List of prompts for generating documents
         prompts = [
-            "Creating Interactive Data Dashboards: Develop a guide on using streamlitgen to create interactive data dashboards in Streamlit, including real-time updates and user-friendly charts.",
+            "Hello World"
         ]
 
         # Broadcast SendChatGPT events for each prompt
         for prompt in prompts:
-            url = "https://chat.openai.com/g/g-JWcKIFe74-bucky-v10133/c/28ccc59a-0dc5-46da-9dee-f37d71781beb"
-            # url = "https://chat.openai.com/"
+            # url = "https://chat.openai.com/g/g-JWcKIFe74-bucky-v10133/c/28ccc59a-0dc5-46da-9dee-f37d71781beb"
+            url = "https://chat.openai.com/"
             await asys.publish(Goto(url=url))
             await asyncio.sleep(3)
             await asys.publish(
@@ -144,14 +142,6 @@ async def main():
                 )
             )
             await asyncio.sleep(90)
-
-        while True:
-            await asyncio.sleep(1)
-
-        links = await page.query_selector_all(".job-card-container__link")
-
-        for link in links:
-            await link.click()
 
 
 if __name__ == "__main__":

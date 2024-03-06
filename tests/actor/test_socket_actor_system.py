@@ -1,7 +1,7 @@
 from unittest.mock import AsyncMock
 
 from dspygen.rdddy.actor_system import ActorSystem
-from dspygen.rdddy.messages import AbstractMessage
+from dspygen.rdddy.abstract_message import AbstractMessage
 import pytest
 
 
