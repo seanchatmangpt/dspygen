@@ -7,14 +7,24 @@ from typer import Typer
 from dspygen.utils.dspy_tools import init_dspy
 
 
-app = Typer()        
+app = Typer()
+
+
+class BlogArticleGenerationSignature(dspy.Signature):
+    """
+    Transforms a given subject into a detailed markdown blog article.
+    """
+
+    subject = dspy.InputField(desc="The main subject or topic for the blog article.")
+
+    markdown_blog_article = dspy.OutputField(desc="Generated blog article in markdown format.", prefix="```markdown")
 
 
 class BlogModule(dspy.Module):
     """BlogModule"""
 
     def forward(self, subject):
-        pred = dspy.Predict("subject -> markdown_blog_article")
+        pred = dspy.ChainOfThought(BlogArticleGenerationSignature)
         result = pred(subject=subject).markdown_blog_article
         return result
 

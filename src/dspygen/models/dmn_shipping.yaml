@@ -1,0 +1,30 @@
+dmn:
+  definitions:
+    id: "shipment_decision_logic"
+    name: "Shipment Decision Logic"
+    decision:
+      - id: "decision_1"
+        name: "Determine Action Based on Shipment Status"
+        decisionTable:
+          inputs:
+            - id: "input_1"
+              label: "Shipment Status"
+              inputExpression: "status"
+              inputValues: ["Delivered", "In Transit", "Exception"]
+          outputs:
+            - id: "output_1"
+              label: "Action"
+              outputValues: ["Print Label", "Automate Browser", "Notify User"]
+          rules:
+            - inputEntries:
+                - "Delivered"
+              outputEntries:
+                - "Print Label"
+            - inputEntries:
+                - "In Transit"
+              outputEntries:
+                - "Automate Browser"
+            - inputEntries:
+                - "Exception"
+              outputEntries:
+                - "Notify User"

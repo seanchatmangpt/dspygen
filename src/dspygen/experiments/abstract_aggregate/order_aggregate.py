@@ -9,7 +9,6 @@ class OrderAggregate(AbstractAggregate):
     async def handle_place_order(self, command: PlaceOrder):
         print(f"OrderAggregate handle order: {command.content}")
         print(f"Print shipping label")
-        raise Exception("This Sucks")
 
 
 async def main():

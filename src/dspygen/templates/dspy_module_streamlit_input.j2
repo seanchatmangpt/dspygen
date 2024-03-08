@@ -1,0 +1,16 @@
+"""
+import streamlit as st
+
+
+# Streamlit form and display
+st.title("{{ module_name }} Generator")
+{% for input in model.inputs %}
+{{ input }} = st.text_input("Enter {{ input }}")
+{% endfor %}
+
+if st.button("Submit {{ module_name }}"):
+    init_dspy()
+
+    result = {{ var_name }}_call({{ inputs_join_kwargs }})
+    st.write(result)
+"""

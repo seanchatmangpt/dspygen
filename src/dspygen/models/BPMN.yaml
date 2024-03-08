@@ -1,0 +1,57 @@
+processes:
+- flows:
+  - condition: null
+    id: flow1
+    sourceRef: start
+    targetRef: track_shipment
+  - condition: null
+    id: flow2
+    sourceRef: track_shipment
+    targetRef: decision_tree
+  - condition: status == 'Delivered'
+    id: flow3
+    sourceRef: decision_tree
+    targetRef: print_label
+  - condition: status != 'Delivered'
+    id: flow4
+    sourceRef: decision_tree
+    targetRef: web_browser_automation
+  - condition: null
+    id: flow5
+    sourceRef: print_label
+    targetRef: end
+  - condition: null
+    id: flow6
+    sourceRef: web_browser_automation
+    targetRef: end
+  id: ups_tracking_and_label_printing
+  name: UPS Tracking and Label Printing Process
+  tasks:
+  - id: start
+    name: Start
+    properties: {}
+    type: startEvent
+  - id: track_shipment
+    name: Track Shipment
+    properties:
+      service: UPS Tracking API
+    type: serviceTask
+  - id: decision_tree
+    name: Decision Tree Analysis
+    properties:
+      decisionLogic: Determine next steps based on tracking status
+    type: exclusiveGateway
+  - id: print_label
+    name: Print Label
+    properties:
+      service: Label Printing Service
+    type: serviceTask
+  - id: web_browser_automation
+    name: Automate Web Browser
+    properties:
+      service: Web Browser Automation Tool
+    type: serviceTask
+  - id: end
+    name: End
+    properties: {}
+    type: endEvent

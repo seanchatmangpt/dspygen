@@ -1,12 +1,10 @@
 import sqlite3
-from typing import Tuple
 
-from dspygen.modules.gen_keyword_arguments_module import invoke
+from dspygen.experiments.lm_call import call
 from dspygen.utils.dspy_tools import init_dspy
 
 # Assuming Chinook.db is located in the same directory for simplicity
 conn = sqlite3.connect("Chinook.db")
-
 
 poor_query = """WITH recursive cte_dates AS (
   SELECT 
@@ -67,11 +65,20 @@ JOIN
                    AND cs.daily_sales = cms.max_daily_sales
 """
 
+from pydantic import BaseModel
 
-def sql_query_optimizer(original_sql_query: str, optimization_recommendations: str, optimized_query: str) -> tuple[
-    str, str]:
+
+class SQLQueryModel(BaseModel):
+    query: str
+
+
+class OptimizedSQLQueryModel(BaseModel):
+    rationale: str
+    optimized_query: str
+
+
+def sql_query_optimizer() -> OptimizedSQLQueryModel:
     """Optimize the given SQL query"""
-    return optimization_recommendations, optimized_query
 
 
 def main():
@@ -79,7 +86,7 @@ def main():
 
     # result = invoke("What is the name of the album with the most tracks and count?", question_to_chinook_query)
 
-    result = invoke(sql_query_optimizer, poor_query)
+    result = call(sql_query_optimizer, poor_query)
 
     print(result)
 

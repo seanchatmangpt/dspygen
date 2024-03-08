@@ -40,10 +40,6 @@ def question_to_chinook_query(question: str, query: str) -> str:
 def main():
     init_dspy()
 
-    # result = invoke(question_to_chinook_query, "What is the name of the album with the most tracks and count?" )
-
-    # print(result)
-
     result = invoke(question_to_chinook_query, "Hi, who are the top 5 artists by number of tracks?")
 
     print(result)

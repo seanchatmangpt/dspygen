@@ -30,7 +30,7 @@ def source_code_docs_call(source_code):
 
 
 @app.command()
-def call(source_code=pyperclip.paste()):
+def call(source_code):
     """SourceCodePep8DocsModule"""
     init_dspy(max_tokens=3000)
 

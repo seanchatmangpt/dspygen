@@ -54,6 +54,9 @@ class {{ module_name }}(dspy.Module):
 
 
 
+{% include 'dspy_module_streamlit_input.j2' %}
+
+
 if __name__ == "__main__":
     main()
 

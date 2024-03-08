@@ -1,7 +1,9 @@
 from dspygen.modules.insight_tweet_module import insight_tweet_call
 from dspygen.rdddy.abstract_actor import AbstractActor
+from dspygen.rdddy.abstract_command import AbstractCommand
+from dspygen.rdddy.abstract_event import AbstractEvent
+from dspygen.rdddy.abstract_query import AbstractQuery
 from dspygen.rdddy.actor_system import ActorSystem
-from dspygen.rdddy.abstract_message import *
 from dspygen.utils.dspy_tools import init_dspy
 
 

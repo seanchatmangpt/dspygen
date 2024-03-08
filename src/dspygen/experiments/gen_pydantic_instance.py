@@ -2,7 +2,7 @@ import ast
 import dspy
 import inspect
 import logging
-from typing import Optional, TypeVar
+from typing import Optional, TypeVar, Type, Set
 
 from pydantic import BaseModel, ValidationError
 
@@ -69,25 +69,17 @@ class GenPydanticInstance(dspy.Module):
 
     def __init__(
         self,
-        root_model: type[T],
-        child_models: Optional[list[type[BaseModel]]] = None,
+        model: Type[T],
         generate_sig=PromptToPydanticInstanceSignature,
         correct_generate_sig=PromptToPydanticInstanceErrorSignature,
     ):
         super().__init__()
 
-        self.models = [root_model]  # Always include root_model in models list
-
-        if child_models:
-            self.models.extend(child_models)
-
         self.output_key = "root_model_kwargs_dict"
-        self.root_model = root_model
+        self.model = model
 
         # Concatenate source code of models for use in generation/correction logic
-        self.model_sources = "\n".join(
-            [inspect.getsource(model) for model in self.models]
-        )
+        self.model_sources = get_model_source(model)
 
         # Initialize DSPy ChainOfThought modules for generation and correction
         self.generate = ChainOfThought(generate_sig)
@@ -97,8 +89,8 @@ class GenPydanticInstance(dspy.Module):
     def validate_root_model(self, output: str) -> bool:
         """Validates whether the generated output conforms to the root Pydantic model."""
         try:
-            model_inst = self.root_model.model_validate(eval_dict_str(output))
-            return isinstance(model_inst, self.root_model)
+            model_inst = self.model.model_validate(eval_dict_str(output))
+            return isinstance(model_inst, self.model)
         except (ValidationError, ValueError, TypeError, SyntaxError) as error:
             self.validation_error = error
             logger.debug(f"Validation error: {error}")
@@ -108,11 +100,11 @@ class GenPydanticInstance(dspy.Module):
         """Validates the generated output and returns an instance of the root Pydantic model if successful."""
         Assert(
             self.validate_root_model(output),
-            f"""You need to create a kwargs dict for {self.root_model.__name__}\n
+            f"""You need to create a kwargs dict for {self.model.__name__}\n
             Validation error:\n{self.validation_error}""",
         )
 
-        return self.root_model.model_validate(eval_dict_str(output))
+        return self.model.model_validate(eval_dict_str(output))
 
     def forward(self, prompt) -> T:
         """Takes a prompt as input and generates a Python dictionary that represents an instance of the
@@ -120,7 +112,7 @@ class GenPydanticInstance(dspy.Module):
         """
         output = self.generate(
             prompt=prompt,
-            root_pydantic_model_class_name=self.root_model.__name__,
+            root_pydantic_model_class_name=self.model.__name__,
             pydantic_model_definitions=self.model_sources,
         )
 
@@ -134,7 +126,7 @@ class GenPydanticInstance(dspy.Module):
             # Correction attempt
             corrected_output = self.correct_generate(
                 prompt=prompt,
-                root_pydantic_model_class_name=self.root_model.__name__,
+                root_pydantic_model_class_name=self.model.__name__,
                 pydantic_model_definitions=self.model_sources,
                 error=f"str(error){self.validation_error}",
             )[self.output_key]
@@ -143,6 +135,58 @@ class GenPydanticInstance(dspy.Module):
 
     def __call__(self, prompt):
         return self.forward(prompt=prompt)
+
+
+from pydantic import BaseModel
+from typing import Type, Set
+import inspect
+
+def get_model_source(model: Type[BaseModel], already_seen: Set[Type[BaseModel]] = None) -> str:
+    """
+    Recursively grab the source code of a given Pydantic model and all related models, including the inheritance chain.
+
+    Args:
+        model: The Pydantic model class to extract source code for.
+        already_seen: A set of models that have already been processed to avoid infinite recursion.
+
+    Returns:
+        A string containing the Python source code for the model and all related models.
+    """
+    if already_seen is None:
+        already_seen = set()
+
+    if model in already_seen:
+        return ""
+    already_seen.add(model)
+
+    source = inspect.getsource(model)
+
+    # Inspect base classes for inheritance until BaseModel is reached
+    for base in model.__bases__:
+        if base is not BaseModel and issubclass(base, BaseModel):
+            base_source = get_model_source(base, already_seen)
+            if base_source:
+                source = base_source + "\n\n" + source
+
+    # Use model.__annotations__ to get the type of each field
+    for field_name, field_type in model.__annotations__.items():
+        # If it is a list, get the type of the list items
+        if hasattr(field_type, "__origin__") and field_type.__origin__ is list:
+            list_item_type = field_type.__args__[0]
+            if issubclass(list_item_type, BaseModel) and list_item_type not in already_seen:
+                list_item_source = get_model_source(list_item_type, already_seen)
+                source += "\n\n" + list_item_source
+
+        # Check if the field is a subclass of BaseModel to identify Pydantic models
+        try:
+            if issubclass(field_type, BaseModel) and field_type not in already_seen:
+                field_source = get_model_source(field_type, already_seen)
+                source += "\n\n" + field_source
+        except TypeError:
+            # Not a class, ignore
+            pass
+
+    return source
 
 
 hygen_prompt = """
@@ -201,25 +245,22 @@ You are a Event Storm assistant that comes up with Events, Commands, and Queries
 
 def main():
     import dspy
-    from rdddy.messages import (
-        AbstractCommand,
-        AbstractEvent,
-        AbstractQuery,
-        EventStormingDomainSpecificationModel,
-    )
 
-    lm = dspy.OpenAI(max_tokens=2000, model="gpt-4")
+    from dspygen.rdddy.event_storm_domain_specification_model import EventStormingDomainSpecificationModel
+
+    lm = dspy.OpenAI(max_tokens=2000)
     dspy.settings.configure(lm=lm)
 
-    model_module = GenPydanticInstance(
-        root_model=EventStormingDomainSpecificationModel,
-        child_models=[AbstractEvent, AbstractCommand, AbstractQuery],
-    )
+    model_module = GenPydanticInstance(EventStormingDomainSpecificationModel)
     model_inst = model_module(hygen_prompt)
     print(model_inst)
 
 
-value = """"""
+def instance(model: Type[BaseModel], prompt: str) -> BaseModel:
+    model_module = GenPydanticInstance(model)
+    return model_module(prompt)
+
+
 
 if __name__ == "__main__":
     main()

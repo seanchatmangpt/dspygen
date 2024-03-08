@@ -2,9 +2,9 @@ import asyncio
 
 import pytest
 
-from dspygen.rdddy.abstract_actor import *
+from dspygen.rdddy.abstract_actor import AbstractActor
+from dspygen.rdddy.abstract_query import AbstractQuery
 from dspygen.rdddy.actor_system import ActorSystem
-from dspygen.rdddy.abstract_message import *
 
 
 @pytest.fixture()

@@ -40,7 +40,7 @@ def main():
 
 
 @app.command()
-def call(file_content: str = pyperclip.paste()):
+def call(file_content: str):
     """Converts file content to a file name with extension"""
     print(file_name_call(file_content=file_content))
 

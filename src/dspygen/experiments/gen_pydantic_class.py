@@ -3,8 +3,9 @@ from pydantic import BaseModel, Field
 
 import dspy
 from dspy import InputField, OutputField, Signature
-from rdddy.generators.gen_pydantic_instance import GenPydanticInstance
-from typetemp.functional import render
+
+from dspygen.experiments.gen_pydantic_instance import GenPydanticInstance
+from dspygen.typetemp.functional import render
 
 
 class FieldTemplateSpecificationModel(BaseModel):
@@ -199,8 +200,7 @@ class GenPydanticClass(dspy.Module):
 
 
         instance_module = GenPydanticInstance(
-            root_model=PydanticClassTemplateSpecificationModel,
-            child_models=[FieldTemplateSpecificationModel],
+            model=PydanticClassTemplateSpecificationModel,
             generate_sig=PromptToPydanticInstanceSignature,
             correct_generate_sig=PromptToPydanticInstanceErrorSignature,
         )

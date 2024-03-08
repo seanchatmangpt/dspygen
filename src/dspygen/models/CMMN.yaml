@@ -1,0 +1,45 @@
+cases:
+- id: ups_tracking_and_handling
+  name: UPS Tracking and Handling Case
+  planItems:
+  - description: Print the shipping label if the package is delivered.
+    entryCriterion: shipment_delivered
+    id: print_label_task
+    name: Print Label Task
+    role: system
+    type: humanTask
+  - description: Automate browser tasks for further actions if the package is not delivered.
+    entryCriterion: shipment_not_delivered
+    id: automate_browser_task
+    name: Automate Browser Task
+    role: system
+    type: humanTask
+  roles:
+  - user
+  - system
+  sentries:
+  - condition: Shipment status is 'Delivered'
+    id: shipment_delivered
+    name: Shipment Delivered
+  - condition: Shipment status is not 'Delivered'
+    id: shipment_not_delivered
+    name: Shipment Not Delivered
+  stages:
+  - id: tracking_stage
+    name: Tracking Stage
+    tasks:
+    - description: Track the shipment using UPS Tracking API.
+      entryCriterion: null
+      id: track_shipment
+      name: Track Shipment
+      role: system
+      type: humanTask
+  - id: decision_making_stage
+    name: Decision Making Stage
+    tasks:
+    - description: Analyze the status of the shipment to determine next actions.
+      entryCriterion: null
+      id: analyze_status
+      name: Analyze Shipment Status
+      role: system
+      type: humanTask

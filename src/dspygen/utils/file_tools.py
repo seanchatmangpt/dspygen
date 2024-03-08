@@ -214,28 +214,32 @@ def project_root() -> Path:
     return Path(__file__).parent.parent.parent.parent
 
 
-def source_dir() -> Path:
-    return Path(__file__).parent.parent
+def source_dir(file_name="") -> Path:
+    return Path(__file__).parent.parent / file_name
 
 
-def subcommands_dir() -> Path:
-    return source_dir() / "subcommands"
+def subcommands_dir(file_name="") -> Path:
+    return source_dir() / "subcommands" / file_name
 
 
-def dspy_modules_dir() -> Path:
-    return source_dir() / "modules"
+def dspy_modules_dir(file_name="") -> Path:
+    return source_dir() / "modules" / file_name
 
 
-def signatures_dir() -> Path:
-    return source_dir() / "signatures"
+def signatures_dir(file_name="") -> Path:
+    return source_dir() / "signatures" / file_name
 
 
-def lm_dir() -> Path:
-    return source_dir() / "lm"
+def lm_dir(file_name="") -> Path:
+    return source_dir() / "lm" / file_name
 
 
-def templates_dir() -> Path:
-    return source_dir() / "templates"
+def templates_dir(file_name="") -> Path:
+    return source_dir() / "templates" / file_name
+
+
+def pages_dir(file_name="") -> Path:
+    return source_dir() / "pages" / file_name
 
 
 def get_source(filename):

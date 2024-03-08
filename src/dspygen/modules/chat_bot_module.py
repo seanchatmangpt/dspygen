@@ -13,7 +13,7 @@ class ChatBotModule(dspy.Module):
     """ChatBotModule"""
 
     def forward(self, message, history, context):
-        pred = dspy.Predict("message, history, context -> response")
+        pred = dspy.ChainOfThought("message, history, context -> response")
         result = pred(message=message, history=history, context=context).response
         return result
 

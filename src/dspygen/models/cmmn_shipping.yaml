@@ -1,0 +1,46 @@
+cmmn:
+  case:
+    id: "ups_tracking_and_handling"
+    name: "UPS Tracking and Handling Case"
+    roles:
+      - id: "user"
+        name: "User"
+      - id: "system"
+        name: "System"
+    stages:
+      - id: "tracking_stage"
+        name: "Tracking Stage"
+        tasks:
+          - id: "track_shipment"
+            name: "Track Shipment"
+            type: "humanTask"
+            role: "system"
+            description: "Track the shipment using UPS Tracking API."
+      - id: "decision_making_stage"
+        name: "Decision Making Stage"
+        tasks:
+          - id: "analyze_status"
+            name: "Analyze Shipment Status"
+            type: "humanTask"
+            role: "system"
+            description: "Analyze the status of the shipment to determine next actions."
+    planItems:
+      - id: "print_label_task"
+        name: "Print Label Task"
+        type: "humanTask"
+        role: "system"
+        description: "Print the shipping label if the package is delivered."
+        entryCriterion: "shipment_delivered"
+      - id: "automate_browser_task"
+        name: "Automate Browser Task"
+        type: "humanTask"
+        role: "system"
+        description: "Automate browser tasks for further actions if the package is not delivered."
+        entryCriterion: "shipment_not_delivered"
+    sentries:
+      - id: "shipment_delivered"
+        name: "Shipment Delivered"
+        condition: "Shipment status is 'Delivered'"
+      - id: "shipment_not_delivered"
+        name: "Shipment Not Delivered"
+        condition: "Shipment status is not 'Delivered'"

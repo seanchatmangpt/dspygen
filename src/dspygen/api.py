@@ -21,7 +21,7 @@ import os
 
 def load_module_routers(app: FastAPI):
     for filename in os.listdir(dspy_modules_dir()):
-        if filename.endswith("_module.py"):
+        if filename.endswith(".py"):
             module_name = filename[:-3]
             module = import_module(f"dspygen.modules.{module_name}")
             if hasattr(module, "router"):

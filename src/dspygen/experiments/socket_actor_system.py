@@ -1,14 +1,18 @@
 import asyncio
 
 from dspygen.rdddy.abstract_actor import AbstractActor
+from dspygen.rdddy.abstract_command import AbstractCommand
 from dspygen.rdddy.actor_system import ActorSystem
-from dspygen.rdddy.abstract_message import AbstractCommand
 
 
 class PrintActor(AbstractActor):
 
     async def process_message(self, message:AbstractCommand):
         print(f"{self.actor_id} received message: {message.content}")
+
+
+class SimpleMessage(AbstractCommand):
+    pass
 
 
 async def main():

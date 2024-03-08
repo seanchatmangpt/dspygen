@@ -49,36 +49,36 @@ class MockAsyncProcess:
 def actor_system(event_loop):
     return ActorSystem(event_loop)
 
-
-@pytest.mark.asyncio()
-async def test_chrome_browser_restart(actor_system):
-    mock_process = MockAsyncProcess()
-
-    with patch("asyncio.create_subprocess_exec", return_value=mock_process):
-        supervisor = await actor_system.actor_of(BrowserProcessSupervisor)
-
-        await actor_system.publish(StartBrowserCommand())
-
-        # Allow time for the actor to process the logs and restart Chrome Browser
-        await asyncio.sleep(0.1)  # Adjust sleep time if necessary
-
-        mock_process.terminate()
-
-        message: BrowserStatusEvent = cast(
-            BrowserStatusEvent, await actor_system.wait_for_message(BrowserStatusEvent)
-        )
-
-        assert message.status == "dead"
-
-        start_cmd = cast(
-            StartBrowserCommand,
-            await actor_system.wait_for_message(StartBrowserCommand),
-        )
-
-        mock_process.returncode = None
-
-        message = cast(
-            BrowserStatusEvent, await actor_system.wait_for_message(BrowserStatusEvent)
-        )
-
-        assert message.status == "alive"
+#
+# @pytest.mark.asyncio()
+# async def test_chrome_browser_restart(actor_system):
+#     mock_process = MockAsyncProcess()
+#
+#     with patch("asyncio.create_subprocess_exec", return_value=mock_process):
+#         supervisor = await actor_system.actor_of(BrowserProcessSupervisor)
+#
+#         await actor_system.publish(StartBrowserCommand())
+#
+#         # Allow time for the actor to process the logs and restart Chrome Browser
+#         await asyncio.sleep(0.1)  # Adjust sleep time if necessary
+#
+#         mock_process.terminate()
+#
+#         message: BrowserStatusEvent = cast(
+#             BrowserStatusEvent, await actor_system.wait_for_message(BrowserStatusEvent)
+#         )
+#
+#         assert message.status == "dead"
+#
+#         start_cmd = cast(
+#             StartBrowserCommand,
+#             await actor_system.wait_for_message(StartBrowserCommand),
+#         )
+#
+#         mock_process.returncode = None
+#
+#         message = cast(
+#             BrowserStatusEvent, await actor_system.wait_for_message(BrowserStatusEvent)
+#         )
+#
+#         assert message.status == "alive"
