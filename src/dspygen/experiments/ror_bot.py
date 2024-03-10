@@ -2,7 +2,7 @@ import subprocess
 
 from dspygen.experiments.gen_python_primitive import gen_bool, gen_list
 from dspygen.modules.checker_module import checker_call
-from dspygen.modules.cli_bot import cli_bot_call
+from dspygen.modules.cli_bot_module import cli_bot_call
 from dspygen.utils.dspy_tools import init_dspy
 
 

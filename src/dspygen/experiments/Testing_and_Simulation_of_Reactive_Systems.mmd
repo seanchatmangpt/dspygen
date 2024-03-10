@@ -1,0 +1,91 @@
+stateDiagram-v2
+  state "Domain Events" {
+    [*] --> TaskStartedEvent
+    TaskStartedEvent --> TaskCompletedEvent
+    TaskCompletedEvent --> TaskFailedEvent
+    TaskFailedEvent --> ExternalEventOccurredEvent
+  }
+  state "External Events" {
+    [*] --> ExternalSystemUpdatedEvent
+    ExternalSystemUpdatedEvent --> RegulationAmendedEvent
+    RegulationAmendedEvent --> ThirdPartyNotificationEvent
+    ThirdPartyNotificationEvent --> DataReceivedEvent
+    DataReceivedEvent --> PartnerNotificationEvent
+    PartnerNotificationEvent --> ServiceDownEvent
+    ServiceDownEvent --> SecurityAlertEvent
+  }
+  state "Commands" {
+    [*] --> StartProcessCommand
+    StartProcessCommand --> StopProcessCommand
+    StopProcessCommand --> ExecuteActivityCommand
+    ExecuteActivityCommand --> InvokePartnerCommand
+    InvokePartnerCommand --> ReceiveFromPartnerCommand
+    ReceiveFromPartnerCommand --> HandleFaultCommand
+    HandleFaultCommand --> SaveProcessInstanceCommand
+    SaveProcessInstanceCommand --> LoadProcessInstanceCommand
+  }
+  state "Queries" {
+    [*] --> GetProcessStatusQuery
+    GetProcessStatusQuery --> GetActivityDetailsQuery
+    GetActivityDetailsQuery --> GetVariableValueQuery
+    GetVariableValueQuery --> GetProcessMetricsQuery
+  }
+  state "Aggregates" {
+    [*] --> ProcessExecutionAggregate
+    ProcessExecutionAggregate --> ActivityExecutionAggregate
+    ActivityExecutionAggregate --> PartnerInteractionAggregate
+    PartnerInteractionAggregate --> ProcessInstanceAggregate
+  }
+  state "Policies" {
+    [*] --> ExecutionPolicy
+    ExecutionPolicy --> RetryPolicy
+    RetryPolicy --> CompensationPolicy
+    CompensationPolicy --> FaultHandlingPolicy
+  }
+  state "Read Models" {
+    [*] --> ProcessSummaryReadModel
+    ProcessSummaryReadModel --> ActivityLogReadModel
+    ActivityLogReadModel --> VariableSnapshotReadModel
+    VariableSnapshotReadModel --> ProcessInstanceDetailsReadModel
+  }
+  state "Views" {
+    [*] --> ProcessOverviewView
+    ProcessOverviewView --> TaskDetailsView
+    TaskDetailsView --> UserDashboardView
+    UserDashboardView --> ErrorLogView
+  }
+  state "UI Events" {
+    [*] --> ButtonClickEvent
+    ButtonClickEvent --> FormSubmissionEvent
+    FormSubmissionEvent --> TaskCompletionEvent
+    TaskCompletionEvent --> UserInteractionEvent
+  }
+  state "Sagas" {
+    [*] --> ProcessExecutionSaga
+    ProcessExecutionSaga --> CompensationSaga
+    CompensationSaga --> FaultHandlingSaga
+  }
+  state "Integration Events" {
+    [*] --> ServiceInvocationEvent
+    ServiceInvocationEvent --> DataTransferEvent
+    DataTransferEvent --> PartnerInteractionEvent
+    PartnerInteractionEvent --> IntegrationEvent
+  }
+  state "Exceptions" {
+    [*] --> ExecutionFailureException
+    ExecutionFailureException --> DataProcessingException
+    DataProcessingException --> IntegrationException
+    IntegrationException --> SystemException
+  }
+  state "Value Objects" {
+    [*] --> ProcessIDValueObject
+    ProcessIDValueObject --> ActivityDetailsValueObject
+    ActivityDetailsValueObject --> PartnerDetailsValueObject
+    PartnerDetailsValueObject --> VariableValueObject
+  }
+  state "Tasks" {
+    [*] --> DataValidationTask
+    DataValidationTask --> ServiceInvocationTask
+    ServiceInvocationTask --> ErrorHandlingTask
+    ErrorHandlingTask --> IntegrationTask
+  }

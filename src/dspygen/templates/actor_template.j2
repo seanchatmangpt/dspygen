@@ -1,21 +1,13 @@
-# actor_template.jinja
-
-import asyncio
-from typing import TYPE_CHECKING
-
 {% for import_line in import_lines %}
 {{ import_line }}
 {% endfor %}
 
-if TYPE_CHECKING:
-    from livingcharter.actor_system import ActorSystem
 
-from livingcharter.actor import Actor
+from dspygen.rdddy.abstract_actor import AbstractActor
 
-class {{ actor_name }}(Actor):
-    def __init__(self, actor_system: "ActorSystem", actor_id=None):
+class {{ actor_name }}(AbstractActor):
+    def __init__(self, actor_system, actor_id=None):
         super().__init__(actor_system, actor_id)
-        # Additional initialization here if necessary
 
     {% for message in messages %}
     async def handle_{{ message.type|lower }}(self, message: {{ message.class_name }}):

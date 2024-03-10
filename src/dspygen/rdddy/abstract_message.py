@@ -13,6 +13,7 @@ class AbstractMessage(YAMLMixin, BaseModel):
     model_config = ConfigDict(extra="allow", arbitrary_types_allowed=True)
 
     actor_id: int = -1
+    metadata: dict[str, Any] = {}
     content: Any = None
     message_type: str = ""
 

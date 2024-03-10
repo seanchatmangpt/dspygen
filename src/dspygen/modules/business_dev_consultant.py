@@ -13,7 +13,7 @@ class BusinessDevConsultantModule(dspy.Module):
     """BusinessDevConsultantModule"""
 
     def forward(self, prompt):
-        pred = dspy.Predict("prompt -> advice")
+        pred = dspy.ChainOfThought("prompt -> advice")
         result = pred(prompt=prompt).advice
         return result
 

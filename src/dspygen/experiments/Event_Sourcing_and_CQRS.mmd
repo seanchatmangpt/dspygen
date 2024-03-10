@@ -1,0 +1,86 @@
+stateDiagram-v2
+    [*] --> DomainEvents: TaskStartedEvent
+    DomainEvents --> ExternalEvents: TaskCompletedEvent
+    ExternalEvents --> Commands: TaskFailedEvent
+    Commands --> Queries: ExternalEventOccurredEvent
+    Queries --> Aggregates: ExternalSystemUpdatedEvent
+    Aggregates --> Policies: RegulationAmendedEvent
+    Policies --> ReadModels: ThirdPartyNotificationEvent
+    ReadModels --> Views: DataReceivedEvent
+    Views --> UIEvents: PartnerNotificationEvent
+    UIEvents --> Sagas: ServiceDownEvent
+    Sagas --> IntegrationEvents: SecurityAlertEvent
+    IntegrationEvents --> Exceptions: StartProcessCommand
+    Exceptions --> ValueObjects: StopProcessCommand
+    ValueObjects --> Tasks: ExecuteActivityCommand
+    Tasks --> [*]: InvokePartnerCommand
+    state DomainEvents {
+        TaskStartedEvent --> TaskCompletedEvent: ReceiveFromPartnerCommand
+        TaskCompletedEvent --> TaskFailedEvent: HandleFaultCommand
+        TaskFailedEvent --> ExternalEventOccurredEvent: SaveProcessInstanceCommand
+    }
+    state ExternalEvents {
+        ExternalSystemUpdatedEvent --> RegulationAmendedEvent: LoadProcessInstanceCommand
+        RegulationAmendedEvent --> ThirdPartyNotificationEvent: GetProcessStatusQuery
+        ThirdPartyNotificationEvent --> DataReceivedEvent: GetActivityDetailsQuery
+    }
+    state Commands {
+        StartProcessCommand --> StopProcessCommand: GetVariableValueQuery
+        StopProcessCommand --> ExecuteActivityCommand: GetProcessMetricsQuery
+        ExecuteActivityCommand --> InvokePartnerCommand: ProcessExecutionAggregate
+    }
+    state Queries {
+        GetProcessStatusQuery --> GetActivityDetailsQuery: ActivityExecutionAggregate
+        GetActivityDetailsQuery --> GetVariableValueQuery: PartnerInteractionAggregate
+        GetVariableValueQuery --> GetProcessMetricsQuery: ProcessInstanceAggregate
+    }
+    state Aggregates {
+        ProcessExecutionAggregate --> ActivityExecutionAggregate: ExecutionPolicy
+        ActivityExecutionAggregate --> PartnerInteractionAggregate: RetryPolicy
+        PartnerInteractionAggregate --> ProcessInstanceAggregate: CompensationPolicy
+    }
+    state Policies {
+        ExecutionPolicy --> RetryPolicy: FaultHandlingPolicy
+        RetryPolicy --> CompensationPolicy: ProcessSummaryReadModel
+        CompensationPolicy --> FaultHandlingPolicy: ActivityLogReadModel
+    }
+    state ReadModels {
+        ProcessSummaryReadModel --> ActivityLogReadModel: VariableSnapshotReadModel
+        ActivityLogReadModel --> VariableSnapshotReadModel: ProcessInstanceDetailsReadModel
+        VariableSnapshotReadModel --> ProcessInstanceDetailsReadModel: ProcessOverviewView
+    }
+    state Views {
+        ProcessOverviewView --> TaskDetailsView: UserDashboardView
+        TaskDetailsView --> UserDashboardView: ErrorLogView
+        UserDashboardView --> ErrorLogView: ButtonClickEvent
+    }
+    state UIEvents {
+        ButtonClickEvent --> FormSubmissionEvent: TaskCompletionEvent
+        FormSubmissionEvent --> TaskCompletionEvent: UserInteractionEvent
+        TaskCompletionEvent --> UserInteractionEvent: ProcessExecutionSaga
+    }
+    state Sagas {
+        ProcessExecutionSaga --> CompensationSaga: FaultHandlingSaga
+        CompensationSaga --> FaultHandlingSaga: ServiceInvocationEvent
+        FaultHandlingSaga --> ProcessExecutionSaga: DataTransferEvent
+    }
+    state IntegrationEvents {
+        ServiceInvocationEvent --> DataTransferEvent: PartnerInteractionEvent
+        DataTransferEvent --> PartnerInteractionEvent: IntegrationEvent
+        PartnerInteractionEvent --> IntegrationEvent: ExecutionFailureException
+    }
+    state Exceptions {
+        ExecutionFailureException --> DataProcessingException: IntegrationException
+        DataProcessingException --> IntegrationException: SystemException
+        IntegrationException --> SystemException: ProcessIDValueObject
+    }
+    state ValueObjects {
+        ProcessIDValueObject --> ActivityDetailsValueObject: PartnerDetailsValueObject
+        ActivityDetailsValueObject --> PartnerDetailsValueObject: VariableValueObject
+        PartnerDetailsValueObject --> VariableValueObject: DataValidationTask
+    }
+    state Tasks {
+        DataValidationTask --> ServiceInvocationTask: ErrorHandlingTask
+        ServiceInvocationTask --> ErrorHandlingTask: IntegrationTask
+        ErrorHandlingTask --> IntegrationTask: [*]
+    }

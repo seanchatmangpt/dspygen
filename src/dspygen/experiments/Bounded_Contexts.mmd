@@ -1,0 +1,26 @@
+stateDiagram-v2
+    [*] --> ProcessExecutionAggregate
+    ProcessExecutionAggregate --> StartProcessCommand: TaskStartedEvent
+    ProcessExecutionAggregate --> StopProcessCommand: TaskCompletedEvent
+    ProcessExecutionAggregate --> ExecuteActivityCommand: TaskFailedEvent
+    ProcessExecutionAggregate --> InvokePartnerCommand: ExternalEventOccurredEvent
+    ProcessExecutionAggregate --> ReceiveFromPartnerCommand: ExternalSystemUpdatedEvent
+    ProcessExecutionAggregate --> HandleFaultCommand: RegulationAmendedEvent
+    ProcessExecutionAggregate --> SaveProcessInstanceCommand: ThirdPartyNotificationEvent
+    ProcessExecutionAggregate --> LoadProcessInstanceCommand: DataReceivedEvent
+    ProcessExecutionAggregate --> GetProcessStatusQuery: PartnerNotificationEvent
+    ProcessExecutionAggregate --> GetActivityDetailsQuery: ServiceDownEvent
+    ProcessExecutionAggregate --> GetVariableValueQuery: SecurityAlertEvent
+    ProcessExecutionAggregate --> GetProcessMetricsQuery: ButtonClickEvent
+    ProcessExecutionAggregate --> ProcessExecutionSaga: FormSubmissionEvent
+    ProcessExecutionAggregate --> CompensationSaga: TaskCompletionEvent
+    ProcessExecutionAggregate --> FaultHandlingSaga: UserInteractionEvent
+    ProcessExecutionAggregate --> ServiceInvocationEvent: ExecutionFailureException
+    ProcessExecutionAggregate --> DataTransferEvent: DataProcessingException
+    ProcessExecutionAggregate --> PartnerInteractionEvent: IntegrationException
+    ProcessExecutionAggregate --> IntegrationEvent: SystemException
+    ProcessExecutionAggregate --> ProcessIDValueObject: DataValidationTask
+    ProcessExecutionAggregate --> ActivityDetailsValueObject: ServiceInvocationTask
+    ProcessExecutionAggregate --> PartnerDetailsValueObject: ErrorHandlingTask
+    ProcessExecutionAggregate --> VariableValueObject: IntegrationTask
+    ProcessExecutionAggregate --> [*]: ProcessCompletedEvent

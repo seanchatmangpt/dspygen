@@ -32,7 +32,7 @@ def new_module(
 
     source = SignatureDspyModuleModule().forward(mdl)
 
-    file_name = f"{inflection.underscore(class_name)}.py"
+    file_name = f"{inflection.underscore(class_name)}_module.py"
 
     with open(dspy_modules_dir() / file_name, "w") as file:
         file.write(source)

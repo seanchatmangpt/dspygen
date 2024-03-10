@@ -3438,6 +3438,17 @@ plugins = ["importlib-metadata"]
 windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
+name = "pykka"
+version = "4.0.2"
+description = "Pykka is a Python implementation of the actor model"
+optional = false
+python-versions = ">=3.8.0,<4.0.0"
+files = [
+    {file = "pykka-4.0.2-py3-none-any.whl", hash = "sha256:100f9ceb5b977aad5eb7b3165d0989d539eff685a5d77b3f733e7c3fe704fd7b"},
+    {file = "pykka-4.0.2.tar.gz", hash = "sha256:05e687c426922b0084d79f22a6c1813e0c4e0c59d8f860aa32c18c5f6127e276"},
+]
+
+[[package]]
 name = "pyperclip"
 version = "1.8.2"
 description = "A cross-platform clipboard module for Python. (Only handles plain text for now.)"
@@ -5434,4 +5445,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "187c8e724626635b8f6485d5a1b7df3cd14addb9e85348641793b2d7a15184f1"
+content-hash = "06f06416910d0f882c2e755ad286c7e6cea974948962e2afd34286d8aa1b5209"

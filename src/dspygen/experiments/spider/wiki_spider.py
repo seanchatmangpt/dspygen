@@ -1,6 +1,6 @@
 from playwright.sync_api import sync_playwright
 
-from dspygen.modules.get_selector import get_selector_call
+from dspygen.modules.get_selector_module import get_selector_call
 from dspygen.utils.dspy_tools import init_dspy
 
 

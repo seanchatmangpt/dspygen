@@ -1,7 +1,7 @@
 import streamlit as st
 from st_pages import add_page_title
 
-from dspygen.modules.streamlit_bot import streamlit_bot_call
+from dspygen.modules.streamlit_bot_module import streamlit_bot_call
 from dspygen.utils.dspy_tools import init_dspy
 
 add_page_title()

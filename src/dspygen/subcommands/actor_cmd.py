@@ -25,6 +25,7 @@ def process_is_running(pid: int) -> bool:
     else:
         return True
 
+
 @app.command(name="start")
 async def start_mqtt(broker_path: str = MOSQUITTO_BINARY, config_path: str = MOSQUITTO_CONF):
     """Starts the Mosquitto MQTT broker."""
@@ -87,6 +88,11 @@ async def start_actor_system(message: str):
     actor_system = ActorSystem()
 
     await actor_system.publish(AbstractCommand(content=message))
+
+
+@app.command(name="new")
+async def new_actor():
+    """Uses a Jinja template to generate a new actor."""
 
 
 if __name__ == "__main__":

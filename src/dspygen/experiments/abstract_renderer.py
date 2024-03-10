@@ -42,59 +42,66 @@ def generate_class_definitions(model: EventStormingDomainSpecificationModel):
 def main():
     event_storm_model_data = {
         "domain_event_classnames": [
-            "OrderPlaced",
-            "PaymentProcessed",
-            "InventoryUpdated",
+            "TaskStartedEvent", "TaskCompletedEvent", "TaskFailedEvent",
+            "ExternalEventOccurredEvent"
         ],
         "external_event_classnames": [
-            "ExternalPaymentConfirmation",
-            "SupplierInventoryUpdate",
-            "SupplierInventoryConfirmation",
+            "ExternalSystemUpdatedEvent",
+            "RegulationAmendedEvent",
+            "ThirdPartyNotificationEvent",
+            "DataReceivedEvent",
+            "PartnerNotificationEvent",
+            "ServiceDownEvent",
+            "SecurityAlertEvent"
         ],
-        "command_classnames": ["PlaceOrder", "ProcessPayment", "UpdateInventory"],
-        "query_classnames": ["GetOrderDetails", "ListBooks", "CheckOrderStatus"],
+        "command_classnames": [
+            "StartProcessCommand", "StopProcessCommand", "ExecuteActivityCommand",
+            "InvokePartnerCommand", "ReceiveFromPartnerCommand", "HandleFaultCommand",
+            "SaveProcessInstanceCommand", "LoadProcessInstanceCommand"
+        ],
+        "query_classnames": [
+            "GetProcessStatusQuery", "GetActivityDetailsQuery",
+            "GetVariableValueQuery", "GetProcessMetricsQuery"
+        ],
         "aggregate_classnames": [
-            "OrderAggregate",
-            "BookAggregate",
-            "CustomerAggregate",
+            "ProcessExecutionAggregate", "ActivityExecutionAggregate",
+            "PartnerInteractionAggregate", "ProcessInstanceAggregate"
         ],
         "policy_classnames": [
-            "OrderCancellationPolicy",
-            "RefundPolicy",
-            "ShippingPolicy",
+            "ExecutionPolicy", "RetryPolicy", "CompensationPolicy",
+            "FaultHandlingPolicy"
         ],
         "read_model_classnames": [
-            "OrderSummaryReadModel",
-            "BookCatalogReadModel",
-            "CustomerOrderHistoryReadModel",
+            "ProcessSummaryReadModel", "ActivityLogReadModel",
+            "VariableSnapshotReadModel", "ProcessInstanceDetailsReadModel"
         ],
-        "view_classnames": ["OrderDetailsView", "BookListView", "CustomerProfileView"],
+        "view_classnames": [
+            "ProcessOverviewView", "TaskDetailsView", "UserDashboardView",
+            "ErrorLogView"
+        ],
         "ui_event_classnames": [
-            "AddToCartButtonClick",
-            "CheckoutFormSubmitted",
-            "OrderHistoryPageLoaded",
+            "ButtonClickEvent", "FormSubmissionEvent", "TaskCompletionEvent",
+            "UserInteractionEvent"
         ],
         "saga_classnames": [
-            "OrderFulfillmentSaga",
-            "PaymentProcessingSaga",
-            "BookRestockSaga",
+            "ProcessExecutionSaga", "CompensationSaga", "FaultHandlingSaga"
         ],
         "integration_event_classnames": [
-            "OrderPlacedIntegrationEvent",
-            "PaymentProcessedIntegrationEvent",
-            "InventoryUpdatedIntegrationEvent",
+            "ServiceInvocationEvent", "DataTransferEvent",
+            "PartnerInteractionEvent", "IntegrationEvent"
         ],
         "exception_classnames": [
-            "OrderNotFoundException",
-            "PaymentDeclinedException",
-            "BookOutOfStockException",
+            "ExecutionFailureException", "DataProcessingException",
+            "IntegrationException", "SystemException"
         ],
-        "value_object_classnames": ["Address", "Price", "Quantity"],
+        "value_object_classnames": [
+            "ProcessIDValueObject", "ActivityDetailsValueObject",
+            "PartnerDetailsValueObject", "VariableValueObject"
+        ],
         "task_classnames": [
-            "ValidateOrder",
-            "CalculateShippingCosts",
-            "SendOrderConfirmationEmail",
-        ],
+            "DataValidationTask", "ServiceInvocationTask",
+            "ErrorHandlingTask", "IntegrationTask"
+        ]
     }
 
     event_storm_model = EventStormingDomainSpecificationModel.model_validate(

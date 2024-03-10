@@ -1,0 +1,158 @@
+I want all of these classes used in the dsl
+
+event_storm_model_data = {
+        "domain_event_classnames": [
+            "TaskStartedEvent", "TaskCompletedEvent", "TaskFailedEvent",
+            "ExternalEventOccurredEvent"
+        ],
+        "external_event_classnames": [
+            "ExternalSystemUpdatedEvent",
+            "RegulationAmendedEvent",
+            "ThirdPartyNotificationEvent",
+            "DataReceivedEvent",
+            "PartnerNotificationEvent",
+            "ServiceDownEvent",
+            "SecurityAlertEvent"
+        ],
+        "command_classnames": [
+            "StartProcessCommand", "StopProcessCommand", "ExecuteActivityCommand",
+            "InvokePartnerCommand", "ReceiveFromPartnerCommand", "HandleFaultCommand",
+            "SaveProcessInstanceCommand", "LoadProcessInstanceCommand"
+        ],
+        "query_classnames": [
+            "GetProcessStatusQuery", "GetActivityDetailsQuery",
+            "GetVariableValueQuery", "GetProcessMetricsQuery"
+        ],
+        "aggregate_classnames": [
+            "ProcessExecutionAggregate", "ActivityExecutionAggregate",
+            "PartnerInteractionAggregate", "ProcessInstanceAggregate"
+        ],
+        "policy_classnames": [
+            "ExecutionPolicy", "RetryPolicy", "CompensationPolicy",
+            "FaultHandlingPolicy"
+        ],
+        "read_model_classnames": [
+            "ProcessSummaryReadModel", "ActivityLogReadModel",
+            "VariableSnapshotReadModel", "ProcessInstanceDetailsReadModel"
+        ],
+        "view_classnames": [
+            "ProcessOverviewView", "TaskDetailsView", "UserDashboardView",
+            "ErrorLogView"
+        ],
+        "ui_event_classnames": [
+            "ButtonClickEvent", "FormSubmissionEvent", "TaskCompletionEvent",
+            "UserInteractionEvent"
+        ],
+        "saga_classnames": [
+            "ProcessExecutionSaga", "CompensationSaga", "FaultHandlingSaga"
+        ],
+        "integration_event_classnames": [
+            "ServiceInvocationEvent", "DataTransferEvent",
+            "PartnerInteractionEvent", "IntegrationEvent"
+        ],
+        "exception_classnames": [
+            "ExecutionFailureException", "DataProcessingException",
+            "IntegrationException", "SystemException"
+        ],
+        "value_object_classnames": [
+            "ProcessIDValueObject", "ActivityDetailsValueObject",
+            "PartnerDetailsValueObject", "VariableValueObject"
+        ],
+        "task_classnames": [
+            "DataValidationTask", "ServiceInvocationTask",
+            "ErrorHandlingTask", "IntegrationTask"
+        ]
+    }
+GPT
+Integrating all the specified classes into the DSL for a BPEL Reactive Domain-Driven Design Workflow Engine requires organizing them according to their roles within the system. This approach ensures the DSL reflects a comprehensive architecture, incorporating domain events, commands, aggregates, and other DDD elements.
+
+Here's an extended Structurizr DSL snippet that incorporates the provided classes, organized by their architectural roles:
+
+dsl
+Copy code
+workspace {
+
+  model {
+    user = person "User" "Interacts with the workflow engine via applications"
+    workflowEngine = softwareSystem "Workflow Engine" "Manages and executes domain-specific workflows" {
+      apiGateway = container "API Gateway" "Serves as the entry point for clients" "REST/GraphQL"
+      eventBus = container "Event Bus" "Facilitates reactive communications" "Message Broker"
+      workflowProcessor = container "Workflow Processor" "Processes workflow tasks and executes commands" "BPEL Engine"
+      domainService = container "Domain Service" "Handles domain-specific logic and rules, including aggregates and policies" "Java/Spring Boot"
+      repository = container "Repository" "Manages persistence of domain objects and read models" "SQL/NoSQL Database"
+      sagaOrchestrator = container "Saga Orchestrator" "Manages sagas for long-running transactions" "Saga Management Framework"
+      ui = container "User Interface" "Presents views to users and handles UI events" "React/Angular"
+
+      // Embedding classes into relevant containers
+      domainService {
+        component "Domain Events" "Handles domain events like TaskStartedEvent, TaskFailedEvent, etc."
+        component "Commands" "Executes commands like StartProcessCommand, StopProcessCommand, etc."
+        component "Aggregates" "Includes ProcessExecutionAggregate, ActivityExecutionAggregate, etc."
+        component "Policies" "Defines policies such as ExecutionPolicy, RetryPolicy, etc."
+      }
+      repository {
+        component "Read Models" "Stores read models like ProcessSummaryReadModel, ActivityLogReadModel, etc."
+      }
+      ui {
+        component "Views" "Includes views like ProcessOverviewView, TaskDetailsView, etc."
+        component "UI Events" "Handles UI events such as ButtonClickEvent, FormSubmissionEvent, etc."
+      }
+      sagaOrchestrator {
+        component "Sagas" "Manages sagas like ProcessExecutionSaga, CompensationSaga, etc."
+      }
+      eventBus {
+        component "Integration Events" "Manages integration events like ServiceInvocationEvent, DataTransferEvent, etc."
+      }
+
+    }
+
+    user -> ui "Uses"
+    ui -> apiGateway "Interacts with"
+    apiGateway -> workflowProcessor "Forwards requests to"
+    workflowProcessor -> domainService "Executes business logic"
+    domainService -> repository "Persists and retrieves state"
+    domainService -> sagaOrchestrator "Initiates and manages sagas"
+    eventBus -> domainService "Communicates domain and integration events"
+    domainService -> eventBus "Publishes events"
+  }
+
+  views {
+    systemContext workflowEngine {
+      include *
+      autoLayout lr
+    }
+
+    container workflowEngine {
+      include *
+      autoLayout lr
+    }
+
+    component domainService {
+      include *
+      autoLayout lr
+    }
+
+    component repository {
+      include *
+      autoLayout lr
+    }
+
+    component ui {
+      include *
+      autoLayout lr
+    }
+
+    component sagaOrchestrator {
+      include *
+      autoLayout lr
+    }
+
+    component eventBus {
+      include *
+      autoLayout lr
+    }
+  }
+}
+This detailed DSL code organizes the various classes you provided into appropriate containers and components within the "Workflow Engine" software system, emphasizing the role of each class group in the system's architecture. The classes are abstracted into their respective architectural elements, such as domain events, commands, aggregates, policies, read models, views, UI events, sagas, and integration events, mapped within the containers they most closely interact with.
+
+This architecture facilitates a clear separation of concerns, aligning with DDD principles and supporting reactive and event-driven workflows. Adjust and extend this template to match your specific system requirements and domain logic intricacies.

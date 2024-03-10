@@ -27,10 +27,6 @@ class JobCommand(AbstractCommand):
     tasks: list[str]
 
 
-class TweetEvent(AbstractEvent):
-    """Tweets has been generated."""
-
-
 class WorkflowEngine(AbstractActor):
     def __init__(self, actor_system, actor_id=None):
         super().__init__(actor_system, actor_id)
@@ -57,13 +53,10 @@ class WorkflowEngine(AbstractActor):
             return
 
         for task in command.tasks:
-            text = insight_tweet_call(task)
-            await self.publish(TweetEvent(content=f"twitter-cli tweet='{text}'"))
+            print(task)
 
         print("Tasks done.")
         await self.publish(StopCommand())
-
-
 
 
 async def main():
@@ -72,8 +65,7 @@ async def main():
 
     await asys.publish(StartCommand())
     # await asys.publish(StatusQuery())
-    await asys.publish(JobCommand(tasks=["Elon Musk is a Lizard Person, prove me wrong?",
-                                         "I am the smartest all time. Thomas Edison Quote"]))
+    await asys.publish(JobCommand(tasks=["BPMN to BPEL", "BPEL to Python", "Python to Docker", "Docker to Kubernetes"]))
 
     while True:
         await asyncio.sleep(5)
