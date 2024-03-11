@@ -49,27 +49,46 @@ def check_or_install_packages():
         if not package_installed(package, min_version):
             print(f"{package} not found or version is below {min_version}. Installing/upgrading...")
             subprocess.check_call([sys.executable, "-m", "pip", "install", f"{package}>={min_version}"])
-        else:
-            print(f"{package} meets the version requirement.")
+        # else:
+        #     print(f"{package} meets the version requirement.")
 
 
 @app.command()
-def init(project_name: str):
-    """Initialize the DSPygen project with the specified project_name."""
+def init(package_name: str):
+    """Initialize the DSPygen project."""
     check_or_install_packages()
+
+    package_name = inflection.underscore(package_name)
 
     # The template URL and the configuration for the new project
     template_url = "https://github.com/radix-ai/poetry-cookiecutter"
     # Project initialization logic, assuming static configuration for demonstration
     try:
-        print(f"Creating new project named {project_name}...")
+        print(f"Creating new package named {package_name}...")
         subprocess.check_call(["cruft", "create", template_url,
                                "--config-file", source_dir("config.yaml"),
-                               "--no-input",
-                               "--output-dir", inflection.underscore(project_name)])
-        print(f"Project {project_name} initialized successfully.")
+                               "--extra-context", f'{{"package_name": "{package_name}"}}',
+                               "--no-input"])
+
+        # We need to install dspygen in the package's virtual environment
+        # It uses poetry to manage the virtual environment
+        # Change to the package directory
+        # Run the command to initialize the virtual environment
+        # Run the command to install dspygen in the virtual environment
+        package_dir = Path(package_name)
+        os.chdir(package_dir)
+        subprocess.check_call(["poetry", "install"])
+        subprocess.check_call(["poetry", "run", "pip", "install", "-e", "."])
+        # Create the virtual environment
+        subprocess.check_call(["poetry", "env", "use", "python"])
+        # Install the package in the virtual environment
+        subprocess.check_call(["poetry", "add", "-D", "dspygen"])
+        # Change back to the original directory
+        os.chdir("..")
+
+        print(f"Project {package_name} initialized successfully.")
     except subprocess.CalledProcessError:
-        print("Failed to initialize the new project.")
+        print("Failed to initialize the new package.")
         sys.exit(1)
 
 

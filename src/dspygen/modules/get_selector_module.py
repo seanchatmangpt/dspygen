@@ -6,29 +6,43 @@ from typer import Typer
 from dspygen.utils.dspy_tools import init_dspy
 
 
-app = Typer()        
+app = Typer()
+
+
+import dspy
+
+class SelectSingleElement(dspy.Signature):
+    """
+    Selects a single element from a list of elements that best matches the given prompt.
+    """
+    elements = dspy.InputField(desc="A list of elements.")
+    prompt = dspy.InputField(desc="A prompt used to match the most relevant element.")
+
+    selected_element = dspy.OutputField(desc="The css selector to use with Selenium.")
+
+
 
 
 class GetSelectorModule(dspy.Module):
     """GetSelectorModule"""
 
-    def forward(self, element_dicts, prompt):
-        pred = dspy.ChainOfThought("element_dicts, prompt -> selector_matching_element_and_prompt")
-        result = pred(element_dicts=element_dicts, prompt=prompt).selector_matching_element_and_prompt
+    def forward(self, elements, prompt):
+        pred = dspy.ChainOfThought(SelectSingleElement)
+        result = pred(elements=elements, prompt=prompt).selected_element
         return result
 
 
-def get_selector_call(element_dicts, prompt):
+def get_selector_call(elements, prompt):
     get_selector = GetSelectorModule()
-    return get_selector.forward(element_dicts=element_dicts, prompt=prompt)
+    return get_selector.forward(elements=elements, prompt=prompt)
 
 
 @app.command()
-def call(element_dicts, prompt):
+def call(elements, prompt):
     """GetSelectorModule"""
     init_dspy()
     
-    print(get_selector_call(element_dicts=element_dicts, prompt=prompt))
+    print(get_selector_call(elements=elements, prompt=prompt))
 
 
 from fastapi import APIRouter
@@ -61,7 +75,7 @@ def main():
 {'type': 'checkbox', 'id': 'p-lang-btn-checkbox', 'role': 'button', 'aria-haspopup': 'true', 'data-event-name': 'ui.dropdown-p-lang-btn', 'class': 'vector-dropdown-checkbox mw-interlanguage-selector', 'aria-label': 'Go to an article in another language. Available in 48 languages'}
 """
     prompt = "search box"
-    print(get_selector_call(element_dicts=element_dicts, prompt=prompt))
+    print(get_selector_call(elements=element_dicts, prompt=prompt))
     
 
 if __name__ == "__main__":

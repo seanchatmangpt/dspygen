@@ -112,7 +112,7 @@ class ActorSystem:
             self.mqtt_client.on_message = self.on_message  # Define the callback for incoming messages
             self.mqtt_client.connect(mqtt_broker, mqtt_port, 60)
             self.mqtt_client.loop_start()
-        except ConnectionRefusedError as e:
+        except (ConnectionRefusedError, OSError) as e:
             logger.error(f"Error connecting to MQTT Broker: {e}")
 
     def on_connect(self, client, userdata, flags, reason_code, properties):

@@ -54,7 +54,7 @@ def main(goal):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
         page = browser.new_page()
-        page.goto("https://en.wikipedia.org/wiki/Main_Page")
+        page.goto("https://google.com")
 
         inputs = find_all_inputs(page)
 

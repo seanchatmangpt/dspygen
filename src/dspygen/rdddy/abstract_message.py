@@ -12,10 +12,10 @@ class AbstractMessage(YAMLMixin, BaseModel):
 
     model_config = ConfigDict(extra="allow", arbitrary_types_allowed=True)
 
-    actor_id: int = -1
-    metadata: dict[str, Any] = {}
-    content: Any = None
-    message_type: str = ""
+    actor_id: int = Field(default=-1, description="The ID of the actor that sent the message. -1 means it was published by the system.")
+    metadata: dict[str, Any] = Field(default_factory=dict, description="Metadata for the message.")
+    content: str | None = Field(default=None, description="The content of the message.")
+    message_type: str = Field(default="", description="The type of the message.")
 
     def __init__(self, **data):
         super().__init__(**data)
@@ -27,12 +27,6 @@ class AbstractMessage(YAMLMixin, BaseModel):
         module = inspect.getmodule(self)
         relative_path = f"{module.__name__}.{self.__class__.__name__}"
         return relative_path
-
-
-
-from pydantic import BaseModel, Field
-
-
 
 
 class MessageList(YAMLMixin, BaseModel):
@@ -71,7 +65,7 @@ class MessageFactory:
         """Create a list of messages from a list of YAML data dictionaries.
 
         Parameters:
-        - data_list (List[dict]): A list of dictionaries containing message data.
+        - data_list (List[dict]): A list of dictionaries containing message  data.
 
         Returns:
         - List[Type[BaseModel]]: A list of appropriate message types.
