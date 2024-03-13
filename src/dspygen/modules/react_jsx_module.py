@@ -6,6 +6,7 @@ app = Typer(help="Create React JSX source code.")
 
 
 class PromptReactJsxModule(dspy.Module):
+
     """This is a DSPy Module that converts a prompt into react_jsx"""
 
     def forward(self, prompt):

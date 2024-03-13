@@ -1,0 +1,11 @@
+modules:
+  - module: BusinessDevConsultant
+    args:
+      prompt: "3 Paragraph example speech on the future of a AGI Agent Swarm Business"
+  - module: TextSummary
+  - module: Tweet
+    args:
+      style: "business with a hint of humor and 5 hashtags"
+  - module: ReactJsx
+    args:
+      reqs: "React, TypeScript, Material-UI, Axios"

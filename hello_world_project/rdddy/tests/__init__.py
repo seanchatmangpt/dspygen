@@ -1,1 +1,0 @@
-"""rdddy test suite."""

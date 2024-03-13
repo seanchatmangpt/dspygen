@@ -18,7 +18,7 @@ class DSPyModuleTemplate(BaseModel):
 
 
 dspy_module_template = '''"""
-{{ docstring }}
+{{ module_name }}
 """
 import dspy
 from dspygen.utils.dspy_tools import init_dspy
@@ -31,11 +31,29 @@ from dspygen.utils.dspy_tools import init_dspy
 
 class {{ module_name }}(dspy.Module):
     """{{ module_name }}"""
+    
+    def __init__(self, **forward_args):
+        super().__init__()
+        self.forward_args = forward_args
+        self.output = None
+        
+    def __or__(self, other):
+        if other.output is None and self.output is None:
+            self.forward(**self.forward_args)
+
+        other.pipe(self.output)
+
+        return other
 
     def forward(self, {{ inputs_join }}):
         pred = dspy.Predict("{{ inputs_join }} -> {{ model.output }}")
-        result = pred({{ inputs_join_kwargs }}).{{ model.output }}
-        return result
+        self.output = pred({{ inputs_join_kwargs }}).{{ model.output }}
+        return self.output
+        
+    def pipe(self, input_str):
+        raise NotImplementedError("Please implement the pipe method for DSL support.")
+        # Replace TODO with a keyword from you forward method
+        # return self.forward(TODO=input_str)
 
 
 {% include 'dspy_module_cli_call.j2' %}

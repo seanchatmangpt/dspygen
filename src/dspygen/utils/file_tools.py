@@ -1,3 +1,8 @@
+import json
+import tiktoken
+import anyio
+import yaml
+
 from pathlib import Path
 
 
@@ -96,12 +101,43 @@ def is_dspygen():
     return "dspygen" in get_source(__file__)
 
 
-import tiktoken
 
 
 def count_tokens(text: str, model: str = "gpt-4") -> int:
     enc = tiktoken.encoding_for_model("gpt-4")
     return len(enc.encode(text))
+
+
+async def read(filename, to_type=None):
+    async with await anyio.open_file(filename, mode="r") as f:
+        contents = await f.read()
+    if to_type == "dict":
+        if filename.endswith(".yaml") or filename.endswith(".yml"):
+            contents = yaml.safe_load(contents)
+        elif filename.endswith(".json"):
+            contents = json.loads(contents)
+    return contents
+
+
+async def write(
+    contents=None,
+    *,
+    filename=None,
+    mode="w+",
+    extension="txt",
+    time_stamp=False,
+    path="",
+):
+    # if extension == "yaml" or extension == "yml":
+    #     contents = yaml.dump(
+    #         contents, default_style="", default_flow_style=False, width=1000
+    #     )
+    # elif extension == "json":
+    #     contents = json.dumps(contents)
+
+    async with await anyio.open_file(path + filename, mode=mode) as f:
+        await f.write(contents)
+    return filename
 
 
 # Test the function
