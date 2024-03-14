@@ -21,6 +21,7 @@ def process_yaml_pipeline(yaml_file):
 
     return dg_modules[-1].output
 
+
 def main():
     from dspygen.utils.dspy_tools import init_dspy
     init_dspy()

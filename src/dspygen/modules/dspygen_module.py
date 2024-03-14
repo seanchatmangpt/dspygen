@@ -16,8 +16,6 @@ class DGModule(dspy.Module):
 
         if other.output is None and self.output is None:
             self.forward(**self.forward_args)
-        # else:
-        #     self.pipe(other.output)
 
         other.pipe(self.output)
 
@@ -47,6 +45,7 @@ class TweetDGModule(DGModule):
         self.output = pred(
             insight=insight, style=self.style
         ).tweet_with_length_of_100_chars
+        print(f"{self.__class__.__name__} output: {self.output}")
         return self.output
 
     def pipe(self, input_str):
@@ -59,6 +58,7 @@ class BusinessDevConsultantDGModule(DGModule):
     def forward(self, prompt):
         pred = dspy.ChainOfThought("prompt -> advice")
         self.output = pred(prompt=prompt).advice
+        print(f"{self.__class__.__name__} output: {self.output}")
         return self.output
 
     def pipe(self, input_str):
@@ -71,6 +71,7 @@ class TextSummaryDGModule(DGModule):
     def forward(self, text):
         pred = dspy.Predict("text -> summary")
         self.output = pred(text=text).summary
+        print(f"{self.__class__.__name__} output: {self.output}")
         return self.output
 
     def pipe(self, input_str):
@@ -87,6 +88,7 @@ class ReactJsxDGModule(DGModule):
     def forward(self, prompt):
         pred = dspy.ChainOfThought("prompt, reqs -> react_jsx")
         self.output = pred(prompt=prompt, reqs=self.reqs).react_jsx
+        print(f"{self.__class__.__name__} output: {self.output}")
         return self.output
 
     def pipe(self, input_str):

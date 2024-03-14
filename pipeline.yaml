@@ -1,0 +1,11 @@
+modules:
+  - module: BusinessDevConsultant
+    args:
+      prompt: "3 Paragraph example sales speech for a advanced AI code generation business"
+  - module: TextSummary
+  - module: Tweet
+    args:
+      style: "business with a hint of humor and 5 hashtags"
+  - module: ReactJsx
+    args:
+      reqs: "React, TypeScript, Tailwind, Fetch API in a useEffect hook"
