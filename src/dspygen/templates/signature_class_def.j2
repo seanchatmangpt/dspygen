@@ -1,0 +1,11 @@
+from dspy import Signature
+from dspy.signatures.field import InputField, OutputField
+
+class {{ class_name }}(Signature):
+    """{{ docstring }}"""
+{% for input in inputs %}
+    {{ input.name }} = InputField(desc="{{ input.desc }}")
+{% endfor %}
+{% for output in outputs %}
+    {{ output.name }} = OutputField(prefix="{{ output.prefix }}", desc="{{ output.desc }}")
+{% endfor %}

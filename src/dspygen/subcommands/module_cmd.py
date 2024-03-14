@@ -29,8 +29,6 @@ def new_module(
 
     mdl = DSPyModuleTemplate(class_name=class_name, inputs=inputs.split(','), output=output)
 
-    print(mdl)
-
     source = SignatureDspyModuleModule().forward(mdl)
 
     file_name = f"{inflection.underscore(class_name)}_module.py"

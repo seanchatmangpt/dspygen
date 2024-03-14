@@ -1,0 +1,14 @@
+docstring: >
+  "Synthesize the prompt into the kwargs to fit the model. Do not duplicate the field descriptions"
+inputs:
+  - name: "root_pydantic_model_class_name"
+    desc: "The class name of the pydantic model to receive the kwargs"
+  - name: "pydantic_model_definitions"
+    desc: "Pydantic model class definitions as a string"
+  - name: "prompt"
+    desc: "The prompt to be synthesized into data. Do not duplicate descriptions"
+outputs:
+  - name: "root_model_kwargs_dict"
+    prefix: "kwargs_dict: dict = "
+    desc: >
+      "Generate a Python dictionary as a string with minimized whitespace that only contains json valid values."

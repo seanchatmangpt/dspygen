@@ -1,4 +1,9 @@
 modules:
+  - module: ChainOfThought
+    signature: "input -> output"
+  - module: Retrive
+    args:
+      k: 5
   - module: BusinessDevConsultant
     args:
       prompt: "3 Paragraph example sales speech for a advanced AI code generation business"

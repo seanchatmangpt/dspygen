@@ -1,0 +1,5 @@
+signature: "hello, goodbye -> translation, reasoning"
+predictor: ChainOfThought
+args:
+  - hello: "French man"
+  - goodbye: "French woman"
