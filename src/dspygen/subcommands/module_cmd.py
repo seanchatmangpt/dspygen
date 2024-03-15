@@ -6,11 +6,8 @@ import os
 import inflection
 import typer
 
-from dspygen.experiments.dsl_pipeline import execute_pipeline
-from dspygen.modules.dspygen_dsl_pipeline import process_yaml_pipeline
+from dspygen.dsl.dsl_pipeline_executor import execute_pipeline
 from dspygen.modules.gen_dspy_module import  DSPyModuleTemplate, SignatureDspyModuleModule
-from dspygen.modules.file_name_module import file_name_call
-from dspygen.modules.gen_pydantic_instance_module import gen_pydantic_instance_call
 from dspygen.utils.cli_tools import chatbot
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.utils.file_tools import dspy_modules_dir, source_dir, get_source
@@ -71,11 +68,3 @@ def cli_help(question: str):
     chatbot(question, get_source(__file__))
 
 
-@app.command("dsl")
-def process_pipeline(yaml_file: str = "pipeline.yaml"):
-    """
-    Process a pipeline defined in a YAML file. Default is pipeline.yaml
-    """
-    init_dspy()
-    result = execute_pipeline(yaml_file)
-    print(result)

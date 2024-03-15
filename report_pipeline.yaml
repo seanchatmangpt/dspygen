@@ -4,11 +4,11 @@ models:
     args:
       model: "gpt-3.5-turbo"
       max_tokens: 4096
-  - label: "fast"
+  - label: "smart"
     name: "OpenAI"
     args:
-      model: "gpt-3.5-turbo"
-      max_tokens: 2048
+      model: "gpt-4"
+      max_tokens: 4096
 
 signatures:
   - name: "ProcessDataSignature"
@@ -23,15 +23,17 @@ signatures:
         desc: "Data processed into a structured format."
 
   - name: "GenerateReportSignature"
-    docstring: "Generates a comprehensive report from structured data."
+    docstring: "Generates a comprehensive report from structured data in the output_format. IT MUST BE IN THE output_format"
     inputs:
       - name: "processed_data"
         desc: "Structured data to be included in the report."
       - name: "report_template"
         desc: "Template specifying the report's format and structure."
+      - name: "output_format"
+        desc: "The desired format of the output report."
     outputs:
       - name: "report"
-        desc: "The final report generated from the structured data."
+        desc: "The final report generated from the structured data in the output_format."
 
 modules:
   - name: "DataProcessorModule"
@@ -46,11 +48,13 @@ modules:
 
   - name: "ReportGeneratorModule"
     signature: "GenerateReportSignature"
-    predictor: "ChainOfThought"
-    model: "fast"
+    predictor: "Predict"
+    model: "default"
     args:
       - name: "report_template"
         value: "StandardReportTemplate"
+      - name: "output_format"
+        value: "HTML"
 
 steps:
   - module: "DataProcessorModule"
@@ -61,4 +65,5 @@ steps:
   - module: "ReportGeneratorModule"
     args:
       processed_data: "{{ processed_data }}"
-      report_template: "templates/standard_report.md"
+      output_format: "CSV"
+      report_template: "templates/standard_report.csv"

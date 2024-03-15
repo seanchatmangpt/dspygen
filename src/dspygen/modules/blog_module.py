@@ -22,6 +22,8 @@ class BlogArticleGenerationSignature(dspy.Signature):
 
 class BlogModule(dspy.Module):
     """BlogModule"""
+    def __init__(self, *args, **kwargs):
+        super().__init__()
 
     def forward(self, subject):
         pred = dspy.ChainOfThought(BlogArticleGenerationSignature)

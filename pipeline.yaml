@@ -1,64 +1,31 @@
 models:
   - label: "default"
     name: "OpenAI"
-    args:
-      model: "gpt-3.5-turbo"
-      max_tokens: 4096
-  - label: "fast"
-    name: "OpenAI"
-    args:
-      model: "gpt-3.5-turbo"
-      max_tokens: 2048
-
-signatures:
-  - name: "ProcessDataSignature"
-    docstring: "Processes raw data to synthesize into a structured format suitable for report generation."
-    inputs:
-      - name: "raw_data"
-        desc: "Raw data input that needs processing."
-      - name: "data_format"
-        desc: "The desired format of the output data."
-    outputs:
-      - name: "processed_data"
-        desc: "Data processed into a structured format."
-
-  - name: "GenerateReportSignature"
-    docstring: "Generates a comprehensive report from structured data."
-    inputs:
-      - name: "processed_data"
-        desc: "Structured data to be included in the report."
-      - name: "report_template"
-        desc: "Template specifying the report's format and structure."
-    outputs:
-      - name: "report"
-        desc: "The final report generated from the structured data."
 
 modules:
-  - name: "DataProcessorModule"
-    signature: "ProcessDataSignature"
+  - name: "BlogModule"
+    signature: "dspygen.signatures.blog_article.BlogArticle"
     predictor: "Predict"
     model: "default"
     args:
-      - name: "raw_data"
-        value: "{{ user_input_data }}"
-      - name: "data_format"
-        value: "JSON"
-
-  - name: "ReportGeneratorModule"
-    signature: "GenerateReportSignature"
-    predictor: "ChainOfThought"
-    model: "fast"
-    args:
-      - name: "report_template"
-        value: "StandardReportTemplate"
+      - name: "celebrity"
+      - name: "news"
 
 steps:
-  - module: "DataProcessorModule"
+  - module: "BlogModule"
     args:
-      raw_data: "id, name, age\n1, John, 25\n2, Jane, 30"
-      data_format: "YAML"
+      celebrity: "Buckminster Fuller"
+      news: "Sales of Critical Path off the charts!"
 
-  - module: "ReportGeneratorModule"
-    args:
-      processed_data: "{{ processed_data }}"
-      report_template: "templates/standard_report.md"
+#
+#ideas:
+#  - "DG: add critic and quality checks"
+#  - "AF: create 5 articles"
+#  - "DG: Rank the N articles"
+#  - "AF: Post the best article"
+#  - "DG: Generate insight from stats and a report"
+#  - "DG: Choose who should receive the email"
+#  - "AF: Email insight"
+#
+#
+#
