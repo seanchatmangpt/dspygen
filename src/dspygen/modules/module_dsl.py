@@ -28,9 +28,6 @@ def initialize_module_from_yaml(yaml_file_path):
     return module_inst
 
 
-
-
-
 # Example usage
 if __name__ == "__main__":
     init_dspy()

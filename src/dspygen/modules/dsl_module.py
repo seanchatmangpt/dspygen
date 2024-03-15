@@ -2,7 +2,9 @@
 
 """
 import dspy
-from dspygen.utils.dspy_tools import init_dspy        
+
+from dspygen.typetemp.functional import render
+from dspygen.utils.dspy_tools import init_dspy
 
 
 DEFAULT_SIGNATURE = "prompt -> response"
@@ -14,32 +16,31 @@ def _get_prediction_key(signature: dspy.Signature | str):
         output_keys = signature.split("->")[1].strip().split(", ")
         return output_keys[0]
     else:
-        return signature.output_fields.keys()[0]
+        keys = signature.output_fields.items()
+        # Get the key of the first output field
+        return next(iter(keys))
 
 
 class DSLModule(dspy.Module):
-    """DSLModule"""
-    
     def __init__(self, signature: dspy.Signature | str = DEFAULT_SIGNATURE,
                  predictor: str = DEFAULT_PREDICTOR,
-                 prediction_key: str = None,
-                 *args,
-                 **forward_args):
+                 context: dict = None,  # Context parameter
+                 *additional_args, **kwargs):
         super().__init__()
-        self.predictor = predictor
         self.signature = signature
-        self.forward_args = forward_args
-        self.predicted = None
-
-        if prediction_key is not None:
-            self.prediction_key = prediction_key
-        else:
-            self.prediction_key = _get_prediction_key(signature)
-
+        self.predictor = predictor
+        self.context = context if context is not None else {}
         self.output = None
 
-    @property
-    def _predictor(self):
+        if not kwargs:
+            kwargs = {}
+
+        self.forward_args = {key: render(str(value), **self.context)
+                             for key, value in kwargs.items()}
+
+        print(f"Forward args: {self.forward_args}")
+
+    def _get_predictor_class(self):
         if self.predictor == "Predict":
             return dspy.Predict
         elif self.predictor == "ChainOfThought":
@@ -66,43 +67,48 @@ class DSLModule(dspy.Module):
         return other
 
     def forward(self, **kwargs):
-        pred_args = {**self.forward_args, **kwargs}
-        pred_inst = self._predictor(self.signature)
-        self.predicted = pred_inst(**pred_args)
+        # Ensure that any additional runtime arguments are merged with pre-resolved forward_args
+        runtime_args = {**self.forward_args, **kwargs}
 
-        if not hasattr(self.predicted, self.prediction_key):
-            raise ValueError(f"Prediction key {self.prediction_key} not found in prediction {self.predicted}.")
+        # Dynamically resolve arguments right before execution
+        resolved_args = {key: render(str(value), **self.context)
+                         for key, value in runtime_args.items()}
 
-        self.output = self.predicted[self.prediction_key]
+        # Determine the appropriate predictor to use based on the self.predictor attribute
+        pred_cls = self._get_predictor_class()
+        pred_inst = pred_cls(self.signature)
+
+        # Call the predictor with only the arguments it expects in the signature
+        # This is a bit of a hack, but it's the best we can do without a proper signature system
+        pred_args = {k: v for k, v in resolved_args.items() if k in pred_inst.signature.input_fields}
+
+        # Execute the predictor with resolved arguments
+        predicted = pred_inst(**pred_args)
+
+        # Optionally, update the context with the new output
+        # Assume self.predicted directly gives us the desired output for simplicity
+        self.output = predicted
+
+        self.context.update(predicted.items())
+
         return self.output
-        
+
     def pipe(self, input_str):
         return self.forward(prompt=input_str)
 
-
-from typer import Typer
-app = Typer()
-
-
-@app.command()
-def call(prompt):
-    """DSLModule"""
-    init_dspy()
-
-    print(dsl_call(prompt=prompt))
+    def __repr__(self):
+        return f"DSLModule(predictor={self.predictor}, signature={self.signature})"
 
 
-
-def dsl_call(prompt):
+def dsl_call(**kwargs):
     dsl = DSLModule()
-    return dsl.forward(prompt=prompt)
-
+    return dsl.forward(**kwargs)
 
 
 def main():
     init_dspy()
-    prompt = ""
-    print(dsl_call(prompt=prompt))
+    kwargs = {}
+    print(dsl_call(**kwargs))
 
 
 

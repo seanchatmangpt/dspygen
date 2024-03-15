@@ -6,6 +6,7 @@ import os
 import inflection
 import typer
 
+from dspygen.experiments.dsl_pipeline import execute_pipeline
 from dspygen.modules.dspygen_dsl_pipeline import process_yaml_pipeline
 from dspygen.modules.gen_dspy_module import  DSPyModuleTemplate, SignatureDspyModuleModule
 from dspygen.modules.file_name_module import file_name_call
@@ -76,5 +77,5 @@ def process_pipeline(yaml_file: str = "pipeline.yaml"):
     Process a pipeline defined in a YAML file. Default is pipeline.yaml
     """
     init_dspy()
-    result = process_yaml_pipeline(yaml_file)
+    result = execute_pipeline(yaml_file)
     print(result)

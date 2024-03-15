@@ -1,0 +1,63 @@
+signatures:
+  - name: "FetchDataSignature"
+    docstring: "Fetches data from a given source."
+    inputs:
+      - name: "source"
+        desc: "The source from which to fetch data."
+    outputs:
+      - name: "data"
+        desc: "The fetched data."
+
+  - name: "TransformDataSignature"
+    docstring: "Transforms data based on specified operations."
+    inputs:
+      - name: "data"
+        desc: "Data to transform."
+      - name: "operations"
+        desc: "Transformation operations to apply."
+    outputs:
+      - name: "transformed_data"
+        desc: "The transformed data."
+
+  - name: "AnalyzeDataSignature"
+    docstring: "Performs analysis on the data and generates insights."
+    inputs:
+      - name: "data"
+        desc: "Data to analyze."
+    outputs:
+      - name: "insights"
+        desc: "Generated insights from the data analysis."
+
+modules:
+  - name: "DataFetcherModule"
+    signature: "FetchDataSignature"
+    predictor: "Predict"
+    args:
+      - name: "source"
+        value: "https://example.com/data/source"
+
+  - name: "DataTransformerModule"
+    signature: "TransformDataSignature"
+    predictor: "Predict"
+    args:
+      - name: "operations"
+        value: "normalize, deduplicate"
+
+  - name: "DataAnalyzerModule"
+    signature: "AnalyzeDataSignature"
+    predictor: "Predict"
+    args:
+      - name: "data"
+        value: "{{ transformed_data }}"  # Using output from DataTransformerModule
+
+steps:
+  - module: "DataFetcherModule"
+    args: {}
+
+  - module: "DataTransformerModule"
+    args:
+      data: "{{ DataFetcherModule.data }}"  # Dynamically resolved from the output of DataFetcherModule
+
+  - module: "DataAnalyzerModule"
+    args:
+      data: "{{ DataTransformerModule.transformed_data }}"  # Dynamically resolved from the output of DataTransformerModule
