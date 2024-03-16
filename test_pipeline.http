@@ -1,0 +1,9 @@
+POST http://127.0.0.1:8888/execute_pipeline/
+Content-Type: application/json
+
+{
+  "yaml_content": "context:\n  celebrity: \"Nicolas Cage\"\n\nmodels:\n  - label: \"default\"\n    name: \"OpenAI\"\n\nmodules:\n  - name: \"BlogModule\"\n    signature: \"dspygen.signatures.blog_article.BlogArticle\"\n    predictor: \"Predict\"\n    model: \"default\"\n    args:\n      - name: \"celebrity\"\n      - name: \"news\"\n\nsteps:\n  - module: \"BlogModule\"\n    args:\n      celebrity: \"{{ celebrity }}\"\n      news: \"{{ news }}\"",
+  "initial_context": {
+    "news": "$12,500 Retainer Contract"
+  }
+}

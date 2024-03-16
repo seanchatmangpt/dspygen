@@ -1,5 +1,5 @@
 from dspygen.utils.yaml_tools import YAMLMixin
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra
 from typing import List, Dict, Optional, Union
 
 
@@ -52,7 +52,7 @@ class LanguageModelConfig(BaseModel):
 
 class AssertionModel(BaseModel):
     label: str
-    assertion: str
+    logic: str
     message: str
 
 
@@ -62,6 +62,14 @@ class SuggestionModel(BaseModel):
     message: str
 
 
+class PipelineConfigModel(BaseModel):
+    global_signatures: Dict[str, SignatureDSLModel] = []
+    current_step: PipelineStepModel = None
+
+    class Config:
+        extra = Extra.allow
+
+
 class PipelineDSLModel(BaseModel, YAMLMixin):
     assertions: List[AssertionModel] = []
     suggestions: List[SuggestionModel] = []
@@ -69,3 +77,6 @@ class PipelineDSLModel(BaseModel, YAMLMixin):
     signatures: List[SignatureDSLModel] = []
     modules: List[ModuleDSLModel] = []
     steps: List[PipelineStepModel] = []
+    context: dict = {}
+    config: PipelineConfigModel = PipelineConfigModel()
+

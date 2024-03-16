@@ -1,0 +1,10 @@
+assertions:
+  - label: "AssertLen"
+    logic: "len(result) == length"
+    message: "The length of the {{ result }} should be {{ length}} but was {{ result|length }}"
+
+steps:
+  - module: "dspygen.modules.blog_module.BlogModule"
+
+    args:
+      subject: "Buckminster Fuller's book Critical Path off the charts!"

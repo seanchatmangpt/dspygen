@@ -1,3 +1,6 @@
+context:
+  celebrity: "Nicolas Cage"
+
 models:
   - label: "default"
     name: "OpenAI"
@@ -14,18 +17,5 @@ modules:
 steps:
   - module: "BlogModule"
     args:
-      celebrity: "Buckminster Fuller"
-      news: "Sales of Critical Path off the charts!"
-
-#
-#ideas:
-#  - "DG: add critic and quality checks"
-#  - "AF: create 5 articles"
-#  - "DG: Rank the N articles"
-#  - "AF: Post the best article"
-#  - "DG: Generate insight from stats and a report"
-#  - "DG: Choose who should receive the email"
-#  - "AF: Email insight"
-#
-#
-#
+      celebrity: "{{ celebrity }}"
+      news: "{{ news }}"

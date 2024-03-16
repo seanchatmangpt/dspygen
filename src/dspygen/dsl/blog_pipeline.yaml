@@ -1,4 +1,0 @@
-steps:
-  - module: "dspygen.modules.blog_module.BlogModule"
-    args:
-      subject: "Buckminster Fuller's book Critical Path off the charts!"

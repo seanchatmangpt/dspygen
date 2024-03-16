@@ -28,7 +28,7 @@ class YAMLMixin:
 
     @classmethod
     @contextmanager
-    def context(cls: type[T], file_path: Optional[str] = None):
+    def yaml_context(cls: type[T], file_path: Optional[str] = None):
         """Context manager that automatically uses the subclass name as the filename."""
         if file_path is None:
             filename = f"{cls.__name__}.yaml"

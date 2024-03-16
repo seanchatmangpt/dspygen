@@ -18,6 +18,11 @@ app = FastAPI()
 from importlib import import_module
 import os
 
+from dspygen.dsl.dsl_pipeline_executor import router as pipeline_router
+
+
+app.include_router(pipeline_router)
+
 
 def load_module_routers(app: FastAPI):
     for filename in os.listdir(dspy_modules_dir()):

@@ -1,8 +1,6 @@
-"""
-
-"""
 import dspy
 
+from dspygen.dsl.dsl_pydantic_models import PipelineDSLModel
 from dspygen.typetemp.functional import render
 from dspygen.utils.dspy_tools import init_dspy
 
@@ -21,42 +19,42 @@ def _get_prediction_key(signature: dspy.Signature | str):
         return next(iter(keys))
 
 
+def _get_predictor_class(predictor):
+    if predictor == "Predict":
+        return dspy.Predict
+    elif predictor == "ChainOfThought":
+        return dspy.ChainOfThought
+    elif predictor == "ChainOfThoughtWithHint":
+        return dspy.ChainOfThoughtWithHint
+    elif predictor == "MultiChainComparison":
+        return dspy.MultiChainComparison
+    elif predictor == "ChainOfThoughtWithHint":
+        return dspy.ProgramOfThought
+    elif predictor == "ProgramOfThought":
+        return dspy.ChainOfThoughtWithHint
+    elif predictor == "ReAct":
+        return dspy.ReAct
+    else:
+        raise ValueError(f"Predictor {predictor} not supported.")
+
+
 class DSLModule(dspy.Module):
-    def __init__(self, signature: dspy.Signature | str = DEFAULT_SIGNATURE,
+    def __init__(self, pipeline: PipelineDSLModel, signature: dspy.Signature | str = DEFAULT_SIGNATURE,
                  predictor: str = DEFAULT_PREDICTOR,
-                 context: dict = None,  # Context parameter
                  *additional_args, **kwargs):
         super().__init__()
+        self.pipeline = pipeline
         self.signature = signature
         self.predictor = predictor
-        self.context = context if context is not None else {}
         self.output = None
 
         if not kwargs:
             kwargs = {}
 
-        self.forward_args = {key: render(str(value), **self.context)
+        self.forward_args = {key: render(str(value), **self.pipeline.context)
                              for key, value in kwargs.items()}
 
         print(f"Forward args: {self.forward_args}")
-
-    def _get_predictor_class(self):
-        if self.predictor == "Predict":
-            return dspy.Predict
-        elif self.predictor == "ChainOfThought":
-            return dspy.ChainOfThought
-        elif self.predictor == "ChainOfThoughtWithHint":
-            return dspy.ChainOfThoughtWithHint
-        elif self.predictor == "MultiChainComparison":
-            return dspy.MultiChainComparison
-        elif self.predictor == "ChainOfThoughtWithHint":
-            return dspy.ProgramOfThought
-        elif self.predictor == "ProgramOfThought":
-            return dspy.ChainOfThoughtWithHint
-        elif self.predictor == "ReAct":
-            return dspy.ReAct
-        else:
-            raise ValueError(f"Predictor {self.predictor} not supported.")
 
     def __or__(self, other):
         if other.output is None and self.output is None:
@@ -71,15 +69,14 @@ class DSLModule(dspy.Module):
         runtime_args = {**self.forward_args, **kwargs}
 
         # Dynamically resolve arguments right before execution
-        resolved_args = {key: render(str(value), **self.context)
+        resolved_args = {key: render(str(value), **self.pipeline.context)
                          for key, value in runtime_args.items()}
 
         # Determine the appropriate predictor to use based on the self.predictor attribute
-        pred_cls = self._get_predictor_class()
+        pred_cls = _get_predictor_class(self.predictor)
         pred_inst = pred_cls(self.signature)
 
         # Call the predictor with only the arguments it expects in the signature
-        # This is a bit of a hack, but it's the best we can do without a proper signature system
         pred_args = {k: v for k, v in resolved_args.items() if k in pred_inst.signature.input_fields}
 
         # Execute the predictor with resolved arguments
@@ -89,9 +86,14 @@ class DSLModule(dspy.Module):
         # Assume self.predicted directly gives us the desired output for simplicity
         self.output = predicted
 
-        self.context.update(predicted.items())
+        self.pipeline.context.update(predicted.items())
 
         return self.output
+
+    def validate_output(self, output):
+        print(f"Assertions to run {self.pipeline.config.current_step.assertions}")
+        # Implement validation logic or override in subclass
+        raise NotImplementedError("Validation logic should be implemented in subclass")
 
     def pipe(self, input_str):
         return self.forward(prompt=input_str)
@@ -101,7 +103,7 @@ class DSLModule(dspy.Module):
 
 
 def dsl_call(**kwargs):
-    dsl = DSLModule()
+    dsl = DSLModule(pipeline=PipelineDSLModel(), **kwargs)
     return dsl.forward(**kwargs)
 
 

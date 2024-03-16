@@ -1,137 +1,99 @@
-import importlib
-import dspy
+import os
+from fastapi import APIRouter, HTTPException
 
-from dspygen.dsl.dsl_models import SignatureDSLModel, ModuleDSLModel, PipelineDSLModel, LanguageModelConfig
-from dspygen.modules.dsl_module import DSLModule
+import tempfile
+from typing import Optional
+
+import dspy
+from pydantic import BaseModel
+
+from dspygen.dsl.utils.dsl_language_model_utils import _get_language_model_instance
+from dspygen.dsl.dsl_pydantic_models import PipelineDSLModel, LanguageModelConfig
+from dspygen.dsl.utils.dsl_module_utils import _get_module_instance
+from dspygen.dsl.utils.dsl_signature_utils import _create_signature_from_model
 from dspygen.typetemp.functional import render
 
 
-def create_signature_from_model(signature_model: SignatureDSLModel) -> type:
-    """Create a DSPy Signature class from a SignatureDSLModel instance."""
-    class_dict = {"__doc__": signature_model.docstring, "__annotations__": {}}
-
-    # Process input fields
-    for input_field in signature_model.inputs:
-        name = input_field.name
-        desc = input_field.desc
-        field_instance = dspy.InputField(desc=desc)
-        class_dict[name] = field_instance
-        class_dict["__annotations__"][name] = dspy.InputField
-
-    # Process output fields
-    for output_field in signature_model.outputs:
-        name = output_field.name
-        desc = output_field.desc
-        prefix = output_field.prefix
-        field_instance = dspy.OutputField(prefix=prefix, desc=desc)
-        class_dict[name] = field_instance
-        class_dict["__annotations__"][name] = dspy.OutputField
-
-    # Dynamically create the Signature class
-    signature_class = type(signature_model.name, (dspy.Signature,), class_dict)
-    return signature_class
-
-
-def create_module_from_model(module_model: ModuleDSLModel, global_signatures) -> dspy.Module:
-    """Create a DSPy Module from a ModuleDSLModel instance."""
-    signature = global_signatures[module_model.signature]
-    predictor = module_model.predictor
-    args = module_model.args
-
-    # Prepare forward_args if args are meant for the forward method
-    # Assuming args is a list of dictionaries where each dict represents kwargs for a method call
-    forward_args = {}
-
-    if isinstance(args, list):
-        for arg in args:
-            forward_args.update(arg)
-    elif isinstance(args, dict):
-        forward_args = args
-    else:
-        raise ValueError("Unsupported argument format in YAML.")
-
-    # Initialize the module with predictor, signature, and forward_args
-    module_inst = DSLModule(predictor=predictor, signature=signature, **forward_args)
-    return module_inst
-
-
-def load_signature_class(signature_class_name: str):
+def execute_pipeline(file_path, initial_context=None):
     """
-    Dynamically loads a signature class by its fully qualified name.
+    Execute a pipeline from a YAML file and return the context.
     """
-    module_name, class_name = signature_class_name.rsplit('.', 1)
-    module = importlib.import_module(module_name)
-    return getattr(module, class_name)
+    pipeline = _get_pipeline(file_path)
+
+    if initial_context:
+        pipeline.context.update(initial_context)
+
+    for step in pipeline.steps:
+        _execute_step(pipeline, step)
+
+    return pipeline.context
 
 
-def load_dspy_module_class(dspy_module_class_name: str):
+def _get_pipeline(file_path):
     """
-    Dynamically loads a signature class by its fully qualified name.
+    Load a PipelineDSLModel instance from a YAML file. Also, create the global signatures from the YAML.
     """
-    module_name, class_name = dspy_module_class_name.rsplit('.', 1)
-    module = importlib.import_module(module_name)
-    return getattr(module, class_name)
-
-
-def execute_pipeline(file_path):
-    pipeline_inst = PipelineDSLModel.from_yaml(file_path)
-
+    pipeline = PipelineDSLModel.from_yaml(file_path)
     # Gather the signatures from the YAML
-    global_signatures = {signature.name: create_signature_from_model(signature) for signature in pipeline_inst.signatures}
+    pipeline.config.global_signatures = {signature.name: _create_signature_from_model(signature)
+                                              for signature in pipeline.signatures}
+    return pipeline
 
-    context = {}  # Shared context for all steps
 
-    if not pipeline_inst.models:
-        pipeline_inst.models = [LanguageModelConfig(label="default", name="OpenAI", args={})]
+def _execute_step(pipeline, step):
+    """
+    Execute a step in a pipeline. Creates the LM, renders the args using Jinja2,
+    runs the module, and updates the context.
+    """
+    if not pipeline.models:
+        pipeline.models = [LanguageModelConfig(label="default", name="OpenAI", args={})]
 
-    for step in pipeline_inst.steps:
-        # Retrieve the module definition based on the step's module name
-        module_def = next((m for m in pipeline_inst.modules if m.name == step.module), None)
+    rendered_args = {arg: render(str(value), **pipeline.context) for arg, value in step.args.items()}
 
-        # Resolve Jinja2 templates in arguments against the context
-        rendered_args = {arg: render(str(value), **context) for arg, value in step.args.items()}
+    module_inst = _get_module_instance(pipeline, rendered_args, step)
 
-        # If the module definition is not found, then load the module with load_dspy_module_class
-        if not module_def:
-            module_inst = load_dspy_module_class(step.module)(**rendered_args)        # Resolve Jinja2 templates in arguments against the context
-        else:
-            # Check if the signature class is already loaded, if not try to load the module
-            # Assuming `pipeline_inst.signatures` contains fully qualified names or similar identifiers:
-            if module_def and module_def.signature != "" and module_def.signature not in global_signatures:
-                signature_class = load_signature_class(module_def.signature)
-                global_signatures[module_def.signature] = signature_class
+    lm_inst = _get_language_model_instance(pipeline, step)
 
-            if step.signature != "" and step.signature not in global_signatures:
-                signature_class = load_signature_class(step.signature)
-                global_signatures[module_def.signature] = signature_class
+    with dspy.context(lm=lm_inst):
+        module_output = module_inst.forward(**rendered_args)
 
-            # Dynamically create a new module instance for this step
-            signature = global_signatures[module_def.signature]
-            predictor = module_def.predictor
+    pipeline.context[step.module] = module_output
 
-            # Note: Additional logic may be required to dynamically resolve args from rendered_args
-            module_inst = DSLModule(signature=signature, predictor=predictor, context=context, **rendered_args)
 
-        lm_label = step.model
+router = APIRouter()
 
-        # Find the lm class within the dspy module. Need to import the class dynamically from the dspy module
-        lm_config = next((m for m in pipeline_inst.models if m.label == lm_label), None)
 
-        lm_class = getattr(dspy, lm_config.name)
-        lm_inst = lm_class(**lm_config.args)
+class PipelineRequest(BaseModel):
+    yaml_content: str
+    initial_context: Optional[dict] = None
 
-        with dspy.context(lm=lm_inst):
-            module_output = module_inst.forward(**rendered_args)
 
-        # Optionally, update the context with this module's output if needed
-        # This assumes a convention for naming outputs in the context, e.g., using the module's name
-        context[step.module] = module_output
+@router.post("/execute_pipeline/")
+async def run_pipeline(request: PipelineRequest):
+    try:
+        # Create a temporary file to hold the YAML content
+        with tempfile.NamedTemporaryFile(delete=False, mode='w+', suffix='.yaml') as tmp:
+            tmp.write(request.yaml_content)
+            tmp_path = tmp.name
 
-    return context
+        context = execute_pipeline(tmp_path, request.initial_context)
+
+        # Optionally, clean up the temporary file after execution
+        os.remove(tmp_path)
+
+        return context
+    except Exception as e:
+        # Ensure the temporary file is removed even if an error occurs
+        if 'tmp_path' in locals():
+            os.remove(tmp_path)
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 def main():
-    context = execute_pipeline('/Users/candacechatman/dev/dspygen/src/dspygen/dsl/blog_pipeline.yaml')
+    # context = execute_pipeline('examples/blog_pipeline.yaml')
+    context = execute_pipeline('/Users/candacechatman/dev/dspygen/pipeline.yaml', {"news": "$12,500 Retainer Contract"})
+    # context = execute_pipeline('examples/example_pipeline.yaml')
+
     print(context)
 
 
