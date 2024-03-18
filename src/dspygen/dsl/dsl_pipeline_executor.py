@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from dspygen.dsl.utils.dsl_language_model_utils import _get_language_model_instance
 from dspygen.dsl.dsl_pydantic_models import PipelineDSLModel, LanguageModelConfig
 from dspygen.dsl.utils.dsl_module_utils import _get_module_instance
+from dspygen.dsl.utils.dsl_retrieval_model_utils import _get_retrieval_model_instance
 from dspygen.dsl.utils.dsl_signature_utils import _create_signature_from_model
 from dspygen.typetemp.functional import render
 
@@ -45,8 +46,8 @@ def _execute_step(pipeline, step):
     Execute a step in a pipeline. Creates the LM, renders the args using Jinja2,
     runs the module, and updates the context.
     """
-    if not pipeline.models:
-        pipeline.models = [LanguageModelConfig(label="default", name="OpenAI", args={})]
+    if not pipeline.lm_models:
+        pipeline.lm_models = [LanguageModelConfig(label="default", name="OpenAI", args={})]
 
     rendered_args = {arg: render(str(value), **pipeline.context) for arg, value in step.args.items()}
 
@@ -54,7 +55,9 @@ def _execute_step(pipeline, step):
 
     lm_inst = _get_language_model_instance(pipeline, step)
 
-    with dspy.context(lm=lm_inst):
+    rm_inst = _get_retrieval_model_instance(pipeline, step)
+
+    with dspy.context(lm=lm_inst, rm=rm_inst):
         module_output = module_inst.forward(**rendered_args)
 
     pipeline.context[step.module] = module_output
@@ -90,8 +93,8 @@ async def run_pipeline(request: PipelineRequest):
 
 
 def main():
-    # context = execute_pipeline('examples/blog_pipeline.yaml')
-    context = execute_pipeline('/Users/candacechatman/dev/dspygen/pipeline.yaml', {"news": "$12,500 Retainer Contract"})
+    context = execute_pipeline('/Users/candacechatman/dev/dspygen/src/dspygen/dsl/examples/example_pipeline.yaml')
+    # context = execute_pipeline('/Users/candacechatman/dev/dspygen/pipeline.yaml', {"news": "$12,500 Retainer Contract"})
     # context = execute_pipeline('examples/example_pipeline.yaml')
 
     print(context)

@@ -1,4 +1,4 @@
-models:
+lm_models:
   - label: "default"
     name: "OpenAI"
     args:
@@ -44,7 +44,7 @@ modules:
     predictor: "Predict"
     args:
       - name: "raw_data"
-        value: "{{ user_input_data }}"
+        value: "{{ user_input }}"
       - name: "data_format"
         value: "JSON"
 
@@ -57,13 +57,13 @@ modules:
 
 steps:
   - module: "DataProcessorModule"
-    model: "default"
+    lm_model: "default"
     args:
       raw_data: "id, name, age\n1, John, 25\n2, Jane, 30"
       data_format: "YAML"
 
   - module: "ReportGeneratorModule"
-    model: "fast"
+    lm_model: "fast"
     args:
       processed_data: "{{ processed_data }}"
       report_template: "templates/standard_report.html"
