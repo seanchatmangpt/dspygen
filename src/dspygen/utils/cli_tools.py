@@ -22,9 +22,7 @@ class ChatbotAssistance(dspy.Signature):
     answer = dspy.OutputField(desc="The chatbot's response to the user's query.")
 
 
-def chatbot(question, context, history="", model="gpt-3.5-turbo-instruct"):
-    init_dspy(max_tokens=3000, model=model)
-
+def chatbot(question, context, history=""):
     if not question:
         question = typer.prompt("How can I help you?")
 

@@ -1,0 +1,343 @@
+PluginGeneratorModule: !!python/object:dspy.primitives.prediction.Prediction
+  _completions: !!python/object:dspy.primitives.prediction.Completions
+    _completions:
+      saltcorn_js_plugin_code:
+      - "```javascript\nconst { Plugin } = require('saltcorn-data/models/plugin');\nconst { text, textarea, select, checkbox, integer } = require('saltcorn-data/types');\n\nclass SaltcornSequentialForms extends Plugin {\n  constructor() {\n    super();\n    this.name = 'Saltcorn Sequential Forms';\n    this.description = 'A web-based form builder that allows users to easily create and manage sequential forms for their websites.';\n    this.version = '1.0.0';\n  }\n\n  options() {\n    return {\n      form_builder: { type: checkbox, label: 'Enable Form Builder', required: true },\n      sequential_form: { type: checkbox, label: 'Enable Sequential Form Functionality', required: true },\n      form_management: { type: checkbox, label: 'Enable Form Management', required: true },\n      responsive_design: { type: checkbox, label: 'Enable Responsive Design', required: true },\n      security: { type: checkbox, label: 'Enable Security Measures', required: true },\n      customization: { type: checkbox,\
+        \ label: 'Enable Customization Options', required: true },\n      user_management: { type: checkbox, label: 'Enable User Management', required: true },\n      customer_support: { type: checkbox, label: 'Enable Customer Support', required: true },\n    };\n  }\n\n  async run() {\n    // Implement the plugin functionality here\n  }\n}\n\nmodule.exports = { SaltcornSequentialForms };\n```\n\nThis is a basic structure of a Saltcorn plugin. The actual functionality of the plugin needs to be implemented in the `run` method. The `options` method defines the configuration options for the plugin. Each option is defined as an object with a type and a label. The `required` property indicates whether the option is mandatory or not."
+    signature: !!python/name:abc.saltcorn_js_plugin_code ''
+  _store:
+    saltcorn_js_plugin_code: "```javascript\nconst { Plugin } = require('saltcorn-data/models/plugin');\nconst { text, textarea, select, checkbox, integer } = require('saltcorn-data/types');\n\nclass SaltcornSequentialForms extends Plugin {\n  constructor() {\n    super();\n    this.name = 'Saltcorn Sequential Forms';\n    this.description = 'A web-based form builder that allows users to easily create and manage sequential forms for their websites.';\n    this.version = '1.0.0';\n  }\n\n  options() {\n    return {\n      form_builder: { type: checkbox, label: 'Enable Form Builder', required: true },\n      sequential_form: { type: checkbox, label: 'Enable Sequential Form Functionality', required: true },\n      form_management: { type: checkbox, label: 'Enable Form Management', required: true },\n      responsive_design: { type: checkbox, label: 'Enable Responsive Design', required: true },\n      security: { type: checkbox, label: 'Enable Security Measures', required: true },\n      customization:\
+      \ { type: checkbox, label: 'Enable Customization Options', required: true },\n      user_management: { type: checkbox, label: 'Enable User Management', required: true },\n      customer_support: { type: checkbox, label: 'Enable Customer Support', required: true },\n    };\n  }\n\n  async run() {\n    // Implement the plugin functionality here\n  }\n}\n\nmodule.exports = { SaltcornSequentialForms };\n```\n\nThis is a basic structure of a Saltcorn plugin. The actual functionality of the plugin needs to be implemented in the `run` method. The `options` method defines the configuration options for the plugin. Each option is defined as an object with a type and a label. The `required` property indicates whether the option is mandatory or not."
+PluginRequirementsModule: !!python/object:dspy.primitives.prediction.Prediction
+  _completions: !!python/object:dspy.primitives.prediction.Completions
+    _completions:
+      product_requirements_doc:
+      - 'Generated product requirements document:
+
+
+        Product Name: Saltcorn Sequential Forms
+
+
+        Overview:
+
+        Saltcorn Sequential Forms is a web-based form builder that allows users to easily create and manage sequential forms for their websites. This product aims to simplify the process of creating and managing forms, making it accessible to users of all technical levels.
+
+
+        Target Audience:
+
+        The target audience for Saltcorn Sequential Forms is website owners, developers, and designers who need a user-friendly and efficient solution for creating and managing forms on their websites.
+
+
+        Features:
+
+        1. Drag-and-Drop Form Builder:
+
+        - Intuitive drag-and-drop interface for creating forms without any coding knowledge.
+
+        - Ability to add various form elements such as text fields, checkboxes, radio buttons, dropdown menus, etc.
+
+        - Customizable form layout and design options.
+
+
+        2. Sequential Form Functionality:
+
+        - Ability to create sequential forms with multiple steps.
+
+        - Option to set conditional logic for form fields based on user input.
+
+        - Progress bar to guide users through the form completion process.
+
+
+        3. Form Management:
+
+        - Easy form management with the ability to view, edit, and delete forms.
+
+        - Option to export form data in various formats (CSV, Excel, etc.).
+
+        - Integration with popular email marketing and CRM platforms.
+
+
+        4. Responsive Design:
+
+        - Forms created with Saltcorn Sequential Forms are mobile-friendly and responsive.
+
+        - Ensures a seamless user experience on all devices.
+
+
+        5. Security:
+
+        - Built-in security measures to protect form data from spam and malicious attacks.
+
+        - Option to add CAPTCHA to forms for an extra layer of security.
+
+
+        6. Customization:
+
+        - Ability to add custom CSS and JavaScript to forms for advanced customization.
+
+        - Option to add custom branding and logos to forms.
+
+
+        7. User Management:
+
+        - Multi-user support with different levels of access and permissions.
+
+        - Option to restrict form access to specific users or groups.
+
+
+        8. Customer Support:
+
+        - Dedicated customer support team available for assistance and troubleshooting.
+
+        - Comprehensive documentation and tutorials for self-help.
+
+
+        System Requirements:
+
+        - Compatible with all major web browsers (Chrome, Firefox, Safari, Edge).
+
+        - Requires a stable internet connection.
+
+        - No additional software or plugins needed.
+
+
+        Timeline:
+
+        - Development and testing: 3 months
+
+        - Beta testing and bug fixes: 1 month
+
+        - Launch: 1 month
+
+
+        Cost:
+
+        - Pricing plans based on the number of forms and users.
+
+        - Free trial available for users to test the product before purchasing.
+
+
+        Conclusion:
+
+        Saltcorn Sequential Forms aims to provide a user-friendly and efficient solution for creating and managing forms on websites. With its drag-and-drop form builder, sequential form functionality, and various customization options, it caters to the needs of website owners, developers, and designers. Its security measures, responsive design, and customer support make it a reliable and valuable tool for any website.'
+    signature: !!python/name:abc.product_requirements_doc ''
+  _store:
+    product_requirements_doc: 'Generated product requirements document:
+
+
+      Product Name: Saltcorn Sequential Forms
+
+
+      Overview:
+
+      Saltcorn Sequential Forms is a web-based form builder that allows users to easily create and manage sequential forms for their websites. This product aims to simplify the process of creating and managing forms, making it accessible to users of all technical levels.
+
+
+      Target Audience:
+
+      The target audience for Saltcorn Sequential Forms is website owners, developers, and designers who need a user-friendly and efficient solution for creating and managing forms on their websites.
+
+
+      Features:
+
+      1. Drag-and-Drop Form Builder:
+
+      - Intuitive drag-and-drop interface for creating forms without any coding knowledge.
+
+      - Ability to add various form elements such as text fields, checkboxes, radio buttons, dropdown menus, etc.
+
+      - Customizable form layout and design options.
+
+
+      2. Sequential Form Functionality:
+
+      - Ability to create sequential forms with multiple steps.
+
+      - Option to set conditional logic for form fields based on user input.
+
+      - Progress bar to guide users through the form completion process.
+
+
+      3. Form Management:
+
+      - Easy form management with the ability to view, edit, and delete forms.
+
+      - Option to export form data in various formats (CSV, Excel, etc.).
+
+      - Integration with popular email marketing and CRM platforms.
+
+
+      4. Responsive Design:
+
+      - Forms created with Saltcorn Sequential Forms are mobile-friendly and responsive.
+
+      - Ensures a seamless user experience on all devices.
+
+
+      5. Security:
+
+      - Built-in security measures to protect form data from spam and malicious attacks.
+
+      - Option to add CAPTCHA to forms for an extra layer of security.
+
+
+      6. Customization:
+
+      - Ability to add custom CSS and JavaScript to forms for advanced customization.
+
+      - Option to add custom branding and logos to forms.
+
+
+      7. User Management:
+
+      - Multi-user support with different levels of access and permissions.
+
+      - Option to restrict form access to specific users or groups.
+
+
+      8. Customer Support:
+
+      - Dedicated customer support team available for assistance and troubleshooting.
+
+      - Comprehensive documentation and tutorials for self-help.
+
+
+      System Requirements:
+
+      - Compatible with all major web browsers (Chrome, Firefox, Safari, Edge).
+
+      - Requires a stable internet connection.
+
+      - No additional software or plugins needed.
+
+
+      Timeline:
+
+      - Development and testing: 3 months
+
+      - Beta testing and bug fixes: 1 month
+
+      - Launch: 1 month
+
+
+      Cost:
+
+      - Pricing plans based on the number of forms and users.
+
+      - Free trial available for users to test the product before purchasing.
+
+
+      Conclusion:
+
+      Saltcorn Sequential Forms aims to provide a user-friendly and efficient solution for creating and managing forms on websites. With its drag-and-drop form builder, sequential form functionality, and various customization options, it caters to the needs of website owners, developers, and designers. Its security measures, responsive design, and customer support make it a reliable and valuable tool for any website.'
+product_requirements_doc: 'Generated product requirements document:
+
+
+  Product Name: Saltcorn Sequential Forms
+
+
+  Overview:
+
+  Saltcorn Sequential Forms is a web-based form builder that allows users to easily create and manage sequential forms for their websites. This product aims to simplify the process of creating and managing forms, making it accessible to users of all technical levels.
+
+
+  Target Audience:
+
+  The target audience for Saltcorn Sequential Forms is website owners, developers, and designers who need a user-friendly and efficient solution for creating and managing forms on their websites.
+
+
+  Features:
+
+  1. Drag-and-Drop Form Builder:
+
+  - Intuitive drag-and-drop interface for creating forms without any coding knowledge.
+
+  - Ability to add various form elements such as text fields, checkboxes, radio buttons, dropdown menus, etc.
+
+  - Customizable form layout and design options.
+
+
+  2. Sequential Form Functionality:
+
+  - Ability to create sequential forms with multiple steps.
+
+  - Option to set conditional logic for form fields based on user input.
+
+  - Progress bar to guide users through the form completion process.
+
+
+  3. Form Management:
+
+  - Easy form management with the ability to view, edit, and delete forms.
+
+  - Option to export form data in various formats (CSV, Excel, etc.).
+
+  - Integration with popular email marketing and CRM platforms.
+
+
+  4. Responsive Design:
+
+  - Forms created with Saltcorn Sequential Forms are mobile-friendly and responsive.
+
+  - Ensures a seamless user experience on all devices.
+
+
+  5. Security:
+
+  - Built-in security measures to protect form data from spam and malicious attacks.
+
+  - Option to add CAPTCHA to forms for an extra layer of security.
+
+
+  6. Customization:
+
+  - Ability to add custom CSS and JavaScript to forms for advanced customization.
+
+  - Option to add custom branding and logos to forms.
+
+
+  7. User Management:
+
+  - Multi-user support with different levels of access and permissions.
+
+  - Option to restrict form access to specific users or groups.
+
+
+  8. Customer Support:
+
+  - Dedicated customer support team available for assistance and troubleshooting.
+
+  - Comprehensive documentation and tutorials for self-help.
+
+
+  System Requirements:
+
+  - Compatible with all major web browsers (Chrome, Firefox, Safari, Edge).
+
+  - Requires a stable internet connection.
+
+  - No additional software or plugins needed.
+
+
+  Timeline:
+
+  - Development and testing: 3 months
+
+  - Beta testing and bug fixes: 1 month
+
+  - Launch: 1 month
+
+
+  Cost:
+
+  - Pricing plans based on the number of forms and users.
+
+  - Free trial available for users to test the product before purchasing.
+
+
+  Conclusion:
+
+  Saltcorn Sequential Forms aims to provide a user-friendly and efficient solution for creating and managing forms on websites. With its drag-and-drop form builder, sequential form functionality, and various customization options, it caters to the needs of website owners, developers, and designers. Its security measures, responsive design, and customer support make it a reliable and valuable tool for any website.'
+saltcorn_js_plugin_code: "```javascript\nconst { Plugin } = require('saltcorn-data/models/plugin');\nconst { text, textarea, select, checkbox, integer } = require('saltcorn-data/types');\n\nclass SaltcornSequentialForms extends Plugin {\n  constructor() {\n    super();\n    this.name = 'Saltcorn Sequential Forms';\n    this.description = 'A web-based form builder that allows users to easily create and manage sequential forms for their websites.';\n    this.version = '1.0.0';\n  }\n\n  options() {\n    return {\n      form_builder: { type: checkbox, label: 'Enable Form Builder', required: true },\n      sequential_form: { type: checkbox, label: 'Enable Sequential Form Functionality', required: true },\n      form_management: { type: checkbox, label: 'Enable Form Management', required: true },\n      responsive_design: { type: checkbox, label: 'Enable Responsive Design', required: true },\n      security: { type: checkbox, label: 'Enable Security Measures', required: true },\n      customization:\
+  \ { type: checkbox, label: 'Enable Customization Options', required: true },\n      user_management: { type: checkbox, label: 'Enable User Management', required: true },\n      customer_support: { type: checkbox, label: 'Enable Customer Support', required: true },\n    };\n  }\n\n  async run() {\n    // Implement the plugin functionality here\n  }\n}\n\nmodule.exports = { SaltcornSequentialForms };\n```\n\nThis is a basic structure of a Saltcorn plugin. The actual functionality of the plugin needs to be implemented in the `run` method. The `options` method defines the configuration options for the plugin. Each option is defined as an object with a type and a label. The `required` property indicates whether the option is mandatory or not."
+user_input: Saltcorn Sequential Forms

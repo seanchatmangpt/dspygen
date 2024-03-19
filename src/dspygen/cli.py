@@ -150,7 +150,10 @@ Use this information to guide the usage of the DSPyGen CLI and its modules.
 @app.command(name="tutor")
 def tutor(question: str = ""):
     """Guide you through developing a project with DSPyGen."""
-    chatbot(question, TUTOR_CONTEXT, model="gpt-4")
+    from dspygen.utils.dspy_tools import init_dspy
+    init_dspy(max_tokens=3000, model="gpt-4")
+
+    chatbot(question, TUTOR_CONTEXT)
 
 
 def main():

@@ -7,15 +7,26 @@ from dspygen.utils.file_tools import dsl_dir
 from dspygen.utils.pydantic_tools import InstanceMixin
 from dspygen.utils.yaml_tools import YAMLMixin
 
+
 def main():
     from dspygen.utils.dspy_tools import init_dspy
     init_dspy()
 
-    # signature = GenSignatureModel.to_inst("Processes raw data to synthesize into a structured format suitable for report generation. in: raw_data, out: structured_data")
+    signature = GenSignatureModel.to_inst("SQL Query to Natual Language")
+    print(signature)
+    signature.to_yaml("sql_to_natural_signature.yaml")
 
-    signature = GenSignatureModel.from_yaml(str(dsl_dir("signature/raw_to_structure_signature.yaml")))
 
-    # print(signature)
+def main2():
+    from dspygen.utils.dspy_tools import init_dspy
+    init_dspy()
+
+    signature = GenSignatureModel.to_inst("SQL Query to Natual Language")
+
+
+    # signature = GenSignatureModel.from_yaml(str(dsl_dir("signature/.yaml")))
+
+    print(signature)
 
     # module = GenModuleModel.to_inst(f"name: RawToStructure, raw_to_structure_signature, Predict {signature}")
 

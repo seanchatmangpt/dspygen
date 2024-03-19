@@ -1,0 +1,49 @@
+# saltcorn_plugin_generator.yaml
+lm_models:
+  - label: "default"
+    name: "OpenAI"
+    args:
+      max_tokens: 3000
+  - label: "smart"
+    name: "OpenAI"
+    args:
+      model: "gpt-4"
+      max_tokens: 6000
+
+signatures:
+  - name: "ProductRequirementsDoc"
+    docstring: "Generates a product requirements document based on user input."
+    inputs:
+      - name: "user_input"
+        desc: "User-defined specifications for the product."
+    outputs:
+      - name: "product_requirements_doc"
+        desc: "Generated product requirements document."
+
+  - name: "GeneratePluginSignature"
+    docstring: "Generates javascript code for a Saltcorn plugin based on user input."
+    inputs:
+      - name: "plugin_spec"
+        desc: "User-defined specifications for the plugin."
+    outputs:
+      - name: "saltcorn_js_plugin_code"
+        desc: "Generated js code for the Saltcorn plugin."
+        prefix: "```javascript\n// Generated Saltcorn plugin code\n\n"
+
+modules:
+  - name: "PluginRequirementsModule"
+    signature: "ProductRequirementsDoc"
+    predictor: "ChainOfThought"
+
+  - name: "PluginGeneratorModule"
+    signature: "GeneratePluginSignature"
+    predictor: "ChainOfThought"
+
+steps:
+  - module: "PluginRequirementsModule"
+    args:
+      user_input: "{{ user_input }}"
+  - module: "PluginGeneratorModule"
+    lm_model: "smart"
+    args:
+      plugin_spec: "{{ product_requirements_doc }}"

@@ -2,6 +2,8 @@ import sqlite3
 
 from dspygen.experiments.lm_call import call
 from dspygen.utils.dspy_tools import init_dspy
+from dspygen.utils.pydantic_tools import InstanceMixin
+from dspygen.utils.yaml_tools import YAMLMixin
 
 # Assuming Chinook.db is located in the same directory for simplicity
 conn = sqlite3.connect("Chinook.db")
@@ -72,21 +74,17 @@ class SQLQueryModel(BaseModel):
     query: str
 
 
-class OptimizedSQLQueryModel(BaseModel):
+class OptimizedSQLQueryModel(BaseModel, InstanceMixin, YAMLMixin):
     rationale: str
     optimized_query: str
 
 
-def sql_query_optimizer() -> OptimizedSQLQueryModel:
-    """Optimize the given SQL query"""
-
-
 def main():
-    init_dspy(max_tokens=3000)
+    init_dspy(max_tokens=3000, model="gpt-4")
 
     # result = invoke("What is the name of the album with the most tracks and count?", question_to_chinook_query)
 
-    result = call(sql_query_optimizer, poor_query)
+    result = OptimizedSQLQueryModel.to_inst(poor_query)
 
     print(result)
 

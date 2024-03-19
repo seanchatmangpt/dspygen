@@ -1,0 +1,13 @@
+docstring: Generates a natural language description of an SQL query.
+inputs:
+- desc: The SQL query to be translated into natural language.
+  name: query
+  prefix: ''
+name: SQLQueryToNL
+outputs:
+- desc: The natural language description of the SQL query.
+  name: description
+  prefix: ''
+- desc: The optimized SQL query.
+  name: optimized_query
+  prefix: '```sql'

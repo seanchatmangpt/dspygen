@@ -59,9 +59,6 @@ class ModuleDSLModel(BaseModel):
     signature: str = Field(..., description="Name of the signature associated with this module.")
     predictor: Optional[str] = Field("Predict", description="Type of predictor to be used with this module. "
                                                             "Usually 'Predict' or 'ChainOfThought'.")
-    args: list[ArgumentModel] = Field(default=[],
-                                      description="List of arguments to be passed to the module during its execution.")
-
 
 # Define PipelineStepModel for pipeline steps
 class StepDSLModel(BaseModel):
@@ -96,6 +93,12 @@ class PipelineConfigModel(BaseModel):
         extra = "allow"
 
 
+class ContextModel(BaseModel, YAMLMixin):
+    """A context dictionary for storing global values accessible across the pipeline."""
+    class Config:
+        extra = "allow"
+
+
 class PipelineDSLModel(BaseModel, YAMLMixin):
     lm_models: list[LanguageModelConfig] = Field(default=[],
                                                  description="list of language model configurations used in the pipeline.")
@@ -108,7 +111,7 @@ class PipelineDSLModel(BaseModel, YAMLMixin):
     steps: list[StepDSLModel] = Field(default=[],
                                       description="Sequential steps to be executed in the pipeline.")
     context: dict = Field(default={},
-                          description="A context dictionary for storing global values accessible across the pipeline.")
+                                  description="A context dictionary for storing global values accessible across the pipeline.")
     config: PipelineConfigModel = Field(default_factory=PipelineConfigModel,
                                         description="Configuration settings for the pipeline execution.")
 

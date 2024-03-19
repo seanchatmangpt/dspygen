@@ -68,7 +68,7 @@ def _load_signature_class(signature_class_name: str):
         if signature_class_name.startswith("/"):
             signature_model = GenSignatureModel.from_yaml(signature_class_name)
         else:
-            signature_model = GenSignatureModel.from_yaml(str(dsl_dir("signature/raw_to_structure_signature.yaml")))
+            signature_model = GenSignatureModel.from_yaml(str(dsl_dir(signature_class_name)))
         return _create_signature_from_model(signature_model)
     else:
         module_name, class_name = signature_class_name.rsplit('.', 1)

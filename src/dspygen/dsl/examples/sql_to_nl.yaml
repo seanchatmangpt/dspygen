@@ -1,0 +1,8 @@
+lm_models:
+  - label: "default"
+    name: "OpenAI"
+    args:
+      max_tokens: 3000
+
+steps:
+  - signature: "signature/sql_to_natural_signature.yaml"

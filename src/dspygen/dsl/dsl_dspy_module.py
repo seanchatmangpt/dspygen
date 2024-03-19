@@ -28,10 +28,8 @@ def _get_predictor_class(predictor):
         return dspy.ChainOfThoughtWithHint
     elif predictor == "MultiChainComparison":
         return dspy.MultiChainComparison
-    elif predictor == "ChainOfThoughtWithHint":
-        return dspy.ProgramOfThought
     elif predictor == "ProgramOfThought":
-        return dspy.ChainOfThoughtWithHint
+        return dspy.ProgramOfThought
     elif predictor == "ReAct":
         return dspy.ReAct
     else:
