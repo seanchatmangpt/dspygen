@@ -13,6 +13,7 @@ from dspygen.dsl.utils.dsl_module_utils import _get_module_instance
 from dspygen.dsl.utils.dsl_retrieval_model_utils import _get_retrieval_model_instance
 from dspygen.dsl.utils.dsl_signature_utils import _create_signature_from_model
 from dspygen.typetemp.functional import render
+from dspygen.utils.file_tools import dsl_dir
 
 
 def execute_pipeline(file_path, initial_context=None):
@@ -94,8 +95,9 @@ async def run_pipeline(request: PipelineRequest):
 
 def main():
     context = execute_pipeline('/Users/candacechatman/dev/dspygen/src/dspygen/dsl/examples/example_pipeline.yaml')
-    # context = execute_pipeline('/Users/candacechatman/dev/dspygen/pipeline.yaml', {"news": "$12,500 Retainer Contract"})
-    # context = execute_pipeline('examples/example_pipeline.yaml')
+    # context = execute_pipeline(str(dsl_dir('examples/text_signature_pipeline.yaml')),
+    #                            {"raw_data": "id,name,job\n1,Joe,Coder"})
+
 
     print(context)
 

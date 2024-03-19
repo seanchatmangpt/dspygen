@@ -3,6 +3,7 @@ import types
 import inspect
 from typing import Callable
 
+
 def module_to_dict(module, include_docstring=True) -> dict:
     module_dict = {
         "module_name": module.__name__,
@@ -31,6 +32,7 @@ def module_to_dict(module, include_docstring=True) -> dict:
             module_dict["classes"][name] = class_dict
 
     return module_dict
+
 
 def function_to_dict(func: Callable) -> dict:
     output = {

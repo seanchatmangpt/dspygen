@@ -1,5 +1,5 @@
 import yaml
-from dspygen.modules.dspygen_module import *
+from dspygen.modules.dspygen_module import DGModule
 
 def process_yaml_pipeline(yaml_file):
     with open(yaml_file, 'r') as f:

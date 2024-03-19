@@ -50,6 +50,10 @@ class GenDict(GenPythonPrimitive):
         super().__init__(primitive_type=dict)
 
 
+def gen_dict(prompt):
+    return GenDict()(prompt)
+
+
 class GenList(GenPythonPrimitive):
     def __init__(self):
         super().__init__(primitive_type=list)
@@ -57,6 +61,7 @@ class GenList(GenPythonPrimitive):
 
 def gen_list(prompt):
     return GenList()(prompt)
+
 
 class GenBool(GenPythonPrimitive):
     def __init__(self):
@@ -72,9 +77,17 @@ class GenInt(GenPythonPrimitive):
         super().__init__(primitive_type=int)
 
 
+def gen_int(prompt):
+    return GenInt()(prompt)
+
+
 class GenFloat(GenPythonPrimitive):
     def __init__(self):
         super().__init__(primitive_type=float)
+
+
+def gen_float(prompt):
+    return GenFloat()(prompt)
 
 
 class GenTuple(GenPythonPrimitive):
@@ -82,9 +95,17 @@ class GenTuple(GenPythonPrimitive):
         super().__init__(primitive_type=tuple)
 
 
+def gen_tuple(prompt):
+    return GenTuple()(prompt)
+
+
 class GenSet(GenPythonPrimitive):
     def __init__(self):
         super().__init__(primitive_type=set)
+
+
+def gen_set(prompt):
+    return GenSet()(prompt)
 
 
 class GenStr(GenPythonPrimitive):
@@ -92,14 +113,18 @@ class GenStr(GenPythonPrimitive):
         super().__init__(primitive_type=str)
 
 
+def gen_str(prompt):
+    return GenStr()(prompt)
+
+
 def main():
     init_dspy()
 
-    result = GenTuple()(
+    result = gen_list(
         "Create a list of planets in our solar system sorted by largest to smallest"
     )
 
-    assert result == (
+    assert result == [
         "Jupiter",
         "Saturn",
         "Uranus",
@@ -108,9 +133,15 @@ def main():
         "Venus",
         "Mars",
         "Mercury",
-    )
+    ]
 
     print(f"The planets of the solar system are {result}")
+
+    for planet in result:
+        print(planet)
+
+    if gen_bool(f"Is {result[0]} the largest planet in the solar system?"):
+        print(f"{result[0]} is the largest planet in the solar system")
 
 
 if __name__ == "__main__":

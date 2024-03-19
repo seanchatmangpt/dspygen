@@ -90,6 +90,10 @@ def pages_dir(file_name="") -> Path:
     return source_dir() / "pages" / file_name
 
 
+def dsl_dir(file_name="") -> Path:
+    return source_dir() / "dsl" / file_name
+
+
 def get_source(filename):
     # Read the source code from the file
     with open(filename, 'r') as file:

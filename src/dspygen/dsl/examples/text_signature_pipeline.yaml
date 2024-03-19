@@ -1,0 +1,2 @@
+steps:
+  - signature: "raw_to_structure_signature.yaml"

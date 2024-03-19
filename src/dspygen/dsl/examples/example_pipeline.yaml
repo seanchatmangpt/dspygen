@@ -15,6 +15,10 @@ lm_models:
       model: "fine-tuned-t5-large-1234"
       max_tokens: 100
 
+rm_models:
+  - label: "default"
+    name: "ColBERTv2"
+
 signatures:
   - name: "ProcessDataSignature"
     docstring: "Processes raw data to synthesize into a structured format suitable for report generation."
@@ -26,7 +30,6 @@ signatures:
     outputs:
       - name: "processed_data"
         desc: "Data processed into a structured format."
-
   - name: "GenerateReportSignature"
     docstring: "Generates a comprehensive report from structured data."
     inputs:

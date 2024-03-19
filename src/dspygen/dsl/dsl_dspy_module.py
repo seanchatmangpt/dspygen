@@ -54,7 +54,25 @@ class DSLModule(dspy.Module):
         self.forward_args = {key: render(str(value), **self.pipeline.context)
                              for key, value in kwargs.items()}
 
-        print(f"Forward args: {self.forward_args}")
+        input_field_names = self._extract_input_fields()
+
+        for field in input_field_names:
+            if field in self.pipeline.context:
+                # Use render to possibly process/format context values if necessary
+                self.forward_args[field] = render(str(self.pipeline.context[field]), **self.pipeline.context)
+
+        # print(f"Forward args: {self.forward_args}")
+
+    def _extract_input_fields(self):
+        # Handle string signature
+        if isinstance(self.signature, str):
+            input_keys = self.signature.split("->")[0].strip().split(", ")
+            return input_keys
+        # Handle dspy.Signature object
+        elif isinstance(self.signature, dspy.SignatureMeta):
+            return list(self.signature.input_fields.keys())
+        else:
+            raise ValueError("Unsupported signature format")
 
     def __or__(self, other):
         if other.output is None and self.output is None:

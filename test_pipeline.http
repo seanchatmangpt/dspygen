@@ -1,4 +1,4 @@
-POST http://127.0.0.1:8000/execute_pipeline/
+POST http://127.0.0.1:8888/execute_pipeline/
 Content-Type: application/json
 
 {

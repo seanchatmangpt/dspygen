@@ -2,22 +2,34 @@ import importlib
 
 import dspy
 
-from dspygen.dsl.dsl_pydantic_models import SignatureDSLModel
+from dspygen.dsl.dsl_pydantic_models import SignatureDSLModel, GenSignatureModel
+from dspygen.utils.file_tools import dsl_dir
+
+
+def get_sig_key(module_def, step):
+    sig_key = ""
+
+    if module_def and module_def.signature != "":
+        sig_key = module_def.signature
+
+    if step.signature != "":
+        sig_key = step.signature
+
+    return sig_key
 
 
 def _process_module_signatures(global_signatures, module_def, step):
     """
     Process the signatures for a module definition and a step. Load the signature class if not already loaded.
     """
-    # Check if the signature class is already loaded, if not try to load the module
-    # Assuming `pipeline.signatures` contains fully qualified names or similar identifiers:
-    if module_def and module_def.signature != "" and module_def.signature not in global_signatures:
-        signature_class = _load_signature_class(module_def.signature)
-        global_signatures[module_def.signature] = signature_class
+    sig_key = get_sig_key(module_def, step)
 
-    if step.signature != "" and step.signature not in global_signatures:
-        signature_class = _load_signature_class(step.signature)
-        global_signatures[module_def.signature] = signature_class
+    if sig_key in global_signatures:
+        return
+
+    sig_cls = _load_signature_class(sig_key)
+
+    global_signatures[sig_key] = sig_cls
 
 
 def _create_signature_from_model(signature_model: SignatureDSLModel) -> type:
@@ -52,6 +64,13 @@ def _load_signature_class(signature_class_name: str):
     """
     Dynamically loads a signature class by its fully qualified name.
     """
-    module_name, class_name = signature_class_name.rsplit('.', 1)
-    module = importlib.import_module(module_name)
-    return getattr(module, class_name)
+    if signature_class_name.endswith(".yaml") or signature_class_name.endswith(".yml"):
+        if signature_class_name.startswith("/"):
+            signature_model = GenSignatureModel.from_yaml(signature_class_name)
+        else:
+            signature_model = GenSignatureModel.from_yaml(str(dsl_dir("signature/raw_to_structure_signature.yaml")))
+        return _create_signature_from_model(signature_model)
+    else:
+        module_name, class_name = signature_class_name.rsplit('.', 1)
+        module = importlib.import_module(module_name)
+        return getattr(module, class_name)

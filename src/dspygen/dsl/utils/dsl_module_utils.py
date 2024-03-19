@@ -3,7 +3,7 @@ import importlib
 import dspy
 
 from dspygen.dsl.dsl_pydantic_models import ModuleDSLModel
-from dspygen.dsl.utils.dsl_signature_utils import _process_module_signatures
+from dspygen.dsl.utils.dsl_signature_utils import _process_module_signatures, get_sig_key
 from dspygen.dsl.dsl_dspy_module import DSLModule
 
 
@@ -48,18 +48,20 @@ def _get_module_instance(pipeline, rendered_args, step):
     """
     module_def = next((m for m in pipeline.modules if m.name == step.module), None)
 
-    # If the module definition is not found, then load the module with load_dspy_module_class
-    if not module_def:
+    # If module def name has period, assume it's a fully qualified class name
+    if module_def and "." in module_def.name:
         module_inst = _load_dspy_module_class(step.module)(
+            pipeline=pipeline,
             **rendered_args)  # Resolve Jinja2 templates in arguments against the context
     else:
         _process_module_signatures(pipeline.config.global_signatures, module_def, step)
 
+        sig_key = get_sig_key(module_def, step)
+
         # Note: Additional logic may be required to dynamically resolve args from rendered_args
         module_inst = DSLModule(pipeline=pipeline,
-                                signature=pipeline.config.global_signatures[module_def.signature],
-                                predictor=module_def.predictor,
-                                context=pipeline.context,
+                                signature=pipeline.config.global_signatures[sig_key],
+                                predictor=ModuleDSLModel(name="", signature="").predictor,
                                 **rendered_args)
     return module_inst
 

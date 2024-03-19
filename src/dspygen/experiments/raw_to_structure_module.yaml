@@ -1,0 +1,4 @@
+args: []
+name: RawToStructure
+predictor: Predict
+signature: raw_to_structure_signature
