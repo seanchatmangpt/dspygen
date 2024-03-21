@@ -1,0 +1,38 @@
+{
+  "title": "Quantitatively Managed Level Assessment",
+  "type": "object",
+  "properties": {
+    "q31": {
+      "type": "boolean",
+      "title": "Are performance objectives for Generative AI processes in business projects quantified?"
+    },
+    "q32": {
+      "type": "boolean",
+      "title": "Are Generative AI techniques used for controlling and improving business process quality?"
+    },
+    "q33": {
+      "type": "boolean",
+      "title": "Is data from Generative AI used for managing and optimizing business processes?"
+    },
+    "q34": {
+      "type": "boolean",
+      "title": "Are quantitative management techniques for business projects supported by Generative AI tools?"
+    },
+    "q35": {
+      "type": "boolean",
+      "title": "Is process variation in business operations analyzed using Generative AI for improvement?"
+    },
+    "q36": {
+      "type": "boolean",
+      "title": "Is the performance of organizational processes in business projects evaluated using Generative AI?"
+    },
+    "q37": {
+      "type": "boolean",
+      "title": "Are quality assurance processes for business projects enhanced with Generative AI?"
+    },
+    "q38": {
+      "type": "boolean",
+      "title": "Is root cause analysis for business process improvements supported by Generative AI?"
+    }
+  }
+}

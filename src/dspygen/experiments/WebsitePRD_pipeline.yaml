@@ -1,0 +1,28 @@
+config:
+  current_step: null
+  global_signatures: {}
+context: {}
+lm_models: []
+modules:
+- name: WebsitePRD
+  predictor: Predict
+  signature: WebsitePRD
+rm_models: []
+signatures:
+- docstring: This Signature generates a product requirements document for a website.
+  inputs:
+  - desc: Requirements for the design of the website.
+    name: DesignRequirements
+    prefix: Design
+  name: WebsitePRD
+  outputs:
+  - desc: The final product requirements document for the website.
+    name: ProductRequirementsDocument
+    prefix: Product
+steps:
+- args:
+    DesignRequirements: '{{ user_input }}'
+  lm_model: default
+  module: WebsitePRD
+  rm_model: ''
+  signature: WebsitePRD

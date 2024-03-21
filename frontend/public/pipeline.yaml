@@ -1,0 +1,32 @@
+# cmmi_gai_maturity_assessment.yaml
+lm_models:
+  - label: "in-depth"
+    name: "OpenAI"
+    args:
+      model: "gpt-4"
+      max_tokens: 6000
+
+signatures:
+  - name: "GenerateAssessmentReport"
+    docstring: "Generates a detailed assessment report based on the CMMI model for Generative AI."
+    inputs:
+      - name: "assessment_answer_data"
+        desc: "Assessment data level maturity."
+      - name: "maturity_assessment_questions"
+        desc: "Applied Direct Services Corporation (ADSC) Instrument To Assess The Capability Maturity Model Integration (CMMI) For Business Processes and Generative AI"
+    outputs:
+      - name: "cmmi_gai_report"
+        desc: "Comprehensive CMMI maturity report for Generative AI."
+        prefix: "```text\n// CMMI Generative AI Maturity Assessment Report\n\n"
+
+modules:
+  - name: "ComprehensiveReportModule"
+    signature: "GenerateAssessmentReport"
+    predictor: "ChainOfThought"
+
+steps:
+  - module: "ComprehensiveReportModule"
+    lm_model: "in-depth"
+    args:
+      assessment_answer_data: "{{ user_input }}"
+      maturity_assessment_questions: "{{ maturity_assessment_questions }}"

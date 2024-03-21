@@ -39,8 +39,8 @@ class Groq(LM):
 
 
 def main():
-    # init_dspy(Groq, model="llama2-70b-4096", max_tokens=2000)
-    init_dspy(max_tokens=2000)
+    init_dspy(Groq, model="llama2-70b-4096", max_tokens=2000)
+    # init_dspy(max_tokens=2000)
     pred = dspy.Predict("prompt -> code")(prompt="Fast API CRUD endpoint for fire alarm global IoT network")
     print(pred.code)
 

@@ -1,0 +1,26 @@
+{
+  "title": "Managed Level Assessment",
+  "type": "object",
+  "properties": {
+    "q11": {
+      "type": "boolean",
+      "title": "Are the management processes of projects within the business well-documented with the help of Generative AI?"
+    },
+    "q12": {
+      "type": "boolean",
+      "title": "Is the management of project requirements enhanced by the use of Generative AI?"
+    },
+    "q13": {
+      "type": "boolean",
+      "title": "Are project plans developed and maintained with the help of standards from Generative AI tools?"
+    },
+    "q14": {
+      "type": "boolean",
+      "title": "Is configuration management for business projects improved through Generative AI?"
+    },
+    "q15": {
+      "type": "boolean",
+      "title": "Is the performance of business projects monitored using analytics powered by Generative AI?"
+    }
+  }
+}

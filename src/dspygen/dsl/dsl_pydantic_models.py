@@ -117,11 +117,14 @@ class PipelineDSLModel(BaseModel, YAMLMixin):
 
 
 class GenSignatureModel(SignatureDSLModel, InstanceMixin, YAMLMixin):
-    """Generate a signature model."""
+    """
+    Generate a signature model. Make sure to have at one input and one output field and
+    the name is CamelCase and ends with 'Signature'. Include a verbose docstring.
+    """
 
 
 class GenModuleModel(ModuleDSLModel, InstanceMixin, YAMLMixin):
-    """Generate a module model."""
+    """Generate a module model. Make sure the name is CamelCase and ends with 'Module'"""
 
 
 class GenPipelineModel(PipelineDSLModel, InstanceMixin, YAMLMixin):

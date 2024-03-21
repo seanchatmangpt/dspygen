@@ -1,0 +1,14 @@
+{
+  "title": "Optimizing Level Assessment",
+  "type": "object",
+  "properties": {
+    "q39": {
+      "type": "boolean",
+      "title": "Is Generative AI currently capable of enhancing the continuous improvement of business processes?"
+    },
+    "q40": {
+      "type": "boolean",
+      "title": "Are Generative AI technologies continually evaluated for their capabilities for enhancing business process optimization?"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "title": "Defined Level Assessment",
+  "type": "object",
+  "properties": {
+    "q16": {
+      "type": "boolean",
+      "title": "Is the management of suppliers and vendors for business projects facilitated by Generative AI integration?"
+    },
+    "q17": {
+      "type": "boolean",
+      "title": "Are quality metrics standards for business projects managed through systems powered by Generative AI?"
+    },
+    "q18": {
+      "type": "boolean",
+      "title": "Is business decision-making supported by analyses supported by Generative AI?"
+    },
+    "q19": {
+      "type": "boolean",
+      "title": "Are Generative AI tools used for supporting stakeholder reviews in business projects?"
+    },
+    "q20": {
+      "type": "boolean",
+      "title": "Does Generative AI support the training for project management within the business?"
+    },
+    "q21": {
+      "type": "boolean",
+      "title": "Are Generative AI processes standardized across the organization for business projects?"
+    },
+    "q22": {
+      "type": "boolean",
+      "title": "Is Generative AI utilized in organizational training programs to improve business process outcomes?"
+    },
+    "q23": {
+      "type": "boolean",
+      "title": "Is integrated project management for business projects enhanced through Generative AI?"
+    },
+    "q24": {
+      "type": "boolean",
+      "title": "Are business issue management processes supported by Generative AI for more effective resolution?"
+    },
+    "q25": {
+      "type": "boolean",
+      "title": "Are roles and responsibilities involving Generative AI clearly defined within business projects?"
+    }
+  }
+}

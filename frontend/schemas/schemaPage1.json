@@ -1,0 +1,46 @@
+{
+  "title": "Initial Level Assessment",
+  "type": "object",
+  "properties": {
+    "q1": {
+      "type": "boolean",
+      "title": "Is there a formal process in place for initiating business projects that can incorporate Generative AI?"
+    },
+    "q2": {
+      "type": "boolean",
+      "title": "Are financial forecasts for projects applicable to Generative AI created and tracked using synthetic data for privacy?"
+    },
+    "q3": {
+      "type": "boolean",
+      "title": "Is Generative AI utilized to enhance the efficiency of basic project management tasks?"
+    },
+    "q4": {
+      "type": "boolean",
+      "title": "Are potential project risks assessed using predictive models powered by Generative AI?"
+    },
+    "q5": {
+      "type": "boolean",
+      "title": "Is the assignment of ad-hoc tasks informed by recommendations from Generative AI systems?"
+    },
+    "q6": {
+      "type": "boolean",
+      "title": "Is customer feedback on business services/products analyzed using Generative AI tools?"
+    },
+    "q7": {
+      "type": "boolean",
+      "title": "Can insights from informal communication within the business currently be analyzed by Generative AI for actionable intelligence?"
+    },
+    "q8": {
+      "type": "boolean",
+      "title": "Are urgent business tasks prioritized with the assistance of Generative AI decision-making tools?"
+    },
+    "q9": {
+      "type": "boolean",
+      "title": "Do team members have a clear understanding of the objectives when using Generative AI in projects?"
+    },
+    "q10": {
+      "type": "boolean",
+      "title": "Can AI tools currently be employed to manage and ensure the levels of quality of business projects?"
+    }
+  }
+}

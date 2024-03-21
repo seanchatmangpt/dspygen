@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]  # https://python-poetry.org/docs/pyproject/
 name = "dspygen"
-version = "2024.3.17"
+version = "2024.3.19"
 description = "A Ruby on Rails style framework for the DSPy (Demonstrate, Search, Predict) project for Language Models like GPT, BERT, and LLama."
 authors = ["Sean Chatman <info@chatmangpt.com>"]
 readme = "README.md"
@@ -117,14 +117,17 @@ convention = "google"
       uvicorn \
         --host $host \
         --port $port \
+        --graceful-timeout 30 \
+        --keep-alive 30
+        --timeout 30 \
         --reload \
         dspygen.api:app
     } else {
       gunicorn \
         --access-logfile - \
         --bind $host:$port \
-        --graceful-timeout 10 \
-        --keep-alive 10 \
+        --graceful-timeout 30 \
+        --keep-alive 30 \
         --log-file - \
         --timeout 30 \
         --worker-class uvicorn.workers.UvicornWorker \

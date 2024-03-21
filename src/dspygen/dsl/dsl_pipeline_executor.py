@@ -8,7 +8,7 @@ import dspy
 from pydantic import BaseModel
 
 from dspygen.dsl.utils.dsl_language_model_utils import _get_language_model_instance
-from dspygen.dsl.dsl_pydantic_models import PipelineDSLModel, LanguageModelConfig, ContextModel
+from dspygen.dsl.dsl_pydantic_models import PipelineDSLModel, LanguageModelConfig
 from dspygen.dsl.utils.dsl_module_utils import _get_module_instance
 from dspygen.dsl.utils.dsl_retrieval_model_utils import _get_retrieval_model_instance
 from dspygen.dsl.utils.dsl_signature_utils import _create_signature_from_model
@@ -28,9 +28,7 @@ def execute_pipeline(file_path, initial_context=None):
     for step in pipeline.steps:
         _execute_step(pipeline, step)
 
-    output_context = ContextModel(**pipeline.context)
-
-    return output_context
+    return pipeline.context
 
 
 def _get_pipeline(file_path):
@@ -89,6 +87,11 @@ async def run_pipeline(request: PipelineRequest):
         # Optionally, clean up the temporary file after execution
         os.remove(tmp_path)
 
+        # Convert the context to a dictionary making sure it is JSON serializable
+        context = {k: v for k, v in context.items() if isinstance(v, (str, int, float, list, dict, bool, type(None)))}
+
+        print(f"Context:\n\n{context}\n\n")
+
         return context
     except Exception as e:
         # Ensure the temporary file is removed even if an error occurs
@@ -105,67 +108,6 @@ def main():
     #                            {"query": poor_query})
 
     # print(context)
-
-#
-# poor_query = """WITH recursive cte_dates AS (
-#   SELECT
-#     DATEADD(day, 1, MIN(order_date)) AS dt
-#   FROM
-#     orders
-#
-#   UNION ALL
-#
-#   SELECT
-#     DATEADD(day, 1, dt)
-#   FROM
-#     cte_dates
-#   WHERE
-#     dt < (SELECT DATEADD(day, -1, MAX(order_date)) FROM orders)
-# ),
-#
-# cte_sales AS (
-#   SELECT
-#     p.product_id,
-#     p.product_name,
-#     d.dt,
-#     SUM(oi.quantity * oi.unit_price) AS daily_sales
-#   FROM
-#     cte_dates d
-#   CROSS JOIN
-#     products p
-#   LEFT JOIN
-#     order_items oi ON oi.product_id = p.product_id
-#                    AND CAST(oi.order_date AS DATE) = CAST(d.dt AS DATE)
-#   GROUP BY
-#     p.product_id,
-#     p.product_name,
-#     d.dt
-# ),
-#
-# cte_max_sales AS (
-#   SELECT
-#     product_id,
-#     product_name,
-#     MAX(daily_sales) AS max_daily_sales
-#   FROM
-#     cte_sales
-#   GROUP BY
-#     product_id,
-#     product_name
-# )
-#
-# SELECT
-#   product_id,
-#   product_name,
-#   dt AS date_of_max_sales,
-#   max_daily_sales
-# FROM
-#   cte_sales cs
-# JOIN
-#   cte_max_sales cms ON cs.product_id = cms.product_id
-#                    AND cs.daily_sales = cms.max_daily_sales
-# """
-#
 
 if __name__ == '__main__':
     main()

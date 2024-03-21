@@ -23,7 +23,6 @@ def main2():
 
     signature = GenSignatureModel.to_inst("SQL Query to Natual Language")
 
-
     # signature = GenSignatureModel.from_yaml(str(dsl_dir("signature/.yaml")))
 
     print(signature)

@@ -1,0 +1,114 @@
+Applied Direct Services Corporation (ADSC)
+
+Instrument To Assess The Capability Maturity Model Integration
+
+(CMMI)
+
+For Business Processes and Generative AI
+
+Released under Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+pg. 1
+
+Level 1: Initial (Weight: 1)
+1. (Weight 1) Is there a formal process in place for initiating business projects
+that can incorporate Generative AI?
+2. (Weight 1) Are financial forecasts for projects applicable to Generative AI
+created and tracked using synthetic data for privacy?
+3. (Weight 1) Is Generative AI utilized to enhance the efficiency of basic
+project management tasks?
+4. (Weight 1) Are potential project risks assessed using predictive models
+powered by Generative AI?
+5. (Weight 1) Is the assignment of ad-hoc tasks informed by
+recommendations from Generative AI systems?
+6. (Weight 1) Is customer feedback on business services/products analyzed
+using Generative AI tools?
+7. (Weight 1) Can insights from informal communication within the business
+currently be analyzed by Generative AI for actionable intelligence?
+8. (Weight 1) Are urgent business tasks prioritized with the assistance of
+Generative AI decision-making tools?
+9. (Weight 1) Do team members have a clear understanding of the objectives
+when using Generative AI in projects?
+10. (Weight 1) Can AI tools currently be employed to manage and ensure the
+levels of quality of business projects?
+Level 2: Managed (Weight: 2)
+11. (Weight 2) Are the management processes of projects within the business
+well-documented with the help of Generative AI?
+12. (Weight 2) Is the management of project requirements enhanced by the use
+of Generative AI?
+13. (Weight 2) Are project plans developed and maintained with the help of
+standards from Generative AI tools?
+14. (Weight 2) Is configuration management for business projects improved
+through Generative AI?
+15. (Weight 2) Is the performance of business projects monitored using
+analytics powered by Generative AI?
+
+Applied Direct Services Corporation (ADSC)
+
+Instrument for CMMI For Business Processes and Generative AI
+
+(Cont.)
+
+Released under Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+pg. 2
+16. (Weight 2) Is the management of suppliers and vendors for business
+projects facilitated by Generative AI integration?
+17. (Weight 2) Are quality metrics standards for business projects managed
+through systems powered by Generative AI?
+18. (Weight 2) Is business decision-making supported by analyses supported
+by Generative AI?
+19. (Weight 2) Are Generative AI tools used for supporting stakeholder reviews
+in business projects?
+20. (Weight 2) Does Generative AI support the training for project management
+within the business?
+Level 3: Defined (Weight: 3)
+21. (Weight 3) Are Generative AI processes standardized across the
+organization for business projects?
+22. (Weight 3) Is Generative AI utilized in organizational training programs to
+improve business process outcomes?
+23. (Weight 3) Is integrated project management for business projects
+enhanced through Generative AI?
+24. (Weight 3) Are business issue management processes supported by
+Generative AI for more effective resolution?
+25. (Weight 3) Are roles and responsibilities involving Generative AI clearly
+defined within business projects?
+26. (Weight 3) Is the integration of new products or services into the business
+improved through Generative AI?
+27. (Weight 3) Is data management and reporting for business projects
+supported by Generative AI?
+28. (Weight 3) Is there a defined process for focusing organizational efforts on
+key areas using Generative AI?
+29. (Weight 3) Does Generative AI produce processes clearly defined for use in
+organizational business best practices?
+30. (Weight 3) Is the management of business performance assisted by
+Generative AI?
+Level 4: Quantitatively Managed (Weight: 4)
+31. (Weight 4) Are performance objectives for Generative AI processes in
+business projects quantified?
+
+Applied Direct Services Corporation (ADSC)
+
+Instrument for CMMI For Business Processes and Generative AI
+
+(Cont.)
+
+Released under Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+pg. 3
+32. (Weight 4) Are Generative AI techniques used for controlling and improving
+business process quality?
+33. (Weight 4) Is data from Generative AI used for managing and optimizing
+business processes?
+34. (Weight 4) Are quantitative management techniques for business projects
+supported by Generative AI tools?
+35. (Weight 4) Is process variation in business operations analyzed using
+Generative AI for improvement?
+36. (Weight 4) Is the performance of organizational processes in business
+projects evaluated using Generative AI?
+37. (Weight 4) Are quality assurance processes for business projects
+enhanced with Generative AI?
+38. (Weight 4) Is root cause analysis for business process improvements
+supported by Generative AI?
+Level 5: Optimizing (Weight: 5)
+39. (Weight 5) Is Generative AI currently capable of enhancing the continuous
+improvement of business processes?
+40. (Weight 5) Are Generative AI technologies continually evaluated for their
+capabilities for enhancing business process optimization?

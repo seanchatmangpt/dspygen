@@ -1,0 +1,66 @@
+config:
+  current_step: null
+  global_signatures: {}
+context: {}
+lm_models:
+- args: {}
+  label: GPT3
+  name: OpenAI
+modules:
+- name: understand_input_module
+  predictor: Predict
+  signature: understand_input
+- name: generate_content_module
+  predictor: Predict
+  signature: generate_content
+- name: finalize_article_module
+  predictor: Predict
+  signature: finalize_article
+rm_models: []
+signatures:
+- docstring: Understand the user input
+  inputs:
+  - desc: The user input
+    name: user_input
+    prefix: ''
+  name: understand_input
+  outputs:
+  - desc: The understood user input
+    name: understood_input
+    prefix: ''
+- docstring: Generate the content of the article
+  inputs:
+  - desc: The understood user input
+    name: understood_input
+    prefix: ''
+  name: generate_content
+  outputs:
+  - desc: The content of the article
+    name: article_content
+    prefix: ''
+- docstring: Finalize and format the article
+  inputs:
+  - desc: The content of the article
+    name: article_content
+    prefix: ''
+  name: finalize_article
+  outputs:
+  - desc: The finalized and formatted article
+    name: final_article
+    prefix: ''
+steps:
+- args: {}
+  lm_model: GPT3
+  module: understand_input_module
+  rm_model: ''
+  signature: understand_input
+- args: {}
+  lm_model: GPT3
+  module: generate_content_module
+  rm_model: ''
+  signature: generate_content
+- args: {}
+  lm_model: GPT3
+  module: finalize_article_module
+  rm_model: ''
+  signature: finalize_article

@@ -1,0 +1,47 @@
+config:
+  current_step: null
+  global_signatures: {}
+context: {}
+lm_models: []
+modules:
+- name: LinkedInNewsletterArticleGeneratorModule
+  predictor: Predict
+  signature: LinkedInNewsletterArticleGeneratorSignature
+- name: CriticFeedbackGeneratorModule
+  predictor: Predict
+  signature: CriticFeedbackGeneratorSignature
+rm_models: []
+signatures:
+- docstring: This signature model generates a LinkedIn newsletter article.
+  inputs:
+  - desc: The content of the article to be generated.
+    name: article_content
+    prefix: Optional
+  name: LinkedInNewsletterArticleGeneratorSignature
+  outputs:
+  - desc: The generated LinkedIn newsletter article.
+    name: article
+    prefix: Generated
+- docstring: This signature model generates a LinkedIn newsletter article and includes a critic for improvement.
+  inputs:
+  - desc: The generated LinkedIn newsletter article.
+    name: article
+    prefix: Generated
+  name: CriticFeedbackGeneratorSignature
+  outputs:
+  - desc: The generated LinkedIn newsletter article.
+    name: article
+    prefix: Generated
+steps:
+- args:
+    article_content: '{{ user_input }}'
+  lm_model: default
+  module: LinkedInNewsletterArticleGeneratorModule
+  rm_model: ''
+  signature: LinkedInNewsletterArticleGeneratorSignature
+- args:
+    article: '{{ article }}'
+  lm_model: default
+  module: CriticFeedbackGeneratorModule
+  rm_model: ''
+  signature: CriticFeedbackGeneratorSignature
