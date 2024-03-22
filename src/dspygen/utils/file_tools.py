@@ -28,6 +28,8 @@ def slugify(text):
     # Convert the text to lowercase
     text = text.lower()
 
+    text = text.replace(" ", "-")
+
     # Replace spaces with hyphens and remove other non-alphanumeric characters
     text = re.sub(r"[^a-z0-9-]", "", text)
 

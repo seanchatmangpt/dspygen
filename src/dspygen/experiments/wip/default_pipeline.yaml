@@ -1,0 +1,40 @@
+config:
+  current_step:
+    args: {}
+    lm_model: default
+    module: dspygen.dsl.dsl_dspy_module.DSLModule
+    rm_model: default
+    signature: default
+  global_signatures: {}
+context: {}
+lm_models:
+- args: {}
+  label: default
+  name: OpenAI
+lm_modules:
+- name: default
+  predictor: Predict
+  signature: default
+rm_models:
+- args: {}
+  label: default
+  name: default
+rm_modules:
+- name: default
+signatures:
+- docstring: default
+  inputs:
+  - desc: default
+    name: default
+    prefix: ''
+  name: default
+  outputs:
+  - desc: default
+    name: default
+    prefix: ''
+steps:
+- args: {}
+  lm_model: default
+  module: dspygen.dsl.dsl_dspy_module.DSLModule
+  rm_model: default
+  signature: default

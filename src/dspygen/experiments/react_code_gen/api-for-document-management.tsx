@@ -1,8 +1,4 @@
-from dspygen.dsl.dsl_pipeline_executor import execute_pipeline
-from dspygen.dsl.dsl_pydantic_models import GenPipelineModel
-
-
-REACT_CODE = """import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 interface Document {
@@ -97,24 +93,4 @@ const DocumentManagement: React.FC = () => {
   );
 };
 
-export default DocumentManagement;"""
-
-
-def main():
-    from dspygen.utils.dspy_tools import init_dspy
-    init_dspy(model="gpt-4", max_tokens=4000)
-
-    pipeline = GenPipelineModel.to_inst(f"3 step pipeline that creates {REACT_CODE} . Be extremly verbose. Fill every value with salient details.")
-
-    print(pipeline)
-
-    pipeline.to_yaml(f"{pipeline.signatures[0].name}_pipeline.yaml")
-
-    context = execute_pipeline(f"{pipeline.signatures[0].name}_pipeline.yaml",
-                               {"user_input": "A full stack nextjs DSL pipeline nocode generator"})
-
-    print(context)
-
-
-if __name__ == '__main__':
-    main()
+export default DocumentManagement;

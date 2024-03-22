@@ -1,0 +1,8 @@
+# feature_data_pipeline.yaml
+rm_models:
+  - label: "data_retriever"
+    name: "DataRetriever"
+
+steps:
+  - module: "FeatureDataModule"
+    rm_model: "data_retriever"

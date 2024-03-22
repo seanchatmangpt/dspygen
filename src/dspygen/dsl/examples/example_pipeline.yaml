@@ -1,77 +1,29 @@
 lm_models:
   - label: "default"
     name: "OpenAI"
-    args:
-      model: "gpt-3.5-turbo"
-      max_tokens: 4096
-  - label: "fast"
-    name: "OpenAI"
-    args:
-      model: "gpt-3.5-turbo"
-      max_tokens: 2048
-  - label: "slow"
-    name: "T5Large"
-    args:
-      model: "fine-tuned-t5-large-1234"
-      max_tokens: 100
-
-rm_models:
-  - label: "default"
-    name: "ColBERTv2"
-  - label: "product_features"
-    name: "prd_feats.csv"
-  - label: "user_feedback"
-    name: "db://user_feedback"
-    query: "SELECT * FROM user_feedback"
 
 signatures:
-  - name: "ProcessDataSignature"
-    docstring: "Processes raw data to synthesize into a structured format suitable for report generation."
-    inputs:
-      - name: "raw_data"
-        desc: "Raw data input that needs processing."
-      - name: "data_format"
-        desc: "The desired format of the output data."
-    outputs:
-      - name: "processed_data"
-        desc: "Data processed into a structured format."
-  - name: "GenerateReportSignature"
-    docstring: "Generates a comprehensive report from structured data."
+  - name: "GenerateGherkinSignature"
+    docstring: "Generates a comprehensive gherkin from structured data."
     inputs:
       - name: "processed_data"
-        desc: "Structured data to be included in the report."
-      - name: "report_template"
-        desc: "Template specifying the report's format and structure."
+        desc: "Structured data to be included in the gherkin."
     outputs:
-      - name: "report"
-        desc: "The final report generated from the structured data."
+      - name: "gherkin"
+        desc: "The final gherkin generated from the structured data."
 
 lm_modules:
-  - name: "DataProcessorModule"
-    signature: "ProcessDataSignature"
-    predictor: "Predict"
-    args:
-      - name: "raw_data"
-        value: "{{ user_input }}"
-      - name: "data_format"
-        value: "JSON"
-
-  - name: "ReportGeneratorModule"
-    signature: "GenerateReportSignature"
+  - name: "GherkinGeneratorModule"
+    signature: "GenerateGherkinSignature"
     predictor: "ChainOfThought"
     args:
-      - name: "report_template"
-        value: "StandardReportTemplate"
+      - name: "gherkin_scenarios"
+        value: "StandardGherkinTemplate"
 
 steps:
-  - module: "DataProcessorModule"
-    lm_model: "default"
-    args:
-      raw_data: "id, name, age\n1, John, 25\n2, Jane, 30"
-      data_format: "YAML"
+  - file: "feature_list.yaml"
 
-  - module: "ReportGeneratorModule"
+  - module: "GherkinGeneratorModule"
     lm_model: "fast"
     args:
       processed_data: "{{ processed_data }}"
-      report_template: "templates/standard_report.html"

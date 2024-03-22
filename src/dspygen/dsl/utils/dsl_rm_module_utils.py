@@ -26,6 +26,9 @@ def _get_rm_module_instance(pipeline, rendered_args, step):
     Get the module instance for a given step from the top level definition or load the module.
     Uses the DSLModule class from dspygen.modules.dsl_module to handle modules defined in the pipeline YAML.
     """
-    return DataRetriever(**rendered_args, pipeline=pipeline, step=step)
+    # Get the file_path from the pipeline.context or rendered_args
+    file_path = pipeline.context.get("file_path", rendered_args.get("file_path"))
+
+    return DataRetriever(file_path=file_path, pipeline=pipeline, step=step, **rendered_args)
 
 

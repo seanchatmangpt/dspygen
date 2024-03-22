@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+from dspygen.experiments.gen_pydantic_instance import GenPydanticDict
 from dspygen.utils.yaml_tools import YAMLMixin
 
 
@@ -9,8 +10,8 @@ class InstanceMixin:
         """
         Turns the prompt into the instance of the Pydantic model.
         """
-        # inst_dict = GenPydanticDict(model=cls)(prompt)
-        return {} # cls.model_validate(inst_dict)
+        inst_dict = GenPydanticDict(model=cls)(prompt)
+        return cls.model_validate(inst_dict)
 
 
 def main():
