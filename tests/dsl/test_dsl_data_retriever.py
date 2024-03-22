@@ -12,7 +12,7 @@ def test_data_retriever_sql_query():
     This assumes DataRetriever has been adjusted to accept and use a connection object.
     """
     # Assuming DataRetriever is adapted to accept a SQL query and connection directly
-    db_path = f"{os.getcwd()}/data/chinook.db"
+    db_path = f"data/chinook.db"
 
     data_retriever = DataRetriever(
         file_path=db_path,

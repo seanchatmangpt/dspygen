@@ -63,7 +63,7 @@ def test_execute_pipeline(mock_get_lm, example_lm_response):
 def test_execute_data_pipeline():
     # Execute your pipeline function. Adjust arguments as needed.
     # For demonstration, assuming `execute_pipeline` takes a YAML string directly.
-    context = execute_pipeline('/dsl/data_hello_world_pipeline.yaml')
+    context = execute_pipeline('dsl/data_hello_world_pipeline.yaml', init_ctx={"csv_file": "data/greek.csv"})
 
     # Now you can make assertions about the result
     assert len(context.HelloWorldModule) == 5

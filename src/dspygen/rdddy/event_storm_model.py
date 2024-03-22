@@ -1,6 +1,5 @@
 from pydantic import Field, BaseModel
 
-from dspygen.experiments.gen_pydantic_instance import instance
 from dspygen.rdddy.abstract_event import AbstractEvent
 from dspygen.utils.dspy_tools import init_dspy
 
