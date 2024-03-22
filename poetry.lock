@@ -2472,6 +2472,21 @@ files = [
 dill = ">=0.3.7"
 
 [[package]]
+name = "munch"
+version = "4.0.0"
+description = "A dot-accessible dictionary (a la JavaScript objects)"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "munch-4.0.0-py2.py3-none-any.whl", hash = "sha256:71033c45db9fb677a0b7eb517a4ce70ae09258490e419b0e7f00d1e386ecb1b4"},
+    {file = "munch-4.0.0.tar.gz", hash = "sha256:542cb151461263216a4e37c3fd9afc425feeaf38aaa3025cd2a981fadb422235"},
+]
+
+[package.extras]
+testing = ["astroid (>=2.0)", "coverage", "pylint (>=2.3.1,<2.4.0)", "pytest"]
+yaml = ["PyYAML (>=5.1.0)"]
+
+[[package]]
 name = "mypy"
 version = "1.8.0"
 description = "Optional static typing for Python"
@@ -2914,6 +2929,21 @@ spss = ["pyreadstat (>=1.2.0)"]
 sql-other = ["SQLAlchemy (>=2.0.0)", "adbc-driver-postgresql (>=0.8.0)", "adbc-driver-sqlite (>=0.8.0)"]
 test = ["hypothesis (>=6.46.1)", "pytest (>=7.3.2)", "pytest-xdist (>=2.2.0)"]
 xml = ["lxml (>=4.9.2)"]
+
+[[package]]
+name = "pandasql"
+version = "0.7.3"
+description = "sqldf for pandas"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pandasql-0.7.3.tar.gz", hash = "sha256:1eb248869086435a7d85281ebd9fe525d69d9d954a0dceb854f71a8d0fd8de69"},
+]
+
+[package.dependencies]
+numpy = "*"
+pandas = "*"
+sqlalchemy = "*"
 
 [[package]]
 name = "pandocfilters"
@@ -5543,4 +5573,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "f88434bbdcaecd0c87291ea47bb9d4e22c734687c0f76b287eb0500a8dfa5999"
+content-hash = "9a2104ad2c3afd05ba06abd8cd797436e74273821c9fe910b968476df4c13017"

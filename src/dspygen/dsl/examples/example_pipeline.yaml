@@ -18,6 +18,11 @@ lm_models:
 rm_models:
   - label: "default"
     name: "ColBERTv2"
+  - label: "product_features"
+    name: "prd_feats.csv"
+  - label: "user_feedback"
+    name: "db://user_feedback"
+    query: "SELECT * FROM user_feedback"
 
 signatures:
   - name: "ProcessDataSignature"
@@ -41,7 +46,7 @@ signatures:
       - name: "report"
         desc: "The final report generated from the structured data."
 
-modules:
+lm_modules:
   - name: "DataProcessorModule"
     signature: "ProcessDataSignature"
     predictor: "Predict"

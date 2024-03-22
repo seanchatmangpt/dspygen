@@ -7,28 +7,25 @@ from typing import Optional
 import dspy
 from pydantic import BaseModel
 
-from dspygen.dsl.utils.dsl_language_model_utils import _get_language_model_instance
+from dspygen.dsl.dsl_step_module import execute_step
 from dspygen.dsl.dsl_pydantic_models import PipelineDSLModel, LanguageModelConfig
-from dspygen.dsl.utils.dsl_module_utils import _get_module_instance
-from dspygen.dsl.utils.dsl_retrieval_model_utils import _get_retrieval_model_instance
 from dspygen.dsl.utils.dsl_signature_utils import _create_signature_from_model
-from dspygen.typetemp.functional import render
-from dspygen.utils.file_tools import dsl_dir
+from munch import Munch
 
 
-def execute_pipeline(file_path, initial_context=None):
+def execute_pipeline(file_path, init_ctx=None):
     """
     Execute a pipeline from a YAML file and return the context.
     """
     pipeline = _get_pipeline(file_path)
 
-    if initial_context:
-        pipeline.context.update(initial_context)
+    if init_ctx:
+        pipeline.context.update(init_ctx)
 
     for step in pipeline.steps:
-        _execute_step(pipeline, step)
+        execute_step(pipeline, step)
 
-    return pipeline.context
+    return Munch(pipeline.context)
 
 
 def _get_pipeline(file_path):
@@ -42,36 +39,12 @@ def _get_pipeline(file_path):
     return pipeline
 
 
-def _execute_step(pipeline, step):
-    """
-    Execute a step in a pipeline. Creates the LM, renders the args using Jinja2,
-    runs the module, and updates the context.
-    """
-    lm_default = next((m for m in pipeline.lm_models if m.label == "default"), None)
-
-    if not lm_default:
-        pipeline.lm_models.append(LanguageModelConfig(label="default", name="OpenAI", args={}))
-
-    rendered_args = {arg: render(str(value), **pipeline.context) for arg, value in step.args.items()}
-
-    module_inst = _get_module_instance(pipeline, rendered_args, step)
-
-    lm_inst = _get_language_model_instance(pipeline, step)
-
-    rm_inst = _get_retrieval_model_instance(pipeline, step)
-
-    with dspy.context(lm=lm_inst, rm=rm_inst):
-        module_output = module_inst.forward(**rendered_args)
-
-    pipeline.context[step.module] = module_output
-
-
 router = APIRouter()
 
 
 class PipelineRequest(BaseModel):
     yaml_content: str
-    initial_context: Optional[dict] = None
+    init_ctx: Optional[dict] = None
 
 
 @router.post("/execute_pipeline/")
@@ -82,7 +55,7 @@ async def run_pipeline(request: PipelineRequest):
             tmp.write(request.yaml_content)
             tmp_path = tmp.name
 
-        context = execute_pipeline(tmp_path, request.initial_context)
+        context = execute_pipeline(tmp_path, request.init_ctx)
 
         # Optionally, clean up the temporary file after execution
         os.remove(tmp_path)
@@ -107,7 +80,8 @@ def main():
     # context = execute_pipeline(str(dsl_dir('examples/sql_to_nl.yaml')),
     #                            {"query": poor_query})
 
-    # print(context)
+
+    print(context)
 
 if __name__ == '__main__':
     main()

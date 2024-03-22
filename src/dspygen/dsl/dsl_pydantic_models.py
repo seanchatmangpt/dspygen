@@ -1,6 +1,6 @@
 from typing import Optional
 
-
+from munch import Munch
 from pydantic import BaseModel, Field
 
 from dspygen.utils.pydantic_tools import InstanceMixin
@@ -48,17 +48,16 @@ class SignatureDSLModel(BaseModel):
     outputs: list[OutputFieldModel] = Field(default=[], description="List of output fields produced by the Signature.")
 
 
-class ArgumentModel(BaseModel):
-    name: str
-    value: str | dict = ""  # Allow for both direct values and references
-
-
-# Define ModuleDSLModel for capturing module details
-class ModuleDSLModel(BaseModel):
-    name: str = Field(..., description="Name of the module. Used for referencing within the pipeline.")
-    signature: str = Field(..., description="Name of the signature associated with this module.")
+class LMModuleDSLModel(BaseModel):
+    name: str = Field(..., description="Name of the language model module. Used for referencing within the pipeline.")
+    signature: str = Field(..., description="Name of the signature associated with this language model module.")
     predictor: Optional[str] = Field("Predict", description="Type of predictor to be used with this module. "
                                                             "Usually 'Predict' or 'ChainOfThought'.")
+
+
+class RMModuleDSLModel(BaseModel):
+    name: str = Field(..., description="Name of the module. Used for referencing within the pipeline.")
+
 
 # Define PipelineStepModel for pipeline steps
 class StepDSLModel(BaseModel):
@@ -66,7 +65,7 @@ class StepDSLModel(BaseModel):
                                   description="Name of the module to be executed in this step of the pipeline.")
     signature: Optional[str] = Field(default="",
                                      description="Signature associated with this step.")
-    lm_model: str = Field(default="default", description="Identifier of the language model to be used in this step.")
+    lm_model: Optional[str] = Field(default="", description="Identifier of the language model to be used in this step.")
     rm_model: Optional[str] = Field(default="", description="Identifier of the retrieval model to be used in this step.")
     args: Optional[dict] = Field(default={}, description="Arguments for the module in this step.")
 
@@ -106,11 +105,13 @@ class PipelineDSLModel(BaseModel, YAMLMixin):
                                                  description="list of retrieval model configurations used in the pipeline.")
     signatures: list[SignatureDSLModel] = Field(default=[],
                                                 description="list of signatures defined for use in the pipeline.")
-    modules: list[ModuleDSLModel] = Field(default=[],
-                                          description="list of modules defined for execution in the pipeline.")
+    lm_modules: list[LMModuleDSLModel] = Field(default=[],
+                                               description="list of language model modules defined for execution in the pipeline.")
+    rm_modules: list[RMModuleDSLModel] = Field(default=[],
+                                               description="list of retriever model modules defined for execution in the pipeline.")
     steps: list[StepDSLModel] = Field(default=[],
                                       description="Sequential steps to be executed in the pipeline.")
-    context: dict = Field(default={},
+    context: dict = Field(default=Munch(),
                                   description="A context dictionary for storing global values accessible across the pipeline.")
     config: PipelineConfigModel = Field(default_factory=PipelineConfigModel,
                                         description="Configuration settings for the pipeline execution.")
@@ -123,7 +124,7 @@ class GenSignatureModel(SignatureDSLModel, InstanceMixin, YAMLMixin):
     """
 
 
-class GenModuleModel(ModuleDSLModel, InstanceMixin, YAMLMixin):
+class GenLMModuleModel(LMModuleDSLModel, InstanceMixin, YAMLMixin):
     """Generate a module model. Make sure the name is CamelCase and ends with 'Module'"""
 
 

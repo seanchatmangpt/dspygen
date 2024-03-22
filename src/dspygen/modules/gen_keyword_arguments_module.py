@@ -8,7 +8,7 @@ from typing import Any, Callable
 import dspy
 from typer import Typer
 
-from dspygen.experiments.function_call import get_current_weather, get_n_day_weather_forecast
+from dspygen.experiments.function_calling.function_call import get_current_weather, get_n_day_weather_forecast
 from dspygen.utils.dspy_tools import init_dspy
 
 

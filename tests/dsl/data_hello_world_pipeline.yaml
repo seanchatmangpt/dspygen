@@ -1,0 +1,10 @@
+rm_models:
+  - label: "data_retriever"
+    name: "DataRetriever"
+
+steps:
+  - module: "HelloWorldModule"
+    rm_model: "data_retriever"
+    args:
+      file_path: "{{ csv_file}}"
+      return_columns: ["id", "name"]

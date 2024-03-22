@@ -119,7 +119,7 @@ export default function DSLPage() {
         'http://127.0.0.1:8000/execute_pipeline/',
         {
           yaml_content: pipeline,
-          initial_context: {
+          init_ctx: {
             user_input: `questions${questions}\n\nNOTE: Missing or false count against the company\n\n${JSON.stringify({ dsl })}`,
           },
         },
