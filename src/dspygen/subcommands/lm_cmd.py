@@ -28,9 +28,11 @@ class {{ name }}(LM):
 
 
 @app.command(name="new")
-def new_lm():
+def new_lm(name: str = typer.Argument(...)):
     """Generates a new language model."""
-    typer.echo("Uses jinja and dspy module to create a language model.")
+    to = f"{lm_dir()}/"
+    source = render(lm_template, name=name, to=to + "{{ name | underscore }}_lm.py")
+    print(source)
 
 
 def main():

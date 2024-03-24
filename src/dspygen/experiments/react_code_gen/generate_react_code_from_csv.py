@@ -7,7 +7,8 @@ from dspygen.dsl.dsl_pipeline_executor import execute_pipeline
 
 
 def feature_code_generation():
-    context = execute_pipeline(f'{os.getcwd()}/feature_data_pipeline.yaml', init_ctx={"file_path": f"{os.getcwd()}/features.csv"})
+    context = execute_pipeline(f'{os.getcwd()}/feature_data_pipeline.yaml',
+                               init_ctx={"file_path": f"{os.getcwd()}/features.csv"})
 
     for result in context.data:
         print(result)

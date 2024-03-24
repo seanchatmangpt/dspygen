@@ -1,0 +1,60 @@
+# gherkin_pipeline.yaml
+lm_models:
+  - label: "default"
+    name: "OpenAI"
+    args:
+      max_tokens: 3000
+
+  - label: "smart"
+    name: "OpenAI"
+    args:
+      model: "gpt-4"
+      max_tokens: 6000
+
+rm_models:
+  - label: "data_retriever"
+    name: "DataRetriever"
+
+signatures:
+  - name: "GenerateGherkinSignature"
+    docstring: "Generates a comprehensive gherkin from structured data."
+    inputs:
+      - name: "data"
+        desc: "Structured data to be included in the gherkin."
+    outputs:
+      - name: "gherkin"
+        desc: "The final gherkin generated from the structured data."
+
+  - name: "GenerateReactCodeSignature"
+    docstring: "Generates Typescript React code to enable the functionalities described in the provided Gherkin scenarios, with an emphasis on code quality."
+    inputs:
+      - name: "gherkin"
+        desc: "The Gherkin scenarios."
+    outputs:
+      - name: "react_code"
+        desc: "The generated React functionl component code with hooks. Write only one ```tsx block in the response."
+        prefix: "```tsx\n"
+
+lm_modules:
+  - name: "GherkinGeneratorModule"
+    signature: "GenerateGherkinSignature"
+    predictor: "ChainOfThought"
+
+  - name: "ReactCodeGeneratorModule"
+    signature: "GenerateReactCodeSignature"
+    predictor: "Predictor"
+
+
+steps:
+  - module: "FeatureDataModule"
+    rm_model: "data_retriever"
+
+  - module: "GherkinGeneratorModule"
+    lm_model: "default"
+    args:
+      data: "{{ data }}"
+
+  - module: "ReactCodeGeneratorModule"
+    lm_model: "default"
+    args:
+      gherkin: "{{ gherkin }}"

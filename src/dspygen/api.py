@@ -1,8 +1,5 @@
 """dspygen REST API."""
-import importlib
 import logging
-import os
-from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
 
 
 import coloredlogs
@@ -19,11 +16,11 @@ from importlib import import_module
 import os
 
 from dspygen.dsl.dsl_pipeline_executor import router as pipeline_router
-
-
+from dspygen.experiments.control_flow.workflow_executor import router as workflow_router
 
 
 app.include_router(pipeline_router)
+app.include_router(workflow_router)
 
 
 def load_module_routers(app: FastAPI):
@@ -66,4 +63,3 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # Adjust as per your requirements
     allow_headers=["*"],  # Adjust this to your specific headers if needed
 )
-

@@ -84,6 +84,10 @@ def lm_dir(file_name="") -> Path:
     return source_dir() / "lm" / file_name
 
 
+def rm_dir(file_name="") -> Path:
+    return source_dir() / "rm" / file_name
+
+
 def templates_dir(file_name="") -> Path:
     return source_dir() / "templates" / file_name
 

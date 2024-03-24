@@ -1,0 +1,61 @@
+jobs:
+- depends: null
+  env: null
+  name: SalesDataProcessing
+  runner: python
+  steps:
+  - args: null
+    code: "sales_data = [\n  {'id': 1, 'amount': 150, 'product': 'Laptop', 'region': 'North'},\n  {'id': 2, 'amount': 90, 'product': 'Tablet', 'region': 'West'},\n  {'id': 3, 'amount': 200, 'product': 'Laptop', 'region': 'East'},\n  {'id': 4, 'amount': 30, 'product': 'Mouse', 'region': 'South'},\n  {'id': 5, 'amount': 120, 'product': 'Keyboard', 'region': 'North'}\n]\nprint('Sales data initialized.')\n"
+    cond: null
+    env: null
+    loop: null
+    name: InitializeSalesData
+    use: null
+  - args: null
+    code: 'global high_value_sales
+
+      high_value_sales = [sale for sale in sales_data if sale[''amount''] > 100]
+
+      print(f''High value sales filtered: {high_value_sales}'')
+
+      '
+    cond: null
+    env: null
+    loop: null
+    name: FilterHighValueSales
+    use: null
+  - args: null
+    code: "for sale in high_value_sales:\n    print(f\"Sale ID: {sale['id']}, Amount: ${sale['amount']}, Product: {sale['product']}, Region: {sale['region']}\")\n"
+    cond: null
+    env: null
+    loop:
+      over: high_value_sales
+      var: sale
+    name: PrintHighValueSalesDetails
+    use: null
+  - args: null
+    code: 'total_sales_amount = sum(sale[''amount''] for sale in high_value_sales)
+
+      average_sales_amount = total_sales_amount / len(high_value_sales)
+
+      print(f''Total sales amount from high value sales: ${total_sales_amount}'')
+
+      print(f''Average sales amount from high value sales: ${average_sales_amount}'')
+
+      '
+    cond: null
+    env: null
+    loop: null
+    name: CalculateSummaryStatistics
+    use: null
+  - args: null
+    code: 'print(''Workflow execution completed. High value sales analysis done.'')
+
+      '
+    cond: null
+    env: null
+    loop: null
+    name: Summary
+    use: null
+name: SalesDataAnalysisWorkflow
+triggers: manual

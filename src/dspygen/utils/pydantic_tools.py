@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from dspygen.experiments.gen_pydantic_instance import GenPydanticDict
+from dspygen.modules.gen_pydantic_instance import GenPydanticDict
 from dspygen.utils.yaml_tools import YAMLMixin
 
 
