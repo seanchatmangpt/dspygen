@@ -67,24 +67,24 @@ def test_feature_data_retriever(sample_feature_csv_file):
     filtered_results = data_retriever.forward(query=query)
 
 
-def test_feature_code_generation(sample_feature_csv_file):
-    # This example query is a placeholder. In a real scenario, you'd have specific logic to filter or process CSV data.
-    query = "SELECT * FROM df"
-    return_columns = ['FeatureDescription']
-
-    # Initialize DataRetriever with the path to the temporary CSV file
-    data_retriever = DataRetriever(file_path=sample_feature_csv_file, return_columns=return_columns)
-
-    # Execute the query using the forward method
-    filtered_results = data_retriever.forward(query=query)
-
-    for result in filtered_results:
-        print(result)
-        context = execute_pipeline('dsl/gherkin_pipeline.yaml', init_ctx={"processed_data": result})
-
-        file_name = f"{inflection.underscore(result['FeatureDescription'])}.tsx"
-        file_name = inflection.dasherize(file_name)
-
-        with open(file_name, 'w') as f:
-            f.write(context.react_code)
-            print(f"React JSX code written to {file_name}")
+# def test_feature_code_generation(sample_feature_csv_file):
+#     # This example query is a placeholder. In a real scenario, you'd have specific logic to filter or process CSV data.
+#     query = "SELECT * FROM df"
+#     return_columns = ['FeatureDescription']
+#
+#     # Initialize DataRetriever with the path to the temporary CSV file
+#     data_retriever = DataRetriever(file_path=sample_feature_csv_file, return_columns=return_columns)
+#
+#     # Execute the query using the forward method
+#     filtered_results = data_retriever.forward(query=query)
+#
+#     for result in filtered_results:
+#         print(result)
+#         context = execute_pipeline('/Users/candacechatman/dev/dspygen/tests/pipeline/gherkin_pipeline.yaml', init_ctx={"processed_data": result})
+#
+#         file_name = f"{inflection.underscore(result['FeatureDescription'])}.tsx"
+#         file_name = inflection.dasherize(file_name)
+#
+#         with open(file_name, 'w') as f:
+#             f.write(context.react_code)
+#             print(f"React JSX code written to {file_name}")

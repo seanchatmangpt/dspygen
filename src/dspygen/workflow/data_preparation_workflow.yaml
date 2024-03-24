@@ -1,0 +1,29 @@
+name: DataPreparationWorkflow
+triggers: manual
+jobs:
+  - name: PrepareData
+    runner: python
+    steps:
+      - name: FilterData
+        code: |
+          raw_data = [
+            {'id': 1, 'value': 150},
+            {'id': 2, 'value': 90},
+            {'id': 3, 'value': 200},
+            {'id': 4, 'value': 30},
+            {'id': 5, 'value': 120}
+          ]
+          filtered_data = [item for item in raw_data if item['value'] > 100]
+        env: {}
+
+      - name: SaveFilteredData
+        code: |
+          import json
+          import tempfile
+          _, path = tempfile.mkstemp(suffix='.json')
+          with open(path, 'w') as f:
+              json.dump(filtered_data, f)
+          print(f'Filtered data saved to {path}')
+          global filtered_data_path
+          filtered_data_path = path
+        env: {}

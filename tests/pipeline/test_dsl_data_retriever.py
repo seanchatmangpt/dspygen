@@ -66,8 +66,6 @@ def test_data_retriever(sample_csv_file):
 
 
 def test_csv_pipeline():
-    csv_path = f"{os.getcwd()}/data/greek.csv"
-
-    context = execute_pipeline(f'{os.getcwd()}/dsl/data_hello_world_pipeline.yaml',
-                               init_ctx={"csv_file": csv_path})
+    context = execute_pipeline(f'/Users/candacechatman/dev/dspygen/tests/pipeline/data_hello_world_pipeline.yaml',
+                               init_ctx={"csv_file": "/Users/candacechatman/dev/dspygen/tests/data/greek.csv"})
     assert len(context.data) == 5

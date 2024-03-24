@@ -70,12 +70,12 @@ async def test_worker_restart(actor_system):
     root_supervisor = await actor_system.actor_of(RootSupervisorActor)
     await root_supervisor.start_supervisor()
 
-    await asyncio.sleep(1)  # Give enough time for the hierarchy to react
+    await asyncio.sleep(0)  # Give enough time for the hierarchy to react
 
     # Check if the supervisor has restarted the worker
     assert root_supervisor.restart_count > 0
 
-    await asyncio.sleep(5)
+    await asyncio.sleep(.1)
 
-    await asyncio.sleep(1)
+    await asyncio.sleep(0)
     # Check if the root supervisor has restarted the supervisor

@@ -42,6 +42,9 @@ class DSLStepModule:
             with dspy.context(lm=lm_inst):
                 module_output = module_inst.forward(**rendered_args)
 
+                # Update the pipeline context with the output from this step
+                self.pipeline.context[self.step.module] = module_output
+
         if self.step.rm_model:
             # rm_inst = _get_retrieval_model_instance(self.pipeline, self.step)
 
@@ -51,8 +54,8 @@ class DSLStepModule:
             # Execute the module with the current context
             module_output = module_inst.forward(**self.step.args)
 
-        # Update the pipeline context with the output from this step
-        self.pipeline.context[self.step.module] = module_output
+            # Update the pipeline context with the output from this step
+            self.pipeline.context[self.step.module] = module_output
 
         return Munch(self.pipeline.context)
 

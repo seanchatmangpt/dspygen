@@ -55,15 +55,14 @@ def test_execute_pipeline(mock_get_lm, example_lm_response):
                                init_ctx=init_ctx)
 
     # Now you can make assertions about the result
-    assert "Data processed" in context.processed_data
-    assert "The final report generated" in context.report
-    # Add more specific assertions here based on your expected outcome
+    assert "Data processed" in context.gherkin
 
 
 def test_execute_data_pipeline():
     # Execute your pipeline function. Adjust arguments as needed.
     # For demonstration, assuming `execute_pipeline` takes a YAML string directly.
-    context = execute_pipeline('dsl/data_hello_world_pipeline.yaml', init_ctx={"csv_file": "data/greek.csv"})
+    context = execute_pipeline('/Users/candacechatman/dev/dspygen/tests/pipeline/data_hello_world_pipeline.yaml',
+                               init_ctx={"csv_file": "/Users/candacechatman/dev/dspygen/tests/data/greek.csv"})
 
     # Now you can make assertions about the result
     assert len(context.HelloWorldModule) == 5

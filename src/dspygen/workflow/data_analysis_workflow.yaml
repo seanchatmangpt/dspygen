@@ -1,0 +1,24 @@
+name: DataAnalysisWorkflow
+triggers: manual
+imports:
+  - /Users/candacechatman/dev/dspygen/src/dspygen/workflow/data_preparation_workflow.yaml
+jobs:
+  - name: AnalyzeData
+    runner: python
+    depends_on:
+      - PrepareData
+    steps:
+      - name: LoadFilteredData
+        code: |
+          import json
+          global filtered_data
+          with open(filtered_data_path, 'r') as f:
+              filtered_data = json.load(f)
+        env: {}
+
+      - name: CalculateAverage
+        code: |
+          average_value = sum(item['value'] for item in filtered_data) / len(filtered_data)
+          print(f'Average value: {average_value}')
+
+        env: {}

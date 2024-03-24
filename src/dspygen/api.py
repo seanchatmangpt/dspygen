@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
 
 
 from dspygen.utils.file_tools import dspy_modules_dir
+from dspygen.workflow.workflow_router import router as workflow_router
 
 app = FastAPI()
 
@@ -16,7 +17,6 @@ from importlib import import_module
 import os
 
 from dspygen.dsl.dsl_pipeline_executor import router as pipeline_router
-from dspygen.experiments.control_flow.workflow_executor import router as workflow_router
 
 
 app.include_router(pipeline_router)
