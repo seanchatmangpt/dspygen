@@ -1,5 +1,7 @@
 import copy
 from typing import Optional, Dict, Any
+
+from dspygen.typetemp.functional import render, render_native
 from dspygen.workflow.workflow_models import Workflow, Action, Job
 from loguru import logger
 
@@ -18,7 +20,24 @@ def update_context(context: Dict[str, Any], updates: Dict[str, Any]) -> Dict[str
 
     new_context.update(updates)
 
-    return new_context
+    if '__builtins__' in new_context:
+        del new_context['__builtins__']  # Remove builtins from context
+
+    rendered_context = {}
+    for arg, value in new_context.items():
+        if "{{" in str(value):
+            # Render the string value with Jinja2
+            rendered_context[arg] = render(value, **new_context)
+
+            # Convert the rendered string to a native Python type
+            try:
+                rendered_context[arg] = eval(rendered_context[arg])
+            except Exception as e:
+                logger.error(f"Error converting rendered value to native Python type: {e}")
+        else:
+            # Non-string values are added to the context unchanged
+            rendered_context[arg] = value
+    return rendered_context
 
 
 def evaluate_condition(condition: str, context: Dict[str, Any]) -> bool:
@@ -54,8 +73,9 @@ def execute_action(action: Action, context: Dict[str, Any]) -> Dict[str, Any]:
     action_context = update_context(context, {})# Isolate context for the action
 
     if action.code:
+        rendered_code = render(action.code, **action_context)
         # Execute action's code, allowing it to modify the action-specific context
-        exec(action.code, action_context, action_context)
+        exec(rendered_code, action_context, action_context)
         context = update_context(context, action_context)  # Update global context with changes
 
     return context
@@ -72,6 +92,7 @@ def execute_workflow(workflow: Workflow, init_ctx: Optional[Dict[str, Any]] = No
     for job in workflow.jobs:
         global_context = execute_job(job, global_context)  # Execute each job
 
-    del global_context['__builtins__']  # Remove builtins from context
+    if '__builtins__' in global_context:
+        del global_context['__builtins__']  # Remove builtins from context
 
     return global_context

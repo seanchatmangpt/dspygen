@@ -21,4 +21,9 @@ jobs:
           average_value = sum(item['value'] for item in filtered_data) / len(filtered_data)
           print(f'Average value: {average_value}')
 
+          from dspygen.dsl.dsl_pipeline_executor import execute_pipeline
+          context = execute_pipeline('/Users/candacechatman/dev/dspygen/tests/pipeline/data_hello_world_pipeline.yaml', init_ctx={"csv_file": "/Users/candacechatman/dev/dspygen/tests/data/greek.csv"})
+          print(context)
+
+
         env: {}

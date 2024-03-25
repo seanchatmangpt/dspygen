@@ -1,3 +1,4 @@
+# DataPreparationWorkflow.yaml
 name: DataPreparationWorkflow
 triggers: manual
 jobs:
@@ -13,7 +14,8 @@ jobs:
             {'id': 4, 'value': 30},
             {'id': 5, 'value': 120}
           ]
-          filtered_data = [item for item in raw_data if item['value'] > 100]
+          threshold = {{ threshold | default(100) }}
+          filtered_data = [item for item in raw_data if item['value'] > threshold]
         env: {}
 
       - name: SaveFilteredData

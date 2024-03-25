@@ -1,14 +1,12 @@
 """dspygen REST API."""
-import logging
-
-
-import coloredlogs
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
 
-
+from dspygen.rdddy.abstract_command import AbstractCommand
+from dspygen.rdddy.actor_system import ActorSystem
 from dspygen.utils.file_tools import dspy_modules_dir
 from dspygen.workflow.workflow_router import router as workflow_router
+
 
 app = FastAPI()
 
@@ -17,6 +15,12 @@ from importlib import import_module
 import os
 
 from dspygen.dsl.dsl_pipeline_executor import router as pipeline_router
+
+
+@app.on_event("startup")
+async def startup_event():
+    global actor_system
+    actor_system = ActorSystem()
 
 
 app.include_router(pipeline_router)
@@ -32,21 +36,22 @@ def load_module_routers(app: FastAPI):
                 app.include_router(module.router)
 
 
-@app.on_event("startup")
-def startup_event() -> None:
-    """Run API startup events."""
-    # Remove all handlers associated with the root logger object.
-    for handler in logging.root.handlers:
-        logging.root.removeHandler(handler)
-    # Add coloredlogs' coloured StreamHandler to the root logger.
-    coloredlogs.install()
-    load_module_routers(app)
+async def get_actor_system():
+    global actor_system
 
+    try:
+        actor_system
+    except NameError:
+        actor_system = ActorSystem()
+
+    return actor_system  # Assume actor_system is globally available
 
 
 @app.get("/")
-def read_root() -> str:
+async def read_root(asys: ActorSystem = Depends(get_actor_system)):
     """Read root."""
+    await asys.publish(AbstractCommand(content="Hello world"))
+
     return "Hello world"
 
 
@@ -54,6 +59,7 @@ def read_root() -> str:
 @app.get("/pingpong")
 def ping_pong():
     return {"message": "pong"}
+
 
 # Add CORS middleware
 app.add_middleware(

@@ -115,6 +115,14 @@ class Job(BaseModel):
     env: Optional[Dict[str, str]] = Field(
         None, description="Environment variables accessible during the job's execution."
     )
+    max_retries: Optional[int] = Field(None, description="Maximum number of retry attempts for the job.")
+    retry_delay_seconds: Optional[int] = Field(None, description="Delay between retry attempts in seconds.")
+    sla_seconds: Optional[int] = Field(None,
+                                       description="Service Level Agreement for the job completion, specified in seconds.")
+
+# class Trigger(BaseModel):
+#     schedule: Optional[str] = Field(None, description="Cron-like schedule for automated workflow triggering.")
+#     webhook: Optional[str] = Field(None, description="Webhook URL for external triggering of the workflow.")
 
 
 class Workflow(BaseModel, YAMLMixin):
@@ -128,9 +136,9 @@ class Workflow(BaseModel, YAMLMixin):
     """
 
     name: str = Field(..., description="The unique name of the workflow.")
-    triggers: Union[str, List[str]] = Field(
-        ..., description="Events that trigger the workflow execution."
-    )
+    description: Optional[str] = Field(None, description="A brief description of the workflow.")
+    # triggers: Union[Trigger, List[Trigger]] = Field(..., description="Events that trigger the workflow execution.")
+    triggers: Optional[Union[str, List[str]]] = Field([], description="Events that trigger the workflow execution.")
     jobs: List[Job] = Field(
         ..., description="A collection of jobs that are defined within the workflow."
     )
@@ -138,6 +146,8 @@ class Workflow(BaseModel, YAMLMixin):
     context: Optional[Dict[str, Any]] = Field(
         {}, description="Global context variables for the workflow execution."
     )
+    env: Optional[Dict[str, str]] = Field({}, description="Global environment variables for the workflow.")
+
 
     def process_imports(self) -> None:
         """Process imported workflows and integrate them into the current workflow."""

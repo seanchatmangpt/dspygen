@@ -5,6 +5,8 @@ import yaml
 
 from pathlib import Path
 
+import tempfile
+from contextlib import contextmanager
 
 def extract_code(text: str) -> str:
     # Use a regular expression to find code blocks enclosed in triple backticks.
@@ -148,6 +150,39 @@ async def write(
     async with await anyio.open_file(path + filename, mode=mode) as f:
         await f.write(contents)
     return filename
+
+
+
+
+
+@contextmanager
+def tmp_file(content, mode='w+', delete=True):
+    """
+    Creates a temp file with content, yielding its path.
+
+    Args:
+        content (str): Content to write to the file.
+        mode (str): File mode ('w+' for text, 'wb+' for binary).
+        delete (bool): Delete file on exit (default True).
+
+    Yields:
+        str: The path to the temporary file.
+    """
+    with tempfile.NamedTemporaryFile(mode=mode, delete=delete) as tmp:
+        # Write the content based on the mode
+        if 'b' in mode:
+            # Ensure content is bytes if in binary mode
+            if isinstance(content, str):
+                content = content.encode()  # Convert to bytes
+            tmp.write(content)
+        else:
+            # Ensure content is str if in text mode
+            if isinstance(content, bytes):
+                content = content.decode()  # Convert to str
+            tmp.write(content)
+
+        tmp.flush()  # Ensure content is written
+        yield tmp.name  # Provide file path
 
 
 # Test the function

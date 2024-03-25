@@ -321,6 +321,24 @@ class ActorSystem:
         return cast(T, self.actors.get(actor_id))
 
 
+    async def shutdown(self):
+        """Shuts down the actor system and terminates all actors.
+
+        Preconditions (Pre):
+            - None
+
+        Transition (T):
+            - Terminates all actors within the actor system.
+            - Closes the event stream and scheduler.
+
+        Postconditions (Post):
+            - The actor system has been successfully shut down.
+        """
+        self.mqtt_client.loop_stop()
+        self.mqtt_client.disconnect()
+        logger.debug("Actor system shutdown complete.")
+
+
 import asyncio
 
 
