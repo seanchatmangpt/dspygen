@@ -44,6 +44,7 @@ To use the ActorSystem, instantiate it within your application and use its metho
 The actor_system.py module, guided by the AMCN, provides a robust foundation for developing actor-based systems within the RDDDY framework, ensuring that applications are built with a solid architectural foundation that promotes maintainability, scalability, and domain-driven design principles.
 """
 import asyncio
+import json
 from asyncio import Future
 from typing import TYPE_CHECKING, Optional, TypeVar, cast
 from paho.mqtt import client as mqtt_client
@@ -54,7 +55,7 @@ from paho.mqtt.enums import CallbackAPIVersion
 from reactivex import operators as ops
 from reactivex.scheduler.eventloop import AsyncIOScheduler
 
-from dspygen.rdddy.abstract_message import AbstractMessage
+from dspygen.rdddy.abstract_message import AbstractMessage, MessageFactory
 
 if TYPE_CHECKING:
     from dspygen.rdddy.abstract_actor import AbstractActor
@@ -122,7 +123,8 @@ class ActorSystem:
     def on_message(self, client, userdata, msg):
         print(f"Received message from topic {msg.topic}: {msg.payload}")
         # Deserialize the message payload into your internal message format
-        message = AbstractMessage.model_validate_json(msg.payload)  # Implement this method based on your message class
+        payload_dict = json.loads(msg.payload)
+        message = MessageFactory.create_message(payload_dict) # Implement this method based on your message class
         asyncio.run_coroutine_threadsafe(self.distribute_message(message), self.loop)
 
     async def distribute_message(self, message):

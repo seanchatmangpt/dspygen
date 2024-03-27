@@ -1,4 +1,5 @@
 import sqlite3
+from pathlib import Path
 
 import dspy
 import pandas as pd
@@ -72,7 +73,7 @@ def read_any(filepath, query, read_options=None):
 
 
 class DataRetriever(dspy.Retrieve):
-    def __init__(self, file_path: str, query: str = "", return_columns=None,
+    def __init__(self, file_path: str | Path, query: str = "", return_columns=None,
                  read_options=None, pipeline=None, step=None, **kwargs):
         super().__init__()
         if return_columns is None:
@@ -83,7 +84,7 @@ class DataRetriever(dspy.Retrieve):
         self.pipeline = pipeline
         self.step = step
 
-        self.file_path = file_path
+        self.file_path = str(file_path)
         self.return_columns = return_columns
         self.read_options = read_options
 

@@ -1,0 +1,34 @@
+system_name: "OSIRIS-PomoBud"
+sensory_capabilities:
+  - feature_name: "SpeechRecognition"
+    sensory_type: "Auditory"
+    inputs: ["audio"]
+    outputs: ["text"]
+    configurations: {}
+actuators:
+  - feature_name: "TextToSpeech"
+    actuator_type: "Speech"
+    inputs: ["text"]
+    outputs: ["audio"]
+    configurations: {}
+cognitive_functions:
+  - feature_name: "NaturalLanguageUnderstanding"
+    cognitive_type: "NLP"
+    inputs: ["text"]
+    outputs: ["intent", "entities"]
+    configurations: {}
+learning_mechanisms:
+  - feature_name: "ReinforcementLearning"
+    learning_type: "Adaptive"
+    configurations:
+      learning_rate: 0.01
+interaction_protocols:
+  - feature_name: "ConversationalInterface"
+    protocol_type: "ConversationalAI"
+    inputs: ["text"]
+    outputs: ["response"]
+    configurations: {}
+continuous_adaptation:
+  - mechanism_name: "SelfModification"
+    details:
+      update_frequency: "weekly"

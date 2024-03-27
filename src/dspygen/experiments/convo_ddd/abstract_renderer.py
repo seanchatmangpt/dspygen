@@ -42,65 +42,62 @@ def generate_class_definitions(model: EventStormingDomainSpecificationModel):
 def main():
     event_storm_model_data = {
         "domain_event_classnames": [
-            "TaskStartedEvent", "TaskCompletedEvent", "TaskFailedEvent",
-            "ExternalEventOccurredEvent"
+            "IntentRecognizedEvent", "EntityRecognizedEvent",
+            "ContextUpdatedEvent", "StateTransitionEvent",
+            "UserQueryHandledEvent", "ResponseGeneratedEvent"
         ],
         "external_event_classnames": [
-            "ExternalSystemUpdatedEvent",
-            "RegulationAmendedEvent",
-            "ThirdPartyNotificationEvent",
-            "DataReceivedEvent",
-            "PartnerNotificationEvent",
-            "ServiceDownEvent",
-            "SecurityAlertEvent"
+            "UserInputReceivedEvent", "ExternalAPIResponseEvent",
+            "SystemInterruptEvent"
         ],
         "command_classnames": [
-            "StartProcessCommand", "StopProcessCommand", "ExecuteActivityCommand",
-            "InvokePartnerCommand", "ReceiveFromPartnerCommand", "HandleFaultCommand",
-            "SaveProcessInstanceCommand", "LoadProcessInstanceCommand"
+            "RecognizeIntentCommand", "RecognizeEntityCommand",
+            "UpdateContextCommand", "TransitionStateCommand",
+            "GenerateResponseCommand", "HandleUserQueryCommand"
         ],
         "query_classnames": [
-            "GetProcessStatusQuery", "GetActivityDetailsQuery",
-            "GetVariableValueQuery", "GetProcessMetricsQuery"
+            "GetCurrentContextQuery", "GetIntentDetailsQuery",
+            "GetEntityDetailsQuery", "GetCurrentStateQuery"
         ],
         "aggregate_classnames": [
-            "ProcessExecutionAggregate", "ActivityExecutionAggregate",
-            "PartnerInteractionAggregate", "ProcessInstanceAggregate"
+            "ConversationAggregate"
         ],
         "policy_classnames": [
-            "ExecutionPolicy", "RetryPolicy", "CompensationPolicy",
-            "FaultHandlingPolicy"
+            "IntentHandlingPolicy", "EntityRecognitionPolicy",
+            "ContextManagementPolicy", "StateTransitionPolicy",
+            "ResponseGenerationPolicy"
         ],
         "read_model_classnames": [
-            "ProcessSummaryReadModel", "ActivityLogReadModel",
-            "VariableSnapshotReadModel", "ProcessInstanceDetailsReadModel"
+            "IntentReadModel", "EntityReadModel",
+            "ContextSnapshotReadModel", "StateReadModel",
+            "ResponseReadModel"
         ],
         "view_classnames": [
-            "ProcessOverviewView", "TaskDetailsView", "UserDashboardView",
-            "ErrorLogView"
+            "IntentView", "EntityView", "ContextView",
+            "StateView", "ResponseView"
         ],
         "ui_event_classnames": [
-            "ButtonClickEvent", "FormSubmissionEvent", "TaskCompletionEvent",
-            "UserInteractionEvent"
+            "UserMessageSubmittedEvent", "SystemMessageDisplayedEvent"
         ],
         "saga_classnames": [
-            "ProcessExecutionSaga", "CompensationSaga", "FaultHandlingSaga"
+            "ConversationHandlingSaga"
         ],
         "integration_event_classnames": [
-            "ServiceInvocationEvent", "DataTransferEvent",
-            "PartnerInteractionEvent", "IntegrationEvent"
+            "ExternalServiceCalledEvent", "DatabaseQueriedEvent"
         ],
         "exception_classnames": [
-            "ExecutionFailureException", "DataProcessingException",
-            "IntegrationException", "SystemException"
+            "IntentNotFoundException", "EntityRecognitionException",
+            "ContextUpdateException", "InvalidStateException",
+            "ResponseGenerationException"
         ],
         "value_object_classnames": [
-            "ProcessIDValueObject", "ActivityDetailsValueObject",
-            "PartnerDetailsValueObject", "VariableValueObject"
+            "IntentValueObject", "EntityValueObject",
+            "ContextValueObject", "StateValueObject",
+            "ResponseValueObject"
         ],
         "task_classnames": [
-            "DataValidationTask", "ServiceInvocationTask",
-            "ErrorHandlingTask", "IntegrationTask"
+            "ProcessUserInputTask", "GenerateDialogueResponseTask",
+            "UpdateConversationContextTask", "ManageStateTransitionsTask"
         ]
     }
 

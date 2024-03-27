@@ -35,7 +35,6 @@ class Condition(BaseModel):
 
     The expression should be a valid Python expression that returns a Boolean value.
     """
-
     expr: str = Field(
         ..., description="A Python expression as a string to evaluate the condition."
     )
@@ -50,7 +49,6 @@ class Loop(BaseModel):
     The 'over' attribute specifies the iterable to loop over, while 'var' indicates the
     variable name assigned to each item during iteration.
     """
-
     over: str = Field(
         ..., description="A Python expression resulting in an iterable for looping."
     )
@@ -67,7 +65,6 @@ class Action(BaseModel):
 
     Conditional execution and looping over actions are supported to allow complex, dynamic workflows.
     """
-
     name: str = Field(..., description="The unique name of the action.")
     use: Optional[str] = Field(
         None, description="Identifier for the module or action to be used."
@@ -99,7 +96,6 @@ class Job(BaseModel):
 
     Jobs specify where they run, allowing for flexibility in execution environments.
     """
-
     name: str = Field(..., description="The unique name of the job.")
     depends_on: Optional[List[str]] = Field(
         None,
@@ -134,7 +130,6 @@ class Workflow(BaseModel, YAMLMixin):
     This class serves as the blueprint for automating complex processes, linking together various
     actions into a cohesive, automated sequence that accomplishes a specific task or set of tasks.
     """
-
     name: str = Field(..., description="The unique name of the workflow.")
     description: Optional[str] = Field(None, description="A brief description of the workflow.")
     # triggers: Union[Trigger, List[Trigger]] = Field(..., description="Events that trigger the workflow execution.")
@@ -147,7 +142,6 @@ class Workflow(BaseModel, YAMLMixin):
         {}, description="Global context variables for the workflow execution."
     )
     env: Optional[Dict[str, str]] = Field({}, description="Global environment variables for the workflow.")
-
 
     def process_imports(self) -> None:
         """Process imported workflows and integrate them into the current workflow."""

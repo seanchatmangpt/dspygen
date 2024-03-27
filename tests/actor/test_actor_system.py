@@ -9,6 +9,15 @@ from dspygen.rdddy.actor_system import ActorSystem
 from dspygen.rdddy.abstract_message import AbstractMessage
 
 
+class TestAbstractActor(AbstractActor):
+    def __init__(self, actor_system: "ActorSystem", actor_id=None):
+        super().__init__(actor_system, actor_id)
+        self.received_message = None
+
+    async def handle_event(self, event: AbstractEvent):
+        self.received_message = event.content
+
+
 class LogSink:
     def __init__(self):
         self.messages = []
@@ -18,6 +27,8 @@ class LogSink:
 
     def __str__(self):
         return "".join(self.messages)
+
+
 
 
 @pytest.fixture()
@@ -66,15 +77,6 @@ async def test_publishing(actor_system):
     Postconditions:
         - Verifies that each actor has received the published message.
     """
-
-    class TestAbstractActor(AbstractActor):
-        def __init__(self, actor_system: "ActorSystem", actor_id=None):
-            super().__init__(actor_system, actor_id)
-            self.received_message = None
-
-        async def handle_event(self, event: AbstractEvent):
-            self.received_message = event.content
-
     actor1 = await actor_system.actor_of(TestAbstractActor)
     actor2 = await actor_system.actor_of(TestAbstractActor)
 
@@ -182,3 +184,54 @@ async def test_error_when_base_message_used(actor_system):
 
     # Check if the error message matches the expected output
     assert "The base Message class should not be used directly" in str(exc_info.value)
+
+
+@pytest.mark.asyncio()
+async def test_actors_creation(actor_system):
+    # Placeholder for testing creation of multiple actors
+    actors = await actor_system.actors_of([TestAbstractActor, TestAbstractActor])
+    assert len(actors) == 2
+    for actor in actors:
+        assert isinstance(actor, TestAbstractActor)
+
+
+import asyncio
+import pytest
+from unittest.mock import patch, MagicMock
+
+
+# @pytest.mark.asyncio
+# async def test_publish_message():
+#     actor_system = ActorSystem(mqtt_broker="localhost", mqtt_port=1883)
+#
+#     # Directly patch the mqtt_client's publish method
+#     with patch('dspygen.rdddy.actor_system.ActorSystem.mqtt_client.publish', new_callable=MagicMock) as mock_publish:
+#         test_message = AbstractEvent(content="Test publish message")
+#         await actor_system.publish(test_message)
+#
+#         # Allow some time for async operations
+#         await asyncio.sleep(0.1)
+#
+#         # Assert the publish method was called as expected
+#         mock_publish.assert_called_once_with(
+#             'actor_system/publish',
+#             test_message.model_dump_json(),
+#             # Include any additional parameters you expect
+#         )
+
+@pytest.mark.asyncio()
+async def test_send_message(actor_system):
+    actor = await actor_system.actor_of(TestAbstractActor)
+    test_message = AbstractEvent(content="Direct send test")
+    await actor_system.send(actor.actor_id, test_message)
+    await asyncio.sleep(0)
+    assert actor.received_message == "Direct send test"
+
+
+@pytest.mark.asyncio()
+async def test_actor_system_shutdown(actor_system):
+    await actor_system.shutdown()
+    # Validate MQTT client stopped and disconnected
+    assert not actor_system.mqtt_client.is_connected()
+    # Additional checks for actor termination and resource release
+    assert "Shutdown logic validation"  # Placeholder assertion

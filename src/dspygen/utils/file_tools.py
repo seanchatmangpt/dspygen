@@ -65,6 +65,9 @@ def find_project_root(current_path: Path | str = Path(__file__)) -> Path:
 def project_root() -> Path:
     return Path(__file__).parent.parent.parent.parent
 
+def data_dir(filename="") -> Path:
+    return project_root() / "data" / filename
+
 
 def source_dir(file_name="") -> Path:
     return Path(__file__).parent.parent / file_name

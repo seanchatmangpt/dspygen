@@ -30,7 +30,7 @@ class AbstractMessage(YAMLMixin, BaseModel):
 
 
 class MessageList(YAMLMixin, BaseModel):
-    messages: list[AbstractMessage]
+    messages: list[AbstractMessage] = []
 
 
 class ExceptionMessage(AbstractMessage):
