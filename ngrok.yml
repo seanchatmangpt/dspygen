@@ -1,0 +1,14 @@
+version: 2
+
+authtoken: 2aY8SAMNlfjdNVsra7Yb9AoguQO_NpAEWEQQTXwss7rwdHgk
+
+tunnels:
+  app:
+    addr: 8000
+    proto: http
+    hostname: chatmangpt.ngrok.dev
+
+  mqtt:
+    addr: 1883
+    proto: tcp
+    remote_addr: 9.tcp.ngrok.io:24651

@@ -1,4 +1,5 @@
 """dspygen CLI."""
+import json
 import sys
 from importlib import import_module, metadata
 import subprocess
@@ -10,6 +11,7 @@ from pathlib import Path
 
 import inflection
 import typer
+from munch import Munch
 
 from dspygen.utils.cli_tools import chatbot
 from dspygen.utils.file_tools import source_dir
@@ -54,9 +56,15 @@ def check_or_install_packages():
 
 
 @app.command()
-def init(package_name: str):
+def init(package_name: str = typer.Argument(...),
+         author_email: str = typer.Argument("todo@todo.com"),
+         author_name: str = typer.Argument("TODO")):
     """Initialize the DSPygen project."""
     check_or_install_packages()
+
+    extra_context = Munch(package_name=package_name,
+                          author_email=author_email,
+                          author_name=author_name)
 
     package_name = inflection.underscore(package_name)
 
@@ -67,7 +75,7 @@ def init(package_name: str):
         print(f"Creating new package named {package_name}...")
         subprocess.check_call(["cruft", "create", template_url,
                                "--config-file", source_dir("config.yaml"),
-                               "--extra-context", f'{{"package_name": "{package_name}"}}',
+                               "--extra-context", f'{json.dumps(extra_context)}',
                                "--no-input"])
 
         # We need to install dspygen in the package's virtual environment
@@ -76,13 +84,16 @@ def init(package_name: str):
         # Run the command to initialize the virtual environment
         # Run the command to install dspygen in the virtual environment
         package_dir = Path(package_name)
+
         os.chdir(package_dir)
+
         subprocess.check_call(["poetry", "install"])
-        subprocess.check_call(["poetry", "run", "pip", "install", "-e", "."])
         # Create the virtual environment
         subprocess.check_call(["poetry", "env", "use", "python"])
         # Install the package in the virtual environment
-        subprocess.check_call(["poetry", "add", "-D", "dspygen"])
+        subprocess.check_call(["poetry", "add", "dspygen"])
+
+        subprocess.check_call(["poetry", "run", "pip", "install", "-e", "."])
         # Change back to the original directory
         os.chdir("..")
 

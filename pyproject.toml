@@ -53,6 +53,8 @@ pypdf = "^4.1.0"
 sqlmodel = "^0.0.16"
 icontract = "^2.6.6"
 tzlocal = "^5.2"
+aiofiles = "^23.2.1"
+pydantic-settings = "^2.2.1"
 
 [tool.poetry.group.test.dependencies]  # https://python-poetry.org/docs/master/managing-dependencies/
 coverage = { extras = ["toml"], version = ">=7.2.5" }
@@ -140,7 +142,7 @@ convention = "google"
         --log-file - \
         --timeout 30 \
         --worker-class uvicorn.workers.UvicornWorker \
-        --workers 2 \
+        --workers 1 \
         dspygen.api:app
     } fi
     """
@@ -182,10 +184,10 @@ convention = "google"
     default = "0.0.0.0"
 
     [[tool.poe.tasks.app.args]]
-    help = "Bind socket to this port (default: 8080)"
+    help = "Bind socket to this port (default: 80)"
     name = "port"
     options = ["--port"]
-    default = "8080"
+    default = "80"
 
   [tool.poe.tasks.docs]
   help = "Generate this package's docs"

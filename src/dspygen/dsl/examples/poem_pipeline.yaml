@@ -1,0 +1,25 @@
+- name: ContentModerationSignature
+  docstring: >
+    Specifies the general moderation level and optional content categories for content filtering.
+  inputs:
+    - name: level
+      desc: "Mandatory moderation intensity level, with 1 being the least restrictive and 5 the most."
+    - name: categories
+      desc: "List of specific content categories to moderate. Leave as 'None' for general moderation based on level."
+  outputs:
+    - name: moderation_result
+      desc: "The result of content moderation, indicating whether the content is acceptable or which categories it violates."
+
+- name: CharacterMessageSignature
+  docstring: >
+    Generates a moderated message or poem from a specified character, ensuring the content remains appropriate for children.
+  inputs:
+    - name: user_input
+      desc: "The input message from the user, which will be moderated according to the defined settings."
+    - name: character
+      desc: "Specifies the character from children's books that is speaking. Selected based on the moderated input."
+    - name: moderation
+      desc: "Defines the moderation parameters for screening user input, ensuring content safety."
+  outputs:
+    - name: poem
+      desc: "The moderated, original poem from the character, crafted in response to the user's input."

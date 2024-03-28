@@ -12,7 +12,6 @@ from pydantic import BaseModel
 T = TypeVar("T", bound="YAMLMixin")
 
 
-# Define a mixin for YAML serialization and deserialization
 class YAMLMixin:
     def to_yaml(self: BaseModel, file_path: Optional[str] = None) -> str:
         yaml_content = yaml.dump(self.model_dump(), default_flow_style=False, width=1000)
@@ -26,7 +25,7 @@ class YAMLMixin:
     def from_yaml(cls: type["T"], file_path: str) -> "T":
         with open(file_path) as yaml_file:
             data = yaml.safe_load(yaml_file)
-        return cls(**data)
+        return cls.model_validate(data)
 
     async def ato_yaml(self: BaseModel, file_path: Optional[str] = None) -> str:
         """
@@ -73,19 +72,14 @@ class YAMLMixin:
 
         absolute_path = os.path.abspath(filename)
 
-        try:
-            # Load from YAML if file exists
-            print(f"Loading {absolute_path}...")
-            instance = (
-                cls.from_yaml(absolute_path) if os.path.exists(absolute_path) else cls.model_validate(model_defaults)
-            )
-            print(f"Instance loaded: {instance}")
-            yield instance
-            # Save to YAML
-            instance.to_yaml(absolute_path)
-            print("Saved as", absolute_path)
-        except Exception as e:
-            print(f"An error occurred: {e}")
+        # Load from YAML if file exists
+        instance = (
+            cls.from_yaml(absolute_path) if os.path.exists(absolute_path) else cls.model_validate(model_defaults)
+        )
+        yield instance
+        # Save to YAML
+        instance.to_yaml(absolute_path)
+
 
     @classmethod
     @asynccontextmanager
@@ -100,15 +94,12 @@ class YAMLMixin:
 
         absolute_path = os.path.abspath(filename)
 
-        try:
-            print(f"Loading {absolute_path}...")
-            instance = await cls.afrom_yaml(absolute_path) if os.path.exists(absolute_path) else cls.model_validate(model_defaults)
-            print(f"Instance loaded: {instance}")
-            yield instance
-            await instance.ato_yaml(absolute_path)
-            print("Saved as", absolute_path)
-        except Exception as e:
-            print(f"An error occurred: {e}")
+        instance = await cls.afrom_yaml(absolute_path) if os.path.exists(absolute_path) else cls.model_validate(model_defaults)
+
+        yield instance
+
+        await instance.ato_yaml(absolute_path)
+
 
 
 def find_all_keys_in_file(filepath: str, target_key: str) -> list[Any]:
@@ -164,7 +155,7 @@ def to_yaml(data, file_path) -> str:
 def from_yaml(model_cls: BaseModel, file_path: str) -> BaseModel:
     with open(file_path) as yaml_file:
         data = yaml.safe_load(yaml_file)
-    return model_cls(**data)
+    return model_cls.model_validate(data)
 
 
 def main2():

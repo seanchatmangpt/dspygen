@@ -1,44 +1,6 @@
 version: "3.9"
 
 services:
-
-  devcontainer:
-    build:
-      context: .
-      target: dev
-      args:
-        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
-        UID: ${UID:-1000}
-        GID: ${GID:-1000}
-    environment:
-      - POETRY_PYPI_TOKEN_PYPI
-    volumes:
-      - ..:/workspaces
-      - command-history-volume:/home/user/.history/
-
-  dev:
-    extends: devcontainer
-    stdin_open: true
-    tty: true
-    entrypoint: []
-    command:
-      [
-        "sh",
-        "-c",
-        "sudo chown user $$SSH_AUTH_SOCK && cp --update /opt/build/poetry/poetry.lock /workspaces/dspygen/ && mkdir -p /workspaces/dspygen/.git/hooks/ && cp --update /opt/build/git/* /workspaces/dspygen/.git/hooks/ && zsh"
-      ]
-    environment:
-      - POETRY_PYPI_TOKEN_PYPI
-      - SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
-    ports:
-      - "8000"
-    volumes:
-      - ~/.gitconfig:/etc/gitconfig
-      - ~/.ssh/known_hosts:/home/user/.ssh/known_hosts
-      - ${SSH_AGENT_AUTH_SOCK:-/run/host-services/ssh-auth.sock}:/run/host-services/ssh-auth.sock
-    profiles:
-      - dev
-
   app:
     build:
       context: .
@@ -48,6 +10,31 @@ services:
       - "8000:8000"
     profiles:
       - app
+
+  mqtt-broker:
+    image: eclipse-mosquitto:latest
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    environment:
+      - TZ=America/Los_Angeles
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+    volumes:
+      - ./ngrok.yml:/etc/ngrok.yml
+    ports:
+      - 4040:4040
 
 volumes:
   command-history-volume:

@@ -1,2 +1,0 @@
-class Document < ApplicationRecord
-end

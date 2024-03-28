@@ -29,8 +29,6 @@ class LogSink:
         return "".join(self.messages)
 
 
-
-
 @pytest.fixture()
 def log_sink():
     sink = LogSink()
