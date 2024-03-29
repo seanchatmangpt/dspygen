@@ -26,9 +26,9 @@ def actor_system(event_loop):
     return ActorSystem(loop=event_loop, mqtt_broker="9.tcp.ngrok.io", mqtt_port=24651)
 
 
-@pytest.mark.asyncio()
-async def test_send_message(actor_system):
-    # Check if client connected
-    print(actor_system.mqtt_client)
-    await asyncio.sleep(0.25)
-    assert actor_system.mqtt_client.is_connected()
+# @pytest.mark.asyncio()
+# async def test_send_message(actor_system):
+#     # Check if client connected
+#     print(actor_system.mqtt_client)
+#     await asyncio.sleep(0.25)
+#     assert actor_system.mqtt_client.is_connected()

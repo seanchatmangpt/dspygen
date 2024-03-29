@@ -112,10 +112,9 @@ def get_source(filename):
 
     return source_code
 
+
 def is_dspygen():
     return "dspygen" in get_source(__file__)
-
-
 
 
 def count_tokens(text: str, model: str = "gpt-4") -> int:
