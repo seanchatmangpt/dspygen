@@ -73,56 +73,6 @@ class ConversationAggregate(AbstractAggregate):
         self.context = Munch({"intent": None, "entity": None})
         self.state = "initial"
 
-    async def handle_recognize_intent_command(self, command: ddd.RecognizeIntentCommand):
-        # Simulate intent recognition logic
-        intent = instance(ddd.IntentRecognizedEvent, command.user_input)  # Assume instance() magically does the job
-        self.apply_event(intent)
-
-    async def handle_recognize_entity_command(self, command: ddd.RecognizeEntityCommand):
-        # Simulate entity recognition logic
-        entity = instance(ddd.EntityRecognizedEvent, command.user_input)  # Assume instance() works similarly
-        self.apply_event(entity)
-
-    async def handle_update_context_command(self, command: ddd.UpdateContextCommand):
-        if command.replace:
-            self.context = command.updates
-        else:
-            self.context.update(command.updates)
-        self.apply_event(ddd.ContextUpdatedEvent(content="Context updated"))
-
-    async def handle_transition_state_command(self, command: ddd.TransitionStateCommand):
-        self.state = command.new_state
-        self.apply_event(ddd.StateTransitionEvent(content=f"Transitioned to {self.state} state"))
-
-    async def handle_generate_response_command(self, command: ddd.GenerateResponseCommand):
-        # Simplified response generation logic based on intent
-        if self.context.get("intent") == "greeting":
-            response = "Hello! How can I assist you today?"
-        elif self.context.get("intent") == "inquiry":
-            response = "What information are you seeking?"
-        else:
-            response = "I'm sorry, could you rephrase that?"
-
-        self.apply_event(ddd.ResponseGeneratedEvent(content=response))
-
-    async def handle_user_query_command(self, command: ddd.HandleUserQueryCommand):
-        # Process user query and potentially invoke other commands based on the query
-        self.apply_event(ddd.UserInputReceivedEvent(content=command.query))
-        # Example: Recognize intent from the user query
-        await self.handle_recognize_intent_command(ddd.RecognizeIntentCommand(user_input=command.query))
-        # Generate a response based on recognized intent
-        await self.handle_generate_response_command(ddd.GenerateResponseCommand(intent=self.context.get("intent", "")))
-
     async def handle_user_input(self, event: ddd.UserInputReceivedEvent) -> CharacterMessage:
         init_dspy()
         return CharacterMessage.to_inst(event.content)
-
-    def apply_event(self, event):
-        if isinstance(event, ddd.IntentRecognizedEvent):
-            self.context['intent'] = event.intent_name
-        elif isinstance(event, ddd.EntityRecognizedEvent):
-            self.context['entity'] = event.entity_name
-        # Include handling for other event types as needed
-        else:
-            # It's helpful to log or handle the case where an event is not recognized
-            print(f"Unhandled event type: {type(event)}")

@@ -116,8 +116,8 @@ class DataRetriever(dspy.Retrieve):
 
 def main():
     file_path = 'sample_data.csv'
-    query = "SELECT * FROM df WHERE age < 30"  # SQL query to filter data
-    return_columns = ['id', 'name', 'age', 'city']
+    query = "SELECT name FROM df WHERE age < 30"  # SQL query to filter data
+    return_columns = ['name']
 
     # Initialize the DataRetriever with the path to your CSV file
     # Note: The query passed here is an SQL query that will be applied to the DataFrame.
