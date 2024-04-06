@@ -1,12 +1,10 @@
-from typing import Optional
+import asyncio
 
 from munch import Munch
-from pydantic import BaseModel, Field
 
 import dspygen.experiments.convo_ddd as ddd
 
 from dspygen.rdddy.abstract_aggregate import AbstractAggregate
-from dspygen.modules.gen_pydantic_instance import instance
 from dspygen.rdddy.actor_system import ActorSystem
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.utils.pydantic_tools import InstanceMixin
@@ -31,17 +29,14 @@ class ContentModeration(BaseModel):
                                           based on thematic concerns.
     """
     level: int = Field(..., ge=1, le=5,
-                       description="Mandatory moderation intensity level, with 1 being the least restrictive and 5 the most.")
-    categories: List[str] = Field(default=..., min_length=1,
-                                  description="List of specific content categories to moderate. Leave as 'None' for general moderation based on level.")
+                       description="Mandatory moderation intensity level, "
+                                   "with 1 being the least restrictive and 5 the most. Focus on setting this value.")
+    categories: List[str] = Field(default=[], min_length=0,
+                                  description="List of specific content categories to moderate.")
 
 
 class CharacterMessage(BaseModel, InstanceMixin):
     """
-    Generates a creative and child-friendly message from a chosen character, ensuring the content is moderated
-    according to the specified rules. This model is designed to engage users with entertaining and safe content
-    from their favorite children's book characters, while actively preventing the generation of inappropriate responses.
-
     Attributes:
         user_input (str): The message or question from the user to which the character will respond.
                           This input is subject to moderation based on the specified settings to ensure
@@ -60,9 +55,10 @@ class CharacterMessage(BaseModel, InstanceMixin):
                             description="The input message from the user, which will be moderated according to the defined settings.")
     character: str = Field("Curious Cow", title="Character",
                            description="Specifies the character from children's books that is speaking. Selected based on the moderated input.")
-    moderation: ContentModeration = Field(..., title="Content Moderation",
-                                          description="Defines the moderation parameters for screening user input, ensuring content safety.")
-    poem: str = Field(..., min_length=50, title="Poem",
+    level: int = Field(1, ge=1, le=5,
+                       description="Mandatory moderation intensity level, "
+                                   "with 1 being the least restrictive and 5 the most. Focus on setting this value.")
+    poem: str = Field(..., title="Poem",
                       description="The moderated, original poem from the character, crafted in response to the user's input. "
                                   "If the moderation level is over 3 write a poem correcting the child's behavior.")
 
@@ -76,3 +72,16 @@ class ConversationAggregate(AbstractAggregate):
     async def handle_user_input(self, event: ddd.UserInputReceivedEvent) -> CharacterMessage:
         init_dspy()
         return CharacterMessage.to_inst(event.content)
+
+
+async def main():
+    """Main function"""
+    asys = ActorSystem()
+    agg = await asys.actor_of(ConversationAggregate)
+    user_input = ddd.UserInputReceivedEvent(content="Hello, Curious Cow! How are you today? I want you ded")
+    response = await agg.handle_user_input(user_input)
+    print(response)
+
+
+if __name__ == '__main__':
+    asyncio.run(main())

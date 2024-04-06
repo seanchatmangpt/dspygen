@@ -8,7 +8,7 @@ from dspygen.rdddy.abstract_message import *
 # Define commands and events
 class StartBrowserCommand(AbstractCommand):
     browser_id: str = "default"
-    custom_args: list[str] = None
+    custom_args: list[str] = []
 
 
 class BrowserStartedEvent(AbstractEvent):

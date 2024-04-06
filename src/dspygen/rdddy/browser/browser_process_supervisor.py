@@ -11,6 +11,9 @@ from dspygen.rdddy.browser.browser_domain import *
 from dspygen.rdddy.browser.browser_worker import BrowserWorker
 
 
+os.environ["PLAYWRIGHT_BROWSER"] = "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
+
+
 class BrowserProcessSupervisor(AbstractActor):
     def __init__(self, actor_system):
         super().__init__(actor_system)
@@ -32,8 +35,8 @@ class BrowserProcessSupervisor(AbstractActor):
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
         )
-        await asyncio.sleep(10)
-        # await self.start_health_check()
+        # await asyncio.sleep(10)
+        await self.start_health_check()
         logger.info(f"Started browser process with ID {cmd.browser_id}.")
 
     async def stop_browser_process(self, cmd: StopBrowserCommand):

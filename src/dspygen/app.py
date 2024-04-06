@@ -5,7 +5,7 @@ import requests
 st.title('Message Testing App')
 
 # Backend API endpoint
-api_endpoint = "http://localhost:6666"
+api_endpoint = "http://localhost:5555"
 
 # User input
 user_input = st.text_input("Enter your message:", "")

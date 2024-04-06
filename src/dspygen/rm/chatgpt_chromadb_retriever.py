@@ -59,13 +59,14 @@ class Conversation(BaseModel):
     mapping: dict
 
 
-class ChatGPTChromaDBRetriever:
+class ChatGPTChromaDBRetriever(dspy.Retrieve):
     def __init__(self,
                  json_file_path: str = data_dir("conversations.json"),
                  collection_name: str = "chatgpt",
                  persist_directory: str = data_dir(),
                  k=5):
         """Initialize the ChatGPTChromaDBRetriever."""
+        super().__init__(k)
         self.json_file_path = json_file_path
         self.collection_name = collection_name
         self.k = k
@@ -108,7 +109,7 @@ class ChatGPTChromaDBRetriever:
                         search_results = self.collection.get(ids=[validated_data.id])
                         if len(search_results["ids"]) > 0:
                             logger.info(f"Skipping already existing document with ID: {validated_data.id}")
-                            continue
+                            return
 
                         if validated_data.message:
                             document_text = ' '.join(part for part in validated_data.message.content.parts if part)
@@ -183,6 +184,8 @@ class ChatGPTChromaDBRetriever:
                                             where={"role": role},
                                             n_results=k)
 
+        # super().forward(query_or_queries)
+
         return results["documents"][0]
 
 
@@ -192,9 +195,9 @@ def main():
     init_dspy(lm_class=Groq, model="mixtral-8x7b-32768")
 
     retriever = ChatGPTChromaDBRetriever()
-    query = "python_source_code_call"
-    matched_conversations = retriever.forward(query, k=3)
-    print(count_tokens(str(matched_conversations) + "\nI want a DSPy module that generates Python source code."))
+    query = "DSPyGen Retriever to generate a ProjectStructureRetriever"
+    matched_conversations = retriever.forward(query, k=10)
+    # print(count_tokens(str(matched_conversations) + "\nI want a DSPy module that generates Python source code."))
     for conversation in matched_conversations:
         logger.info(conversation)
 

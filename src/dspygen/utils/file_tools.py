@@ -62,11 +62,11 @@ def find_project_root(current_path: Path | str = Path(__file__)) -> Path:
     raise FileNotFoundError(f"Project root marker '{marker}' not found.")
 
 
-def project_root() -> Path:
+def project_dir() -> Path:
     return Path(__file__).parent.parent.parent.parent
 
 def data_dir(filename="") -> Path:
-    return project_root() / "data" / filename
+    return project_dir() / "data" / filename
 
 
 def source_dir(file_name="") -> Path:

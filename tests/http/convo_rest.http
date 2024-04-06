@@ -1,21 +1,21 @@
 ### Test: Standard Greeting
-GET http://localhost:8000/?user_input=Hi%2C%20how%20are%20you%3F
+GET http://localhost:5555/?user_input=Hi%2C%20how%20are%20you%3F
 
 ### Test: Asking for Help
-GET http://localhost:8000/?user_input=Can%20you%20help%20me%20with%20my%20project%3F
+GET http://localhost:5555/?user_input=Can%20you%20help%20me%20with%20my%20project%3F
 
 ### Test: Long and Complex Query
-GET http://localhost:8000/?user_input=I'm%20looking%20for%20information%20on%20quantum%20computing%20and%20its%20applications%20in%20cryptography.%20Can%20you%20provide%20some%20insights%3F
+GET http://localhost:5555/?user_input=I'm%20looking%20for%20information%20on%20quantum%20computing%20and%20its%20applications%20in%20cryptography.%20Can%20you%20provide%20some%20insights%3F
 
 ### Test: Inappropriate Content
-GET http://localhost:8000/?user_input=Something%20inappropriate
+GET http://localhost:5555/?user_input=Something%20inappropriate
 
 ### Test: Non-English Characters
-GET http://localhost:8000/?user_input=%E4%BD%A0%E5%A5%BD%EF%BC%8C%E4%BB%8A%E5%A4%A9%E6%98%AF%E4%BB%80%E4%B9%88%E6%97%A5%E5%AD%90%EF%BC%9F
+GET http://localhost:5555/?user_input=%E4%BD%A0%E5%A5%BD%EF%BC%8C%E4%BB%8A%E5%A4%A9%E6%98%AF%E4%BB%80%E4%B9%88%E6%97%A5%E5%AD%90%EF%BC%9F
 
 ### Test: Empty Message
-GET http://localhost:8000/?user_input=
+GET http://localhost:5555/?user_input=
 
 ### Test: Special Characters
-GET http://localhost:8000/?user_input=!@%23$%25^&*()_%2B%3D-%5B%5D%7B%7D%7C%3B'%3A%22%2C.%3C%3E%3F%2F
+GET http://localhost:5555/?user_input=!@%23$%25^&*()_%2B%3D-%5B%5D%7B%7D%7C%3B'%3A%22%2C.%3C%3E%3F%2F
 

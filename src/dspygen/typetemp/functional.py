@@ -25,6 +25,10 @@ def render(tmpl_str_or_path: str | Path, to: str = "", **kwargs) -> str:
         to_ = _env.from_string(to)
         rendered_to = to_.render(**kwargs)
 
+        # Check if the directory exists, if not create it
+        if not os.path.exists(os.path.dirname(rendered_to)):
+            os.makedirs(os.path.dirname(rendered_to))
+
         with open(rendered_to, "w") as file:
             file.write(rendered)
 
