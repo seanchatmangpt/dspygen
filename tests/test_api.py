@@ -4,7 +4,7 @@ import httpx
 from fastapi import Depends
 from fastapi.testclient import TestClient
 
-from dspygen.api_dev import app, get_actor_system
+from dspygen.api import app, get_actor_system
 from dspygen.rdddy.actor_system import ActorSystem
 
 client = TestClient(app)

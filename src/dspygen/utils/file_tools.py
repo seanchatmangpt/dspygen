@@ -4,9 +4,11 @@ import anyio
 import yaml
 
 from pathlib import Path
+from fnmatch import fnmatch
 
 import tempfile
 from contextlib import contextmanager
+
 
 def extract_code(text: str) -> str:
     # Use a regular expression to find code blocks enclosed in triple backticks.
@@ -17,7 +19,7 @@ def extract_code(text: str) -> str:
 
     # Concatenate all the code blocks together with double newline separators.
     concatenated_code = "\n\n".join(
-        [code[code.index("\n") + 1 :] for code in text_code]
+        [code[code.index("\n") + 1:] for code in text_code]
     )
 
     return concatenated_code
@@ -64,6 +66,7 @@ def find_project_root(current_path: Path | str = Path(__file__)) -> Path:
 
 def project_dir() -> Path:
     return Path(__file__).parent.parent.parent.parent
+
 
 def data_dir(filename="") -> Path:
     return project_dir() / "data" / filename
@@ -134,13 +137,13 @@ async def read(filename, to_type=None):
 
 
 async def write(
-    contents=None,
-    *,
-    filename=None,
-    mode="w+",
-    extension="txt",
-    time_stamp=False,
-    path="",
+        contents=None,
+        *,
+        filename=None,
+        mode="w+",
+        extension="txt",
+        time_stamp=False,
+        path="",
 ):
     # if extension == "yaml" or extension == "yml":
     #     contents = yaml.dump(
@@ -152,9 +155,6 @@ async def write(
     async with await anyio.open_file(path + filename, mode=mode) as f:
         await f.write(contents)
     return filename
-
-
-
 
 
 @contextmanager
@@ -190,6 +190,57 @@ def tmp_file(content, mode='w+', delete=True):
 # Test the function
 def main():
     print(count_tokens(get_source(__file__)))
+
+
+
+
+
+def parse_gitignore(gitignore_path):
+    if not gitignore_path.exists():
+        return set()
+
+    with gitignore_path.open("r", encoding="utf-8") as file:
+        patterns = set(line.strip() for line in file if line.strip() and not line.startswith("#"))
+    patterns.add(".git")  # Always ignore .git directory
+    return patterns
+
+
+def is_ignored(file_path, ignore_patterns):
+    relative_path = file_path.relative_to(file_path.parents[len(ignore_patterns) - 1])
+    return any(match_gitignore_pattern(relative_path, pattern) for pattern in ignore_patterns)
+
+
+def match_gitignore_pattern(relative_path, pattern):
+    if pattern.startswith("/"):
+        if fnmatch(str(relative_path), pattern[1:]) or fnmatch(str(relative_path.parent), pattern[1:]):
+            return True
+    else:
+        if any(fnmatch(str(path), pattern) for path in [relative_path, *relative_path.parents]):
+            return True
+    return False
+
+
+def is_binary(file_path):
+    try:
+        with open(file_path, "rb") as file:
+            return b"\x00" in file.read(1024)
+    except IOError:
+        return False
+
+
+def find_gitignore(start_path):
+    """
+    Walks up the directory tree from the start_path to find a .gitignore file.
+
+    :param start_path: The starting directory path as a Path object or string.
+    :return: The path to the first .gitignore file found, or None if not found.
+    """
+    current_path = Path(start_path).resolve()  # Ensure we have an absolute path
+    for parent in [current_path, *current_path.parents]:
+        gitignore_path = parent / ".gitignore"
+        if gitignore_path.exists():
+            return gitignore_path
+    return None
 
 
 if __name__ == "__main__":
