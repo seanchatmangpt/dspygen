@@ -73,6 +73,13 @@ class CodeRetriever(dspy.Retrieve):
         return False
 
 
+def get_files_from_directory(directory, query, gitignore=None):
+    """Retrieves code snippets from a specified directory using CodeRetriever."""
+    code_retriever = CodeRetriever(directory, gitignore)
+    result = code_retriever.forward(query)
+    return result.passages  # Return the list of file contents
+
+
 def main():
     path = "/Users/candacechatman/dev/dspygen/src/dspygen/"
     gitignore = "/Users/candacechatman/dev/dspygen/.gitignore"  # Optional

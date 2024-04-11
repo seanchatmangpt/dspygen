@@ -1225,13 +1225,13 @@ wmi = ["wmi (>=1.5.1)"]
 
 [[package]]
 name = "docutils"
-version = "0.20.1"
+version = "0.21"
 description = "Docutils -- Python Documentation Utilities"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.9"
 files = [
-    {file = "docutils-0.20.1-py3-none-any.whl", hash = "sha256:96f387a2c5562db4476f09f13bbab2192e764cac08ebbf3a34a95d9b1e4a59d6"},
-    {file = "docutils-0.20.1.tar.gz", hash = "sha256:f08a4e276c3a1583a86dce3e34aba3fe04d02bba2dd51ed16106244e8a923e3b"},
+    {file = "docutils-0.21-py3-none-any.whl", hash = "sha256:c26e17ca4915b9df42a4ce2ccca1b25b8b896f33caedb1a558684f0789d0783e"},
+    {file = "docutils-0.21.post1.tar.gz", hash = "sha256:518e29081124e7d8159550958e6de240622562aa824f945f501ec3d3c5b67d19"},
 ]
 
 [[package]]
@@ -6271,6 +6271,24 @@ docs = ["myst-parser", "pydata-sphinx-theme", "sphinx"]
 test = ["argcomplete (>=3.0.3)", "mypy (>=1.7.0)", "pre-commit", "pytest (>=7.0,<7.5)", "pytest-mock", "pytest-mypy-testing"]
 
 [[package]]
+name = "transitions"
+version = "0.9.0"
+description = "A lightweight, object-oriented Python state machine implementation with many extensions."
+optional = false
+python-versions = "*"
+files = [
+    {file = "transitions-0.9.0-py2.py3-none-any.whl", hash = "sha256:5687ee8c6a3200830e44f988d16b0045f53293f7a873002d7bff70852331a078"},
+    {file = "transitions-0.9.0.tar.gz", hash = "sha256:2f54d11bdb225779d7e729011e93a9fb717668ce3dc65f8d4f5a5d7ba2f48e10"},
+]
+
+[package.dependencies]
+six = "*"
+
+[package.extras]
+diagrams = ["pygraphviz"]
+test = ["pytest"]
+
+[[package]]
 name = "twine"
 version = "5.0.0"
 description = "Collection of utilities for publishing packages on PyPI"
@@ -7190,4 +7208,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "01fc0768595aafb99761fae881f9c6558c193caded9f59128e81d3d7bda1ddb1"
+content-hash = "562e9bb09b17b44b960d346f1dd0c2b174584c849bdd651ab1d67a5ddc448c96"

@@ -54,6 +54,18 @@ class CodeExtractor(ast.NodeVisitor):
 
     def visit_ClassDef(self, node):
         self.filtered_code += f'Class: {node.name}\n'
+        for child_node in node.body:
+            if isinstance(child_node, ast.AnnAssign):
+                target = ast.unparse(child_node.target).strip()
+                annotation = ast.unparse(child_node.annotation).strip()
+                assignment_string = f"{target}: {annotation}"
+
+                if child_node.value:  # Optional value inclusion
+                    value = ast.unparse(child_node.value).strip()
+                    assignment_string += f" = {value}"
+
+                self.filtered_code += assignment_string + "\n"
+
         self.generic_visit(node)
 
     def _include_node_signature(self, node):

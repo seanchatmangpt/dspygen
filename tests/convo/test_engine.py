@@ -25,7 +25,6 @@ class Entity(BaseModel):
     """
     name: str = Field(..., description="The name of the entity.")
     type: str = Field(..., description="The type of the entity, used for parsing and validation.")
-    regex_pattern: str = Field(..., description="The regular expression pattern used to recognize the entity in user input.")
 
 
 class ContextManager:

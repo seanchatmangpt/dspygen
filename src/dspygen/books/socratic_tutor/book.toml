@@ -1,0 +1,6 @@
+[book]
+authors = ["Sean Chatman"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Socratic ChatGPT - An Intelligent Tutoring System Powered by Language Models: A Domain Driven Design Python Implementation"
