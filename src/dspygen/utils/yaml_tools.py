@@ -237,6 +237,12 @@ async def async_main():
 def uuid_factory():
     return uuid.uuid4().hex
 
+
+def now_factory():
+    from datetime import datetime
+    return str(datetime.now())
+
+
 if __name__ == '__main__':
     # asyncio.run(async_main())
     main()

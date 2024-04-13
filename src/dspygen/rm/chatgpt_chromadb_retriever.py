@@ -19,6 +19,7 @@ from dspygen.utils.file_tools import data_dir, count_tokens
 # Configure loguru logger
 logger.add("chatgpt_chromadb_retriever.log", rotation="10 MB", level="ERROR")
 
+
 def calculate_file_checksum(file_path: str) -> str:
     hash_md5 = hashlib.md5()
     with open(file_path, "rb") as f:
@@ -83,8 +84,6 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
             logger.info("Detected changes in the conversation history, processing...")
             self._process_and_store_conversations()
             self._save_last_processed_checksum()
-        # else:
-        #     logger.info("No changes detected in the conversation history. Skipping processing.")
 
     def _load_last_processed_checksum(self) -> Optional[str]:
         checksum_file = self.persist_directory / "last_checksum.txt"
@@ -195,7 +194,7 @@ def main():
     init_dspy(lm_class=Groq, model="mixtral-8x7b-32768")
 
     retriever = ChatGPTChromaDBRetriever()
-    query = "DSPyGen Retriever to generate a ProjectStructureRetriever"
+    query = "Revenue Operations Automation"
     matched_conversations = retriever.forward(query, k=10)
     # print(count_tokens(str(matched_conversations) + "\nI want a DSPy module that generates Python source code."))
     for conversation in matched_conversations:

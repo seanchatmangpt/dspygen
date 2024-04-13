@@ -11,7 +11,7 @@ def get_files_from_directory(directory, gitignore=None):
         directory (str): The path to the directory.
         gitignore (str, optional): The path to a .gitignore file. Defaults to None.
     """
-    retriever = PythonCodeRetriever(include_signatures=True, include_docstrings=True, include_executable_code=False)
+    retriever = PythonCodeRetriever(include_signatures=True, include_docstrings=True, include_executable_code=True)
     result = retriever.forward(directory)
     return result  # Return the list of file contents
 
@@ -165,7 +165,25 @@ def get_services():
     return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/services')
 
 
+def get_modules():
+    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/services' directory."""
+    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/modules')
+
+
 def main():
+    import pyperclip
+    pyperclip.copy(f"{get_modules()}")
+
+def main3():
+    print(get_domain_models())
+    print(get_root_aggregates())
+    print(get_value_objects())
+
+    import pyperclip
+    pyperclip.copy(f"{get_domain_models()} {get_root_aggregates()} {get_value_objects()}")
+
+
+def main2():
     from loguru import logger
     import os
     from dspygen.utils.dspy_tools import init_dspy
