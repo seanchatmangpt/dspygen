@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]  # https://python-poetry.org/docs/pyproject/
 name = "dspygen"
-version = "2024.4.11"
+version = "2024.4.13"
 description = "A Ruby on Rails style framework for the DSPy (Demonstrate, Search, Predict) project for Language Models like GPT, BERT, and LLama."
 authors = ["Sean Chatman <info@chatmangpt.com>"]
 readme = "README.md"
@@ -28,7 +28,7 @@ jinja2 = "^3.1.3"
 inflection = "^0.5.1"
 jinja2-time = "^0.2.0"
 jinja2-ext = "^0.1"
-dspy-ai = "2.3.1"
+dspy-ai = "^2.4.5"
 openai = "^1.12.0"
 pyperclip = "^1.8.2"
 asyncer = "^0.0.5"
@@ -123,6 +123,9 @@ ban-relative-imports = "all"
 convention = "google"
 
 [tool.poe.tasks]  # https://github.com/nat-n/poethepoet
+lock = "poetry lock"
+inst = "poetry install"
+pub = "poetry publish --build"
 
   [tool.poe.tasks.api]
   help = "Serve a REST API"
