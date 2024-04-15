@@ -60,6 +60,12 @@ def init(project_name: str = typer.Argument(...),
          author_email: str = typer.Argument("todo@todo.com"),
          author_name: str = typer.Argument("TODO")):
     """Initialize the DSPygen project."""
+
+    # If the project has underscores or spaces throw an error
+    if "_" or " " in project_name:
+        print("Project name should not contain underscores or spaces.")
+        sys.exit(1)
+
     check_or_install_packages()
 
     extra_context = Munch(project_name=project_name,
