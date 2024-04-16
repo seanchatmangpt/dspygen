@@ -65,6 +65,9 @@ def init(project_name: str = typer.Argument(...),
     if "_" or " " in project_name:
         print("Project name should not contain underscores or spaces.")
         sys.exit(1)
+    elif project_name[0] == "-" or project_name[0] == "_":
+        print("Project name should not start with a hyphen or underscore.")
+        sys.exit(1)
 
     check_or_install_packages()
 
