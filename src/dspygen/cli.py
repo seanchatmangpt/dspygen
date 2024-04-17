@@ -60,9 +60,8 @@ def init(project_name: str = typer.Argument(...),
          author_email: str = typer.Argument("todo@todo.com"),
          author_name: str = typer.Argument("TODO")):
     """Initialize the DSPygen project."""
-
     # If the project has underscores or spaces throw an error
-    if "_" or " " in project_name:
+    if "_" in project_name or " " in project_name:
         print("Project name should not contain underscores or spaces.")
         sys.exit(1)
     elif project_name[0] == "-" or project_name[0] == "_":
@@ -75,7 +74,6 @@ def init(project_name: str = typer.Argument(...),
                           author_email=author_email,
                           author_name=author_name)
 
-    project_name = inflection.underscore(project_name)
 
     # The template URL and the configuration for the new project
     template_url = "https://github.com/radix-ai/poetry-cookiecutter"
@@ -92,9 +90,8 @@ def init(project_name: str = typer.Argument(...),
         # Change to the project directory
         # Run the command to initialize the virtual environment
         # Run the command to install dspygen in the virtual environment
-        project_dir = Path(project_name)
 
-        os.chdir(project_dir)
+        os.chdir(project_name)
 
         subprocess.check_call(["poetry", "install"])
         # Create the virtual environment
