@@ -1,5 +1,3 @@
-"""code"""
-import typer
 from loguru import logger
 
 from dspygen.modules.python_source_code_module import python_source_code_call
@@ -7,19 +5,9 @@ from dspygen.rm.chatgpt_chromadb_retriever import ChatGPTChromaDBRetriever
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.lm.groq_lm import Groq
 
-app = typer.Typer(help="Code subcommands.")
-
-
-@app.command(name="create")
-def _create(todo: str = typer.Argument(..., help="What to do?")):
-    """create"""
-    init_dspy()
-    code = python_source_code_call(todo)
-    typer.echo(code)
-
 
 def main():
-    init_dspy(model="gpt-4")
+    init_dspy(lm_class=Groq, model="mixtral-8x7b-32768")
 
     retriever = ChatGPTChromaDBRetriever()
     query = "Revenue Operations Automation"

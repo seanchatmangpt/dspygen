@@ -206,7 +206,7 @@ def main():
 def main2():
     """Updating metadata of the collection"""
     retriever = ChatGPTChromaDBRetriever()
-    retriever._update_collection_metadata()
+    # retriever._update_collection_metadata()
 
 
 if __name__ == "__main__":

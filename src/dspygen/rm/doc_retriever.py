@@ -71,7 +71,14 @@ class DocRetriever(dspy.Retrieve):
         super().__init__()
         self.path = path
 
-    def forward(self, **kwargs):
+    def read_chunks(self, chunk_chars):
+        text = read_any(self.path)
+        return [text[i:i + chunk_chars] for i in range(0, len(text), chunk_chars)]
+
+    def forward(self, chunk_chars=None, **kwargs) -> str | list[str]:
+        if chunk_chars:
+            return self.read_chunks(chunk_chars)
+
         return read_any(self.path)
 
 
