@@ -63,7 +63,7 @@ Ensure that VS Code is using the correct Python interpreter from your virtual en
 
 - Open Command Palette in VS Code: Use Ctrl+Shift+P or Cmd+Shift+P on macOS.
 - Select Interpreter: Type and select "Python: Select Interpreter."
-- Choose the Correct Environment: Pick the interpreter from the virtual environment associated with your project (C:\Users\hjvog\miniconda3\envs\dspygen_py).
+- Choose the Correct Environment: Pick the interpreter from the virtual environment associated with your project (\envs\dspygen_py).
 
 pip install -e . develop
 
