@@ -61,8 +61,10 @@ async def blog_route(data: dict):
 
 def main():
     init_dspy()
-    subject = ""
+    subject = "The Tetris Game, simple but working : in 100 lines" # 300 did not end ok
+    #( pls do not run into those issues here: TypeError: unsupported operand type(s) for +=: 'int' and 'NoneType')"
     print(blog_call(subject=subject))
+    # manually crated the output to src\dspygen\experiments\blog\Tetris_1.md
     
 
 if __name__ == "__main__":

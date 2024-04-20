@@ -1,4 +1,28 @@
-[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/user/my-package)
+# DSPyGen: Phyton - for JavaScript use: npm dpgjs
+The idea of this fork is to follow up with the genius developer Sean Chatman and his work (https://github.com/seanchatmangpt/dspygen) and find out how to best and quickly get started producing the best quality.
+
+The purpose is to use it mostly everywhere: Expert chatbots, workflows, code/data retrievers...
+
+Thanks, and find out about the great DSPy project here https://github.com/stanfordnlp/dspy.
+
+# My ideas: Structuring Code - A new class of Digital Assets = Dematerialized Commodity
+Coming from Financial Engineering and Structuring Financial Products and also from Software Engineering to Avaloq Param, my goals are about getting all Code-Gen Systems to work in compliance and not just mixing others' IP as AI seems mostly to do today.
+
+For such, any creator of something new and valuable should have options to receive a (micro-) payment any time their code is analyzed, cloned, or even used, especially at the enterprise level, where masses of payments might just not be paid.
+
+The bases for all valuable, useful code should then be a new form of NFT - a Structured Commodity of Code - a variant of a Dematerialized Asset - such as I earlier created my Meta-Bricks Repo for.
+
+Having a massive store of runnable and easily pluggable/composable elements of code, paired with terms and conditions we know from classical structured products (see e.g., Ricardian Contracts), Retrievers should use those for Code-Gen workflows, especially to keep legal risks lowest and always send payments or pay shares/revenues from their new meta-bricks derived to the creators owning the underlying product. But we are not here yet, and not many LLMs can and will reference where the code was taken from... I'm sure that can be fixed now.
+
+# Getting Started - Find out simple structures of game code or how creators can get into 'owning' and incentivize code
+First: Also in terms of privacy / data loss protection, I try to switch the init to use ollama since this week llama3 came out with decent figures.
+
+To install ollama first go: https://ollama.com/
+
+The default LLM should be set to model="llama3:8b-instruct-q5_1"
+
+For test and setup DSPy, Ollama and Weaviate go https://github.com/weaviate/recipes/blob/main/integrations/dspy/llms/Llama3.ipynb - not sure if Windows is supported
+
 
 # DSPyGen: Streamlining AI Development
 
@@ -17,7 +41,36 @@ DSPyGen, influenced by the efficiency and modularity of Ruby on Rails, is a powe
 
 ## Getting Started
 
+
+[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?
+url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/user/my-package)
+
+or
+
 Ensure Python is installed on your system. Install DSPyGen via pip:
+
+Devs and local changes seems to be always compiled using
+
+using conda for env management
+
+conda create -n dspygen_py python=3.10
+conda activate dspygen_py
+poetry config virtualenvs.create false
+poetry update
+
+using VS Code - Confirm Python Interpreter in VS Code
+Ensure that VS Code is using the correct Python interpreter from your virtual environment where dspy-ai is installed:
+
+- Open Command Palette in VS Code: Use Ctrl+Shift+P or Cmd+Shift+P on macOS.
+- Select Interpreter: Type and select "Python: Select Interpreter."
+- Choose the Correct Environment: Pick the interpreter from the virtual environment associated with your project (C:\Users\hjvog\miniconda3\envs\dspygen_py).
+
+pip install -e . develop
+
+try and run the blog and run 
+src\dspygen\modules\blog_module.py
+compare to my run:
+src\dspygen\experiments\blog\Tetris_1.md
 
 ```bash
 pip install dspygen

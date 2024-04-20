@@ -3,13 +3,10 @@ import json
 import sys
 from importlib import import_module, metadata
 import subprocess
-
-
 import os
 
 from pathlib import Path
 
-import inflection
 import typer
 from munch import Munch
 
