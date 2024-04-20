@@ -47,18 +47,18 @@ url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github
 
 or
 
-Ensure Python is installed on your system. Install DSPyGen via pip:
+Ensure Python is installed on your system.
 
-Devs and local changes seems to be always compiled using
-
-using conda for env management
+Devs and local changes seems to be always compiled ok with conda for env management
 
 conda create -n dspygen_py python=3.10
 conda activate dspygen_py
 poetry config virtualenvs.create false
-poetry update
 
-using VS Code - Confirm Python Interpreter in VS Code
+in case needed
+poetry update or add <package> 
+
+using VS Code - Confirm correct (conda env!) Python Interpreter in VS Code
 Ensure that VS Code is using the correct Python interpreter from your virtual environment where dspy-ai is installed:
 
 - Open Command Palette in VS Code: Use Ctrl+Shift+P or Cmd+Shift+P on macOS.
@@ -67,10 +67,22 @@ Ensure that VS Code is using the correct Python interpreter from your virtual en
 
 pip install -e . develop
 
-try and run the blog and run 
+on Win get your CLI up to speed and alias
+
+Set-Alias -Name dg -Value dspygen
+
+and 
+
+dg --help
+
+should work
+
+try and run the blog-creator and run 
 src\dspygen\modules\blog_module.py
 compare to my run:
 src\dspygen\experiments\blog\Tetris_1.md
+
+For production envs:
 
 ```bash
 pip install dspygen
