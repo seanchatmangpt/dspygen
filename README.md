@@ -19,10 +19,18 @@ First: Also in terms of privacy / data loss protection, I try to switch the init
 
 To install ollama first go: https://ollama.com/
 
-The default LLM should be set to model="llama3:8b-instruct-q5_1"
+The default LLM should be set to model="llama3:8b-instruct-q5_1" or "llama3:70b-instruct-q3_K_M"
+use 
+from dspygen.lm.groq_lm import Groq
+from dspygen.lm.ollama_lm import Ollama
+and the init:
+init_dspy(Ollama, model="llama3:8b-instruct-q5_1", max_tokens=8000)
+or just run the blog_mudule.py 
 
-For test and setup DSPy, Ollama and Weaviate go https://github.com/weaviate/recipes/blob/main/integrations/dspy/llms/Llama3.ipynb - not sure if Windows is supported
-
+Use Groq - get the API KEY from https://console.groq.com/keys
+and modify your .env like seen in .envDemo 
+dont forget to init
+init_dspy(Groq, model="llama3-70b-8192", max_tokens=8000)
 
 # DSPyGen: Streamlining AI Development
 
