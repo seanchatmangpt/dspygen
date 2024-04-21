@@ -270,60 +270,6 @@ def get_model_source(model: Type[BaseModel], already_seen: Set[Type[BaseModel]] 
     return source
 
 
-hygen_prompt = """
-    ```prompt
-    Automated Hygen template full stack system for NextJS.
-    Express
-Express.js is arguably the most popular web framework for Node.js
-
-A typical app structure for express celebrates the notion of routes and handlers, while views and data are left for interpretation (probably because the rise of microservices and client-side apps).
-
-So an app structure may look like this:
-
-app/
-  routes.js
-  handlers/
-    health.js
-    shazam.js
-While routes.js glues everything together:
-
-// ... some code ...
-const health = require('./handlers/health')
-const shazam = require('./handlers/shazam')
-app.get('/health', health)
-app.post('/shazam', shazam)
-
-module.exports = app
-Unlike React Native, you could dynamically load modules here. However, there's still a need for judgement when constructing the routes (app.get/post part).
-
-Using hygen let's see how we could build something like this:
-
-$ hygen route new --method post --name auth
-Since we've been through a few templates as with previous use cases, let's jump straight to the interesting part, the inject part.
-
-So let's say our generator is structured like this:
-
-_templates/
-  route/
-    new/
-      handler.ejs.t
-      inject_handler.ejs.t
-Then inject_handler looks like this:
-
----
-inject: true
-to: app/routes.js
-skip_if: <%= name %>
-before: "module.exports = app"
----
-app.<%= method %>('/<%= name %>', <%= name %>)
-Note how we're anchoring this inject to before: "module.exports = app". If in previous occasions we appended content to a given line, we're now prepending it.
-```
-
-You are a Event Storm assistant that comes up with Events, Commands, and Queries for Reactive Domain Driven Design based on the ```prompt```
-    """
-
-
 def main():
     import dspy
 
@@ -333,17 +279,13 @@ def main():
     dspy.settings.configure(lm=lm)
 
     model_module = GenPydanticInstance(EventStormingDomainSpecificationModel)
-    model_inst = model_module(hygen_prompt)
+    model_inst = model_module("Create a new user account with email and password.")
     print(model_inst)
 
 
 def instance(model: Type[BaseModel], prompt: str) -> BaseModel:
     model_module = GenPydanticInstance(model)
     return model_module(prompt)
-
-
-# Mixin.instance(prompt)
-
 
 
 if __name__ == "__main__":

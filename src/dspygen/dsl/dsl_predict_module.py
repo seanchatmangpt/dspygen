@@ -102,9 +102,9 @@ class DSLPredictModule(dspy.Module):
         # Assume self.predicted directly gives us the desired output for simplicity
         self.output = predicted
 
-        #
-
         self.pipeline.context.update(predicted.items())
+
+        print(f"Output:\n{self.output}")
 
         return self.output
 
