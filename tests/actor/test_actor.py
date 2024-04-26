@@ -2,8 +2,8 @@ import asyncio
 
 import pytest
 
-from dspygen.rdddy.abstract_actor import AbstractActor
-from dspygen.rdddy.abstract_query import AbstractQuery
+from dspygen.rdddy.base_actor import BaseActor
+from dspygen.rdddy.base_query import BaseQuery
 from dspygen.rdddy.actor_system import ActorSystem
 
 
@@ -13,12 +13,12 @@ def actor_system(event_loop):
     return ActorSystem(event_loop)
 
 
-class DummyActor(AbstractActor):
+class DummyActor(BaseActor):
     def __init__(self, actor_system, actor_id=None):
         super().__init__(actor_system, actor_id)
         self.processed_query = None
 
-    async def handle_query(self, query: AbstractQuery):
+    async def handle_query(self, query: BaseQuery):
         self.processed_query = query
 
 
@@ -26,7 +26,7 @@ class DummyActor(AbstractActor):
 async def test_handler(actor_system):
     actor = await actor_system.actor_of(DummyActor)
 
-    query = AbstractQuery(content="Query1")
+    query = BaseQuery(content="Query1")
 
     await asyncio.sleep(0)
 

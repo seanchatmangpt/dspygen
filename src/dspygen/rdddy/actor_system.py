@@ -47,7 +47,7 @@ import asyncio
 import json
 from asyncio import Future
 from typing import TYPE_CHECKING, Optional, TypeVar, cast
-from paho.mqtt import client as mqtt_client
+from paho.mqtt import client as mclient
 
 import reactivex as rx
 from loguru import logger
@@ -55,12 +55,12 @@ from paho.mqtt.enums import CallbackAPIVersion
 from reactivex import operators as ops
 from reactivex.scheduler.eventloop import AsyncIOScheduler
 
-from dspygen.rdddy.abstract_message import AbstractMessage, MessageFactory
+from dspygen.rdddy.base_message import BaseMessage, MessageFactory
 
 if TYPE_CHECKING:
-    from dspygen.rdddy.abstract_actor import AbstractActor
+    from dspygen.rdddy.base_actor import BaseActor
 
-T = TypeVar("T", bound="AbstractActor")
+T = TypeVar("T", bound="BaseActor")
 
 
 class ActorSystem:
@@ -83,13 +83,16 @@ class ActorSystem:
         wait_for_event(event_type): Waits for a specific event type to occur within the system.
 
     Implementation Details:
-    The ActorSystem class implements actor management and message passing functionalities, abstracting away the complexities of asynchronous programming and actor coordination. It integrates seamlessly with the asyncio event loop, ensuring efficient concurrent operations.
+    The ActorSystem class implements actor management and message passing functionalities, abstracting away the
+    complexities of asynchronous programming and actor coordination. It integrates seamlessly with the asyncio
+    event loop, ensuring efficient concurrent operations.
 
     Usage:
-    Instantiate an ActorSystem object within your application to manage actors and coordinate message passing. Use its methods to create actors, send messages, and wait for specific events within the system.
+    Instantiate an ActorSystem object within your application to manage actors and coordinate message passing. Use its
+    methods to create actors, send messages, and wait for specific events within the system.
     """
 
-    def __init__(self, loop: Optional[asyncio.AbstractEventLoop] = None, mqtt_broker="localhost", mqtt_port=1883):
+    def __init__(self, loop: Optional[asyncio.AbstractEventLoop] = None, mqtt_client: mclient = None):
         """Initializes the ActorSystem.
 
         Args:
@@ -102,19 +105,20 @@ class ActorSystem:
             scheduler (AsyncIOScheduler): An asynchronous scheduler for controlling task execution.
             event_stream (Subject): A subject for publishing events within the actor system.
         """
-        self.actors: dict[int, AbstractActor] = {}
+        self.mqtt_client = mqtt_client
+        self.actors: dict[int, BaseActor] = {}
         self.loop = loop if loop is not None else asyncio.get_event_loop()
         self.scheduler = AsyncIOScheduler(loop=self.loop)
         self.event_stream = rx.subject.Subject()
 
-        try:
-            self.mqtt_client = mqtt_client.Client(CallbackAPIVersion.VERSION2)
-            self.mqtt_client.on_connect = self.on_connect
-            self.mqtt_client.on_message = self.on_message  # Define the callback for incoming messages
-            self.mqtt_client.connect(mqtt_broker, mqtt_port, 60)
-            self.mqtt_client.loop_start()
-        except (ConnectionRefusedError, OSError) as e:
-            logger.error(f"Error connecting to MQTT Broker: {e}")
+        # try:
+        #     self.mqtt_client = mqtt_client.Client(CallbackAPIVersion.VERSION2)
+        #     self.mqtt_client.on_connect = self.on_connect
+        #     self.mqtt_client.on_message = self.on_message  # Define the callback for incoming messages
+        #     self.mqtt_client.connect(mqtt_broker, mqtt_port, 60)
+        #     self.mqtt_client.loop_start()
+        # except (ConnectionRefusedError, OSError) as e:
+        #     logger.error(f"Error connecting to MQTT Broker: {e}")
 
     def on_connect(self, client, userdata, flags, reason_code, properties):
         print("Connected to MQTT Broker.")
@@ -189,7 +193,7 @@ class ActorSystem:
             actors.append(actor)
         return actors
 
-    async def publish(self, message: "AbstractMessage"):
+    async def publish(self, message: "BaseMessage"):
         """Publishes a message to the actor system for distribution.
 
         Preconditions (Pre):
@@ -204,12 +208,14 @@ class ActorSystem:
             - If the message is an instance of the base Message class, an error is raised.
 
         Args:
-            message (AbstractMessage): The message to be published to the actor system.
+            message (BaseMessage): The message to be published to the actor system.
 
         Raises:
             ValueError: If the base Message class is used directly.
         """
-        if type(message) is AbstractMessage:
+        logger.debug(f"Publishing message: {message}")
+
+        if type(message) is BaseMessage:
             raise ValueError(
                 "The base Message class should not be used directly. Please use a subclass of Message."
             )
@@ -220,7 +226,7 @@ class ActorSystem:
             await self.send(actor.actor_id, message)
 
         actor_system_topic = "actor_system/publish"
-        self.mqtt_client.publish(actor_system_topic, message.model_dump_json())
+        # self.mqtt_client.publish(actor_system_topic, message.model_dump_json())
 
     async def remove_actor(self, actor_id):
         """Removes an actor from the actor system.
@@ -244,7 +250,7 @@ class ActorSystem:
             logger.debug(f"Actor {actor_id} not found for removal")
         logger.debug(f"Current actors count: {len(self.actors)}")
 
-    async def send(self, actor_id: int, message: "AbstractMessage"):
+    async def send(self, actor_id: int, message: "BaseMessage"):
         """Sends a message to a specific actor within the actor system.
 
         Preconditions (Pre):
@@ -259,7 +265,7 @@ class ActorSystem:
 
         Args:
             actor_id (int): The ID of the target actor.
-            message (AbstractMessage): The message to be sent to the target actor.
+            message (BaseMessage): The message to be sent to the target actor.
         """
         # logger.debug(f"Sending message {message} to actor {actor_id}")
         actor = self.actors.get(actor_id)
@@ -269,7 +275,7 @@ class ActorSystem:
         else:
             logger.debug(f"Actor {actor_id} not found.")
 
-    async def wait_for_message(self, message_type: type) -> Future["AbstractMessage"]:
+    async def wait_for_message(self, message_type: type) -> Future["BaseMessage"]:
         """Waits for a message of a specific type to be published to the actor system.
 
         Preconditions (Pre):
@@ -318,7 +324,7 @@ class ActorSystem:
             actor_id: The ID of the actor to retrieve.
 
         Returns:
-            AbstractActor: The actor object corresponding to the specified ID.
+            BaseActor: The actor object corresponding to the specified ID.
         """
         return cast(T, self.actors.get(actor_id))
 
@@ -336,8 +342,8 @@ class ActorSystem:
         Postconditions (Post):
             - The actor system has been successfully shut down.
         """
-        self.mqtt_client.loop_stop()
-        self.mqtt_client.disconnect()
+        # self.mqtt_client.loop_stop()
+        # self.mqtt_client.disconnect()
         logger.debug("Actor system shutdown complete.")
 
 

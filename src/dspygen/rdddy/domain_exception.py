@@ -3,5 +3,3 @@ class DomainException(Exception):
     conditions in a way that is meaningful within the domain context, providing clear and actionable feedback to the
     system or the end-user. Custom exceptions derived from DomainException enhance error handling by incorporating
     domain-relevant information and context."""
-
-    pass

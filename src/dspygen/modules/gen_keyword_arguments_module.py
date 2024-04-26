@@ -111,14 +111,6 @@ def invoke(fn: Callable, prompt: str):
     return fn(**kwargs)
 
 
-@app.command()
-def call(prompt, function):
-    """GenKeywordArgumentsModule"""
-    init_dspy()
-    
-    print(gen_keyword_arguments_call(prompt=prompt, function=function))
-
-
 def main():
     init_dspy()
 

@@ -1,9 +1,9 @@
 from pydantic import Field
 
-from dspygen.rdddy.abstract_actor import AbstractActor
-from dspygen.rdddy.abstract_command import AbstractCommand
-from dspygen.rdddy.abstract_event import AbstractEvent
-from dspygen.rdddy.abstract_query import AbstractQuery
+from dspygen.rdddy.base_actor import BaseActor
+from dspygen.rdddy.base_command import BaseCommand
+from dspygen.rdddy.base_event import BaseEvent
+from dspygen.rdddy.base_query import BaseQuery
 from dspygen.rdddy.actor_system import ActorSystem
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.workflow.workflow_executor import execute_workflow
@@ -11,28 +11,28 @@ from dspygen.workflow.workflow_models import Workflow
 
 from loguru import logger
 
-class StatusQuery(AbstractQuery):
+class StatusQuery(BaseQuery):
     """Find out the status of the workflow engine."""
 
 
-class StartCommand(AbstractCommand):
+class StartCommand(BaseCommand):
     """Start the workflow."""
     wf_path: str = Field(..., description="Path to the workflow YAML file.")
 
 
-class StopCommand(AbstractCommand):
+class StopCommand(BaseCommand):
     """Stop the workflow."""
 
 
-class StatusEvent(AbstractEvent):
+class StatusEvent(BaseEvent):
     """Status has changed."""
 
 
-class JobCommand(AbstractCommand):
+class JobCommand(BaseCommand):
     tasks: list[str]
 
 
-class WorkflowEngine(AbstractActor):
+class WorkflowEngine(BaseActor):
     def __init__(self, actor_system, actor_id=None):
         super().__init__(actor_system, actor_id)
         self.status = "idle"

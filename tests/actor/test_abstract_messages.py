@@ -3,7 +3,7 @@ import os
 from pydantic import BaseModel
 import asyncio
 
-from dspygen.rdddy.abstract_message import *
+from dspygen.rdddy.base_message import *
 
 
 # Import your classes here, assuming they're defined in the same file or appropriately imported

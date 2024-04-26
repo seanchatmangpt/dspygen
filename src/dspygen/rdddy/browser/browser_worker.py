@@ -4,13 +4,13 @@ from typing import Optional
 from loguru import logger
 from playwright.async_api import async_playwright
 
-from dspygen.rdddy.abstract_actor import AbstractActor
+from dspygen.rdddy.base_actor import BaseActor
 from dspygen.rdddy.actor_system import ActorSystem
 from dspygen.rdddy.browser.browser_domain import *
-from dspygen.rdddy.abstract_message import *
+from dspygen.rdddy.base_message import *
 
 
-class BrowserWorker(AbstractActor):
+class BrowserWorker(BaseActor):
     def __init__(
         self,
         actor_system: ActorSystem,

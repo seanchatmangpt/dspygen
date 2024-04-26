@@ -188,7 +188,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
         return results["documents"][0]
 
 
-def main():
+def main3():
     from dspygen.utils.dspy_tools import init_dspy
     from dspygen.lm.groq_lm import Groq
     init_dspy(lm_class=Groq, model="mixtral-8x7b-32768")
@@ -207,6 +207,15 @@ def main2():
     """Updating metadata of the collection"""
     retriever = ChatGPTChromaDBRetriever()
     # retriever._update_collection_metadata()
+
+
+def main():
+    retriever = ChatGPTChromaDBRetriever()
+    query = "Retriever"
+    matched_conversations = retriever.forward(query, contains="CodeRetriever")
+    # print(count_tokens(str(matched_conversations) + "\nI want a DSPy module that generates Python source code."))
+    for conversation in matched_conversations:
+        logger.info(conversation)
 
 
 if __name__ == "__main__":

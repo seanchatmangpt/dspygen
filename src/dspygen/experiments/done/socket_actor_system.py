@@ -1,17 +1,17 @@
 import asyncio
 
-from dspygen.rdddy.abstract_actor import AbstractActor
-from dspygen.rdddy.abstract_command import AbstractCommand
+from dspygen.rdddy.base_actor import BaseActor
+from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.actor_system import ActorSystem
 
 
-class PrintActor(AbstractActor):
+class PrintActor(BaseActor):
 
-    async def process_message(self, message:AbstractCommand):
+    async def process_message(self, message:BaseCommand):
         print(f"{self.actor_id} received message: {message.content}")
 
 
-class SimpleMessage(AbstractCommand):
+class SimpleMessage(BaseCommand):
     pass
 
 

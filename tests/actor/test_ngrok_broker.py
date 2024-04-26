@@ -2,21 +2,21 @@ import asyncio
 
 import pytest
 
-from dspygen.rdddy.abstract_actor import AbstractActor
-from dspygen.rdddy.abstract_command import AbstractCommand
-from dspygen.rdddy.abstract_event import AbstractEvent
+from dspygen.rdddy.base_actor import BaseActor
+from dspygen.rdddy.base_command import BaseCommand
+from dspygen.rdddy.base_event import BaseEvent
 from dspygen.rdddy.actor_system import ActorSystem
 
 
-class TestAbstractActor(AbstractActor):
+class TestBaseActor(BaseActor):
     def __init__(self, actor_system: "ActorSystem", actor_id=None):
         super().__init__(actor_system, actor_id)
         self.received_message = None
 
-    async def handle_event(self, event: AbstractEvent):
+    async def handle_event(self, event: BaseEvent):
         self.received_message = event.content
 
-    async def handle_event(self, command: AbstractCommand):
+    async def handle_event(self, command: BaseCommand):
         self.received_message = command.content
 
 

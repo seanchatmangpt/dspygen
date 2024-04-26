@@ -4,9 +4,9 @@ import datetime as dt
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
 
-from dspygen.experiments.convo_ddd.abstract_aggregate.conversation_aggregate import ConversationAggregate
-from dspygen.experiments.convo_ddd.abstract_event.user_input_received_event import UserInputReceivedEvent
-from dspygen.rdddy.abstract_command import AbstractCommand
+# from dspygen.experiments.convo_ddd.abstract_aggregate.conversation_aggregate import ConversationAggregate
+# from dspygen.experiments.convo_ddd.abstract_event.user_input_received_event import UserInputReceivedEvent
+from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.actor_system import ActorSystem
 from dspygen.utils.file_tools import dspy_modules_dir
 from dspygen.workflow.workflow_router import router as workflow_router
@@ -53,9 +53,10 @@ async def get_actor_system():
 @app.get("/")
 async def read_root(user_input: str, asys: ActorSystem = Depends(get_actor_system)):
     """Read root."""
-    convo_agg: ConversationAggregate = await asys.actor_of(ConversationAggregate)
-    msg = await convo_agg.handle_user_input(UserInputReceivedEvent(content=user_input))
-    return msg.model_dump()
+    return "Hello, world!"
+    # convo_agg: ConversationAggregate = await asys.actor_of(ConversationAggregate)
+    # msg = await convo_agg.handle_user_input(UserInputReceivedEvent(content=user_input))
+    # return msg.model_dump()
 
 
 # Define endpoint

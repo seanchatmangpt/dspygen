@@ -4,7 +4,7 @@ import dspy
 from dspy import Signature
 from dspy.signatures.field import InputField, OutputField
 
-from dspygen.modules.gen_pydantic_instance_module import gen_pydantic_instance_call
+# from dspygen.modules.gen_pydantic_instance_module import gen_pydantic_instance_call
 from dspygen.typetemp.template.typed_template import TypedTemplate
 
 
@@ -139,14 +139,14 @@ business_sig_prompts = [
 # Assuming we have a function `generate_signature_from_prompt` that takes a sig_prompt and processes it.
 def generate_signature_from_prompt(sig_prompt):
     # This function is a placeholder for the actual logic that would generate a signature model from a prompt.
-    sig_instance = gen_pydantic_instance_call(
-        sig_prompt,
-        root_model=SignatureTemplateSpecModel,
-        child_models=[InputFieldTemplateSpecModel, OutputFieldTemplateSpecModel],
-    )
+    # sig_instance = gen_pydantic_instance_call(
+    #     sig_prompt,
+    #     root_model=SignatureTemplateSpecModel,
+    #     child_models=[InputFieldTemplateSpecModel, OutputFieldTemplateSpecModel],
+    # )
 
     # print(sig_instance)
-    return GenDSPySignatureTemplate(signature=sig_instance)()
+    return None  # GenDSPySignatureTemplate(signature=sig_instance)()
 
 
 def main():

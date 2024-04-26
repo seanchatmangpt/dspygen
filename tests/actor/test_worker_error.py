@@ -1,11 +1,11 @@
 import asyncio
 
-from dspygen.rdddy.abstract_actor import AbstractActor
+from dspygen.rdddy.base_actor import BaseActor
 from dspygen.rdddy.actor_system import ActorSystem
-from dspygen.rdddy.abstract_message import ExceptionMessage, TerminationMessage
+from dspygen.rdddy.base_message import ExceptionMessage, TerminationMessage
 
 
-class WorkerActor(AbstractActor):
+class WorkerActor(BaseActor):
     async def start_working(self):
         try:
             # Simulate some work
@@ -19,7 +19,7 @@ class WorkerActor(AbstractActor):
             )
 
 
-class SupervisorActor(AbstractActor):
+class SupervisorActor(BaseActor):
     def __init__(self, actor_system, actor_id=None):
         super().__init__(actor_system, actor_id)
         self.worker_actor = None
@@ -36,7 +36,7 @@ class SupervisorActor(AbstractActor):
         await self.worker_actor.start_working()
 
 
-class RootSupervisorActor(AbstractActor):
+class RootSupervisorActor(BaseActor):
     def __init__(self, actor_system, actor_id=None):
         super().__init__(actor_system, actor_id)
         self.supervisor_actor = None

@@ -3,9 +3,9 @@
 {% endfor %}
 
 
-from dspygen.rdddy.abstract_actor import AbstractActor
+from dspygen.rdddy.base_actor import BaseActor
 
-class {{ actor_name }}(AbstractActor):
+class {{ actor_name }}(BaseActor):
     def __init__(self, actor_system, actor_id=None):
         super().__init__(actor_system, actor_id)
 

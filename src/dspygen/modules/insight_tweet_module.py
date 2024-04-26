@@ -5,9 +5,9 @@ import dspy
 import pyperclip
 from typer import Typer
 
-from dspygen.rdddy.abstract_actor import AbstractActor
-from dspygen.rdddy.abstract_command import AbstractCommand
-from dspygen.rdddy.abstract_event import AbstractEvent
+from dspygen.rdddy.base_actor import BaseActor
+from dspygen.rdddy.base_command import BaseCommand
+from dspygen.rdddy.base_event import BaseEvent
 from dspygen.utils.dspy_tools import init_dspy
 
 
@@ -28,15 +28,15 @@ def insight_tweet_call(insight):
     return insight_tweet.forward(insight=insight)
 
 
-class InsightTweetModuleCommand(AbstractCommand):
+class InsightTweetModuleCommand(BaseCommand):
     """Generate Tweet"""
 
 
-class InsightTweetModuleEvent(AbstractEvent):
+class InsightTweetModuleEvent(BaseEvent):
     """Generate Tweet"""
 
 
-class InsightTweetModuleActor(AbstractActor):
+class InsightTweetModuleActor(BaseActor):
     async def handle_tax_return(self, command: InsightTweetModuleCommand):
         await self.publish(InsightTweetModuleEvent(content=insight_tweet_call(command.content)))
 

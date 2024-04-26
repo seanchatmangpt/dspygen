@@ -147,3 +147,6 @@ node_modules/
 .rspec_failed
 .rubocop.yml
 .rubocop_*.yml
+
+project-with-doublehyphen
+projectwithhyphenatend

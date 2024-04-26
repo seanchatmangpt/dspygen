@@ -6,7 +6,7 @@ import os
 import signal
 
 from dspygen.async_typer import AsyncTyper
-from dspygen.rdddy.abstract_command import AbstractCommand
+from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.actor_system import ActorSystem
 
 app = AsyncTyper(help="")
@@ -87,7 +87,7 @@ async def start_actor_system(message: str):
     """Starts the actor system with MQTT integration."""
     actor_system = ActorSystem()
 
-    await actor_system.publish(AbstractCommand(content=message))
+    await actor_system.publish(BaseCommand(content=message))
 
 
 @app.command(name="new")

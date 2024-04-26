@@ -5,7 +5,7 @@ from asyncio.subprocess import Process
 
 from loguru import logger
 
-from dspygen.rdddy.abstract_actor import AbstractActor
+from dspygen.rdddy.base_actor import BaseActor
 from dspygen.rdddy.actor_system import ActorSystem
 from dspygen.rdddy.browser.browser_domain import *
 from dspygen.rdddy.browser.browser_worker import BrowserWorker
@@ -14,7 +14,7 @@ from dspygen.rdddy.browser.browser_worker import BrowserWorker
 os.environ["PLAYWRIGHT_BROWSER"] = "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
 
 
-class BrowserProcessSupervisor(AbstractActor):
+class BrowserProcessSupervisor(BaseActor):
     def __init__(self, actor_system):
         super().__init__(actor_system)
         self.processes: dict[str, Process] = {}  # Tracks browser processes by ID

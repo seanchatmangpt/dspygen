@@ -6,7 +6,7 @@ import inspect
 import dspy
 from typer import Typer
 
-from dspygen.modules.gen_pydantic_instance_module import GenPydanticInstance
+# from dspygen.modules.gen_pydantic_instance_module import GenPydanticInstance
 from dspygen.rdddy.browser.browser_domain import TypeText
 from dspygen.utils.dspy_tools import init_dspy
 
@@ -18,8 +18,8 @@ class MessageModule(dspy.Module):
     """MessageModule"""
 
     def forward(self, prompt, pydantic_class):
-        pred = GenPydanticInstance(root_model=pydantic_class)
-        return pred(prompt)
+        # pred = GenPydanticInstance(root_model=pydantic_class)
+        return None  # pred(prompt)
 
 
 def message_call(prompt, pydantic_class):

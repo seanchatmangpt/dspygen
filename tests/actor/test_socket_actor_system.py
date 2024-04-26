@@ -1,6 +1,6 @@
 from unittest.mock import AsyncMock
 
-from dspygen.rdddy.abstract_query import AbstractQuery
+from dspygen.rdddy.base_query import BaseQuery
 from dspygen.rdddy.actor_system import ActorSystem
 import pytest
 

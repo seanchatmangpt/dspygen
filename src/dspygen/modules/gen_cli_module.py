@@ -10,7 +10,6 @@ import dspy
 from pydantic import BaseModel, Field
 from typer import Typer
 
-from dspygen.modules.gen_pydantic_instance_module import gen_pydantic_instance_call
 from dspygen.typetemp.functional import render
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.utils.yaml_tools import YAMLMixin
@@ -98,14 +97,14 @@ def main():
 
     print(concept)
 
-    model = gen_pydantic_instance_call(prompt=concept,
-        root_model=TyperCLI, child_models=[TyperCommand]
-    )
-
-    print(model.to_yaml())
-
-    render(cli_template, model=model, to="{{ model.name | underscore }}_cli.py")
-    render(pytest_template, model=model, to="test_{{ model.name | underscore }}_cli.py")
+    # model = gen_pydantic_instance_call(prompt=concept,
+    #     root_model=TyperCLI, child_models=[TyperCommand]
+    # )
+    #
+    # print(model.to_yaml())
+    #
+    # render(cli_template, model=model, to="{{ model.name | underscore }}_cli.py")
+    # render(pytest_template, model=model, to="test_{{ model.name | underscore }}_cli.py")
 
     # # --- Render Templates ---
     # env = Environment(loader=FileSystemLoader("."))
