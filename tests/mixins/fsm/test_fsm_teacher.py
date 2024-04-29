@@ -1,8 +1,5 @@
-import pytest
-from transitions import MachineError
-
 from enum import Enum, auto
-from dspygen.utils.fsm_mixin import FSMMixin, trigger
+from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 
 
 class InteractionState(Enum):

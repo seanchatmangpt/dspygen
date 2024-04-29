@@ -1,4 +1,6 @@
 import inspect
+import uuid
+from datetime import datetime
 from importlib import import_module
 from typing import Any, TypeVar
 
@@ -7,26 +9,20 @@ from pydantic import BaseModel, ConfigDict, Field
 from dspygen.utils.yaml_tools import YAMLMixin
 
 
-class BaseMessage(YAMLMixin, BaseModel):
-    """Message class using Pydantic for data validation and serialization."""
+class BaseMessage(BaseModel):
+    """Base message class for serialization/deserialization compatibility with a TypeScript equivalent."""
+    actor_id: int = Field(default=-1, description="Unique identifier for the actor that sent the message.")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Universally unique identifier for the message.")
+    topic: str = Field(default="default-topic", description="Represents the channel, topic, queue, or subject the message pertains to.")
+    timestamp: int = Field(default_factory=lambda: int(datetime.now().timestamp() * 1000), description="Epoch time in milliseconds for when the message was created or sent.")
+    content_type: str = Field(default="application/json", description="MIME type indicating the format of the content.")
+    content: str = Field(default="", description="The payload of the message, typically in a serialized format.")
+    attributes: dict = Field(default_factory=dict, description="Key-value pairs for additional metadata, akin to headers.")
 
-    model_config = ConfigDict(extra="allow", arbitrary_types_allowed=True)
-
-    actor_id: int = Field(default=-1, description="The ID of the actor that sent the message. -1 means it was published by the system.")
-    metadata: dict[str, Any] = Field(default_factory=dict, description="Metadata for the message.")
-    content: str | None = Field(default=None, description="The content of the message.")
-    message_type: str = Field(default="", description="The type of the message.")
-
-    def __init__(self, **data):
+    def __init__(self, **data: Any):
         super().__init__(**data)
-        # Calculate the relative import path at runtime
-        self.message_type = self._calculate_import_path()
-
-    def _calculate_import_path(self) -> str:
-        """Calculate the relative import path of the class."""
-        module = inspect.getmodule(self)
-        relative_path = f"{module.__name__}.{self.__class__.__name__}"
-        return relative_path
+        # Ensure that the 'messageType' attribute exists in the attributes dictionary
+        self.attributes.setdefault('messageType', 'BaseMessage')
 
 
 class MessageList(YAMLMixin, BaseModel):
@@ -57,8 +53,8 @@ class MessageFactory:
         Returns:
         - Type[BaseModel]: The appropriate message type.
         """
-        message_class = cls._get_message_class(data["message_type"])
-        return message_class(**data)
+        # message_class = cls._get_message_class(data["message_type"])
+        return BaseMessage(**data)
 
     @classmethod
     def create_messages_from_list(cls, data_list: list[dict]) -> list[T]:

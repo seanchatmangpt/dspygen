@@ -1,0 +1,33 @@
+digraph pastafarianism {
+ordering=out;
+graph [fontname="times-roman"];
+node [fontname="times-roman"];
+edge [fontname="times-roman"];
+"Superhero Activities" [fillcolor=cyan, fontcolor=black, fontsize=9, label="Superhero Activities", shape=octagon, style=filled];
+Asleep [fillcolor=orange, fontcolor=black, fontsize=9, label=Asleep, shape=box, style=filled];
+"Superhero Activities" -> Asleep;
+"Wake Up" [fillcolor=gray, fontcolor=black, fontsize=9, label="Wake Up", shape=ellipse, style=filled];
+Asleep -> "Wake Up";
+"Hanging Out" [fillcolor=orange, fontcolor=black, fontsize=9, label="Hanging Out", shape=box, style=filled];
+"Superhero Activities" -> "Hanging Out";
+"Work Out" [fillcolor=gray, fontcolor=black, fontsize=9, label="Work Out", shape=ellipse, style=filled];
+"Hanging Out" -> "Work Out";
+Hungry [fillcolor=orange, fontcolor=black, fontsize=9, label=Hungry, shape=box, style=filled];
+"Superhero Activities" -> Hungry;
+Eat [fillcolor=gray, fontcolor=black, fontsize=9, label=Eat, shape=ellipse, style=filled];
+Hungry -> Eat;
+"Saving The World" [fillcolor=orange, fontcolor=black, fontsize=9, label="Saving The World", shape=box, style=filled];
+"Superhero Activities" -> "Saving The World";
+"Distress Call" [fillcolor=gray, fontcolor=black, fontsize=9, label="Distress Call", shape=ellipse, style=filled];
+"Saving The World" -> "Distress Call";
+"Complete Mission" [fillcolor=gray, fontcolor=black, fontsize=9, label="Complete Mission", shape=ellipse, style=filled];
+"Saving The World" -> "Complete Mission";
+Sweaty [fillcolor=cyan, fontcolor=black, fontsize=9, label=Sweaty, shape=octagon, style=filled];
+"Superhero Activities" -> Sweaty;
+"Is Exhausted?" [fillcolor=gray, fontcolor=black, fontsize=9, label="Is Exhausted?", shape=ellipse, style=filled];
+Sweaty -> "Is Exhausted?";
+"Clean Up Exhausted" [fillcolor=gray, fontcolor=black, fontsize=9, label="Clean Up Exhausted", shape=ellipse, style=filled];
+Sweaty -> "Clean Up Exhausted";
+"Clean Up" [fillcolor=gray, fontcolor=black, fontsize=9, label="Clean Up", shape=ellipse, style=filled];
+Sweaty -> "Clean Up";
+}

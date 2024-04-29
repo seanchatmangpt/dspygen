@@ -15,11 +15,11 @@ def message_data():
     return {
         "messages": [
             ExceptionMessage(
-                metadata={"key": "value1"},
+                attributes={"key": "value1"},
                 content="This is a test message",
             ).model_dump(),
             TerminationMessage(
-                metadata={"key": "value2"},
+                attributes={"key": "value2"},
                 content="This is another test message",
             ).model_dump()
         ]
@@ -56,7 +56,7 @@ async def test_aio_context_save(message_data, tmp_path):
     async with MessageList.aio_context(file_path=str(file_path)) as saved_message_list:
         assert len(saved_message_list.messages) == len(message_data["messages"]), "Not all messages were saved."
         for msg_data, saved_msg in zip(message_data["messages"], saved_message_list.messages):
-            assert saved_msg.metadata == msg_data["metadata"], "Metadata does not match."
+            assert saved_msg.attributes == msg_data["attributes"], "Metadata does not match."
             assert saved_msg.content == msg_data["content"], "Content does not match."
 
 

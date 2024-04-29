@@ -1,6 +1,6 @@
 from enum import Enum, auto
 import random
-from dspygen.utils.fsm_mixin import FSMMixin, trigger
+from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 
 
 class SuperheroState(Enum):
@@ -15,7 +15,7 @@ class NarcolepticSuperhero(FSMMixin):
     def __init__(self, name):
         self.name = name
         self.kittens_rescued = 0
-        super().setup_fsm(SuperheroState, SuperheroState.ASLEEP)
+        super().setup_fsm(SuperheroState)
 
     @trigger(source=SuperheroState.ASLEEP, dest=SuperheroState.HANGING_OUT)
     def wake_up(self):

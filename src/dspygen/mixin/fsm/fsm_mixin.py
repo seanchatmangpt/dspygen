@@ -1,26 +1,11 @@
 import inspect
 
 from transitions import Machine
-import functools
-from enum import Enum, auto
-
 from transitions.core import State
 
-
-from transitions import Machine
 import functools
-from enum import Enum, auto
-
-import inspect
-import functools
-from transitions import Machine
-
-import inspect
-import functools
-from transitions import Machine
 
 
-# A decorator that adds transition metadata to methods
 def trigger(source, dest, conditions=None, unless=None, before=None, after=None, prepare=None):
     def decorator(func):
         if not hasattr(func, '_transitions'):
@@ -70,16 +55,29 @@ def trigger(source, dest, conditions=None, unless=None, before=None, after=None,
 
 
 class FSMMixin:
-    def setup_fsm(self, state_enum, initial):
+    def setup_fsm(self, state_enum, initial=None):
         self.states = [State(state.name) for state in state_enum]
+
+        if initial is None:
+            initial = [state for state in state_enum][0]
+
         self.machine = Machine(model=self, states=self.states, initial=initial, auto_transitions=False)
         self.initialize_transitions()
+        self.setup_transitions()
+
+    def setup_transitions(self):
+        pass
 
     def initialize_transitions(self):
         for name, method in inspect.getmembers(self, predicate=inspect.ismethod):
             if hasattr(method, '_transitions'):
                 for trans in method._transitions:
-                    self.machine.add_transition(**trans)
+                    self.add_transition(**trans)
+
+    def add_transition(self, trigger, source, dest, conditions=None, unless=None, before=None, after=None,
+                       prepare=None):
+        self.machine.add_transition(trigger, source, dest, conditions=conditions, unless=unless, before=before,
+                                    after=after, prepare=prepare)
 
 
 def state_transition_possibilities(fsm):

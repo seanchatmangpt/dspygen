@@ -4507,6 +4507,20 @@ files = [
 tests = ["pytest"]
 
 [[package]]
+name = "py-trees"
+version = "2.2.3"
+description = "pythonic implementation of behaviour trees"
+optional = false
+python-versions = ">=3.8,<4.0"
+files = [
+    {file = "py_trees-2.2.3-py3-none-any.whl", hash = "sha256:0c667e15d45157d92b0cd23f0cf8f8ca6a41bd9d2f3a159599cbf88287d98566"},
+    {file = "py_trees-2.2.3.tar.gz", hash = "sha256:8a2024ca6cb966c3c571d91e2d60c90cc562c4d237a0af8ab7a7c27c2cff0795"},
+]
+
+[package.dependencies]
+pydot = ">=1.4"
+
+[[package]]
 name = "pyarrow"
 version = "15.0.2"
 description = "Python library for Apache Arrow"
@@ -4789,6 +4803,25 @@ carto = ["pydeck-carto"]
 jupyter = ["ipykernel (>=5.1.2)", "ipython (>=5.8.0)", "ipywidgets (>=7,<8)", "traitlets (>=4.3.2)"]
 
 [[package]]
+name = "pydot"
+version = "2.0.0"
+description = "Python interface to Graphviz's Dot"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pydot-2.0.0-py3-none-any.whl", hash = "sha256:408a47913ea7bd5d2d34b274144880c1310c4aee901f353cf21fe2e526a4ea28"},
+    {file = "pydot-2.0.0.tar.gz", hash = "sha256:60246af215123fa062f21cd791be67dda23a6f280df09f68919e637a1e4f3235"},
+]
+
+[package.dependencies]
+pyparsing = ">=3"
+
+[package.extras]
+dev = ["black", "chardet"]
+release = ["zest.releaser[recommended]"]
+tests = ["black", "chardet", "tox"]
+
+[[package]]
 name = "pyee"
 version = "11.1.0"
 description = "A rough port of Node.js's EventEmitter to Python with a few tricks of its own"
@@ -4896,6 +4929,20 @@ files = [
     {file = "pykka-4.0.2-py3-none-any.whl", hash = "sha256:100f9ceb5b977aad5eb7b3165d0989d539eff685a5d77b3f733e7c3fe704fd7b"},
     {file = "pykka-4.0.2.tar.gz", hash = "sha256:05e687c426922b0084d79f22a6c1813e0c4e0c59d8f860aa32c18c5f6127e276"},
 ]
+
+[[package]]
+name = "pyparsing"
+version = "3.1.2"
+description = "pyparsing module - Classes and methods to define and execute parsing grammars"
+optional = false
+python-versions = ">=3.6.8"
+files = [
+    {file = "pyparsing-3.1.2-py3-none-any.whl", hash = "sha256:f9db75911801ed778fe61bb643079ff86601aca99fcae6345aa67292038fb742"},
+    {file = "pyparsing-3.1.2.tar.gz", hash = "sha256:a1bac0ce561155ecc3ed78ca94d3c9378656ad4c94c1270de543f621420f94ad"},
+]
+
+[package.extras]
+diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
 name = "pypdf"
@@ -7367,4 +7414,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "9d80ddefc39388a05bb2804c2df6d57c09834376f7357e50e2deedf9c2d059ae"
+content-hash = "5f8f70037bcfa1dd17b599a12a5f69a6854b703208f9c2190c529d3d5e509352"
