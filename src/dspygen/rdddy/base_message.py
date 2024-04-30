@@ -22,7 +22,7 @@ class BaseMessage(BaseModel):
     def __init__(self, **data: Any):
         super().__init__(**data)
         # Ensure that the 'messageType' attribute exists in the attributes dictionary
-        self.attributes.setdefault('messageType', 'BaseMessage')
+        self.attributes.setdefault('messageType', type(self).__name__)
 
 
 class MessageList(YAMLMixin, BaseModel):

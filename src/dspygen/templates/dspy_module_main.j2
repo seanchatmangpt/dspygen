@@ -3,5 +3,6 @@ def main():
 {% for input in model.inputs %}
     {{ input }} = ""
 {% endfor %}
-    print({{ var_name }}_call({{ inputs_join_kwargs }}))
+    result = {{ var_name }}_call({{ inputs_join_kwargs }})
+    print(result)
 

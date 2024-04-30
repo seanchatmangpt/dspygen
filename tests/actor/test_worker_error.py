@@ -25,7 +25,7 @@ class SupervisorActor(BaseActor):
         self.worker_actor = None
         self.restart_count = 0
 
-    async def handle_message(self, message: ExceptionMessage):
+    async def handle_exception(self, message: ExceptionMessage):
         # If an error message is received, restart the worker
         if "error" in message.content:
             self.restart_count += 1
@@ -42,7 +42,7 @@ class RootSupervisorActor(BaseActor):
         self.supervisor_actor = None
         self.restart_count = 0
 
-    async def handle_message(self, message: ExceptionMessage):
+    async def handle_exception(self, message: ExceptionMessage):
         if "error" in message.content:
             self.restart_count += 1
 

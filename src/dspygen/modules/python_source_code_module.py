@@ -51,8 +51,17 @@ async def generate_code(code_prompt: CodePrompt):
 def main():
     init_dspy()
 
-    prompt = "Hello World def with print FastAPI call with import"
+    # prompt = "Hello World def with print FastAPI call with import"
+    # prompt = "We function called 'add_numbers' that takes two arguments 'a' and 'b', prints the sum and returns their sum."
+    prompt = "Write the quicksort algorithm in Python. DO NOT INCLUDE INVOCATION"
+    fn = python_source_code_call(prompt=prompt)
+    print(fn)
+
+    prompt = f"{fn} Invoke the function. Do not write the function declaration, it was written in a previous step."
+    invoke_add_nums = python_source_code_call(prompt=prompt)
     print(python_source_code_call(prompt=prompt))
+    # print(python_source_code_call(prompt=prompt))
+    # print(python_source_code_call(prompt=prompt))
 
 
 if __name__ == "__main__":

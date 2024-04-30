@@ -79,6 +79,13 @@ class FSMMixin:
         self.machine.add_transition(trigger, source, dest, conditions=conditions, unless=unless, before=before,
                                     after=after, prepare=prepare)
 
+    def possible_transitions(self):
+        return state_transition_possibilities(self)
+
+    def possible_triggers(self):
+        # Get possible destination states from the current state
+        return self.machine.get_triggers(self.state)
+
 
 def state_transition_possibilities(fsm):
     current_state = fsm.state
