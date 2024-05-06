@@ -10,7 +10,7 @@ class PromptPep8PythonSourceCodeModule(dspy.Module):
     """Verbose Documentation for the DSPy Module"""
 
     def forward(self, prompt):
-        pred = dspy.ChainOfThought("prompt -> pep8_python_source_code")
+        pred = dspy.Predict("prompt -> pep8_python_source_code")
         result = pred(prompt=prompt).pep8_python_source_code
         return result
 

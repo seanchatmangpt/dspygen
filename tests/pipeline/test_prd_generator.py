@@ -80,7 +80,7 @@ def test_feature_data_retriever(sample_feature_csv_file):
 #
 #     for result in filtered_results:
 #         print(result)
-#         context = execute_pipeline('/Users/candacechatman/dev/dspygen/tests/pipeline/gherkin_pipeline.yaml', init_ctx={"processed_data": result})
+#         context = execute_pipeline('/Users/sac/dev/dspygen/tests/pipeline/gherkin_pipeline.yaml', init_ctx={"processed_data": result})
 #
 #         file_name = f"{inflection.underscore(result['FeatureDescription'])}.tsx"
 #         file_name = inflection.dasherize(file_name)

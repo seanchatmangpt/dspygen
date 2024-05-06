@@ -1,11 +1,16 @@
 import os
 from enum import Enum, auto
+
+import dspy
+
+from dspygen.utils.dspy_tools import init_dspy
+
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 from dspygen.modules.condition_sufficient_info_module import condition_sufficient_info_call
 from dspygen.modules.query_generator_module import query_generator_call
 #from dspygen.modules.refine_results_module import refine_results_module_call
 from dspygen.modules.source_selector_module import source_selector_call
-from dspygen.utils.scraping_tools import execute_search_queries, scrape_urls
+from dspygen.utils.scraping_tools import execute_brave_search_queries, scrape_urls, execute_duckduckgo_queries
 
 
 class LearningAgentState(Enum):
@@ -23,6 +28,7 @@ class LearningAgentState(Enum):
 
 class LearningAgent(FSMMixin):
     def __init__(self, objectives):
+        # super().setup_fsm(LearningAgentState, initial=LearningAgentState.EXECUTE_SEARCH)
         super().setup_fsm(LearningAgentState, initial=LearningAgentState.INPUT_OBJECTIVES)
         self.objectives = objectives
         self.current_objective = None
@@ -37,19 +43,20 @@ class LearningAgent(FSMMixin):
     def process_input(self):
         """Processes the initial input of learning objectives."""
         # Placeholder: processing input and setting up initial data
-        print("Processing input objectives.")
+        # print("Processing input objectives.")
 
     @trigger(source=LearningAgentState.GENERATE_QUERIES, dest=LearningAgentState.EXECUTE_SEARCH)
     def generate_queries(self):
         """Generate search queries for each learning objective using the query_generator module."""
         self.queries = {objective: query_generator_call(objective) for objective in self.objectives}
-        print(f"Generated search queries: {self.queries}")
+        # print(f"Generated search queries: {self.queries}")
 
     @trigger(source=LearningAgentState.EXECUTE_SEARCH, dest=LearningAgentState.SELECT_URLS)
     def execute_search(self):
         """Execute the generated search queries using the Brave Search API."""
-        api_key = os.getenv("BRAVE_API_KEY")  
-        self.search_results = execute_search_queries(self.queries, api_key)
+        # api_key = os.getenv("BRAVE_API_KEY")
+        # self.search_results = execute_brave_search_queries(self.queries, api_key)
+        self.search_results = execute_duckduckgo_queries(self.queries)
         print(f"Search results: {self.search_results}")
 
     @trigger(source=LearningAgentState.SELECT_URLS, dest=LearningAgentState.SCRAPE_AND_CONVERT)
@@ -110,8 +117,10 @@ class LearningAgent(FSMMixin):
         # Check if all values in sufficient_info are True
         return all(self.sufficient_info.values())
 
+
 def main():
     # Example objectives
+    init_dspy(dspy.OllamaLocal, model="llama3")
     objectives = ["how to finetune a llama 3 lora model"]
     agent = LearningAgent(objectives)
     print("Initial state:", agent.state)

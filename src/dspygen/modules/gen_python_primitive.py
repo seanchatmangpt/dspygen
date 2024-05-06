@@ -1,5 +1,6 @@
 import ast
 
+import dspy
 from dspy import Assert
 
 from dspygen.modules.gen_module import GenModule
@@ -118,7 +119,7 @@ def gen_str(prompt):
 
 
 def main():
-    init_dspy()
+    init_dspy(dspy.OllamaLocal, model="llama3")
 
     result = gen_list(
         "Create a list of planets in our solar system sorted by largest to smallest"

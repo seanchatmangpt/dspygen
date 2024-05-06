@@ -1,7 +1,7 @@
 name: DataAnalysisWorkflow
 triggers: manual
 imports:
-  - /Users/candacechatman/dev/dspygen/src/dspygen/workflow/data_preparation_workflow.yaml
+  - /Users/sac/dev/dspygen/src/dspygen/workflow/data_preparation_workflow.yaml
 jobs:
   - name: AnalyzeData
     runner: python
@@ -22,7 +22,7 @@ jobs:
           print(f'Average value: {average_value}')
 
           from dspygen.dsl.dsl_pipeline_executor import execute_pipeline
-          context = execute_pipeline('/Users/candacechatman/dev/dspygen/tests/pipeline/data_hello_world_pipeline.yaml', init_ctx={"csv_file": "/Users/candacechatman/dev/dspygen/tests/data/greek.csv"})
+          context = execute_pipeline('/Users/sac/dev/dspygen/tests/pipeline/data_hello_world_pipeline.yaml', init_ctx={"csv_file": "/Users/sac/dev/dspygen/tests/data/greek.csv"})
           print(context)
 
 

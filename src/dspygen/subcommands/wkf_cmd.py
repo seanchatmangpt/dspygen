@@ -8,7 +8,7 @@ app = typer.Typer(help="Language Workflow Domain Specific Language commands for 
 
 
 @app.command("run")
-def run_workflow(yaml_file: str = typer.Argument("/Users/candacechatman/dev/dspygen/src/dspygen/experiments/workflow/control_flow_workflow.yaml")):
+def run_workflow(yaml_file: str = typer.Argument("/Users/sac/dev/dspygen/src/dspygen/experiments/workflow/control_flow_workflow.yaml")):
     """
     Run a workflow defined in a YAML file. Default is workflow.yaml
     """

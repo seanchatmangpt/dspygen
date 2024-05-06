@@ -1,8 +1,46 @@
 import requests
 from html2text import html2text
 import requests
+from duckduckgo_search import DDGS
 
-def execute_search_queries(queries, api_key):
+
+from duckduckgo_search import DDGS
+
+def execute_duckduckgo_queries(queries: dict, max_results=5):
+    """
+    Execute search queries using DuckDuckGo API and return search results formatted to include
+    only URL, title, and description for each result.
+
+    :param queries: Dictionary of objectives to search query strings
+    :param max_results: Maximum number of results to return per query
+    :return: Dictionary of objectives to lists of {'url': url, 'title': title, 'description': description}
+    """
+    print(f"Executing DuckDuckGo queries: {queries}")
+    search_results = {}
+
+    for objective, query in queries.items():
+        print(f"Executing query for {objective}: {query}")
+        results = DDGS().text(query, max_results=max_results)
+
+        print(f"Results for {objective}: {results}")
+
+        formatted_results = [
+            {
+                'url': result.get('href'),
+                'title': result.get('title'),
+                'description': result.get('body')
+            }
+            for result in results if result.get('href') and result.get('title')
+        ]
+        search_results[objective] = formatted_results
+
+    print(f"Search results: {search_results}")
+
+    return search_results
+
+
+
+def execute_brave_search_queries(queries: dict, api_key):
     """
     Execute search queries using Brave Search API and return search results formatted to include
     only URL, title, and description for each result.

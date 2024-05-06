@@ -2,8 +2,8 @@ from dspygen.rm.code_retriever import CodeRetriever
 
 
 def main():
-    path = "/Users/candacechatman/dev/dspygen/src/dspygen/books/socratic_tutor/src"
-    gitignore = "/Users/candacechatman/dev/dspygen/.gitignore"  # Optional
+    path = "/Users/sac/dev/dspygen/src/dspygen/books/socratic_tutor/src"
+    gitignore = "/Users/sac/dev/dspygen/.gitignore"  # Optional
 
     code_retriever = CodeRetriever(path, gitignore)
     result = code_retriever.forward("*md")

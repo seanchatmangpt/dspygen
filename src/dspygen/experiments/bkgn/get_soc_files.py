@@ -16,158 +16,158 @@ def get_files_from_directory(directory, gitignore=None):
     return result  # Return the list of file contents
 
 def get_abstract_saga(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/ddd/abstract_saga' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/ddd/abstract_saga')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/ddd/abstract_saga' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/ddd/abstract_saga')
     
 
 def get_abstract_aggregate(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/ddd/abstract_aggregate' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/ddd/abstract_aggregate')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/ddd/abstract_aggregate' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/ddd/abstract_aggregate')
     
 
 def get_abstract_read_model(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/ddd/abstract_read_model' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/ddd/abstract_read_model')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/ddd/abstract_read_model' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/ddd/abstract_read_model')
     
 
 def get_abstract_view(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/ddd/abstract_view' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/ddd/abstract_view')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/ddd/abstract_view' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/ddd/abstract_view')
     
 
 def get_abstract_task(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/ddd/abstract_task' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/ddd/abstract_task')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/ddd/abstract_task' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/ddd/abstract_task')
     
 
 def get_abstract_policy(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/ddd/abstract_policy' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/ddd/abstract_policy')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/ddd/abstract_policy' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/ddd/abstract_policy')
     
 
 def get_abstract_value_object(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/ddd/abstract_value_object' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/ddd/abstract_value_object')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/ddd/abstract_value_object' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/ddd/abstract_value_object')
     
 
 def get_domain_exception(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/ddd/domain_exception' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/ddd/domain_exception')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/ddd/domain_exception' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/ddd/domain_exception')
     
 
 def get_abstract_query(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/ddd/abstract_query' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/ddd/abstract_query')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/ddd/abstract_query' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/ddd/abstract_query')
     
 
 def get_abstract_event(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/ddd/abstract_event' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/ddd/abstract_event')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/ddd/abstract_event' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/ddd/abstract_event')
     
 
 def get_abstract_command(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/ddd/abstract_command' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/ddd/abstract_command')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/ddd/abstract_command' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/ddd/abstract_command')
     
 
 def get_repositories(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/repositories' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/repositories')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/repositories' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/repositories')
     
 
 def get_introduction(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/introduction' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/introduction')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/introduction' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/introduction')
     
 
 def get_appendices(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/appendices' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/appendices')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/appendices' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/appendices')
     
 
 def get_language_models(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/foundations/language-models' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/foundations/language-models')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/foundations/language-models' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/foundations/language-models')
     
 
 def get_testing(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/testing' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/testing')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/testing' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/testing')
     
 
 def get_architecture(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/architecture' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/architecture')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/architecture' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/architecture')
     
 
 def get_infrastructure(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/implementation/infrastructure' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/implementation/infrastructure')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/implementation/infrastructure' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/implementation/infrastructure')
     
 
 def get_best_practices(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/best-practices' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/books/socratic_tutor/src/best-practices')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/best-practices' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/books/socratic_tutor/src/best-practices')
     
 
 def get_tutor_bot(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/tutor_bot' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/tutor_bot')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/tutor_bot' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/tutor_bot')
     
 
 def get_configs(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/configs' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/configs')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/configs' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/configs')
     
 
 def get_actors(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/actors' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/actors')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/actors' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/actors')
     
 
 def get_critical_vision(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/data/critical_vision' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/data/critical_vision')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/data/critical_vision' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/data/critical_vision')
     
 
 def get_business_skills(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/data/business_skills' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/data/business_skills')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/data/business_skills' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/data/business_skills')
     
 
 def get_logical_thinking(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/data/logical_thinking' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/data/logical_thinking')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/data/logical_thinking' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/data/logical_thinking')
     
 
 def get_models(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/models' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/models')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/models' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/models')
 
 
 def get_domain_models():
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/models' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/models/domain_models')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/models' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/models/domain_models')
 
 
 def get_root_aggregates():
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/models' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/models/root_aggregates')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/models' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/models/root_aggregates')
 
 
 def get_value_objects():
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/models' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/models/value_objects')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/models' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/models/value_objects')
 
 
 def get_services(): 
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/services' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/services')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/services' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/services')
 
 
 def get_modules():
-    """Retrieves code snippets from the '/Users/candacechatman/dev/soc/src/soc/services' directory."""
-    return get_files_from_directory('/Users/candacechatman/dev/soc/src/soc/modules')
+    """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/services' directory."""
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/modules')
 
 
 def main():

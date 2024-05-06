@@ -53,7 +53,7 @@ def generate_file_retrieval_functions(base_path, output_file):
 
 def main():
     """Main function"""
-    target = "/Users/candacechatman/dev/soc/src/soc"
+    target = "/Users/sac/dev/soc/src/soc"
     generate_file_retrieval_functions(target, "get_soc_files.py")
 
 if __name__ == '__main__':

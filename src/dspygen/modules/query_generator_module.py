@@ -9,7 +9,7 @@ class GenerateSearchQueriesForLearningObjective(dspy.Signature):
     Generate 1 to 3 search queries based on the specified learning objective with the intent
     of finding relevant information via SERP API.
     """
-    learning_objective = dspy.InputField(desc="Specific learning objective to generate search queries for.")
+    learning_objectives = dspy.InputField(desc="Specific learning objective to generate search queries for.")
 
     search_queries = dspy.OutputField(desc="List of 1 to 3 search queries tailored to retrieve information relevant to the learning objective. Separate each query with a comma.", prefix="```search_queries")
 
@@ -34,7 +34,7 @@ class QueryGeneratorModule(dspy.Module):
 
     def forward(self, learning_objectives):
         pred = dspy.Predict(GenerateSearchQueriesForLearningObjective)
-        self.output = pred(learning_objectives=learning_objectives).queries
+        self.output = pred(learning_objectives=learning_objectives).search_queries
         return self.output
         
     def pipe(self, input_str):

@@ -24,8 +24,8 @@ def trigger(source, dest, conditions=None, unless=None, before=None, after=None,
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
             # Execute any 'prepare' callbacks
-            if prepare:
-                [getattr(self, p)() for p in (prepare if isinstance(prepare, list) else [prepare])]
+            # if prepare:
+            #     [getattr(self, p)() for p in (prepare if isinstance(prepare, list) else [prepare])]
 
             # Check 'unless' conditions to prevent transition
             if unless and any([getattr(self, u)() for u in (unless if isinstance(unless, list) else [unless])]):
@@ -34,8 +34,8 @@ def trigger(source, dest, conditions=None, unless=None, before=None, after=None,
             # Check 'conditions' to allow transition
             if conditions is None or all(
                     [getattr(self, c)() for c in (conditions if isinstance(conditions, list) else [conditions])]):
-                if before:
-                    [getattr(self, b)() for b in (before if isinstance(before, list) else [before])]
+                # if before:
+                #     [getattr(self, b)() for b in (before if isinstance(before, list) else [before])]
 
                 # Correctly trigger the transition through the state machine
                 event_trigger = getattr(self, 'trigger')
@@ -43,8 +43,8 @@ def trigger(source, dest, conditions=None, unless=None, before=None, after=None,
 
                 result = func(self, *args, **kwargs)  # Execute the actual function logic
 
-                if after:
-                    [getattr(self, a)() for a in (after if isinstance(after, list) else [after])]
+                # if after:
+                #     [getattr(self, a)() for a in (after if isinstance(after, list) else [after])]
                 return result
 
             return func(self, *args, **kwargs)  # Conditions not met, no transition

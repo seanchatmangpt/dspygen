@@ -8,7 +8,7 @@ from typing import List, Optional, Union
 from loguru import logger
 
 import chromadb
-from chromadb.utils import embedding_functions
+import chromadb.utils.embedding_functions as embedding_functions
 from munch import Munch
 from pydantic import BaseModel, ValidationError
 
@@ -17,7 +17,7 @@ from dspygen.utils.file_tools import data_dir, count_tokens
 
 
 # Configure loguru logger
-logger.add("chatgpt_chromadb_retriever.log", rotation="10 MB", level="ERROR")
+# logger.add("chatgpt_chromadb_retriever.log", rotation="10 MB", level="ERROR")
 
 
 def calculate_file_checksum(file_path: str) -> str:
@@ -60,11 +60,18 @@ class Conversation(BaseModel):
     mapping: dict
 
 
+default_embed_fn = embedding_functions.OllamaEmbeddingFunction(
+            url="http://localhost:11434/api/embeddings",
+            model_name="llama3",)
+
+
 class ChatGPTChromaDBRetriever(dspy.Retrieve):
     def __init__(self,
-                 json_file_path: str = data_dir("conversations.json"),
+                 json_file_path: str = data_dir() / "chatgpt_logs" / "conversations.json",
                  collection_name: str = "chatgpt",
                  persist_directory: str = data_dir(),
+                 check_for_updates: bool = True,
+                 embed_fn=default_embed_fn,
                  k=5):
         """Initialize the ChatGPTChromaDBRetriever."""
         super().__init__(k)
@@ -73,10 +80,14 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
         self.k = k
         self.persist_directory = Path(persist_directory)
         self.client = chromadb.PersistentClient(path=str(self.persist_directory))
-        self.embedding_function = embedding_functions.DefaultEmbeddingFunction()
+        self.embedding_function = embed_fn
         self.collection = self.client.get_or_create_collection(name=self.collection_name,
                                                                embedding_function=self.embedding_function)
         self.persist_directory.mkdir(parents=True, exist_ok=True)
+
+        if not check_for_updates:
+            return
+
         self.current_checksum = calculate_file_checksum(json_file_path)
         self.last_processed_checksum = self._load_last_processed_checksum()
 
@@ -98,7 +109,11 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
 
     def _process_and_store_conversations(self):
         with open(self.json_file_path, "rb") as json_file:
+            count = -1
+
             for conversation in ijson.items(json_file, "item"):
+                count += 1
+                print(f"Processing conversation #{count} {conversation['title']}")
                 try:
                     validated_conversation = Conversation(**conversation)
                     for _, data in validated_conversation.mapping.items():
@@ -107,11 +122,15 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
                         # Search if document already exists
                         search_results = self.collection.get(ids=[validated_data.id])
                         if len(search_results["ids"]) > 0:
-                            logger.info(f"Skipping already existing document with ID: {validated_data.id}")
-                            return
+                            logger.info(f"Skipping already existing document #{count} with ID: {validated_data.id}")
+                            continue
 
                         if validated_data.message:
                             document_text = ' '.join(part for part in validated_data.message.content.parts if part)
+
+                            if len(document_text) < 200:
+                                continue
+
                             self.collection.add(documents=[document_text], metadatas=[{"id": validated_data.id}],
                                                 ids=[validated_data.id])
                             logger.debug(f"Added document with ID: {validated_data.id}")
@@ -126,9 +145,6 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
                     validated_conversation = Conversation(**conversation)
                     for _, data in validated_conversation.mapping.items():
                         validated_data = Data(**data)
-
-                        # Search if document already exists
-                        search_results = self.collection.get(ids=[validated_data.id])
 
                         if validated_data.message:
                             document_text = ' '.join(part for part in validated_data.message.content.parts if part)
@@ -188,34 +204,27 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
         return results["documents"][0]
 
 
-def main3():
-    from dspygen.utils.dspy_tools import init_dspy
-    from dspygen.lm.groq_lm import Groq
-    init_dspy(lm_class=Groq, model="mixtral-8x7b-32768")
+def main():
+    from dspygen.utils.dspy_tools import init_ol
 
-    retriever = ChatGPTChromaDBRetriever()
-    query = "Revenue Operations Automation"
-    matched_conversations = retriever.forward(query, k=10)
+    init_ol()
+
+    retriever = ChatGPTChromaDBRetriever(check_for_updates=True)
+    retriever._update_collection_metadata()
+
+    query = ""
+    matched_conversations = retriever.forward(query, k=5)
     # print(count_tokens(str(matched_conversations) + "\nI want a DSPy module that generates Python source code."))
     for conversation in matched_conversations:
         logger.info(conversation)
 
-    logger.info(python_source_code_call(str(matched_conversations)))
+    # logger.info(python_source_code_call(str(matched_conversations)))
 
 
 def main2():
     """Updating metadata of the collection"""
-    retriever = ChatGPTChromaDBRetriever()
-    # retriever._update_collection_metadata()
-
-
-def main():
-    retriever = ChatGPTChromaDBRetriever()
-    query = "Retriever"
-    matched_conversations = retriever.forward(query, contains="CodeRetriever")
-    # print(count_tokens(str(matched_conversations) + "\nI want a DSPy module that generates Python source code."))
-    for conversation in matched_conversations:
-        logger.info(conversation)
+    retriever = ChatGPTChromaDBRetriever(check_for_updates=False)
+    retriever._update_collection_metadata()
 
 
 if __name__ == "__main__":

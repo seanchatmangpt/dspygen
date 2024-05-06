@@ -104,7 +104,7 @@ def main():
 
     # DataWriter(data).forward()
     from dspygen.rm.data_retriever import DataRetriever
-    print(DataRetriever("/Users/candacechatman/dev/dspygen/src/dspygen/writer/Book_Title_Author_Price_Sold_Copies.csv").forward())
+    print(DataRetriever("/Users/sac/dev/dspygen/src/dspygen/writer/Book_Title_Author_Price_Sold_Copies.csv").forward())
 
 
 # Usage example

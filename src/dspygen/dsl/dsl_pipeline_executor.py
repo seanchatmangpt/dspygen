@@ -74,7 +74,7 @@ async def run_pipeline(request: PipelineRequest):
 
 
 def main():
-    context = execute_pipeline('/Users/candacechatman/dev/dspygen/src/dspygen/dsl/examples/example_pipeline.yaml')
+    context = execute_pipeline('/Users/sac/dev/dspygen/src/dspygen/dsl/examples/example_pipeline.yaml')
     # context = execute_pipeline(str(dsl_dir('examples/text_signature_pipeline.yaml')),
     #                            {"raw_data": "id,name,job\n1,Joe,Coder"})
     # context = execute_pipeline(str(dsl_dir('examples/sql_to_nl.yaml')),

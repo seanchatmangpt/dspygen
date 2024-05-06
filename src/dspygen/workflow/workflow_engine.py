@@ -85,7 +85,7 @@ async def main():
     asys = ActorSystem()
     engine = await asys.actor_of(WorkflowEngine)
 
-    wf_path = "/Users/candacechatman/dev/dspygen/src/dspygen/workflow/data_analysis_workflow.yaml"
+    wf_path = "/Users/sac/dev/dspygen/src/dspygen/workflow/data_analysis_workflow.yaml"
     await asys.publish(StartCommand(wf_path=wf_path))
 
     while True:

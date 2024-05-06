@@ -63,7 +63,7 @@ def process_conversations_chunk(chunk):
 
 def main():
     # Define the path to your large JSON file
-    json_file_path = "/Users/candacechatman/dev/dspygen/data/conversations.json"
+    json_file_path = "/Users/sac/dev/dspygen/data/conversations.json"
 
     # Open the JSON file for streaming
     with open(json_file_path, "rb") as json_file:

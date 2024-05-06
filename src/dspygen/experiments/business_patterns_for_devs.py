@@ -5,7 +5,7 @@ from dspygen.utils.dspy_tools import init_dspy
 
 
 def main():
-    drt = DocRetriever(path="/Users/candacechatman/Downloads/BusPatterns.pdf")
+    drt = DocRetriever(path="/Users/sac/Downloads/BusPatterns.pdf")
     business_text = drt.forward()
     print(business_text)
 

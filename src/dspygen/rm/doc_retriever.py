@@ -83,7 +83,7 @@ class DocRetriever(dspy.Retrieve):
 
 
 def main():
-    drt = DocRetriever(path="/Users/candacechatman/Downloads/consulting-contract.pdf")
+    drt = DocRetriever(path="/Users/sac/Downloads/consulting-contract.pdf")
     print(drt.forward())
 
     # from dspygen.utils.file_tools import tmp_file

@@ -84,7 +84,7 @@ async def acreate(*, config: Optional[LLMConfig] = None, **kwargs):
         from llama_cpp import Llama
 
         llm = Llama(
-            model_path="/Users/candacechatman/dev/models/codellama-7b.Q4_0.gguf"
+            model_path="/Users/sac/dev/models/codellama-7b.Q4_0.gguf"
         )
 
         response = llm(
