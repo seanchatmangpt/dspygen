@@ -9,10 +9,9 @@ from dspygen.modules.python_source_code_module import python_source_code_call
 
 
 class CoderAgent(FSMMixin):
-    def __init__(self):
+    def __init__(self, requirements: str):
         super().setup_fsm(CoderAgentState, initial=CoderAgentState.ANALYZING_REQUIREMENTS)
-        prompt = "Write a tic tac toe pygame."
-        self.requirements = prompt
+        self.requirements = requirements
         self.code = ""
         self.errors = []
         self.test_results = ""
@@ -86,9 +85,9 @@ class CoderAgent(FSMMixin):
 
 
 def main():
-    from dspygen.utils.dspy_tools import init_dspy
-    init_dspy(max_tokens=3000)
-    agent = CoderAgent()
+    from dspygen.utils.dspy_tools import init_ol
+    init_ol(max_tokens=3000)
+    agent = CoderAgent("Make a request to an API and return the response.")
     print("Initial state:", agent.state)
     agent.start_coding()
     agent.test_code()
