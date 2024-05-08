@@ -1,22 +1,14 @@
 import dspy
+from dspy.teleprompt import MIPRO
 
 from dspygen.experiments.mock_gen.swe_bench import SWEBench
 from dspygen.utils.dspy_tools import init_ol
 
 
-class IssueToPatchSignature(dspy.Signature):
-    """Transforms software issues into actionable patches. In the style of a FAANG System Architect interview question solution."""
-    # Input field representing the issue to be addressed
-    issue = dspy.InputField(desc="Detailed description of the software issue.")
-
-    # Output field representing the patch
-    patch = dspy.OutputField(desc="Proposed patch to resolve the issue.")
-
-
 class CoT(dspy.Module):
     def __init__(self):
         super().__init__()
-        self.prog = dspy.ChainOfThought(IssueToPatchSignature)
+        self.prog = dspy.ChainOfThought("issue -> patch")
 
     def forward(self, issue):
         return self.prog(issue=issue)
@@ -30,7 +22,7 @@ def main():
 
     # Load the SWE-bench dataset
     swe_bench = SWEBench()
-    swe_bench_trainset, swe_bench_devset = swe_bench.train[:5], swe_bench.dev[:5]
+    swe_bench_trainset, swe_bench_devset = swe_bench.train[:25], swe_bench.dev[:25]
 
     print(swe_bench_trainset)
 
@@ -40,14 +32,11 @@ def main():
     # Define a custom metric for evaluating patches
     def swebench_metric(gold, pred, trace=None):
         # This is a placeholder metric; adjust based on actual evaluation needs
-        if gold.patch == pred.patch:
-            print(f"Gold: {gold.patch} matched with Pred: {pred.patch}")
         return gold.patch == pred.patch
 
-    teleprompter = BootstrapFewShot(metric=swebench_metric, **config)
+    teleprompter = MIPRO(metric=swebench_metric, **config)
     optimized_cot = teleprompter.compile(CoT(), trainset=swe_bench_trainset)
-    from time import time
-    optimized_cot.save(f"optimized_cot_sig_{str(time())}.json")
+    optimized_cot.save("optimized_cot.json")
 
     from dspy.evaluate import Evaluate
 
@@ -57,6 +46,7 @@ def main():
 
     # Evaluate our `optimized_cot` program.
     evaluate(optimized_cot)
+
 
     lm.inspect_history(n=1)
 

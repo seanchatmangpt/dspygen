@@ -15,13 +15,14 @@ class SWEBenchData(BaseModel):
     repo: str = Field(description="The repository owner/name identifier from GitHub.")
     base_commit: str = Field(description="The commit hash of the repository representing the HEAD of the repository before the solution PR is applied.")
     hints_text: str = Field(description="Comments made on the issue prior to the creation of the solution PR’s first commit creation date.")
+    text: str = Field(description="The generated text according to the retrieval criterion and the style-2 prompt found in github:SWE-bench.")
     created_at: str = Field(description="The creation date of the pull request.")
     test_patch: str = Field(description="A test-file patch that was contributed by the solution PR.")
     problem_statement: str = Field(description="The issue title and body.")
     version: str = Field(description="Installation version to use for running evaluation.")
     environment_setup_commit: str = Field(description="Commit hash to use for environment setup and installation.")
-    FAIL_TO_PASS: Optional[List[str]] = Field(default=None, description="A list of strings that represent the set of tests resolved by the PR and tied to the issue resolution.")
-    PASS_TO_PASS: Optional[List[str]] = Field(default=None, description="A list of strings that represent tests that should pass before and after the PR application.")
+    # FAIL_TO_PASS: Optional[List[str]] = Field(default=None, description="A list of strings that represent the set of tests resolved by the PR and tied to the issue resolution.")
+    # PASS_TO_PASS: Optional[List[str]] = Field(default=None, description="A list of strings that represent tests that should pass before and after the PR application.")
 
 
 def get_instance_by_id(dataset, instance_id):
@@ -57,16 +58,20 @@ class SWEBench:
         official_test = []
 
         for example in tqdm.tqdm(hf_official_train):
-            issue = example['problem_statement']
+            print(example)
+            issue = f"{example['problem_statement']}\n\n{example['hints_text']}"
             patch = example['patch']
             test_patch = example['test_patch']
 
             official_train.append(dict(issue=issue, patch=patch, test_patch=test_patch))
 
         for example in tqdm.tqdm(hf_official_test):
-            issue = example['problem_statement']
+            issue = f"{example['problem_statement']}\n\n{example['hints_text']}"
             patch = example['patch']
             test_patch = example['test_patch']
+
+            if len(test_patch) == 0:
+                continue
 
             official_test.append(dict(issue=issue, patch=patch, test_patch=test_patch))
 

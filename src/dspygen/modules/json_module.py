@@ -1,20 +1,17 @@
-"""
-
-"""
 import json
+import typing
 from datetime import datetime, timedelta
 
-import dspy
 from pydantic import BaseModel
 
 from dspygen.utils.dspy_tools import init_dspy
 
 import dspy
 
-import dspy
-
 from dspygen.utils.json_tools import extract
-from dspygen.utils.pydantic_tools import extract_valid_dicts
+
+
+Model = typing.TypeVar('Model', bound='BaseModel')
 
 
 class GenerateJSONFromText(dspy.Signature):
@@ -99,9 +96,12 @@ class JsonModule(dspy.Module):
         # VEvent.
 
 
-def json_call(schema, text):
-    json_mod = JsonModule()
-    return json_mod.forward(schema=schema, text=text)
+def json_call(model: type[Model], text: str) -> Model:
+    """Takes the JSON schema and text and returns the JSON object as a string."""
+    json_module = JsonModule()
+    instance = model.model_validate_json(json_module.forward(schema=model.model_json_schema(), text=text))
+    print(instance)
+    return instance
 
 
 def main():

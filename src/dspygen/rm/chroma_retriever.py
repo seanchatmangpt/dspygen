@@ -40,9 +40,9 @@ def query_collection(collection, embeddings: List, k: int, contains: Optional[st
     return results["documents"]
 
 
-class ChatGPTRetriever(dspy.Retrieve):
+class ChromaRetriever(dspy.Retrieve):
     def __init__(self,
-                 collection_name: str = "chatgpt",
+                 collection_name: str,
                  persist_directory: str = data_dir(),
                  embed_fn=default_embed_fn,
                  k=5):
@@ -66,7 +66,7 @@ def main2():
     from loguru import logger
     init_dspy(model="gpt-4")
 
-    retriever = ChatGPTRetriever()
+    retriever = ChromaRetriever()
     query = "Revenue Operations Automation"
     matched_conversations = retriever.forward(query, k=100)
     # print(count_tokens(str(matched_conversations) + "\nI want a DSPy module that generates Python source code."))
@@ -80,7 +80,7 @@ def main2():
 def main():
     from dspygen.utils.dspy_tools import init_ol
     init_ol(max_tokens=4000)
-    retriever = ChatGPTRetriever()
+    retriever = ChromaRetriever("chatgpt")
     query = "MIPRO"
 
     matched_conversations = retriever.forward(query, k=10, contains=query)

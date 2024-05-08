@@ -1,10 +1,8 @@
 import requests
-from html2text import html2text
+# from html2text import html2text
 import requests
-from duckduckgo_search import DDGS
+# from duckduckgo_search import DDGS
 
-
-from duckduckgo_search import DDGS
 
 def execute_duckduckgo_queries(queries: dict, max_results=5):
     """
@@ -20,7 +18,7 @@ def execute_duckduckgo_queries(queries: dict, max_results=5):
 
     for objective, query in queries.items():
         print(f"Executing query for {objective}: {query}")
-        results = DDGS().text(query, max_results=max_results)
+        results = {}  # DDGS().text(query, max_results=max_results)
 
         print(f"Results for {objective}: {results}")
 
@@ -97,7 +95,7 @@ def scrape_urls(urls):
     for url in urls:
         response = requests.get(url)
         if response.status_code == 200:
-            text = html2text(response.text)
+            text = ""  # html2text(response.text)
             contents.append(text)
         else:
             contents.append("")
