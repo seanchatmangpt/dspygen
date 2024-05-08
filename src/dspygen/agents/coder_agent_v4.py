@@ -4,6 +4,7 @@ import tempfile
 
 from dspygen.agents.coder_agent import CoderAgentState
 from dspygen.mixin.fsm.fsm_mixin import trigger, FSMMixin
+from dspygen.modules.fsm_trigger_module import fsm_trigger_call
 from dspygen.modules.function_invoke_module import function_invoke_call
 from dspygen.modules.python_source_code_module import python_source_code_call
 
@@ -56,7 +57,7 @@ class CoderAgent(FSMMixin):
         print("Handling coding errors.")
         self.errors.clear()
 
-    @trigger(source=CoderAgentState.HANDLING_ERRORS, dest=CoderAgentState.REFACTORING_CODE, conditions=['errors_resolved'])
+    @trigger(source=[CoderAgentState.TESTING_CODE, CoderAgentState.HANDLING_ERRORS], dest=CoderAgentState.REFACTORING_CODE, conditions=['errors_resolved'])
     def refactor_code(self):
         """Refactor code after errors are resolved."""
         self.code = "# Added by refactoring\n" + self.code
@@ -89,12 +90,11 @@ def main():
     init_ol(max_tokens=3000)
     agent = CoderAgent("Make a request to an API and return the response.")
     print("Initial state:", agent.state)
-    agent.start_coding()
-    agent.test_code()
-    if agent.errors_detected():
-        agent.handle_errors()
-        agent.refactor_code()
-    agent.complete_task()
+
+    fsm_trigger_call("I want you to start coding for me", agent)
+    fsm_trigger_call("I want you to test the code", agent)
+    fsm_trigger_call("I want you to refactor the code", agent)
+    fsm_trigger_call("I want you to complete the task", agent)
     print("Final state:", agent.state)
 
 

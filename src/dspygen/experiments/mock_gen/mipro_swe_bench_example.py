@@ -1,8 +1,14 @@
 import dspy
-
+from dspy.evaluate import Evaluate
+from dspy.teleprompt import MIPRO
 from dspygen.experiments.mock_gen.swe_bench import SWEBench
 from dspygen.utils.dspy_tools import init_ol
 
+# Initialize DSPy settings with a retrieval model and a language model
+colbert_v2_endpoint = "http://20.102.90.50:2017/wiki17_abstracts"
+colbertv2 = dspy.ColBERTv2(url=colbert_v2_endpoint)
+lm = init_ol()
+dspy.settings.configure(rm=colbertv2, lm=lm)
 
 class IssueToPatchSignature(dspy.Signature):
     """ Transforms detailed descriptions of software issues, especially those occurring in high-stakes, large-scale production environments (such as those at FAANG companies), into actionable, ready-to-deploy git patch files. This Signature class focuses on creating highly reliable and targeted solutions that can be applied with a near-certain guarantee of success, backed by a deep understanding of system architecture and software engineering best practices. Ideal for simulating the process of a FAANG System Architect resolving complex software issues under stringent operational requirements, where patches must achieve near-perfect reliability to maintain system integrity and performance. """
@@ -19,55 +25,43 @@ extensive comments and adhering to industry-leading software engineering standar
 Designed to ensure seamless integration and deployment, minimizing disruption and maximizing system stability.",
                                       prefix="```diff\n")
 
-
-class CoT(dspy.Module):
+class GeneratePatch(dspy.Module):
     def __init__(self):
         super().__init__()
-        self.prog = dspy.ChainOfThought(IssueToPatchSignature)
+        self.generate_patch = dspy.ChainOfThought(IssueToPatchSignature)
 
     def forward(self, issue):
-        return self.prog(issue=issue)
-
+        return self.generate_patch(issue=issue)
 
 def main():
     """Main function"""
-    from dspy.teleprompt import BootstrapFewShot
-    # Set up the LM
-    lm = init_ol(model="phi3:instruct", max_tokens=20000)
-    # lm = init_ol(model="llama3", max_tokens=20000)
-
-    # Load the SWE-bench dataset
+    # Load SWEBench dataset
     swe_bench = SWEBench()
-    swe_bench_trainset, swe_bench_devset = swe_bench.train[:50], swe_bench.dev[:50]
+    trainset = swe_bench.train[:50]  # Example subset for training
+    devset = swe_bench.dev[:50]  # Example subset for development
 
-    # print(swe_bench_trainset)
+    # Initialize the program
+    program = GeneratePatch()
 
-    # Set up the optimizer: we want to "bootstrap" (i.e., self-generate) 4-shot examples of our CoT program.
-    config = dict(max_bootstrapped_demos=4, max_labeled_demos=4)
+    # Define a metric for evaluating the effectiveness of the patches
+    def patch_effectiveness_metric(gold, pred, trace=None):
+        return gold.patch == pred.git_patch_diff  # This is a simplification; you might need a more complex comparison
 
-    # Define a custom metric for evaluating patches
-    def swebench_metric(gold, pred, trace=None):
-        # This is a placeholder metric; adjust based on actual evaluation needs
-        if gold.patch == pred.git_patch_diff:
-            print(f"Gold: {gold.patch} matched with Pred: {pred.git_patch_diff}")
-        return gold.patch == pred.git_patch_diff
+    # Initialize MIPRO for optimizing the generation of patches
+    teleprompter = MIPRO(prompt_model=lm, task_model=lm, metric=patch_effectiveness_metric, num_candidates=10,
+                         init_temperature=1.0, verbose=True, )
+    compiled_program = teleprompter.compile(program, trainset=trainset, num_trials=30,
+                                            max_bootstrapped_demos=1, max_labeled_demos=2,
+                                            eval_kwargs={'num_threads': 10, 'display_progress': True},
+                                            requires_permission_to_run=False)
 
-    teleprompter = BootstrapFewShot(metric=swebench_metric, **config)
-    optimized_cot = teleprompter.compile(CoT(), trainset=swe_bench_trainset)
     from time import time
-    optimized_cot.save(f"optimized_cot_sig_{str(time())}.json")
+    compiled_program.save(f"optimized_swe_mipro_program_{str(time())}.json")
 
-    from dspy.evaluate import Evaluate
-
-    # Set up the evaluator, which can be used multiple times.
-    evaluate = Evaluate(devset=swe_bench_devset, metric=swebench_metric, num_threads=12, display_progress=True,
-                        display_table=0)
-
-    # Evaluate our `optimized_cot` program.
-    evaluate(optimized_cot)
-
-    print(lm.inspect_history(n=1))
-
+    # Evaluate the optimized program
+    evaluate = Evaluate(devset=devset, metric=patch_effectiveness_metric, num_threads=10, display_progress=True)
+    results = evaluate(compiled_program)
+    print(f"Evaluation Results: {results}")
 
 if __name__ == '__main__':
     main()

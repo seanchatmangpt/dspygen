@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field
 
 from dspygen.modules.gen_pydantic_instance_module import GenPydanticInstance
-from dspygen.utils.dspy_tools import init_dspy
+from dspygen.utils.dspy_tools import init_dspy, init_ol
+
 
 class EventStormingDomainSpecificationModel(BaseModel):
     """Integrates Event Storming with RDDDY and DFLSS to capture and analyze domain complexities through events, commands,
@@ -89,17 +90,22 @@ At the time of the shipping lable being produced, the event should halt moving t
 
 Once the questionnaire is complete, the browser s closed, the questionnare cerificate id be posted and included to be printed to shipping label.
 
-The decision tree selection is based on types of products in the order and should be managed / created by business analysts."""
+The decision tree selection is based on types of products in the order and should be managed / created by business analysts.
+
+"""
 
 
 def main():
-    init_dspy(model="gpt-4")
+    # init_ol(model="llama3")
+    init_ol()
 
-    pred = GenPydanticInstance(root_model=EventStormingDomainSpecificationModel)
+    from dspygen.modules.gen_pydantic_instance import instance
+    inst = instance(EventStormingDomainSpecificationModel, requirements)
+    print(inst)
 
-    model = pred(requirements)
-
-    print(model)
+    # from dspygen.modules.json_module import json_call
+    # mdl = json_call(EventStormingDomainSpecificationModel, requirements)
+    # print(mdl)
 
 
 

@@ -58,7 +58,6 @@ class SWEBench:
         official_test = []
 
         for example in tqdm.tqdm(hf_official_train):
-            print(example)
             issue = f"{example['problem_statement']}\n\n{example['hints_text']}"
             patch = example['patch']
             test_patch = example['test_patch']

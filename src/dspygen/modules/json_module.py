@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 from pydantic import BaseModel
 
-from dspygen.utils.dspy_tools import init_dspy
+from dspygen.utils.dspy_tools import init_dspy, init_ol
 
 import dspy
 
@@ -56,7 +56,8 @@ class GenerateJSONFromText(dspy.Signature):
     text_information = dspy.InputField(desc="Text information in structured or unstructured format. To be converted into a JSON object.")
 
     # The output JSON object, as a string, based on the processed text information.
-    json_object = dspy.OutputField(desc="YOUR ONLY OUTPUT IS THE JSON OBJECT. Ensure it adheres to the provided JSON schema. Do not include the schema in the output.")
+    json_object = dspy.OutputField(desc="YOUR ONLY OUTPUT IS THE JSON OBJECT. Ensure it adheres to the provided JSON schema. Do not include the schema in the output.",
+                                   prefix="Only return the JSON object based on the provided text information and schema.\n\n```json\n")
 
 
 # RFC 5545 VEvent
@@ -87,6 +88,7 @@ class JsonModule(dspy.Module):
     def forward(self, text, schema):
         pred = dspy.Predict(GenerateJSONFromText)
         self.output = pred(json_schema=str(schema), text_information=text).json_object
+        self.output = extract(self.output)
         return self.output
         
     def pipe(self, input_str):
@@ -99,15 +101,13 @@ class JsonModule(dspy.Module):
 def json_call(model: type[Model], text: str) -> Model:
     """Takes the JSON schema and text and returns the JSON object as a string."""
     json_module = JsonModule()
-    instance = model.model_validate_json(json_module.forward(schema=model.model_json_schema(), text=text))
-    print(instance)
+    model_dict = json_module.forward(schema=model.model_json_schema(), text=text)
+    instance = model.model_validate(model_dict)
     return instance
 
 
 def main():
-    from dspygen.lm.groq_lm import Groq
-    # init_dspy(Groq, 1000, "mixtral-8x7b-32768")
-    init_dspy(Groq, max_tokens=1000, model= "llama3-70b-8192") # for Groq you must pass an Groq provided model
+    init_ol()
     # Create fake data
     import faker
     fake = faker.Faker()
@@ -116,9 +116,8 @@ def main():
     text = (f"Hi Jane, I hope you are doing well. I wanted to remind you about our meeting tomorrow at 10:00 AM. "
             f"Today:{datetime.now()} Tomorrow:{datetime.now() + timedelta(days=1)} "
             f"Location: {fake.address()} Description: {fake.text()}")
-    result = json_call(schema=VEvent.model_json_schema(), text=text)
-    res_dict = extract(result)
-    print(VEvent.model_validate_json(json.dumps(res_dict)))
+    result = json_call(VEvent, text=text)
+    print(result)
 
 
 if __name__ == '__main__':
