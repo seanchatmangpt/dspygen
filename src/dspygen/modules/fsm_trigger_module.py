@@ -26,7 +26,7 @@ class FSMTriggerModule(dspy.Module):
         from dspygen.modules.json_module import json_call
         possible_triggers = "\n".join(fsm.possible_triggers())
 
-        text = (f"```prompt\n{prompt}```\n\n"
+        text = (f"```prompt\n{prompt}\n```\n\n"
                 f"Choose from Possible State Transition Triggers based on prompt:\n\n```possible_triggers\n{possible_triggers}\n```\n\n"
                 f"You must choose one of the possible triggers to proceed.")
 

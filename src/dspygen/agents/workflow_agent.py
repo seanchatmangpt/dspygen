@@ -1,47 +1,13 @@
+from dspygen.agents.business_logic import *
 from dspygen.agents.order_payload import OrderPayload
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 from enum import Enum, auto
 import logging
 
 # Setup basic configuration for logging
-logging.basicConfig(level=logging.INFO, format='== APP == %(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+logging.basicConfig(level=logging.INFO, format='== APP == %(asctime)s %(levelname)s: %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
 
-# Business logic functions
-def notify_activity(message):
-    """Log notifications about the workflow."""
-    logging.info(message)
-
-def process_payment_activity(order_id, amount):
-    """Process and authorize the payment for an order."""
-    logging.info(f"Processing payment: {order_id} for ${amount}")
-    return True
-
-def verify_inventory_activity(item_name, quantity, inventory):
-    """Check if there is enough inventory present for the purchase."""
-    available = inventory.get(item_name, 0)
-    if available >= quantity:
-        logging.info(f"VerifyInventoryActivity: There are {available} {item_name}s available for purchase")
-        return True
-    else:
-        logging.info("VerifyInventoryActivity: Insufficient inventory!")
-        return False
-
-def update_inventory_activity(item_name, quantity, inventory):
-    """Remove the requested items from inventory and update the store."""
-    if inventory[item_name] >= quantity:
-        inventory[item_name] -= quantity
-        logging.info(f"UpdateInventoryActivity: There are now {inventory[item_name]} {item_name}s left in stock")
-        return True
-    else:
-        logging.error(f"UpdateInventoryActivity: Failed to update inventory for {item_name}")
-        return False
-
-def request_approval_activity(order_id, amount):
-    """Request manager's approval if the payment amount is over $50,000."""
-    if amount > 50000:
-        logging.info(f"RequestApprovalActivity: Requesting approval for payment of ${amount} USD for order {order_id}")
-        return True
-    return False
 
 # FSM State Enum
 class WorkflowAgentState(Enum):
@@ -51,9 +17,11 @@ class WorkflowAgentState(Enum):
     MONITORING = auto()
     COMPLETING = auto()
 
+
 # FSM Agent Class
 class WorkflowFSMAgent(FSMMixin):
     def __init__(self, dapr_adapter, baseInventory):
+        super().__init__()
         super().setup_fsm(state_enum=WorkflowAgentState, initial=WorkflowAgentState.INITIALIZING)
         self.dapr_adapter = dapr_adapter
         self.baseInventory = baseInventory
@@ -76,7 +44,8 @@ class WorkflowFSMAgent(FSMMixin):
     def start_workflow(self, item_name, order_quantity):
         total_cost = int(order_quantity) * self.baseInventory[item_name].per_item_cost
         self.order_payload = OrderPayload(item_name=item_name, quantity=int(order_quantity), total_cost=total_cost)
-        start_resp = self.dapr_adapter.start_workflow(self.workflow_component, self.workflow_name, input=self.order_payload)
+        start_resp = self.dapr_adapter.start_workflow(self.workflow_component, self.workflow_name,
+                                                      input=self.order_payload)
         self.workflow_instance_id = start_resp.instance_id
 
     @trigger(source=WorkflowAgentState.PROCESSING, dest=WorkflowAgentState.MONITORING)
@@ -93,7 +62,8 @@ class WorkflowFSMAgent(FSMMixin):
         print("Resetting workflow agent state")
 
     def prompt_for_approval(self):
-        self.dapr_adapter.raise_workflow_event(self.workflow_instance_id, self.workflow_component, "manager_approval", {'approval': True})
+        self.dapr_adapter.raise_workflow_event(self.workflow_instance_id, self.workflow_component, "manager_approval",
+                                               {'approval': True})
 
     def check_workflow_state(self):
         state = self.dapr_adapter.get_workflow(self.workflow_instance_id, self.workflow_component)
