@@ -2,6 +2,7 @@ import inspect
 
 from transitions import Machine
 from transitions.core import State
+from dspygen.modules.fsm_trigger_module import fsm_trigger_call
 
 import functools
 
@@ -55,6 +56,11 @@ def trigger(source, dest, conditions=None, unless=None, before=None, after=None,
 
 
 class FSMMixin:
+    def __init__(self):
+        self.states = []
+        self.machine = None
+        self.state = None
+
     def setup_fsm(self, state_enum, initial=None):
         self.states = [State(state.name) for state in state_enum]
 
@@ -85,6 +91,9 @@ class FSMMixin:
     def possible_triggers(self):
         # Get possible destination states from the current state
         return self.machine.get_triggers(self.state)
+
+    def prompt(self, prompt, **kwargs):
+        return fsm_trigger_call(prompt, self, **kwargs)
 
 
 def state_transition_possibilities(fsm):
