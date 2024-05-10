@@ -1,7 +1,7 @@
 import json
 
 
-def extract(string):
+def extract(string) -> dict or None:
     bracket_pairs = {
         '{': '}',
         '[': ']',

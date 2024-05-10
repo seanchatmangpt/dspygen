@@ -1,0 +1,10 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Proposed Instruction: Based on the provided `input` (data) and given a specific `instruction` detailing what analysis or transformation needs to be done, craft an output that succinctly captures the essence of this task. Use clear language and precise requirements in your instructions.",
+    "signature_prefix": "To generate the result, analyze\/transform as instructed by considering the input provided.\n\nFor example, if you are given an `input` which is a collection of restaurant reviews and the `instruction` asks to extract key sentiments (positive or negative), the proposed prefix would be \"From analyzing the array of review texts provided, synthesize the dominant sentiment expressed in each."
+  }
+}

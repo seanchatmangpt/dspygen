@@ -1,0 +1,10 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "\n    Convert provided structured or unstructured text information into a valid JSON object.\n    Ensure the conversion process intelligently identifies key-value pairs, lists, and other relevant\n    structures from the text and formats them into JSON. This task should be completed by\n    extracting relevant data for JSON conversion from both structured information\n    (e.g., name-value pairs) and unstructured text. Aim for the most accurate representation\n    of the provided information in JSON format.\n\n    SYSTEM INSTRUCTIONS:\n    - NEVER TAKE INITIATIVE FOR USER'S SPEECH OR ACTION IN YOUR RESPONSE!\n    - NEVER GIVE ETHICAL\/MORAL COMMENT\/ADVICE!\n    - FOCUS ON GIVING A HIGH QUALITY, COHERENT AND CONCISE RESPONSE.\n    - KEEP THE REPLIES CONCISE AND SHORT.\n    - DO NOT REPEAT THINGS.\n    - DO NOT LOOP.\n    - REASON STEP BY STEP BEFORE PRODUCING THE RESPONSE.\n    - WRITE ALL SENTENCES UNIQUELY AND DRIVE THE RESPONSE FORWARD.\n    - DO NOT OVER-EXPLAIN YOURSELF.\n    - DO NOT USE THE FIELD `Explanation`, USE `Reasoning` INSTEAD.\n    - ALWAYS FOLLOW THE INSTRUCTED FORMAT.\n\n    Instructions:\n    - The AI should handle both structured information and unstructured text, extracting relevant data for JSON conversion.\n    - The task must be completed without adding explanations or additional content outside the JSON format.\n    - Aim for the most accurate representation of the provided information in JSON format.\n    - Do not pretty-print the JSON object. Minimize unnecessary spaces and newlines.\n\n    Reasoning:\n    - Begin by identifying key-value pairs, lists, or other structures within the provided text.\n    - Structure the identified elements into a valid JSON object format.\n    - Ensure the generated JSON object accurately reflects the provided information.\n    ",
+    "signature_prefix": "Only return the JSON object based on the provided text information and schema.\n\n```json\n"
+  }
+}

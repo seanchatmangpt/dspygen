@@ -20,7 +20,7 @@ to ensure a highly contextual and accurate patch formulation.")
 
     # Output field: A git-formatted patch file, thoroughly commented and adhering to best
     # software engineering practices, ready for deployment in production systems.
-    git_patch_diff = dspy.OutputField(desc="A meticulously crafted git patch file, incorporating \
+    patch = dspy.OutputField(desc="A meticulously crafted git patch file, incorporating \
 extensive comments and adhering to industry-leading software engineering standards. \
 Designed to ensure seamless integration and deployment, minimizing disruption and maximizing system stability.",
                                       prefix="```diff\n")
@@ -37,20 +37,20 @@ def main():
     """Main function"""
     # Load SWEBench dataset
     swe_bench = SWEBench()
-    trainset = swe_bench.train[:50]  # Example subset for training
-    devset = swe_bench.dev[:50]  # Example subset for development
+    trainset = swe_bench.train[:1]  # Example subset for training
+    devset = swe_bench.dev[:1]  # Example subset for development
 
     # Initialize the program
     program = GeneratePatch()
 
     # Define a metric for evaluating the effectiveness of the patches
     def patch_effectiveness_metric(gold, pred, trace=None):
-        return gold.patch == pred.git_patch_diff  # This is a simplification; you might need a more complex comparison
+        return gold.patch == pred.patch  # This is a simplification; you might need a more complex comparison
 
     # Initialize MIPRO for optimizing the generation of patches
-    teleprompter = MIPRO(prompt_model=lm, task_model=lm, metric=patch_effectiveness_metric, num_candidates=10,
+    teleprompter = MIPRO(prompt_model=lm, task_model=lm, metric=patch_effectiveness_metric, num_candidates=2,
                          init_temperature=1.0, verbose=True, )
-    compiled_program = teleprompter.compile(program, trainset=trainset, num_trials=30,
+    compiled_program = teleprompter.compile(program, trainset=trainset, num_trials=2,
                                             max_bootstrapped_demos=1, max_labeled_demos=2,
                                             eval_kwargs={'num_threads': 10, 'display_progress': True},
                                             requires_permission_to_run=False)

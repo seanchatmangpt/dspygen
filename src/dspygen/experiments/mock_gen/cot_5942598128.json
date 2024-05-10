@@ -1,0 +1,10 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Turn the schema and prompt in to a JSON completion.",
+    "signature_prefix": "Only return the JSON object based on the provided text information and schema.\n\n```json\n"
+  }
+}

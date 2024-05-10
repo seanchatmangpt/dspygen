@@ -1,0 +1,10 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "```json\n{\n  \"name\": \"Jane Doe\",\n  \"age\": 29,\n  \"profession\": \"Data Analyst\",\n  \"contact\": {\n    \"email\": \"jane.doe@example.com\"\n  }\n}\n```",
+    "signature_prefix": "```json\n{\n  \"name\": \"Jane Doe\",\n  \"age\": 29,\n  \"profession\": \"Data Analyst\",\n  \"contact\": {\n    \"email\": \"jane.doe@example.com\"\n  }\n}\n```"
+  }
+}

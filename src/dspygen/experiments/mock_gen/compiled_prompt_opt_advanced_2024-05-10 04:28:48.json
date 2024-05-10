@@ -1,0 +1,10 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Define: Accept a body of text containing key-value pairs with the goal of converting this data into a valid JSON structure adhering to a specified schema, ensuring high fidelity and precision in representing information values for model processing tasks.\nMeasure: Evaluate current methods employed by language models when handling input conversion from plain text to structured JSON, assess their error rates, processing times, and output consistency.\nAnalyze: Identify patterns of inconsistencies or bottlecks in the existing data transformation approach that may cause deviations from Six Sigma quality levels, specifically addressing non-compliance with required JSON schema fields or misalignments in data types.\nImprove: Restructure the provided instruction sequence to include step-by-step guidelines for converting text input into a structured JSON format. Incorporate explicit checks and validations against schema requirements, optimize parsing logic for performance, and apply error handling procedures that facilitate accurate data translation with minimal defects.\nControl: Develop monitoring processes and continuous feedback mechanisms to ensure the revised instruction maintains a high standard of accuracy (99.9999996%) post-implementation. Establish protocols for routine validation and correction tasks, along with updates in response patterns according to emerging model improvements or schema changes.",
+    "signature_prefix": "JSON_Conversion_Optimizer_Start"
+  }
+}

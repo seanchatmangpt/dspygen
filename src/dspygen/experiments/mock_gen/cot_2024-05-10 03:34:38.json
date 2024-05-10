@@ -1,0 +1,10 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "\n    Proposed Instruction: Transform the provided text with key-value pairs into a valid JSON object that conforms to the specified JSON schema. Ensure all required fields are included and that data types match the expected format in the schema. Use curly braces to encapsulate your resulting JSON structure, commas to separate items within an array, colons to separate keys from values, and quotation marks for string literals.\n    ",
+    "signature_prefix": "Constructed JSON Object:"
+  }
+}

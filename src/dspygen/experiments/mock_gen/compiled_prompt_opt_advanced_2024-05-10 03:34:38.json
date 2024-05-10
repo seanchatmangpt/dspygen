@@ -1,0 +1,10 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Input: Key-value text pairs (text), Expected JSON schema with required fields and data types\n\nProposed Instruction: Given the provided key-value pairs of text and an expected JSON schema detailing required fields and their respective data types, generate a valid JSON object. Enclose the structure in curly braces, use commas to separate elements within arrays, colons between keys and values, and ensure all mandatory fields from the schema are present with correct data types.",
+    "signature_prefix": "```json {\n\n}\n\n---"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Optimized Proposed Instruction: Convert the provided text containing key-value pairs into a precisely formatted JSON object, conforming strictly to the given JSON schema. Ensure that all critical fields are present and validate data type integrity against the schema specifications. Utilize curly braces for structure encapsulation, commas to delineate array elements, colons for key-value associations, and quotation marks for textual entries. Maintain an error rate below 300 parts per million (PPM), consistent with a Six Sigma quality standard, ensuring maximum accuracy of the output data.",
+    "signature_prefix": "ValidateJSONConversion:"
+  }
+}

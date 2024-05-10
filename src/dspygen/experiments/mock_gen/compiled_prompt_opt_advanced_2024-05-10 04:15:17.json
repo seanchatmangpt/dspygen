@@ -1,0 +1,10 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Optimized Proposed Instruction: Initiate the data conversion process by defining input text as structured key-value pairs, ensuring adherence to the predefined JSON schema with exacting accuracy at a 99.9999996% level. Streamline this transformation through analysis of potential ambiguities, precise control of field assignments, and continuous validation against schema specifications. Employ curly braces for enclosures, use commas to list arrays elements, pair keys with values via colons, and enclose string values within quotation marks. This enhancement targets defect reduction by minimizing data formatting inconsistencies and maximizing predictable outcomes.",
+    "signature_prefix": "JSON_Init"
+  }
+}

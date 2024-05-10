@@ -1,0 +1,10 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Proposed Instruction: \"Given a list of numbered items, transform them into key-value pairs where keys are the numbers and values are the elements from the specified 'Number' field. Create a clean and concise JSON object representation of this information.",
+    "signature_prefix": "`{\"transformed_data\":`"
+  }
+}

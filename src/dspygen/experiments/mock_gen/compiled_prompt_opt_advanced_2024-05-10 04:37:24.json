@@ -1,0 +1,10 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Optimized Proposed Instruction: Apply the DMAIC methodology on the task of converting key-value pairs into a well-structured JSON object, with stringent adherence to an accurate and schema-conforming output, targeted at maintaining near six sigma quality. The resultant instruction will be prefaced by \"ValidateAndStructureJSON\" to clearly denote its purpose and expected high-fidelity output:",
+    "signature_prefix": "ValidateAndStructureJSON"
+  }
+}

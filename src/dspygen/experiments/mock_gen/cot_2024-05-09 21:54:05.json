@@ -1,0 +1,10 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": " ```json\n    {\n      \"Score\": 30.0,\n      \"Number\": [18, 19, 20, 21, 22, 23],\n      \"Instructions\": {\n        \"7\": \"Convert provided structured or unstructured text information into a valid JSON object.\",\n        \"8\": \"Generate a minimalistic, error-free JSON object representing extracted key-value pairs from given\n        structured text and appropriately interpreting unstructured information while avoiding unnecessary formatting\n        or verbose language in your response. No pretty-printing or newlines.\"\n      }\n    }\n    ```\n    ",
+    "signature_prefix": "Only return the JSON object based on the provided text information and schema.\n\n```json\n"
+  }
+}
