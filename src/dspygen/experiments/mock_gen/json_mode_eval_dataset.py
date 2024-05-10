@@ -21,7 +21,8 @@ class JsonModeEvalDataset(Dataset):
                 keys = ['prompt', 'completion']
 
             example_data = {k: raw_example[k] for k in keys}
-            example_data['prompt'] = str(example_data['prompt'])
+
+            example_data['prompt'] = example_data['prompt'][1]['content']
             example = dspy.Example(**example_data).with_inputs("prompt", "schema")  # Creating an Example object
             official_train.append(example)
 

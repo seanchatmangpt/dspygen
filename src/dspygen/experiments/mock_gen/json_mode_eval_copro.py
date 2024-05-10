@@ -9,7 +9,7 @@ import json
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 from dspygen.experiments.mock_gen.json_mode_eval_dataset import JsonModeEvalDataset
-from dspygen.utils.dspy_tools import init_ol
+from dspygen.utils.dspy_tools import init_ol, init_dspy
 from dspygen.utils.json_tools import extract
 
 
@@ -29,25 +29,30 @@ class PromptToJSONSignature(dspy.Signature):
         prefix="Constructed JSON Object:\n```json\n")
 
 
-
 class JSONErrorRetrySignature(dspy.Signature):
     """
-    This signature is designed to handle errors in JSON object construction by focusing on identifying and rectifying the errors in the JSON output. The model uses this signature to understand the nature of the error and to guide the correction process in a retry mechanism. This is crucial for tasks requiring high accuracy in data format and structure adherence to a JSON schema.
+    This signature is essential for automating the detection and correction of errors in JSON objects. It focuses on providing detailed feedback on non-compliance with a JSON schema and facilitates targeted modifications to ensure that outputs meet stringent data format and structure requirements. This signature acts as an intermediary step in a data validation workflow, where it interprets validation failures and provides specific, actionable feedback to refine the output.
 
-    Instructions: Review the incorrect JSON object, identify the mismatches against the specified JSON schema, and modify the text or processing logic to correct these errors. The goal is to refine the JSON output in subsequent iterations until it fully complies with the JSON schema.
+    Instruction Flow:
+    - Analyze the provided JSON object against the schema.
+    - Identify specific deviations from the schema requirements.
+    - Offer precise corrections to align the JSON output with the schema, enhancing both data integrity and accuracy.
+    - Iterate the process to minimize error rates and optimize compliance.
     """
     # Inputs
     json_schema = dspy.InputField(
-        desc="The JSON schema that the original JSON output failed to meet. This schema acts as the benchmark for validating the corrected JSON object.")
+        desc="A comprehensive blueprint that the JSON object must conform to. It specifies the structure, required fields, permissible data types, and other validation rules essential for the JSON object’s integrity.")
     prompt = dspy.InputField(
-        desc="The prompt that was used to generate the incorrect JSON object. This prompt may need to be adjusted to guide the model in producing a compliant JSON object.")
+        desc="The initial input or instructions used to generate the JSON object. This may include the raw data and specific guidelines or parameters that influenced the JSON creation process.")
     validation_error = dspy.InputField(
-        desc="The error message or details that describe why the original JSON object failed to meet the JSON schema requirements. This information will help guide the correction process.")
+        desc="Detailed feedback on the JSON object’s failure points when measured against the schema. This includes type mismatches, missing fields, and structural errors, providing a basis for targeted corrections.")
+
+    # Outputs
     step_by_step_instructions = dspy.OutputField(
-        desc="Explicitly state the steps to extract key-value pairs and format them into JSON, including any specific formatting or data validation requirements.")
+        desc="Comprehensive instructions to guide the correction of the JSON object. This includes identifying errors, applying fixes, and validating adjustments to ensure schema compliance.")
     constructed_json_object = dspy.OutputField(
-        desc="A JSON object that conforms to the provided JSON schema.",
-        prefix="Constructed JSON Object:\n```json\n")
+        desc="The revised JSON object post-correction, accurately formatted and validated against the schema, demonstrating full compliance with all specified requirements.",
+        prefix="Corrected JSON Object:\n```json\n")
 
 
 class PromptToJSONModule(dspy.Module):
@@ -75,7 +80,7 @@ class PromptToJSONModule(dspy.Module):
                                            prompt=prompt,
                                            validation_error=str(ve))
             json_output = extract(result2.constructed_json_object)
-            validate(instance=json_output, schema=json.loads(schema))
+            # validate(instance=json_output, schema=json.loads(schema))
             completion = json.dumps(json_output)
 
         except json.JSONDecodeError as je:
@@ -100,6 +105,8 @@ from dspy.teleprompt import COPRO
 teleprompter = COPRO(
     metric=validate_context_and_answer,
     verbose=True,
+    batch_size=2,
+    depth=2,
 )
 
 
@@ -107,6 +114,7 @@ def main():
     """Main function"""
     from dspygen.utils.dspy_tools import init_ol
     init_ol()
+    # init_dspy(api_key="sk-my-service-account-h1hYB7umvc95nTjqj0dPT3BlbkFJsMKub3QPxM8lO7l2Ekxs")
     from dsp.utils import dotdict
 
     dataset = JsonModeEvalDataset()
@@ -131,7 +139,7 @@ def main():
     kwargs = dict(num_threads=1, display_progress=True,
                   display_table=0)  # Used in Evaluate class in the optimization process
     cot = PromptToJSONModule()
-    compiled_prompt_opt = teleprompter.compile(cot, trainset=dataset.train[:10], eval_kwargs=kwargs)
+    compiled_prompt_opt = teleprompter.compile(cot, trainset=dataset.train[:5], eval_kwargs=kwargs)
     from datetime import datetime
 
     # Get the current time in UTC
