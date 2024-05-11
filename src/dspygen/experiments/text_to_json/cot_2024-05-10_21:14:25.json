@@ -1,0 +1,18 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Given the fields `json_schema`, `prompt`, produce the fields `constructed_json_object`.",
+    "signature_prefix": "Constructed Json Object:"
+  },
+  "retry_predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "\n    <|user|>\n    Proposed Instruction: Examine a given JSON object in comparison to its specified schema, pinpoint areas where it does not conform to defined rules, and provide corrective steps to rectify these issues. Begin each iteration by scrutinizing the entire JSON data structure against the expected format, detailing specific non-adherence points. Generate accurate instructions for modification that will progressively enhance output precision and ensure full schema alignment until validation errors are eradicated\n    ",
+    "signature_prefix": "\n<|end|>\n<|assistant|>\nConstructed JSON Object:\n```json\n\"`{\"json_output\":`"
+  }
+}

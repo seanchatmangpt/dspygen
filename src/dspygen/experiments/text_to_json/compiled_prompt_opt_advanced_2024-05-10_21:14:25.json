@@ -1,0 +1,18 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Proposed Instruction: Using the provided JSON schema (`json_schema`) and the given prompt (`prompt`), construct a JSON object (`constructed_json_object`) that adheres to the structure defined in the schema, integrating relevant information from the prompt accordingly.",
+    "signature_prefix": "`{ \"constructed_json_object\": {"
+  },
+  "retry_predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Review a provided JSON object to assess its conformity with a predefined schema; identify discrepancies from the expected structure, suggest corrective actions, and refine instructions incrementally for each review round. Begin by analyzing the whole JSON object against the template, specifying precise deviations. Draft precise modification guidelines to progressively perfect output quality until the data meets the schema without failures:",
+    "signature_prefix": "To conform the JSON structure with the specified schema:"
+  }
+}

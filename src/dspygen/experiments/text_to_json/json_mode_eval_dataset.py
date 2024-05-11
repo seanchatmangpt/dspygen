@@ -3,6 +3,14 @@ import random
 import dspy
 from datasets import load_dataset
 from dspy.datasets.dataset import Dataset
+from pydantic import BaseModel, Field
+
+
+class JsonModeModel(BaseModel):
+    """A Pydantic model for the JSON mode dataset. We have to change the schema property name to avoid conflicts."""
+    prompt: str = Field(..., description="The prompt for the JSON object.")
+    json_schema: str = Field(..., alias='schema', description="The schema of the JSON object.")
+    completion: str = Field(..., description="The gold completion of the JSON object.")
 
 
 class JsonModeEvalDataset(Dataset):
@@ -26,6 +34,7 @@ class JsonModeEvalDataset(Dataset):
             example = dspy.Example(**example_data).with_inputs("prompt", "schema")  # Creating an Example object
             official_train.append(example)
 
+        # @sean: I'm not sure if this is the right way to shuffle the data
         rng = random.Random(seed)
         rng.shuffle(official_train)
 
