@@ -9,6 +9,7 @@ from pydantic import BaseModel, ValidationError
 
 from dspy import Assert, ChainOfThought, InputField, OutputField, Signature
 
+from dspygen.models.bpm_plus_domain_models import DMN
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
@@ -270,7 +271,7 @@ def get_model_source(model: Type[BaseModel], already_seen: Set[Type[BaseModel]] 
     return source
 
 
-def main():
+def main2():
     import dspy
 
     from dspygen.rdddy.event_storm_domain_specification_model import EventStormingDomainSpecificationModel
@@ -283,9 +284,55 @@ def main():
     print(model_inst)
 
 
-def instance(model: Type[BaseModel], prompt: str) -> BaseModel:
-    model_module = GenPydanticInstance(model)
-    return model_module(prompt)
+dmn_str = """Develop a decision-making model for a loan approval system. The system should evaluate if an applicant qualifies for a personal loan based on their income, credit score, and requested loan amount. The decision process involves:
+
+Inputs:
+
+Income: Monthly income of the applicant.
+Credit Score: The credit score of the applicant, reflecting their creditworthiness.
+Loan Amount Requested: The total amount the applicant wishes to borrow.
+Outputs:
+
+Loan Approval: A decision of 'Approved' or 'Rejected'.
+Maximum Loan Amount: If approved, the maximum amount the bank is willing to lend.
+Rules:
+
+If the credit score is below 600, the loan is rejected.
+If the credit score is above 700 and the income is at least three times the requested loan amount, the loan is approved.
+If the requested loan amount is more than 50% of the applicant’s yearly income, the loan is rejected.
+Decision Table Details:
+
+The decision table should use the inputs to determine the outputs based on the defined rules."
+Decision Structure:
+
+Decision ID: LoanDecision1
+Decision Name: Evaluate Loan Approval
+Decision Table:
+
+Inputs:
+
+Income: Identified by input1, labeled as 'Monthly Income', expression to capture 'monthlyIncome'.
+Credit Score: Identified by input2, labeled as 'Credit Score', expression to capture 'creditScore'.
+Loan Amount Requested: Identified by input3, labeled as 'Loan Amount Requested', expression to capture 'loanAmount'.
+Outputs:
+
+Loan Approval: Identified by output1, possible values include 'Approved', 'Rejected'.
+Maximum Loan Amount: Identified by output2, list the possible amounts or state as dynamic.
+Rules:
+
+Rule 1: Input entries for credit score <600 result in 'Rejected' and no maximum amount.
+Rule 2: Input entries for credit score >700 and monthly income >= 3 times the loan amount result in 'Approved' and the same amount as requested.
+Rule 3: Input entries for requested loan amount > 50% of annual income (calculated as 12 times monthly income) result in 'Rejected' and no maximum amount."""
+
+
+
+
+def main():
+    from dspygen.utils.dspy_tools import init_ol
+    init_ol(max_tokens=3000)
+
+    model_module = GenPydanticInstance(DMN)
+    model_inst = model_module("Create a new user account with email and password.")
 
 
 if __name__ == "__main__":

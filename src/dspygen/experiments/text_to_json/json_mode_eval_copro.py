@@ -1,8 +1,6 @@
 def main():
-    from dspygen.experiments.text_to_json.json_mode_eval_dataset import JsonModeEvalDataset
     from dspygen.experiments.text_to_json.json_mode_error_dataset import JsonModeErrorDataset
-    from dspygen.experiments.text_to_json.prompt_to_json_module import compare_example_to_prediction
-    from dspy.teleprompt import COPRO
+    from dspygen.modules.prompt_to_json_module import compare_example_to_prediction
 
     """Main function"""
     from dspygen.utils.dspy_tools import init_ol
@@ -23,7 +21,7 @@ def main():
     kwargs = dict(num_threads=1,
                   display_progress=True,
                   display_table=0)  # Used in Evaluate class in the optimization process
-    from dspygen.experiments.text_to_json.prompt_to_json_module import PromptToJSONModule
+    from dspygen.modules.prompt_to_json_module import PromptToJSONModule
     cot = PromptToJSONModule()
     compiled_prompt_opt = teleprompter.compile(cot,
                                                trainset=dataset.train[:5],

@@ -72,10 +72,10 @@ def main(load_previous):
     json_dataset = JsonModeEvalDataset(0)
 
     # Initialize the module
-    from dspygen.experiments.text_to_json.prompt_to_json_module import PromptToJSONModule
+    from dspygen.modules.prompt_to_json_module import PromptToJSONModule
     module = PromptToJSONModule()
     # Assume json_dataset and module are defined somehow
-    from dspygen.experiments.text_to_json.prompt_to_json_module import compare_example_to_prediction
+    from dspygen.modules.prompt_to_json_module import compare_example_to_prediction
     run_tests(json_dataset, module, compare_example_to_prediction, load_previous)
 
 

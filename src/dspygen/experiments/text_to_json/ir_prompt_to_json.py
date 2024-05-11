@@ -1,9 +1,7 @@
 import dspy
 from loguru import logger
 import json
-from dspygen.utils.json_tools import extract
 
-from dspygen.experiments.text_to_json.prompt_to_json_module import PromptToJSONSignature, JSONErrorRetrySignature
 from dspygen.utils.json_tools import extract
 
 
@@ -34,7 +32,6 @@ class IntPromptToJSONModule(dspy.Module):
         from jsonschema.validators import validate
         import json
 
-        from jsonschema.exceptions import ValidationError
         try:
             validate(instance=y_inst, schema=json.loads(schema))
         except Exception as ve:
