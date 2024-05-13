@@ -15,6 +15,16 @@ from dspygen.models.bpm_plus_domain_models import DMN, Rule
 
 Model = typing.TypeVar('Model', bound='BaseModel')
 
+def compare_example_to_prediction(example, pred, trace=None):
+    # Metric to compare predicted JSON to the actual JSON in the dataset
+
+    out_d = extract(example.completion.replace("'", '"').replace("hours and", "hours"))
+    pred_d = extract(pred.completion)
+    #print("---- trace", trace)
+    #print(out_d, pred_d)
+    # print(out_d == pred_d)
+    return pred_d == out_d #is not None
+
 
 class PromptToJSONSignature(dspy.Signature):
     """
@@ -162,7 +172,12 @@ Rule 3: Input entries for requested loan amount > 50% of annual income (calculat
 
 
 def main():
-    init_ol(max_tokens=3000)
+    init_ol(max_tokens=8000)
+    #from dspygen.lm.ollama_lm import Ollama
+    #from dspygen.utils.dspy_tools import init_dspy
+    #init_dspy(Ollama, model="llama3:8b-instruct-fp16", max_tokens=17000)
+    #init_dspy(Ollama, model="phi3:3.8b-mini-instruct-4k-fp16", max_tokens=17000)
+
     # Create fake data
     import faker
     fake = faker.Faker()
@@ -175,9 +190,12 @@ def main():
     # print(dmn)
 
     prompt = "Input entries for requested loan amount > 50% of annual income (calculated as 12 times monthly income) result in 'Rejected' and no maximum amount."
-
+    print(prompt)
+    print("---------------")
     import inspect
     result = dspy.ChainOfThought("source, prompt -> kwargs_dict")(source=inspect.getsource(Rule), prompt=prompt).kwargs_dict
+
+    print(result)
     import ast
     rdict = ast.literal_eval(result)
     model = Rule.model_validate(rdict)
