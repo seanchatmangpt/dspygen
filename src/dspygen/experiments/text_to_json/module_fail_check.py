@@ -66,7 +66,7 @@ def save_failed_examples(failed_examples):
 
 def main(load_previous):
     from dspygen.utils.dspy_tools import init_ol
-    lm = init_ol(model="phi3:instruct", max_tokens=2000)
+    lm = init_ol(model="phi3:instruct", max_tokens=8000)
 
     from dspygen.experiments.text_to_json.json_mode_eval_dataset import JsonModeEvalDataset
     json_dataset = JsonModeEvalDataset(0)
