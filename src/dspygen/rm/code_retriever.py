@@ -2,6 +2,8 @@ import dspy
 from pathlib import Path
 from fnmatch import fnmatch
 
+from dspygen.utils.dspy_tools import init_ol
+
 
 class CodeRetriever(dspy.Retrieve):
     def __init__(self, path, gitignore=None):
@@ -23,6 +25,7 @@ class CodeRetriever(dspy.Retrieve):
 
     def forward(self, query=None):
         content = []
+        file_dict = {}
         for file_path in self.path.rglob("*"):
             if (
                     file_path.is_file()
@@ -33,13 +36,14 @@ class CodeRetriever(dspy.Retrieve):
                 try:
                     with file_path.open("r", encoding="utf-8") as f:
                         file_content = f.read()
+                        file_dict[file_path] = file_content
                 except UnicodeDecodeError:
                     continue
 
                 file_info = self.extract_file_info(file_path)
                 content.append(file_info + file_content + "\n```\n\n")
 
-        return dspy.Prediction(passages=content)
+        return dspy.Prediction(passages=content, file_dict=file_dict)
 
     def is_ignored(self, file_path):
         relative_path = file_path.relative_to(self.path)

@@ -65,7 +65,8 @@ class StepDSLModel(BaseModel):
                                   description="Name of the module to be executed in this step of the pipeline.")
     signature: Optional[str] = Field(default="",
                                      description="Signature associated with this step.")
-    lm_model: Optional[str] = Field(default="", description="Identifier of the language model to be used in this step.")
+    lm_model: Optional[str] = Field(default=["default"],
+                                    description="Identifier of the language model to be used in this step.")
     rm_model: Optional[str] = Field(default="", description="Identifier of the retrieval model to be used in this step.")
     args: Optional[dict] = Field(default={}, description="Arguments for the module in this step.")
 

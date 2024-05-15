@@ -32,7 +32,7 @@ def main():
     current_time_utc = datetime.utcnow()
 
     # Convert the datetime object to a string in the format 'YYYY-MM-DD HH:MM:SS'
-    zulu_time_str = current_time_utc.strftime('%Y-%m-%d_%H:%M:%S')
+    zulu_time_str = current_time_utc.strftime('%Y-%m-%d_%H-%M-%S')
 
     compiled_prompt_opt.save(f"compiled_prompt_opt_advanced_{zulu_time_str}.json")
     cot.save(f"cot_{zulu_time_str}.json")

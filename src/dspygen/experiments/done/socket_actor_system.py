@@ -6,8 +6,7 @@ from dspygen.rdddy.actor_system import ActorSystem
 
 
 class PrintActor(BaseActor):
-
-    async def process_message(self, message:BaseCommand):
+    async def process_message(self, message: BaseCommand):
         print(f"{self.actor_id} received message: {message.content}")
 
 

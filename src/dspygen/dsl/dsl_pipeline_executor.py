@@ -13,10 +13,16 @@ from dspygen.dsl.utils.dsl_signature_utils import _create_signature_from_model
 from munch import Munch
 
 
+from loguru import logger
+
+
 def execute_pipeline(file_path, init_ctx=None):
     """
     Execute a pipeline from a YAML file and return the context.
     """
+    logger.info(f"Executing pipeline from {file_path}")
+    logger.info(f"Initial context: {init_ctx}")
+
     pipeline = _get_pipeline(file_path)
 
     if init_ctx:

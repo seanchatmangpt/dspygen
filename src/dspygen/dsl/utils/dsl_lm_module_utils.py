@@ -46,7 +46,7 @@ def _get_lm_module_instance(pipeline, rendered_args, step):
     Get the module instance for a given step from the top level definition or load the module.
     Uses the DSLModule class from dspygen.modules.dsl_module to handle modules defined in the pipeline YAML.
     """
-    module_def = next((m for m in pipeline.lm_modules if m.name == step.module), None)
+    module_def = next((m for m in pipeline.lm_modules if m.name in step.module), None)
 
     # If module def name has period, assume it's a fully qualified class name
     if module_def and "." in module_def.name:

@@ -11,6 +11,9 @@ from munch import Munch
 from dspygen.dsl.dsl_pydantic_models import PipelineDSLModel, StepDSLModel
 
 
+from loguru import logger
+
+
 class DSLStepModule:
     """
     A module to execute a single step in a DSPyGen pipeline.
@@ -32,6 +35,9 @@ class DSLStepModule:
         # Render the arguments for the current step using Jinja2
         rendered_args = self._get_rendered_args()
 
+        logger.info(f"Executing step {self.step.module}")
+        logger.info(f"Arguments: {rendered_args}")
+
         if self.step.lm_model:
             lm_inst = _get_language_model_instance(self.pipeline, self.step)
 
@@ -44,6 +50,7 @@ class DSLStepModule:
 
                 # Update the pipeline context with the output from this step
                 self.pipeline.context[self.step.module] = module_output
+                logger.info(f"Output: {module_output}")
 
         if self.step.rm_model:
             # rm_inst = _get_retrieval_model_instance(self.pipeline, self.step)
@@ -56,6 +63,7 @@ class DSLStepModule:
 
             # Update the pipeline context with the output from this step
             self.pipeline.context[self.step.module] = module_output
+            logger.info(f"Output: {module_output}")
 
         return Munch(self.pipeline.context)
 
@@ -65,7 +73,7 @@ class DSLStepModule:
         for key, value in rendered_args.items():
             try:
                 rendered_args[key] = eval(value)
-            except:
+            except SyntaxError:
                 pass
         return rendered_args
 

@@ -3,12 +3,14 @@ from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 from dspygen.utils.dspy_tools import init_ol
 from dspygen.modules.fsm_trigger_module import fsm_trigger_call
 
+
 class AnalyticsAgentState(Enum):
     IDLE = auto()
     ANALYZING = auto()
     REPORTING = auto()
     HANDLING_ERRORS = auto()
     COMPLETING_TASK = auto()
+
 
 class AnalyticsAgent(FSMMixin):
     def __init__(self):
@@ -22,7 +24,8 @@ class AnalyticsAgent(FSMMixin):
     def generate_report(self):
         print("Generating analysis report.")
 
-    @trigger(source=[AnalyticsAgentState.ANALYZING, AnalyticsAgentState.REPORTING], dest=AnalyticsAgentState.HANDLING_ERRORS)
+    @trigger(source=[AnalyticsAgentState.ANALYZING, AnalyticsAgentState.REPORTING],
+             dest=AnalyticsAgentState.HANDLING_ERRORS)
     def handle_error(self):
         print("Handling error in data analysis.")
 
@@ -30,9 +33,11 @@ class AnalyticsAgent(FSMMixin):
     def resolve_error(self):
         print("Error resolved, returning to idle.")
 
-    @trigger(source=[AnalyticsAgentState.ANALYZING, AnalyticsAgentState.REPORTING], dest=AnalyticsAgentState.COMPLETING_TASK)
+    @trigger(source=[AnalyticsAgentState.ANALYZING, AnalyticsAgentState.REPORTING],
+             dest=AnalyticsAgentState.COMPLETING_TASK)
     def complete_task(self):
         print("Data analysis task completed.")
+
 
 def main():
     init_ol(max_tokens=3000)  # Initialize any required DSPy settings
@@ -47,6 +52,7 @@ def main():
     fsm_trigger_call("Complete the data analysis task", agent)
 
     print("Final state:", agent.state)
+
 
 if __name__ == "__main__":
     main()

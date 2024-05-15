@@ -9,6 +9,9 @@ DEFAULT_SIGNATURE = "prompt -> response"
 DEFAULT_PREDICTOR = "Predict"
 
 
+from loguru import logger
+
+
 def _get_prediction_key(signature: dspy.Signature | str):
     if isinstance(signature, str):
         output_keys = signature.split("->")[1].strip().split(", ")
@@ -59,6 +62,8 @@ class DSLPredictModule(dspy.Module):
                 # Use render to possibly process/format context values if necessary
                 self.forward_args[field] = render(str(self.pipeline.context[field]), **self.pipeline.context)
 
+        logger.info(f"Initialized DSLPredictModule with args: {self.forward_args}")
+
         # print(f"Forward args: {self.forward_args}")
 
     def _extract_input_fields(self):
@@ -104,7 +109,7 @@ class DSLPredictModule(dspy.Module):
 
         self.pipeline.context.update(predicted.items())
 
-        print(f"Output:\n{self.output}")
+        logger.info(f"Predicted: {predicted}")
 
         return self.output
 
