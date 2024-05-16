@@ -1,0 +1,18 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Attempted Instructions: [1] \u00abInstruction #1: To optimize the instruction for generating the output field based on the provided JSON schema and prompt, I suggest the following format:\n1. Read and understand the given JSON schema.\n2. Use the information from the JSON schema to construct a relevant prompt.\n3. Generate an output by using a large language model trained on diverse data.\n[Proposed Instruction] [2] \u00abPrefix #1: Given your input and understanding of the JSON schema, please provide the generated output here:\u00bb [3] \u00abResulting Score #1: 40.0\u00bb\n[4] \u00abInstruction #2: Given the fields `json_schema`, `prompt`, produce the fields `output`.\u00bb\n[5] \u00abPrefix #2: Output:\u00bb\n[6] \u00abResulting Score #2: 60.0\u00bb\n\nProposed Instruction:\nUnderstand the provided JSON schema, create a relevant prompt based on its contents, then use a large language model to generate the output field.",
+    "signature_prefix": "Please provide your generated output here:"
+  },
+  "retry_predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Analyzing the structure of a provided JSON object against its defined schema, list any discrepancies and suggest amendments to ensure conformity. Begin by thoroughly examining the entire JSON against its schema specifications. For each inconsistency discovered, provide specific instructions to refine the data iteratively until it perfectly aligns with the schema. Once all validation issues have been addressed, no further changes will be necessary.",
+    "signature_prefix": "'Discrepancy #1: <description> -> Amendment #1: <instruction>'"
+  }
+}

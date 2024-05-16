@@ -1,0 +1,131 @@
+lm_models:
+  - label: "default"
+    name: "OllamaLocal"
+    args:
+      model: "llama3"
+      max_tokens: 1000
+#   - label: "smart"
+#     name: "OpenAI"
+#     args:
+#       model: "gpt-4o"
+#       max_tokens: 1000
+
+signatures:
+  - name: "InitialComponentSpecSignature"
+    docstring: "Generates an initial Component Specification Document (CSD) based solely on the provided component path. The CSD is specific to the Vue component indicated by the component path and follows Nuxt.js with Vue 3 Composition API standards."
+    inputs:
+      - name: "component_path"
+        desc: "The component path to the directory where the initial CSD will be generated. This should be a valid path on the filesystem where the output will be saved. The component path specifies the Vue component for which the initial CSD is being created."
+    outputs:
+      - name: "initial_csd"
+        desc: "The generated initial Component Specification Document (CSD) in a detailed and structured format, specific to the Vue component indicated by the component path, and ready for review and implementation. The CSD adheres to Nuxt.js with Vue 3 Composition API standards."
+        prefix: "```markdown\n"
+
+  - name: "DetailedComponentSpecSignature"
+    docstring: "Generates a detailed Component Specification Document (CSD) by combining the initial CSD with the README content. The CSD is specific to the Vue component indicated by the component path and follows Nuxt.js with Vue 3 Composition API standards."
+    inputs:
+      - name: "component_path"
+        desc: "The component path to the directory where the detailed CSD will be generated. This should be a valid path on the filesystem where the output will be saved. The component path specifies the Vue component for which the detailed CSD is being created."
+      - name: "readme"
+        desc: "The content of the README file in markdown format. This content typically includes the project overview, objectives, target audience, key features, and other essential information that will guide the detailed CSD generation process."
+      - name: "initial_csd"
+        desc: "The initial Component Specification Document (CSD) generated based on the component path."
+    outputs:
+      - name: "detailed_csd"
+        desc: "The generated detailed Component Specification Document (CSD) in a detailed and structured format, specific to the Vue component indicated by the component path, and ready for review and implementation. The CSD adheres to Nuxt.js with Vue 3 Composition API standards."
+        prefix: "```markdown\n"
+
+  - name: "GenerateNuxtJSSignature"
+    docstring: "Generates high-quality Nuxt.js source code based on the provided component path and detailed CSD content. The Nuxt.js code is specific to the Vue component indicated by the component path and uses the Vue 3 Composition API."
+    inputs:
+      - name: "component_path"
+        desc: "The component path to the directory where the Nuxt.js source code will be generated. This should be a valid path on the filesystem where the output will be saved. The component path specifies the Vue component for which the Nuxt.js source code is being created."
+      - name: "detailed_csd"
+        desc: "The generated detailed Component Specification Document (CSD) in a detailed and structured format, specific to the Vue component indicated by the component path."
+    outputs:
+      - name: "nuxt_source"
+        desc: "The generated Nuxt.js source code using Vue 3 Composition API, specific to the Vue component indicated by the component path."
+        prefix: "```vue\n"
+
+  - name: "DetailedFeatureListSignature"
+    docstring: "Generates a detailed feature list for the Vue component based on the detailed CSD. The feature list follows Nuxt.js with Vue 3 Composition API standards."
+    inputs:
+      - name: "detailed_csd"
+        desc: "The generated detailed Component Specification Document (CSD) in a detailed and structured format."
+    outputs:
+      - name: "feature_list"
+        desc: "The detailed feature list derived from the detailed CSD. The feature list adheres to Nuxt.js with Vue 3 Composition API standards."
+        prefix: "```markdown\n"
+
+  - name: "TechnicalSpecificationsSignature"
+    docstring: "Generates technical specifications based on the feature list. The technical specifications follow Nuxt.js with Vue 3 Composition API standards."
+    inputs:
+      - name: "feature_list"
+        desc: "The detailed feature list derived from the detailed CSD."
+    outputs:
+      - name: "technical_specifications"
+        desc: "The technical specifications derived from the feature list. The technical specifications adhere to Nuxt.js with Vue 3 Composition API standards."
+        prefix: "```markdown\n"
+
+  - name: "ImplementationPlanSignature"
+    docstring: "Generates an implementation plan based on the technical specifications. The implementation plan follows Nuxt.js with Vue 3 Composition API standards."
+    inputs:
+      - name: "technical_specifications"
+        desc: "The technical specifications derived from the feature list."
+    outputs:
+      - name: "implementation_plan"
+        desc: "The implementation plan derived from the technical specifications. The implementation plan adheres to Nuxt.js with Vue 3 Composition API standards."
+        prefix: "```markdown\n"
+
+lm_modules:
+  - name: "InitialComponentSpecModule"
+    signature: "InitialComponentSpecSignature"
+    predictor: "ChainOfThought"
+
+  - name: "DetailedComponentSpecModule"
+    signature: "DetailedComponentSpecSignature"
+    predictor: "ChainOfThought"
+
+  - name: "NuxtJSModule"
+    signature: "GenerateNuxtJSSignature"
+    predictor: "ChainOfThought"
+
+  - name: "FeatureListModule"
+    signature: "DetailedFeatureListSignature"
+    predictor: "ChainOfThought"
+
+  - name: "TechnicalSpecificationsModule"
+    signature: "TechnicalSpecificationsSignature"
+    predictor: "ChainOfThought"
+
+  - name: "ImplementationPlanModule"
+    signature: "ImplementationPlanSignature"
+    predictor: "ChainOfThought"
+
+steps:
+  - module: "InitialComponentSpecModule"
+    args:
+      component_path: "{{ component_path }}"
+  - module: "DetailedComponentSpecModule"
+    lm_model: "default"
+    args:
+      component_path: "{{ component_path }}"
+      readme: "{{ readme }}"
+      initial_csd: "{{ initial_csd }}"
+  - module: "FeatureListModule"
+    lm_model: "default"
+    args:
+      detailed_csd: "{{ detailed_csd }}"
+  - module: "TechnicalSpecificationsModule"
+    lm_model: "default"
+    args:
+      feature_list: "{{ feature_list }}"
+  - module: "ImplementationPlanModule"
+    lm_model: "default"
+    args:
+      technical_specifications: "{{ technical_specifications }}"
+  - module: "NuxtJSModule"
+    lm_model: "default"
+    args:
+      component_path: "{{ component_path }}"
+      detailed_csd: "{{ detailed_csd }}"

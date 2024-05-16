@@ -38,13 +38,14 @@ def main():
     for path, content in result.file_dict.items():
         # print(path, content)
         with open(path, "w") as f:
-            context = execute_pipeline('/Users/sac/dev/dspygen/src/dspygen/experiments/nuxt_code_ret/nuxt_gen.yaml',
-                                       init_ctx={"path": path, "readme": README})
+            context = execute_pipeline('/Users/sac/dev/dspygen/src/dspygen/experiments/nuxt_code_ret/nuxt_gen_v2.yaml',
+                                       component_path=str(path),
+                                       readme=README)
+            logger.info(f"Context: {context}")
             code = context.nuxt_source
             print(code)
             f.write(code)
-
-            return
+            # f.write(str(context.initial_csd))
 
 
 if __name__ == "__main__":

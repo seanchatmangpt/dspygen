@@ -60,7 +60,11 @@ class DSLPredictModule(dspy.Module):
         for field in input_field_names:
             if field in self.pipeline.context:
                 # Use render to possibly process/format context values if necessary
-                self.forward_args[field] = render(str(self.pipeline.context[field]), **self.pipeline.context)
+                if "{{" in str(self.pipeline.context[field]):
+                    rnd = render(str(self.pipeline.context[field]), **self.pipeline.context)
+                    self.forward_args[field] = rnd
+                else:
+                    self.forward_args[field] = self.pipeline.context[field]
 
         logger.info(f"Initialized DSLPredictModule with args: {self.forward_args}")
 
@@ -90,18 +94,18 @@ class DSLPredictModule(dspy.Module):
         runtime_args = {**self.forward_args, **kwargs}
 
         # Dynamically resolve arguments right before execution
-        resolved_args = {key: render(str(value), **self.pipeline.context)
-                         for key, value in runtime_args.items()}
+        # resolved_args = {key: render(str(value), **self.pipeline.context)
+        #                  for key, value in runtime_args.items()}
 
         # Determine the appropriate predictor to use based on the self.predictor attribute
         pred_cls = _get_predictor_class(self.predictor)
         pred_inst = pred_cls(self.signature)
 
         # Call the predictor with only the arguments it expects in the signature
-        pred_args = {k: v for k, v in resolved_args.items() if k in pred_inst.signature.input_fields}
+        # pred_args = {k: v for k, v in resolved_args.items() if k in pred_inst.signature.input_fields}
 
         # Execute the predictor with resolved arguments
-        predicted = pred_inst(**pred_args)
+        predicted = pred_inst(**runtime_args)
 
         # Optionally, update the context with the new output
         # Assume self.predicted directly gives us the desired output for simplicity

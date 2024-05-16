@@ -147,8 +147,8 @@ class Choice(BaseModel):
 # def message_to_trigger(fsm, message):
 #     from dspygen.utils.dspy_tools import init_dspy
 #     from dspygen.lm.groq_lm import Groq
-#     # init_dspy(Groq, 1000, "mixtral-8x7b-32768")
-#     # init_dspy(Groq, max_tokens=1000, model="llama3-70b-8192")  # for Groq you must pass an Groq provided model
+#     # init_dspy(lm_class=Groq, 1000, "mixtral-8x7b-32768")
+#     # init_dspy(lm_class=Groq, max_tokens=1000, model="llama3-70b-8192")  # for Groq you must pass an Groq provided model
 #
 #     init_dspy()
 #     poss = fsm.possible_triggers()

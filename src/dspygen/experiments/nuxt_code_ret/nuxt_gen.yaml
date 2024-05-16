@@ -72,23 +72,18 @@ signatures:
 lm_modules:
   - name: "ProductManagerModule"
     signature: "ProductManagerSignature"
-    predictor: "ChainOfThought"
 
   - name: "NuxtJSModule"
     signature: "GenerateNuxtJSSignature"
-    predictor: "ChainOfThought"
 
   - name: "FeatureListModule"
     signature: "DetailedFeatureListSignature"
-    predictor: "ChainOfThought"
 
   - name: "TechnicalSpecificationsModule"
     signature: "TechnicalSpecificationsSignature"
-    predictor: "ChainOfThought"
 
   - name: "ImplementationPlanModule"
     signature: "ImplementationPlanSignature"
-    predictor: "ChainOfThought"
 
 
 rm_modules:

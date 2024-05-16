@@ -16,7 +16,7 @@ from munch import Munch
 from loguru import logger
 
 
-def execute_pipeline(file_path, init_ctx=None):
+def execute_pipeline(file_path, init_ctx=None, **kwargs):
     """
     Execute a pipeline from a YAML file and return the context.
     """
@@ -27,6 +27,9 @@ def execute_pipeline(file_path, init_ctx=None):
 
     if init_ctx:
         pipeline.context.update(init_ctx)
+
+    if kwargs:
+        pipeline.context.update(kwargs)
 
     for step in pipeline.steps:
         execute_step(pipeline, step)

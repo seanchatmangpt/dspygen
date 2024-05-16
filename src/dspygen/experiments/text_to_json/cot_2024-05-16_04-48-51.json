@@ -1,0 +1,18 @@
+{
+  "predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Given the fields `json_schema`, `prompt`, produce the fields `output`.",
+    "signature_prefix": "Output:"
+  },
+  "retry_predictor": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "\n    <|user|>\n    Review a given JSON object using its defined schema to identify discrepancies between the structure of the provided data and expected rules, then suggest amendments. Start by evaluating the entire JSON against its schema comprehensively, listing out areas where it fails to meet specifications. Devise precise instructions for each identified inconsistency that will iteratively refine the accuracy of the JSON object to perfectly match the schema until no validation issues remain.    ",
+    "signature_prefix": "\n<|end|>\n<|assistant|>\nThe Post-Correction Constructed JSON Object:\n```json\n"
+  }
+}

@@ -33,7 +33,7 @@ class FeedbackAndRetry(dspy.Signature):
 
 def main2():
     """Main function"""
-    init_dspy(Groq, max_tokens=1000, model="llama3-70b-8192") # for Groq you must pass the Groq existing model
+    init_dspy(lm_class=Groq, max_tokens=1000, model="llama3-70b-8192")  # for Groq you must pass the Groq existing model
 
     story = ("You are a software engineer preparing for a technical interview. "
              "You have been given a coding challenge to solve. The challenge involves a NuxtJS frontend with a Convex API backend. ")

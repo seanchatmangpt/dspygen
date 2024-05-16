@@ -28,8 +28,10 @@ def compare_example_to_prediction(example, pred, trace=None):
 
 class PromptToJSONSignature(dspy.Signature):
     """
-    <|user|>
-    Proposed Instruction: Using the provided JSON schema (`json_schema`) and the given prompt (`prompt`), construct a JSON object (`constructed_json_object`) that adheres to the structure defined in the schema, integrating relevant information from the prompt accordingly.    """
+    Proposed Instruction:
+    Understand the provided JSON schema, create a relevant prompt based on its contents,
+    then use a large language model to generate the output field.
+    """
     # Inputs
     json_schema = dspy.InputField(
         desc="JSON schema to validate the JSON object. Your response must exactly adhere to this schema. ")
@@ -37,16 +39,15 @@ class PromptToJSONSignature(dspy.Signature):
         desc="Text information in structured or unstructured format, to be converted into a JSON object.")
     # mock_data = dspy.InputField(
     #     desc="Mock data has the same shape as the JSON schema, but with placeholder values. This data can be used to guide the JSON object creation process.")
-    # step_by_step_instructions = dspy.OutputField(
-    #     desc="Explicitly state the steps to extract key-value pairs and format them into JSON, including any specific formatting or data validation requirements.")
+    step_by_step_instructions = dspy.OutputField(
+        desc="Explicitly state the steps to extract key-value pairs and format them into JSON, including any specific formatting or data validation requirements.")
     output = dspy.OutputField(
         desc="A JSON object that conforms to the provided JSON schema.",
-        prefix="""\n<|end|>\n<|assistant|>\n```json\n""")
+        prefix="""```json\n""")
 
 
 class JSONErrorRetrySignature(dspy.Signature):
     """
-    <|user|>
     Review a given JSON object using its defined schema to identify discrepancies between the structure of the provided data and expected rules, then suggest amendments. Start by evaluating the entire JSON against its schema comprehensively, listing out areas where it fails to meet specifications. Devise precise instructions for each identified inconsistency that will iteratively refine the accuracy of the JSON object to perfectly match the schema until no validation issues remain.    """
     # Inputs
     json_schema = dspy.InputField(
