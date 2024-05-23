@@ -85,8 +85,8 @@ def get_files_from_directory(directory, query, gitignore=None):
 
 
 def main():
-    path = "/Users/sac/dev/dspygen/src/dspygen/"
-    gitignore = "/Users/sac/dev/dspygen/.gitignore"  # Optional
+    path = "/"
+    gitignore = "/.gitignore"  # Optional
 
     code_retriever = CodeRetriever(path, gitignore)
     result = code_retriever.forward("*pipeline.yaml")
