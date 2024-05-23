@@ -45,6 +45,9 @@ def run_tests(json_dataset, module, compare_example_to_prediction, load_previous
         # Save successful examples to disk
         with open(successful_examples_file, 'w') as file:
             json.dump(list(successful_examples), file)
+            json.dump(list(example.values()), file, indent=2, default=str)
+            json.dump(list(pred), file, indent=2, default=str)
+
 
         # Print the progress
         total_examples = len(json_dataset.train) if dataset_type == 'train' else len(json_dataset.dev)
