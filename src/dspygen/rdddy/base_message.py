@@ -11,18 +11,40 @@ from dspygen.utils.yaml_tools import YAMLMixin
 
 class BaseMessage(BaseModel):
     """Base message class for serialization/deserialization compatibility with a TypeScript equivalent."""
-    actor_id: int = Field(default=-1, description="Unique identifier for the actor that sent the message.")
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Universally unique identifier for the message.")
-    topic: str = Field(default="default-topic", description="Represents the channel, topic, queue, or subject the message pertains to.")
-    timestamp: int = Field(default_factory=lambda: int(datetime.now().timestamp() * 1000), description="Epoch time in milliseconds for when the message was created or sent.")
-    content_type: str = Field(default="application/json", description="MIME type indicating the format of the content.")
-    content: str = Field(default="", description="The payload of the message, typically in a serialized format.")
-    attributes: dict = Field(default_factory=dict, description="Key-value pairs for additional metadata, akin to headers.")
+    data: dict = Field(default_factory=dict, description="Key-value pairs for additional metadata, akin to headers.")
+    datacontenttype: str = Field(default='application/json', description="The content type of the data.")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="A unique identifier for the message.")
+    pubsubname: str = Field(default='pubsub', description="The name of the pub/sub component.")
+    source: str = Field("", description="The Dapr application ID.")
+    specversion: str = Field(default='1.0', description="The pubsub spec version.")
+    topic: str = Field("", description="The topic name.")
+    traceid: str = Field(default_factory=lambda: str(uuid.uuid4()), description="A unique identifier for the trace.")
+    traceparent: str = Field(default_factory=lambda: str(uuid.uuid4()), description="The parent trace identifier.")
+    tracestate: str = Field(default_factory=lambda: str(uuid.uuid4()), description="The trace state.")
+    type: str = Field("", description="The Dapr message type.")
 
-    def __init__(self, **data: Any):
-        super().__init__(**data)
-        # Ensure that the 'messageType' attribute exists in the attributes dictionary
-        self.attributes.setdefault('messageType', type(self).__name__)
+    @property
+    def actor_id(self) -> int:
+        return self.data.get('actor_id', -1)
+
+    @actor_id.setter
+    def actor_id(self, value: int):
+        self.data['actor_id'] = value
+
+    @property
+    def content(self) -> str:
+        return self.data.get('content', '')
+
+    @property
+    def timestamp(self) -> int:
+        return self.data.get('timestamp', int(datetime.now().timestamp() * 1000))
+
+    @property
+    def message_type(self) -> str:
+        """Calculate the relative import path of the class."""
+        module = inspect.getmodule(self)
+        relative_path = f"{module.__name__}.{self.__class__.__name__}"
+        return relative_path
 
 
 class MessageList(YAMLMixin, BaseModel):
@@ -53,7 +75,7 @@ class MessageFactory:
         Returns:
         - Type[BaseModel]: The appropriate message type.
         """
-        # message_class = cls._get_message_class(data["message_type"])
+        message_class = cls._get_message_class(data["message_type"])
         return BaseMessage(**data)
 
     @classmethod

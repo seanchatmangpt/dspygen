@@ -9,7 +9,7 @@ from dspygen.async_typer import AsyncTyper
 from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.actor_system import ActorSystem
 
-app = AsyncTyper(help="")
+app = AsyncTyper(help="Full lifecycle for the Agent system. Generation to deployment.")
 
 MOSQUITTO_BINARY = os.getenv("MOSQUITTO_BINARY", default="/usr/sbin/mosquitto")
 MOSQUITTO_CONF = os.getenv("MOSQUITTO_CONF", default="/etc/mosquitto/mosquitto.conf")

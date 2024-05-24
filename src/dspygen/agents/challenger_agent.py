@@ -2,9 +2,6 @@ import logging
 from enum import Enum, auto
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 
-# Setup logging configuration
-logging.basicConfig(level=logging.INFO, format='== SALES == %(asctime)s %(levelname)s: %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
 
 class SalesState(Enum):
     INITIALIZING = auto()
@@ -16,6 +13,7 @@ class SalesState(Enum):
     CLOSING = auto()
     COMPLETING = auto()
 
+
 class ChallengerSalesAgent(FSMMixin):
     def __init__(self):
         super().__init__()
@@ -23,56 +21,63 @@ class ChallengerSalesAgent(FSMMixin):
 
     @trigger(source=SalesState.INITIALIZING, dest=SalesState.RESEARCHING)
     def start_research(self):
-        logging.info("Starting market and lead research.")
+        print("Starting market and lead research.")
 
     @trigger(source=SalesState.RESEARCHING, dest=SalesState.OUTREACHING)
     def conduct_outreach(self):
-        logging.info("Conducting outreach to potential leads.")
+        print("Conducting outreach to potential leads.")
 
     @trigger(source=SalesState.OUTREACHING, dest=SalesState.DISCOVERING)
     def perform_discovery(self):
-        logging.info("Engaging in discovery process to understand client needs.")
+        print("Engaging in discovery process to understand client needs.")
 
     @trigger(source=SalesState.DISCOVERING, dest=SalesState.TAILORING)
     def tailor_solution(self):
-        logging.info("Tailoring solutions based on discovered needs.")
+        print("Tailoring solutions based on discovered needs.")
 
     @trigger(source=SalesState.TAILORING, dest=SalesState.HANDLING_OBJECTIONS)
     def handle_objections(self):
-        logging.info("Addressing client objections and concerns.")
+        print("Addressing client objections and concerns.")
 
     @trigger(source=[SalesState.HANDLING_OBJECTIONS, SalesState.OUTREACHING], dest=SalesState.CLOSING)
     def close_deal(self):
-        logging.info("Closing the deal with the client.")
+        print("Closing the deal with the client.")
 
     @trigger(source=SalesState.CLOSING, dest=SalesState.COMPLETING)
     def complete_sale(self):
-        logging.info("Finalizing all post-sale processes and ensuring client satisfaction.")
+        print("Finalizing all post-sale processes and ensuring client satisfaction.")
 
     # Additional triggers to handle loops and branching
     @trigger(source=SalesState.HANDLING_OBJECTIONS, dest=SalesState.TAILORING)
     def revise_proposal(self):
-        logging.info("Revising proposal based on feedback.")
+        print("Revising proposal based on feedback.")
 
     @trigger(source=[SalesState.OUTREACHING, SalesState.TAILORING, SalesState.DISCOVERING], dest=SalesState.DISCOVERING)
     def deepen_discovery(self):
-        logging.info("Returning to discovery to gather more information.")
+        print("Returning to discovery to gather more information.")
 
     @trigger(source=[SalesState.HANDLING_OBJECTIONS, SalesState.DISCOVERING], dest=SalesState.OUTREACHING)
     def restart_outreach(self):
-        logging.info("Restarting outreach with new strategy or contact.")
+        print("Restarting outreach with new strategy or contact.")
 
     @trigger(source=SalesState.CLOSING, dest=SalesState.HANDLING_OBJECTIONS)
     def negotiation_failed(self):
-        logging.info("Negotiation failed, addressing remaining objections.")
+        print("Negotiation failed, addressing remaining objections.")
 
     @trigger(source=SalesState.COMPLETING, dest=SalesState.INITIALIZING)
     def new_opportunity(self):
-        logging.info("Completing current cycle, preparing for new opportunity.")
+        print("Completing current cycle, preparing for new opportunity.")
+
+    def prompt(self, prompt, **kwargs):
+        super().prompt(prompt, **kwargs)
+        from dspygen.modules.challenger_sales_manager_module import challenger_sales_manager_call
+        print(challenger_sales_manager_call(prompt=prompt).split("---")[0])
+
 
 def main():
-    from dspygen.utils.dspy_tools import init_ol
-    init_ol()
+    from dspygen.utils.dspy_tools import init_dspy, init_ol
+    # init_dspy(model="gpt-4o")
+    init_ol(max_tokens=100)
 
     agent = ChallengerSalesAgent()
     print("Initial state:", agent.state)
