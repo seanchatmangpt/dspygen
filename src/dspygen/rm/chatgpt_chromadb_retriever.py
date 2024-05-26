@@ -13,6 +13,9 @@ from pydantic import BaseModel, ValidationError, Field
 from dspygen.modules.python_source_code_module import python_source_code_call
 from dspygen.utils.file_tools import data_dir, count_tokens
 
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding ## pip install llama-index-embeddings-huggingface
+
+
 # Configure loguru logger
 #logger.add("chatgpt_chromadb_retriever.log", rotation="10 MB", level="ERROR")
 
@@ -58,6 +61,12 @@ class Conversation(BaseModel):
     title: str
     mapping: dict
 
+
+
+default_embed_fn_hf = embedding_functions.HuggingFaceEmbeddingFunction ( #HuggingFaceEmbedding(
+    api_key="",
+    model_name="BAAI/bge-small-en-v1.5",
+)
 
 default_embed_fn = embedding_functions.OllamaEmbeddingFunction(
     url="http://localhost:11434/api/embeddings",
@@ -248,7 +257,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
 def main():
     from dspygen.utils.dspy_tools import init_ol
 
-    init_ol()
+    init_ol(model="phi3:medium", max_tokens=5000, timeout=500)
 
     retriever = ChatGPTChromaDBRetriever(check_for_updates=True)
     retriever._update_collection_metadata()

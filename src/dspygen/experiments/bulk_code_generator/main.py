@@ -8,7 +8,7 @@ from dspygen.lm.groq_lm import Groq
 
 def main():
     #init_dspy(lm_class=Groq, model="mixtral-8x7b-32768")
-    init_ol("phi3") #codellama:python", max_tokens=12000)
+    init_ol("phi3:medium", max_tokens=1000)
     retriever = ChatGPTChromaDBRetriever()
     query = "Revenue Operations Automation"
     matched_conversations = retriever.forward(query, k=10)
