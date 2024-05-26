@@ -92,10 +92,10 @@ def main():
     agent = CoderAgent("Make a request to an API and return the response.")
     print("Initial state:", agent.state)
 
-    fsm_trigger_call("I want you to start coding for me", agent)
-    fsm_trigger_call("I want you to test the code", agent)
-    fsm_trigger_call("I want you to refactor the code", agent)
-    fsm_trigger_call("I want you to complete the task", agent)
+    agent.prompt("I want you to start coding for me", agent)
+    agent.prompt("I want you to test the code", agent)
+    agent.prompt("I want you to refactor the code", agent)
+    agent.prompt("I want you to complete the task", agent)
     print("Final state:", agent.state)
 
 

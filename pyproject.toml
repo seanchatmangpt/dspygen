@@ -63,6 +63,7 @@ py-trees = "^2.2.3"
 chromadb = "^0.5.0"
 html2text = "^2024.2.26"
 duckduckgo-search = "^5.3.0"
+factory-boy = "^3.3.0"
 
 [tool.poetry.group.test.dependencies]  # https://python-poetry.org/docs/master/managing-dependencies/
 coverage = { extras = ["toml"], version = ">=7.2.5" }

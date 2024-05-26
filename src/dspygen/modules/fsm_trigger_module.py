@@ -1,5 +1,7 @@
 import typing
 
+from loguru import logger
+
 import dspy
 from pydantic import BaseModel, Field
 
@@ -30,7 +32,7 @@ class FSMTriggerModule(dspy.Module):
                 f"Choose from Possible State Transition Triggers based on prompt:\n\n```possible_triggers\n{possible_triggers}\n```\n\n"
                 f"You must choose one of the possible triggers to proceed.")
 
-        print(text)
+        # logger.info(text)
 
         response = json_call(ChosenTrigger, text=text)
 
