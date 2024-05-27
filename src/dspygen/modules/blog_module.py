@@ -7,7 +7,7 @@ from typer import Typer
 from dspygen.lm.groq_lm import Groq
 from dspygen.lm.ollama_lm import Ollama
 
-from dspygen.utils.dspy_tools import init_ol
+from dspygen.utils.dspy_tools import init_ol, init_dspy
 from dspygen.writer import data_writer
 
 
