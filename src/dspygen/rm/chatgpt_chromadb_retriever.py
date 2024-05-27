@@ -13,7 +13,7 @@ from pydantic import BaseModel, ValidationError, Field
 from dspygen.modules.python_source_code_module import python_source_code_call
 from dspygen.utils.file_tools import data_dir, count_tokens
 
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding ## pip install llama-index-embeddings-huggingface
+#from llama_index.embeddings.huggingface import HuggingFaceEmbedding ## pip install llama-index-embeddings-huggingface
 
 
 # Configure loguru logger
@@ -63,10 +63,10 @@ class Conversation(BaseModel):
 
 
 
-default_embed_fn_hf = embedding_functions.HuggingFaceEmbeddingFunction ( #HuggingFaceEmbedding(
-    api_key="",
-    model_name="BAAI/bge-small-en-v1.5",
-)
+#default_embed_fn_hf = embedding_functions.HuggingFaceEmbeddingFunction ( #HuggingFaceEmbedding(
+#    api_key="",
+#    model_name="BAAI/bge-small-en-v1.5",
+#)
 
 default_embed_fn = embedding_functions.OllamaEmbeddingFunction(
     url="http://localhost:11434/api/embeddings",
