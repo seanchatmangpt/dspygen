@@ -1,4 +1,5 @@
-"""Actor System Module Documentation
+"""
+Actor System Module Documentation
 
 This module, actor_system.py, implements the ActorSystem class within the Reactive Domain-Driven Design (RDDDY) framework. It serves as the orchestrator for actor lifecycle management, message passing, and system-wide coordination, ensuring that the principles of the Actor model are adhered to in a domain-driven context.
 
@@ -45,13 +46,11 @@ The actor_system.py module, guided by the AMCN, provides a robust foundation for
 """
 import asyncio
 import json
-from asyncio import Future
 from typing import TYPE_CHECKING, Optional, TypeVar, cast
 from paho.mqtt import client as mclient
 
 import reactivex as rx
 from loguru import logger
-from paho.mqtt.enums import CallbackAPIVersion
 from reactivex import operators as ops
 from reactivex.scheduler.eventloop import AsyncIOScheduler
 
@@ -106,7 +105,7 @@ class ActorSystem:
             event_stream (Subject): A subject for publishing events within the actor system.
         """
         self.mqtt_client = mqtt_client
-        self.actors: dict[int, BaseActor] = {}
+        self.actors: dict[int, "BaseActor"] = {}
         self.loop = loop if loop is not None else asyncio.get_event_loop()
         self.scheduler = AsyncIOScheduler(loop=self.loop)
         self.event_stream = rx.subject.Subject()
@@ -163,6 +162,7 @@ class ActorSystem:
         actor = actor_class(self, **kwargs)
         self.actors[actor.actor_id] = actor
         await actor.start(self.scheduler)
+        logger.info(f"Actor {actor.actor_id} started")
         return actor
 
     async def actors_of(self, actor_classes, **kwargs) -> list[T]:
@@ -270,12 +270,13 @@ class ActorSystem:
         # logger.debug(f"Sending message {message} to actor {actor_id}")
         actor = self.actors.get(actor_id)
         if actor:
-            actor.mailbox.on_next(message)
-            await asyncio.sleep(0)
+            await actor.handle_event(message)
+            await asyncio.sleep(0.01)
+            logger.info(f"Message {message} sent to actor {actor_id}")
         else:
             logger.debug(f"Actor {actor_id} not found.")
 
-    async def wait_for_message(self, message_type: type) -> Future["BaseMessage"]:
+    async def wait_for_message(self, message_type: type) -> "BaseMessage":
         """Waits for a message of a specific type to be published to the actor system.
 
         Preconditions (Pre):
