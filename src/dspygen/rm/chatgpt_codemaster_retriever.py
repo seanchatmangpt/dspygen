@@ -10,6 +10,7 @@ import chromadb.utils.embedding_functions as embedding_functions
 from pydantic import BaseModel, ValidationError
 
 from dspygen.utils.file_tools import data_dir
+from structured_code_desc_saver import save_code_snippets  # Import the save_code_snippets function
 
 # Configure loguru logger
 logger.add("chatgpt_chromadb_retriever.log", rotation="10 MB", level="ERROR")
@@ -109,51 +110,48 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
                     for conversation in ijson.items(json_file, "item"):
                         count += 1
                         print(f"Processing conversation #{count} {conversation['title']}")
-                        temp_code_directory = Path(f"data/temp_code/{conversation['title']}")
-                        temp_code_directory.mkdir(parents=True, exist_ok=True)
-                        try:
-                            validated_conversation = Conversation(**conversation)
-                            for _, data in validated_conversation.mapping.items():
-                                validated_data = Data(**data)
+                        if conversation['title'] == "Create Python PUF Assets":
+                            temp_code_directory = Path(f"data/temp_code/{conversation['title']}")
+                            temp_code_directory.mkdir(parents=True, exist_ok=True)
+                            try:
+                                validated_conversation = Conversation(**conversation)
+                                chat_count = -1
+                                for _, data in validated_conversation.mapping.items():
+                                    validated_data = Data(**data)
 
-                                if validated_data.message and validated_data.message.content.parts:
-                                    # Detect and process code snippets
-                                    code_snippets, non_code_text = self._extract_code_and_text(validated_data.message.content.parts)
+                                    if validated_data.message and validated_data.message.content.parts:
+                                        # Detect and process code snippets
+                                        code_snippets, non_code_text = self._extract_code_and_text(validated_data.message.content.parts)
+                                        chat_count +=1
+                                        if code_snippets:
+                                            for snippet, description in zip(code_snippets, non_code_text):
+                                                document_id = f"{validated_data.id}_{hashlib.md5(snippet.encode()).hexdigest()}"
+                                                temp_code_directory = Path(f"data/temp_code/{conversation['title']}/{chat_count}_{validated_data.id}")
+                                                temp_code_directory.mkdir(parents=True, exist_ok=True)
+                                                # Check if the document already exists
+                                                search_results = self.collection.get(ids=[document_id])
+                                                if len(search_results["ids"]) > 0:
+                                                    # Update existing document
+                                                    self.collection.update(
+                                                        ids=[document_id],
+                                                        documents=[snippet],
+                                                        metadatas=[{"id": validated_data.id, "description": description}]
+                                                    )
+                                                    logger.debug(f"Updated document with ID: {document_id}")
+                                                else:
+                                                    # Add new document
+                                                    self.collection.add(
+                                                        documents=[snippet],
+                                                        metadatas=[{"id": validated_data.id, "description": description}],
+                                                        ids=[document_id],
+                                                    )
+                                                    logger.debug(f"Added document with ID: {document_id}")
 
-                                    if code_snippets:
-                                        for snippet, description in zip(code_snippets, non_code_text):
-                                            document_id = f"{validated_data.id}_{hashlib.md5(snippet.encode()).hexdigest()}"
+                                                # Save to temp code directory
+                                                save_code_snippets(temp_code_directory, document_id, snippet, description)  # Call the external function
 
-                                            # Check if the document already exists
-                                            search_results = self.collection.get(ids=[document_id])
-                                            if len(search_results["ids"]) > 0:
-                                                # Update existing document
-                                                self.collection.update(
-                                                    ids=[document_id],
-                                                    documents=[snippet],
-                                                    metadatas=[{"id": validated_data.id, "description": description}]
-                                                )
-                                                logger.debug(f"Updated document with ID: {document_id}")
-                                            else:
-                                                # Add new document
-                                                self.collection.add(
-                                                    documents=[snippet],
-                                                    metadatas=[{"id": validated_data.id, "description": description}],
-                                                    ids=[document_id],
-                                                )
-                                                logger.debug(f"Added document with ID: {document_id}")
-
-                                            # Save to temp code directory
-                                            file_path = temp_code_directory / f"{document_id}.py"
-                                            if snippet and description:
-                                                with file_path.open("w", encoding="utf-8") as file:
-                                                    logger.debug(f" code description to {description}")
-                                                    logger.debug(f" code snippet to {snippet}")
-                                                    file.write(f"# {description}\n{snippet}")
-                                                logger.debug(f"Saved code snippet to {file_path}")
-
-                        except ValidationError as e:
-                            logger.error(f"Validation error: {e}")
+                            except ValidationError as e:
+                                logger.error(f"Validation error: {e}")
                     break
                 except ijson.JSONError as e:
                     logger.error(f"JSON parsing error: {e}")
@@ -334,7 +332,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
 
 def main():
     retriever = ChatGPTChromaDBRetriever(check_for_updates=True)
-    retriever._process_and_store_conversations() # use only for enforced overiding
+    retriever._process_and_store_conversations()  # use only for enforced overriding
     #retriever._update_collection_metadata()
 
     query = "Please provide the code to create a Tetris game in Python."
