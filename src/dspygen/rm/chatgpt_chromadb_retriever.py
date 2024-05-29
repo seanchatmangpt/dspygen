@@ -259,11 +259,11 @@ def main():
 
     init_ol(model="phi3:medium", max_tokens=5000, timeout=500)
 
-    retriever = ChatGPTChromaDBRetriever(check_for_updates=True)
-    retriever._update_collection_metadata()
+    retriever = ChatGPTChromaDBRetriever(check_for_updates=False)
+    # retriever._update_collection_metadata()
 
-    query = "Fixed and running Tetris pygame"
-    matched_conversations = retriever.forward(query, k=5)
+    query = "YAML"
+    matched_conversations = retriever.forward(query, k=10, contains="interactible")
     # print(count_tokens(str(matched_conversations) + "\nI want a DSPy module that generates Python source code."))
     for conversation in matched_conversations:
         logger.info(conversation)

@@ -11,7 +11,7 @@ from dspygen.rdddy.browser.browser_domain import *
 from dspygen.rdddy.browser.browser_worker import BrowserWorker
 
 
-os.environ["PLAYWRIGHT_BROWSER"] = "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
+os.environ["PLAYWRIGHT_BROWSER"] = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 
 class BrowserProcessSupervisor(BaseActor):
@@ -91,10 +91,11 @@ class BrowserProcessSupervisor(BaseActor):
 async def main():
     actor_system = ActorSystem()
     proc_supervisor = await actor_system.actor_of(BrowserProcessSupervisor)
-    browser_actor = await actor_system.actor_of(BrowserWorker)
+    browser_actor = await actor_system.actor_of(BrowserWorker, )
 
     # Start Chrome Browser
     await actor_system.publish(StartBrowserCommand())
+    # await actor_system.publish(Goto(url="https://www.google.com"))
 
     # await actor_system.publish(StopBrowserCommand())
 
