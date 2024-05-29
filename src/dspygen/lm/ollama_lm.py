@@ -21,7 +21,7 @@ class Ollama(LM):
         self.history = []
 
         # Initialize the Ollama client with the API key
-        self.client = OllamaClient(model=model, timeout_s = 300)
+        self.client = OllamaClient(model=model, timeout_s = 500)
 
     def basic_request(self, prompt, **kwargs):
         # Request a chat completion with the given prompt and model

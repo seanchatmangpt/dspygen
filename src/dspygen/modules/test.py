@@ -3,7 +3,7 @@
 """
 import dspy
 from typer import Typer
-from dspygen.utils.dspy_tools import init_dspy
+from dspygen.utils.dspy_tools import init_dspy, init_ol
 
 
 app = Typer()        
@@ -44,7 +44,7 @@ async def test_route(data: dict):
 
 
 def main():
-    init_dspy()
+    init_ol()
     a1 = ""
     s2 = ""
     v3 = ""

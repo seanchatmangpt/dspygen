@@ -7,7 +7,7 @@ from typer import Typer
 from dspygen.lm.groq_lm import Groq
 from dspygen.lm.ollama_lm import Ollama
 
-from dspygen.utils.dspy_tools import init_dspy
+from dspygen.utils.dspy_tools import init_ol, init_dspy
 from dspygen.writer import data_writer
 
 
@@ -65,12 +65,15 @@ async def blog_route(data: dict):
 
 def main():
     #init_dspy(lm_class=Groq, model="llama3-70b-8192", max_tokens=8000) # with Groq you must set the model!
-    init_dspy(Ollama, model="llama3:8b-instruct-q5_1", max_tokens=8000) # with Ollama you must set the model! -- llama3:70b-instruct ollama run llama3:70b-instruct-q3_K_M
+    #init_ol("codellama:python", max_tokens=12000)
+    init_ol("phi3:medium", max_tokens=5000 , timeout=500)
+
+    #init_dspy(Ollama, model="llama3:8b-instruct-q5_1", max_tokens=8000) # with Ollama you must set the model! -- llama3:70b-instruct ollama run llama3:70b-instruct-q3_K_M
     subject = "The Tetris Game, simple but working : in 100 lines" # 300 did not end ok with ollama mistral
     #( pls do not run into those issues here: TypeError: unsupported operand type(s) for +=: 'int' and 'NoneType')"
     print(blog_call(subject=subject))
     # manually created the output to src\dspygen\experiments\blog\Tetris_1.md
-    #data_writer(data=subject, file_path="Tetris_File.py",)
+    data_writer(data=subject, file_path="./Tetris_Blog_Phi3Med.md",)
     
 
 if __name__ == "__main__":
