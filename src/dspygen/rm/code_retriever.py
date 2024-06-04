@@ -2,7 +2,7 @@ import dspy
 from pathlib import Path
 from fnmatch import fnmatch
 
-from dspygen.utils.dspy_tools import init_ol
+from dspygen.utils.dspy_tools import init_ol, init_dspy
 
 
 class CodeRetriever(dspy.Retrieve):
@@ -85,14 +85,19 @@ def get_files_from_directory(directory, query, gitignore=None):
 
 
 def main():
-    path = "/"
+    # init_ol(model="llava-phi3", max_tokens=2000)
+    init_dspy(model="gpt-4o", max_tokens=3000)
+    path = "/Users/sac/dev/nuxt-ai-chatbot/stores"
     gitignore = "/.gitignore"  # Optional
 
     code_retriever = CodeRetriever(path, gitignore)
-    result = code_retriever.forward("*.yaml")
+    result = code_retriever.forward()
 
     for file_content in result.passages:
+        from dspygen.modules.nuxt_module import nuxt_call
         print(file_content)
+        nuxt = nuxt_call(path=path, readme=file_content)
+        print(nuxt)
     # for file_content in result.passages:
     #     print(file_content)  # Here, you can instead write to a Markdown file or process further.
 
