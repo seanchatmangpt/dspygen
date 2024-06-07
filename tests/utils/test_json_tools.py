@@ -87,7 +87,32 @@ def test_generate_array_of_objects():
 
 
 def test_complex_schema():
-    schema = {"$id": "https://example.com/fstab", "$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object", "required": ["/"], "properties": {"/": {"type": "object", "properties": {"device": {"type": "string"}, "mount_point": {"type": "string"}, "file_system_type": {"type": "string"}, "options": {"type": "string"}, "dump": {"type": "string", "pattern": "^[0-1]$"}, "pass": {"type": "string", "pattern": "^[0-2]$"}}, "required": ["device", "mount_point", "file_system_type", "options", "dump", "pass"]}}, "patternProperties": {"^(/[^/]+)+$": {"type": "object", "properties": {"device": {"type": "string"}, "mount_point": {"type": "string"}, "file_system_type": {"type": "string"}, "options": {"type": "string"}, "dump": {"type": "string", "pattern": "^[0-1]$"}, "pass": {"type": "string", "pattern": "^[0-2]$"}}, "required": ["device", "mount_point", "file_system_type", "options", "dump", "pass"]}}, "additionalProperties": False}
+    schema = {"$id": "https://example.com/fstab", "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "type": "object", "required": ["/"], "properties": {"/": {"type": "object",
+                                                                        "properties": {"device": {"type": "string"},
+                                                                                       "mount_point": {
+                                                                                           "type": "string"},
+                                                                                       "file_system_type": {
+                                                                                           "type": "string"},
+                                                                                       "options": {"type": "string"},
+                                                                                       "dump": {"type": "string",
+                                                                                                "pattern": "^[0-1]$"},
+                                                                                       "pass": {"type": "string",
+                                                                                                "pattern": "^[0-2]$"}},
+                                                                        "required": ["device", "mount_point",
+                                                                                     "file_system_type", "options",
+                                                                                     "dump", "pass"]}},
+              "patternProperties": {"^(/[^/]+)+$": {"type": "object", "properties": {"device": {"type": "string"},
+                                                                                     "mount_point": {"type": "string"},
+                                                                                     "file_system_type": {
+                                                                                         "type": "string"},
+                                                                                     "options": {"type": "string"},
+                                                                                     "dump": {"type": "string",
+                                                                                              "pattern": "^[0-1]$"},
+                                                                                     "pass": {"type": "string",
+                                                                                              "pattern": "^[0-2]$"}},
+                                                    "required": ["device", "mount_point", "file_system_type", "options",
+                                                                 "dump", "pass"]}}, "additionalProperties": False}
 
     result = generate_from_schema(schema)
     assert isinstance(result, dict)
@@ -124,3 +149,118 @@ def test_strip_properties():
         },
         "required": ["name", "age"]
     }
+
+
+output_json = """Output: {
+  "deal_terms": "2 months free, after that 10% discount for 3 months.",
+  "regular_price": 100,
+  "monthly_descriptions": [
+    {
+      "month": 1,
+      "description": "Free"
+    },
+    {
+      "month": 2,
+      "description": "Free"
+    },
+    {
+      "month": 3,
+      "description": "10% discount"
+    },
+    {
+      "month": 4,
+      "description": "10% discount"
+    },
+    {
+      "month": 5,
+      "description": "10% discount"
+    },
+    {
+      "month": 6,
+      "description": "Regular price"
+    },
+    {
+      "month": 7,
+      "description": "Regular price"
+    },
+    {
+      "month": 8,
+      "description": "Regular price"
+    },
+    {
+      "month": 9,
+      "description": "Regular price"
+    },
+    {
+      "month": 10,
+      "description": "Regular price"
+    },
+    {
+      "month": 11,
+      "description": "Regular price"
+    },
+    {
+      "month": 12,
+      "description": "Regular price"
+    }
+  ]
+}"""
+
+
+def test_extracts_object_from_a_string():
+    input_str = output_json
+    expected = {
+        "deal_terms": "2 months free, after that 10% discount for 3 months.",
+        "regular_price": 100,
+        "monthly_descriptions": [
+            {
+                "month": 1,
+                "description": "Free"
+            },
+            {
+                "month": 2,
+                "description": "Free"
+            },
+            {
+                "month": 3,
+                "description": "10% discount"
+            },
+            {
+                "month": 4,
+                "description": "10% discount"
+            },
+            {
+                "month": 5,
+                "description": "10% discount"
+            },
+            {
+                "month": 6,
+                "description": "Regular price"
+            },
+            {
+                "month": 7,
+                "description": "Regular price"
+            },
+            {
+                "month": 8,
+                "description": "Regular price"
+            },
+            {
+                "month": 9,
+                "description": "Regular price"
+            },
+            {
+                "month": 10,
+                "description": "Regular price"
+            },
+            {
+                "month": 11,
+                "description": "Regular price"
+            },
+            {
+                "month": 12,
+                "description": "Regular price"
+            }
+        ]
+    }
+    assert extract(input_str) == expected

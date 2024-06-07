@@ -1,0 +1,30 @@
+### Create Sales Agent
+POST http://localhost:3000/agents
+Content-Type: application/json
+
+{
+  "agent_type": "SalesAgent",
+  "current_state": "PROSPECTING",
+  "initial_price": 1000,
+  "minimum_price": 700
+}
+
+### Create Customer Agent
+POST http://localhost:3000/agents
+Content-Type: application/json
+
+{
+  "agent_type": "CustomerAgent",
+  "current_state": "BROWSING",
+  "desired_products": ["smartphone"],
+  "budget": 800
+}
+
+### Engage Customer (SalesAgent)
+POST http://localhost:3000/messages
+Content-Type: application/json
+
+{
+  "role": "Sales Agent",
+  "message": "Hello! We have a new Product Type: Electronics (Smartphones). Interested?"
+}

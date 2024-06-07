@@ -270,9 +270,8 @@ class ActorSystem:
         # logger.debug(f"Sending message {message} to actor {actor_id}")
         actor = self.actors.get(actor_id)
         if actor:
-            await actor.handle_event(message)
-            await asyncio.sleep(0.01)
-            logger.info(f"Message {message} sent to actor {actor_id}")
+            actor.mailbox.on_next(message)
+            await asyncio.sleep(0)
         else:
             logger.debug(f"Actor {actor_id} not found.")
 

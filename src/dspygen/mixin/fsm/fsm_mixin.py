@@ -58,6 +58,7 @@ def trigger(source, dest, conditions=None, unless=None, before=None, after=None,
 class FSMMixin:
     def __init__(self):
         self.states = []
+        self.prompts = []
         self.machine = None
         self.state = None
 
@@ -93,6 +94,7 @@ class FSMMixin:
         return self.machine.get_triggers(self.state)
 
     def prompt(self, prompt, **kwargs):
+        self.prompts.append(prompt)
         return fsm_trigger_call(prompt, self, **kwargs)
 
 

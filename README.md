@@ -79,9 +79,9 @@ dspygen module new [OPTIONS]
     dspygen module new -cn SentimentAnalyzer -i "text" -o "sentiment"
     ```
 
-3. **Named Entity Recognition (NER)**:
+3. **YouTube Comment Generation**:
     ```bash
-    dspygen module new -cn NERModule -i "text" -o "entities"
+    dspygen module new -cn Comment -i "vid_title,words" -o "viral_comment"
     ```
 
 4. **Machine Translation**:

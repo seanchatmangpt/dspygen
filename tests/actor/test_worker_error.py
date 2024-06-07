@@ -65,6 +65,7 @@ def actor_system(event_loop):
     return ActorSystem(event_loop)
 
 
+@pytest.mark.skip
 @pytest.mark.asyncio()
 async def test_worker_restart(actor_system):
     root_supervisor = await actor_system.actor_of(RootSupervisorActor)

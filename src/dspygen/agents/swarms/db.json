@@ -1,0 +1,27 @@
+{
+  "agents": [
+    {
+      "id": "b639",
+      "agent_type": "SalesAgent",
+      "current_state": "PROSPECTING",
+      "initial_price": 1000,
+      "minimum_price": 700
+    },
+    {
+      "id": "9bd0",
+      "agent_type": "CustomerAgent",
+      "current_state": "BROWSING",
+      "desired_products": [
+        "smartphone"
+      ],
+      "budget": 800
+    }
+  ],
+  "messages": [
+    {
+      "id": "2f2d",
+      "role": "Sales Agent",
+      "message": "Hello! We have a new Product Type: Electronics (Smartphones). Interested?"
+    }
+  ]
+}

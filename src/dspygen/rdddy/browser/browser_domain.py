@@ -87,10 +87,9 @@ class GetPageContent(BaseCommand):
     """Get the HTML content of the current component"""
 
 
-class PageContent(BaseEvent):
+class HTMLContent(BaseEvent):
     """HTML content of the component"""
-
-    content: str
+    html_content: str
 
 
 class ExecuteScript(BaseCommand):

@@ -30,7 +30,7 @@ class PromptToJSONSignature(dspy.Signature):
     """
     Proposed Instruction:
     Understand the provided JSON schema, create a relevant prompt based on its contents,
-    then use a large language model to generate the output field.
+    then use a large language model to generate the output field. Do not include comments.
     """
     # Inputs
     json_schema = dspy.InputField(
@@ -88,6 +88,10 @@ class PromptToJSONModule(dspy.Module):
 
             # Validate the JSON output against the schema
             # validate(instance=json_output, schema=schema)
+
+            if json_output is None:
+                raise ValidationError("JSON output is not parsing. Make sure it contains only valid JSON.")
+
             completion = json.dumps(json_output)
             print(f"Correct Completion")
         except ValidationError as ve:
@@ -97,8 +101,7 @@ class PromptToJSONModule(dspy.Module):
             # updated_prompt = self.modify_prompt_based_on_error(prompt, ve)
             result2 = self.retry_predictor(json_schema=str(schema),
                                            prompt=prompt,
-                                           initial_json_object=result.constructed_json_object,
-                                           mock_data=mock_data,
+                                           initial_json_object=result.output,
                                            validation_error=str(ve))
             json_output = extract(result2.constructed_json_object)
             try:

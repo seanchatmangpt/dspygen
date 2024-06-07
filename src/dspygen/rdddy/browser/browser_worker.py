@@ -87,7 +87,7 @@ class BrowserWorker(BaseActor):
         self, get_page_content_cmd: GetPageContent
     ) -> None:
         page_content = await self.page.content()
-        await self.publish(PageContent(content=page_content))
+        await self.publish(HTMLContent(content=page_content))
 
     async def handle_execute_script(self, execute_script_cmd: ExecuteScript) -> None:
         script_result = await self.page.evaluate(execute_script_cmd.script)
