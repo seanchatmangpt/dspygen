@@ -177,6 +177,17 @@ files = [
 ]
 
 [[package]]
+name = "antlr4-python3-runtime"
+version = "4.13.1"
+description = "ANTLR 4.13.1 runtime for Python 3"
+optional = false
+python-versions = "*"
+files = [
+    {file = "antlr4-python3-runtime-4.13.1.tar.gz", hash = "sha256:3cd282f5ea7cfb841537fe01f143350fdb1c0b1ce7981443a2fa8513fddb6d1a"},
+    {file = "antlr4_python3_runtime-4.13.1-py3-none-any.whl", hash = "sha256:78ec57aad12c97ac039ca27403ad61cb98aaec8a3f9bb8144f889aa0fa28b943"},
+]
+
+[[package]]
 name = "anyio"
 version = "4.4.0"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
@@ -844,6 +855,103 @@ files = [
 
 [package.dependencies]
 colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[[package]]
+name = "clingo"
+version = "5.7.1"
+description = "CFFI-based bindings to the clingo solver."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "clingo-5.7.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:a594f94970fe42a33e3b2269e8acbb4ee8d0a8cb4266a4de00c4b8b66efe40a2"},
+    {file = "clingo-5.7.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:42759e82d3e62cd4ad5d229c01f57d4626580aef7e9fa867a59941d4b41ca5a0"},
+    {file = "clingo-5.7.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:55eb971cc01f277dd9338725f5ec2349b792e2406a576e9fe9c30f56ab592d3f"},
+    {file = "clingo-5.7.1-cp310-cp310-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:05d5dbfd4c1d72914e81779ba8f74cbba97c6319cb4672c7f58b12efdfdd1c6f"},
+    {file = "clingo-5.7.1-cp310-cp310-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:27a75b43ff40bc9c2d60805e6e58832aa49489dd1980329515e69550b3d5c14b"},
+    {file = "clingo-5.7.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c5aa2d966c52c49530714d04abce50528f420c8acd2265618b1243f12e4b0a1d"},
+    {file = "clingo-5.7.1-cp310-cp310-musllinux_1_1_i686.whl", hash = "sha256:09dc133060ba859cdb4bfdc438aa0efe1bca256dba214a07521c7c54cef90746"},
+    {file = "clingo-5.7.1-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:4c724bacf4b4bc4d9e474270c0065e9cf1b8fc164ccbca4e3c7f17c97a1be843"},
+    {file = "clingo-5.7.1-cp310-cp310-win32.whl", hash = "sha256:633720f64dbea34ac8a5a5007254cd730f8995d482819fc41543d8e8e89b6623"},
+    {file = "clingo-5.7.1-cp310-cp310-win_amd64.whl", hash = "sha256:8704a299d1da57999c5bbd3685dd88a383262eadb26a30ddaaf713a7d0f1b180"},
+    {file = "clingo-5.7.1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:156cbb56869eead2b46cdf58b4d05244f47dc6d20cb6e6051f407572fc93b572"},
+    {file = "clingo-5.7.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:d8d46dd3e45b53de15f2bd656ecf7f02469c4928b03c068f79fad2371c0940b5"},
+    {file = "clingo-5.7.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:427e266a7567407cee3a6b12ad9a8564ebc6cd9c51282fc00ce6436929a615a8"},
+    {file = "clingo-5.7.1-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:0c6260a5d29886109f90a67c134399b4b54992dda6fd508c9bac6eea98801f33"},
+    {file = "clingo-5.7.1-cp311-cp311-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:34b640dc78625811c28dd19e98272085b8032369a79316a9db2e1d4131836d31"},
+    {file = "clingo-5.7.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fa0a2c9ab3fa4d93fae7bebcf0e1f78fa65949e1cf3e13867af76ebb9dd40796"},
+    {file = "clingo-5.7.1-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:afac6e08334d91af7061e4899fe0fbf1889e6b9224d298e9260b8d1295bea0d1"},
+    {file = "clingo-5.7.1-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:9325031c81077081c30725cf04406e7cdf9984723b20878fc61b1de24ead39a0"},
+    {file = "clingo-5.7.1-cp311-cp311-win32.whl", hash = "sha256:2b765126f45cc84eac6f301f40567c2fbaefa16092b1d603cbab14b25f68ac96"},
+    {file = "clingo-5.7.1-cp311-cp311-win_amd64.whl", hash = "sha256:8f7d195e84ac4154372d2707b46f52bba41295d7e5dd7d3dffd29807c67404b4"},
+    {file = "clingo-5.7.1-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:83d1e6005ebaccb7e1dc7ca733effd7d6ab063bd37fc5eb17f97705ad0a86ec6"},
+    {file = "clingo-5.7.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:2518a6118f084c0cbec5b79d035c6a93257cb41d8ee1a30147b8685e3fac2871"},
+    {file = "clingo-5.7.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1faf6db10bf92df965c309dbad15ad5394ee0d2954b152619564e4facbb5cc5f"},
+    {file = "clingo-5.7.1-cp312-cp312-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:17472ae3db51071e984eac04437eea3c192d897f6ad79a9af0e618d172a89afd"},
+    {file = "clingo-5.7.1-cp312-cp312-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:198fa526995acef61c5ff95d898a10b3b4616041507b617b95feb677e960870c"},
+    {file = "clingo-5.7.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:11f3c784139ed56e0ec9c4cf1e090c839998d23704014a248d2a52da83471def"},
+    {file = "clingo-5.7.1-cp312-cp312-musllinux_1_1_i686.whl", hash = "sha256:3d83f6979c2f9e5b7c8e2db0d0f4ed83525926dbf4ad11802f539e423cc0e53a"},
+    {file = "clingo-5.7.1-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:4b6d3a79bd65e5cec0139d8d481366c3d4fc7921afe54bd014b61b52394b6394"},
+    {file = "clingo-5.7.1-cp312-cp312-win32.whl", hash = "sha256:e8532b567f4a2ffb82d59a5d9e09ab304c1fabb5597a70a5eaef249ba728313c"},
+    {file = "clingo-5.7.1-cp312-cp312-win_amd64.whl", hash = "sha256:353782221883ab9a9ac7caeb4a2f82cd46d46c50291c7b6fdfb17a2df95dcf8c"},
+    {file = "clingo-5.7.1-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:ba38dfa0d3f9bc4b5307311521f2120206d67f29bc048009f41a9d556e4723e3"},
+    {file = "clingo-5.7.1-cp36-cp36m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:789cb555012242cc7d3fb64d4bd561ef533ba6446490b7ed6e6be96dac5c08d6"},
+    {file = "clingo-5.7.1-cp36-cp36m-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:81d26a625ae688fdfce09b1a8fdc1b556e1bbc60a9394a62e16f074b1d7df0c9"},
+    {file = "clingo-5.7.1-cp36-cp36m-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:6286b50c64b9c083c04d2d084308d2632ece20e2b596bca7dfb3ef3cf85c8858"},
+    {file = "clingo-5.7.1-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:42f8180fcdeae894617ade5edb43d57da4123f87d2437451769c6dff6fa99eed"},
+    {file = "clingo-5.7.1-cp36-cp36m-musllinux_1_1_i686.whl", hash = "sha256:bf21a609dd04486d8b16298263e028309ce35849605b11d88282216a4eb5c39c"},
+    {file = "clingo-5.7.1-cp36-cp36m-musllinux_1_1_x86_64.whl", hash = "sha256:1a9fe7303e3c4942df787e6f5edd6a9cf843351c2ffa5254f26aafcda71edf2d"},
+    {file = "clingo-5.7.1-cp36-cp36m-win32.whl", hash = "sha256:1d6fa3b85e9f5247829e179ff2975dd0a937229f5aab454cd4cb459f1bc94756"},
+    {file = "clingo-5.7.1-cp36-cp36m-win_amd64.whl", hash = "sha256:8f3eb33bbd59b215752d0c1cc9cf5304ae01d19567c7fc04b0058d112811ddf4"},
+    {file = "clingo-5.7.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:9bb32288cd541dd829381d3f9a5fbddec700531bc922e31a32f260f88ec3fef6"},
+    {file = "clingo-5.7.1-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:42cf649b625831db64b7505400e90226eda189fca0993f5d72ff0f20db547acd"},
+    {file = "clingo-5.7.1-cp37-cp37m-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:deb86b54914f17dde406d992db1bc2647aa7d67f8a426bb699a27c30d2ef3c4e"},
+    {file = "clingo-5.7.1-cp37-cp37m-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:2ba4570fab0a9a5e9ecd3762e264aee0b37330dae9529c2f7613414b72bd200e"},
+    {file = "clingo-5.7.1-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:63fb2aa6b7ad21a78e3958e6db38c842a4c2087c943b47e9a1a8e3776b1b443c"},
+    {file = "clingo-5.7.1-cp37-cp37m-musllinux_1_1_i686.whl", hash = "sha256:19b0f9337365172b440c332ec00439abc5db97dcfa22ee3767d75080e19d6a1a"},
+    {file = "clingo-5.7.1-cp37-cp37m-musllinux_1_1_x86_64.whl", hash = "sha256:75cc4c248c047709d2ef53c2fceea9d5370779acb477d626375563f9beed4ec3"},
+    {file = "clingo-5.7.1-cp37-cp37m-win32.whl", hash = "sha256:ec78875585becad9da5ed9cdc0ea88b1eb6573d20fb33137510e273d4d5c884d"},
+    {file = "clingo-5.7.1-cp37-cp37m-win_amd64.whl", hash = "sha256:0eafa58e3c5b2e2cbd2a72a3789eac3aa0153a6bddaaca40d9dbed0cdce0bcaa"},
+    {file = "clingo-5.7.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:c045787f76444030564343a07c170508b2a9ea1c25a49ea1700d7de9e5f0fc11"},
+    {file = "clingo-5.7.1-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:bc59334cfe4c332900bbdc6fba532f6572e5e23387ac35f1758317e6a39addbc"},
+    {file = "clingo-5.7.1-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0560e99f4a17468aa23ae65255055a6349b09e25bda9e79cbce9e42222cddc72"},
+    {file = "clingo-5.7.1-cp38-cp38-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:8bbfbf21ba87ef103f77abaaff0f26cf2542c77c7dd45202d19ff97ecd4fe7de"},
+    {file = "clingo-5.7.1-cp38-cp38-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:4932eb445f517019a093887d2163a5ee4f0a1e00c15143c9b20d8ba0b2392de7"},
+    {file = "clingo-5.7.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:be3786952ea7771a8381facec9a40e8aa73fb9a28b9352fa9b1e099124307478"},
+    {file = "clingo-5.7.1-cp38-cp38-musllinux_1_1_i686.whl", hash = "sha256:e5425e06287b4fa16ec50453c938d8500fb9ba7f6be22de029d52655f2aeace2"},
+    {file = "clingo-5.7.1-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:c57aac454cd70f491eb289ce12c8c7f33da08804be7c05c76a63199d22ab0e76"},
+    {file = "clingo-5.7.1-cp38-cp38-win32.whl", hash = "sha256:32956e6ce12209cd610067877f5424243af12dd43aa567e3c487e5d5f975f981"},
+    {file = "clingo-5.7.1-cp38-cp38-win_amd64.whl", hash = "sha256:ea34388a885e4cfaf865abc2ae47ed9e9a3e1f2eb11f7cc03cf8310171239926"},
+    {file = "clingo-5.7.1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:5298d3733f24076b65f05c957b0d9842e926a95022610910212c30c0b91639f6"},
+    {file = "clingo-5.7.1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:ff245e19bc4cb25d8b5e01eddc8d23ba3852ecd9aa57edb077013bdefdb51344"},
+    {file = "clingo-5.7.1-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ce1e7ff1961ab6be2b4f56b8fe98c7e4842fb4395e87ee8dbee3c0bec04b19af"},
+    {file = "clingo-5.7.1-cp39-cp39-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:34f1d923b91d84930c5b1eb92ed8cdda9ef8a45fc219d58efc2d6725d96862c6"},
+    {file = "clingo-5.7.1-cp39-cp39-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:d0ae917589bc34c973dae90e408a96f5eee231c05319d6fd6c90814e0d8d82ab"},
+    {file = "clingo-5.7.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0aa5a64df5a545c5ae8ccda76ad05893d304726a6f18e0f53f02e436ad058485"},
+    {file = "clingo-5.7.1-cp39-cp39-musllinux_1_1_i686.whl", hash = "sha256:8ef3c005c1a6e9379a2db870421e99f5dc61878e4880583c128a7ef66ab9f46c"},
+    {file = "clingo-5.7.1-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:47f9e7c08e02dd2e6de1d1ed9fd23be3550fc282b6fc307c8199a5e9fea53a1f"},
+    {file = "clingo-5.7.1-cp39-cp39-win32.whl", hash = "sha256:3d1af3f7947128eac37983bca5a2ea9a423fedfe7acf050eda4a7467ab011369"},
+    {file = "clingo-5.7.1-cp39-cp39-win_amd64.whl", hash = "sha256:489a2e6246f0a66ea4e34fb61986115d6d76362bedbf1faa3240d6bee3c82333"},
+    {file = "clingo-5.7.1-pp310-pypy310_pp73-macosx_10_9_x86_64.whl", hash = "sha256:b3635895af2fb5f6e11bed1f69945a15f3f4e5a25db2a8204300312d7c0477c8"},
+    {file = "clingo-5.7.1-pp310-pypy310_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a6b02279c69a49604a905fee6a95930257fff6cb3a305222902f1cdc7f6a7ced"},
+    {file = "clingo-5.7.1-pp310-pypy310_pp73-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:12a14f054581bf4230eb809cad28096e091c2994ffc8dbe25fd3bcbc52183662"},
+    {file = "clingo-5.7.1-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e51a44d5ec631b847dd749697ab23a0dfdb838cfd8c34f9be6a962d2a8c42e4d"},
+    {file = "clingo-5.7.1-pp37-pypy37_pp73-macosx_10_9_x86_64.whl", hash = "sha256:7c95e647c37c8544f189333f5518853d9f6544c1cd09769b0cee75394c1b0233"},
+    {file = "clingo-5.7.1-pp37-pypy37_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6596448d279282bee77da133739ad16fa48f5b2bb3d1090457ead720c3b9729e"},
+    {file = "clingo-5.7.1-pp37-pypy37_pp73-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:db58a18090abaa1968bda7c6fe420c8d95e1544d51265f86e379a3f4732089de"},
+    {file = "clingo-5.7.1-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:19c2a664dbda2ef357c9649cff77471912ee5f1860e1f0c9446e139a04ac43da"},
+    {file = "clingo-5.7.1-pp38-pypy38_pp73-macosx_10_9_x86_64.whl", hash = "sha256:f29d2a9b26b507dbedb77af4705a9c7f8a76836be326a67ca79aa6011c8c2f78"},
+    {file = "clingo-5.7.1-pp38-pypy38_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:5eae9169de31fbf67423fba78164996aefc6fad7f75abc44aa943e78cf087530"},
+    {file = "clingo-5.7.1-pp38-pypy38_pp73-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:f9c98fb287283fe2e246761daf220613aeb3a47debb894479a6d13375de1ef0c"},
+    {file = "clingo-5.7.1-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c4d2041eeb33597629c4652c904240b7a875da57bd5aab3f4929070d4c23b51d"},
+    {file = "clingo-5.7.1-pp39-pypy39_pp73-macosx_10_9_x86_64.whl", hash = "sha256:4b107d39cd1bc1300c04589918e4dad6efb5530f286fd4b01da02ae4e03e67b9"},
+    {file = "clingo-5.7.1-pp39-pypy39_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:db99f43b339b04f29877bf6f7a439f003c04f6f238bcc0d0d3b09318d5848070"},
+    {file = "clingo-5.7.1-pp39-pypy39_pp73-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:c1a748fb50bf9cc665d96bb15bf3e1094d1224734c064d6568d106a98661bc85"},
+    {file = "clingo-5.7.1-pp39-pypy39_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7e4c36857d15cc5a83187b97345d28fb0fae82f47df6c06634b1d0436a04391c"},
+    {file = "clingo-5.7.1.tar.gz", hash = "sha256:17400a1894da46b2d4941a4a85012c98fa8b3c67a5c6b4c73dcd8c8facbc059f"},
+]
+
+[package.dependencies]
+cffi = "*"
 
 [[package]]
 name = "colorama"
@@ -2301,6 +2409,17 @@ python-versions = ">=3.7"
 files = [
     {file = "iniconfig-2.0.0-py3-none-any.whl", hash = "sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374"},
     {file = "iniconfig-2.0.0.tar.gz", hash = "sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3"},
+]
+
+[[package]]
+name = "inject"
+version = "5.2.1"
+description = "Python dependency injection framework."
+optional = false
+python-versions = "*"
+files = [
+    {file = "inject-5.2.1-py2.py3-none-any.whl", hash = "sha256:e40a5b1bebd8a4050b6f98f3396f3de6e9e2e411ad2a2145f16f351cb6f54e51"},
+    {file = "inject-5.2.1.tar.gz", hash = "sha256:f7c305a75cc4e3a331d248e996f25783ba784b88d5a9b9f73c53eacaa6d76985"},
 ]
 
 [[package]]
@@ -4196,6 +4315,19 @@ files = [
 ]
 
 [[package]]
+name = "pddlpy"
+version = "0.4.4"
+description = "Python PDDL parser"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pddlpy-0.4.4-py3-none-any.whl", hash = "sha256:b2c28f3a320d8bfbc481fa6d32b0e418ec4099aa7aa5fef2a852b3f11036bd7a"},
+]
+
+[package.dependencies]
+antlr4-python3-runtime = "4.13.1"
+
+[[package]]
 name = "pdfminer-six"
 version = "20231228"
 description = "PDF parser and analyzer"
@@ -5116,6 +5248,24 @@ files = [
 pprintpp = ">=0.4.0"
 pytest = ">=3.5.0"
 rich = ">=8.0.0"
+
+[[package]]
+name = "pytest-httpx"
+version = "0.30.0"
+description = "Send responses to httpx."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "pytest-httpx-0.30.0.tar.gz", hash = "sha256:755b8edca87c974dd4f3605c374fda11db84631de3d163b99c0df5807023a19a"},
+    {file = "pytest_httpx-0.30.0-py3-none-any.whl", hash = "sha256:6d47849691faf11d2532565d0c8e0e02b9f4ee730da31687feae315581d7520c"},
+]
+
+[package.dependencies]
+httpx = "==0.27.*"
+pytest = ">=7,<9"
+
+[package.extras]
+testing = ["pytest-asyncio (==0.23.*)", "pytest-cov (==4.*)"]
 
 [[package]]
 name = "pytest-mock"
@@ -7461,4 +7611,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "4dbbc26d7fd293fa6de61e1cb10becbb5c3805e15e9809b9d016ea1fcb9c0ae5"
+content-hash = "00b86a0b8889ae9e41dde064caca1606f3f8f782fa60d03fa2729083f8ae2379"

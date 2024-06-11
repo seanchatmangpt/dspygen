@@ -164,7 +164,7 @@ def strip_non_validation_properties(schema):
 
 def main2():
     # Example schema with non-validation properties
-    schema_example = {
+    json_schema_example = {
         "title": "User",
         "type": "object",
         "properties": {
@@ -184,7 +184,7 @@ def main2():
     }
 
     # Use the function to strip non-validation properties
-    cleaned_schema = strip_non_validation_properties(schema_example)
+    cleaned_schema = strip_non_validation_properties(json_schema_example)
     print(cleaned_schema)
 
 

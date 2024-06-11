@@ -15,7 +15,7 @@ class GenerateViralComment(dspy.Signature):
     """
     vid_title = dspy.InputField(desc="Title of the YouTube video. This provides context and helps tailor the comment to the video's content.")
     words = dspy.InputField(desc="Relevant keywords or phrases to include in the comment. These should reflect popular and trending terms related to the video.")
-    viral_comment = dspy.OutputField(desc="Generated comment designed to engage viewers and increase the likelihood of going viral. Includes relevant hashtags for discoverability.")
+    viral_comment = dspy.OutputField(desc="Generated comment designed to engage viewers and increase the likelihood of going viral. Includes relevant hashtags and emojis for discoverability.")
 
 
 
@@ -74,23 +74,6 @@ async def comment_route(data: dict):
     print(data)
     return comment_call(**data)
 
-
-
-"""
-import streamlit as st
-
-
-# Streamlit form and display
-st.title("CommentModule Generator")
-vid_title = st.text_input("Enter vid_title")
-words = st.text_input("Enter words")
-
-if st.button("Submit CommentModule"):
-    init_dspy()
-
-    result = comment_call(vid_title=vid_title, words=words)
-    st.write(result)
-"""
 
 if __name__ == "__main__":
     main()
