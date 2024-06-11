@@ -3,12 +3,6 @@ from google.oauth2.service_account import Credentials
 
 from dspygen.utils.file_tools import project_dir
 
-# Set up Google Sheets API credentials
-scopes = ["https://www.googleapis.com/auth/spreadsheets"]
-creds = Credentials.from_service_account_file(str(project_dir() / "credentials.json"), scopes=scopes)
-client = gspread.authorize(creds)
-
-
 def show_all_sheet_data(sheet):
     """
     Prints all data from the given sheet.

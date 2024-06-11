@@ -1,9 +1,7 @@
 from jinja2 import Template
 import yaml
 
-# Load your OpenAPI YAML file
-with open('openapi.yaml', 'r') as file:
-    openapi_data = yaml.safe_load(file)
+
 
 # Jinja2 template string (put the Jinja template content here)
 template_str = """{% set predicates = {
@@ -68,6 +66,10 @@ def main():
     """Main function"""
     from dspygen.utils.dspy_tools import init_ol
     init_ol()
+
+    # Load your OpenAPI YAML file
+    with open('openapi.yaml', 'r') as file:
+        openapi_data = yaml.safe_load(file)
 
     # Create a Jinja2 Template object
     template = Template(template_str)
