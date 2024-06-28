@@ -31,12 +31,12 @@ def new_module(
 
     file_name = f"{inflection.underscore(class_name)}_module.py"
 
-    with open(dspy_modules_dir() / file_name, "w") as file:
+    with open(file_name, "w") as file:
         file.write(source)
 
     print(source)
 
-    print(f"Module saved to {dspy_modules_dir() / file_name}")
+    print(f"Module saved to {file_name}")
 
 
 def load_commands(directory: str = "modules"):
