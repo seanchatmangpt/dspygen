@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from typing import TypeVar, Type, Set
 
 import dspy
-from dspygen.utils.dspy_tools import init_dspy
+from dspygen.utils.dspy_tools import init_dspy, init_ol
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -100,7 +100,8 @@ def get_model_source(model: Type[BaseModel], already_seen: Set[Type[BaseModel]] 
 
 
 def main():
-    init_dspy()
+    #init_dspy()
+    init_ol()
 
     # hello_world = call(ping_pong, "Lorem Ipsum")
     # print(hello_world)
