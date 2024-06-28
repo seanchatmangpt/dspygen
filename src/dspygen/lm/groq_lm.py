@@ -36,7 +36,7 @@ class Groq(LM):
                     "content": prompt,
                 },
             ],
-            model=self.kwargs.get("model", default_model),
+            model=self.kwargs.read("model", default_model),
         )
         return [chat_completion.choices[0].message.content]
 

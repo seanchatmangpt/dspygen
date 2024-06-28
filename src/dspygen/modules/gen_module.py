@@ -33,7 +33,7 @@ class GenModule(Module):
     def forward(self, **kwargs):
         # Generate the output using provided inputs
         gen_result = self.generate(**kwargs)
-        output = gen_result.get(self.output_key)
+        output = gen_result.read(self.output_key)
 
         # Try validating the output
         try:
@@ -43,7 +43,7 @@ class GenModule(Module):
             logger.error(output)
             # Correction attempt
             corrected_result = self.correct_generate(**kwargs, error=str(error))
-            corrected_output = corrected_result.get(self.output_key)
+            corrected_output = corrected_result.read(self.output_key)
             return self.validate_output(corrected_output)
 
     def validate_output(self, output):

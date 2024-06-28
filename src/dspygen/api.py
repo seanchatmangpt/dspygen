@@ -10,6 +10,8 @@ from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.actor_system import ActorSystem
 from dspygen.utils.file_tools import dspy_modules_dir
 from dspygen.workflow.workflow_router import router as workflow_router
+from loguru import logger
+
 
 
 app = FastAPI()
@@ -24,6 +26,7 @@ from dspygen.dsl.dsl_pipeline_executor import router as pipeline_router
 @app.on_event("startup")
 async def startup_event():
     await get_actor_system()
+    load_module_routers(app)
 
 
 app.include_router(pipeline_router)
@@ -36,6 +39,7 @@ def load_module_routers(app: FastAPI):
             module_name = filename[:-3]
             module = import_module(f"dspygen.modules.{module_name}")
             if hasattr(module, "router"):
+                logger.info(f"Loading router for module: {module_name}")
                 app.include_router(module.router)
 
 
@@ -45,7 +49,7 @@ async def get_actor_system():
     try:
         actor_system
     except NameError:
-        actor_system = ActorSystem(mqtt_broker="9.tcp.ngrok.io", mqtt_port=24651)
+        actor_system = ActorSystem()
 
     return actor_system  # Assume actor_system is globally available
 

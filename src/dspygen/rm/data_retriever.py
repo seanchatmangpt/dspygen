@@ -73,11 +73,9 @@ def read_any(filepath, query, read_options=None):
 
 
 class DataRetriever(dspy.Retrieve):
-    def __init__(self, file_path: str | Path, query: str = "", return_columns=None,
+    def __init__(self, file_path: str | Path, query: str = "SELECT * FROM df",
                  read_options=None, pipeline=None, step=None, **kwargs):
         super().__init__()
-        if return_columns is None:
-            return_columns = []
         if read_options is None:
             read_options = {}
 
@@ -85,7 +83,6 @@ class DataRetriever(dspy.Retrieve):
         self.step = step
 
         self.file_path = str(file_path)
-        self.return_columns = return_columns
         self.read_options = read_options
 
         # Read the data using the read_any function
@@ -101,10 +98,6 @@ class DataRetriever(dspy.Retrieve):
 
         if k is not None:
             matches = matches.head(k)
-
-        if self.return_columns:
-            # Ensure only specified return columns are included in the results
-            matches = matches[self.return_columns]
 
         result = matches.to_dict(orient='records')
 

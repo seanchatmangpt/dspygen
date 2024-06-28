@@ -29,7 +29,7 @@ def main():
 
     # Convert the datetime object to a string in the format 'YYYY-MM-DD HH:MM:SS'
     zulu_time_str = current_time_utc.strftime('%Y-%m-%d_%H_%M_%S')
-    optimized_cot.save(f"optimized_cot_bootstrap_sig_{zulu_time_str}.json")
+    optimized_cot.upsert(f"optimized_cot_bootstrap_sig_{zulu_time_str}.json")
 
     from dspy.evaluate import Evaluate
 

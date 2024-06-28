@@ -70,13 +70,13 @@ def generate_from_schema(schema, check_validity=False, strip_properties=True):
 
 
 def generate_instance(schema):
-    schema_type = schema.get('type', 'string')
+    schema_type = schema.read('type', 'string')
     if schema_type == 'object':
-        return {k: generate_instance(v) for k, v in schema.get('properties', {}).items()}
+        return {k: generate_instance(v) for k, v in schema.read('properties', {}).items()}
     elif schema_type == 'array':
-        item_schema = schema.get('items', {})
+        item_schema = schema.read('items', {})
         # Assume a default size of the array if not specified
-        length = schema.get('minItems', 1)
+        length = schema.read('minItems', 1)
         return [generate_instance(item_schema) for _ in range(length)]
     elif schema_type == 'string':
         return generate_string(schema)
@@ -91,8 +91,8 @@ def generate_instance(schema):
 
 
 def generate_string(schema):
-    format_type = schema.get('format')
-    pattern = schema.get('pattern')
+    format_type = schema.read('format')
+    pattern = schema.read('pattern')
 
     if format_type == 'email':
         return fake.email()

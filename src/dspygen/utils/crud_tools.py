@@ -9,13 +9,13 @@ from dspygen.experiments.rfc5545.ical_db_session import get_session
 
 def get_model(model_cls, model_id):
     session = get_session()
-    model = session.get(model_cls, model_id)
+    model = session.read(model_cls, model_id)
     return model
 
 
 def delete_model(model_cls, model_id):
     session = get_session()
-    model = session.get(model_cls, model_id)
+    model = session.read(model_cls, model_id)
     if model:
         session.delete(model)
 
@@ -30,7 +30,7 @@ def delete_model(model_cls, model_id):
 def add_model(model):
     session = get_session()  # Assuming you have a function to get a database session
     try:
-        session.add(model)  # Add the provided model to the session
+        session.create(model)  # Add the provided model to the session
         session.commit()  # Commit changes on success
         session.refresh(model)  # Refresh the provided model
 
@@ -50,7 +50,7 @@ def add_model(model):
 def update_model(model_cls, model_id):
     session = get_session()  # Assuming you have a function to get a database session
     try:
-        existing_model = session.query(model_cls).get(model_id)
+        existing_model = session.query(model_cls).read(model_id)
         if existing_model is None:
             raise ValueError(f"{model_cls.__name__} with ID {model_id} not found")
 

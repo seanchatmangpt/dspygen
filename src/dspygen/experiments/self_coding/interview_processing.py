@@ -59,13 +59,3 @@ def main2():
     print(f"Evaluation Result: {evaluation_result}")
     print(f"Retry Decision: {retry_decision}")
 
-
-def main():
-    """"""
-    dspy.Suggest
-    dspy.Assert
-
-
-if __name__ == '__main__':
-    #main()
-    main2()

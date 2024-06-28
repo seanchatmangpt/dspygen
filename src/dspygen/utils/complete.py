@@ -341,16 +341,16 @@ async def awrite_response(mode, prompt, res, write_path):
 
 
 def get_response(res, raw_msg, funcs):
-    msg = res.get("choices")[0].get("message")
+    msg = res.read("choices")[0].read("message")
 
     if raw_msg:
         return msg
 
-    func = msg.get("function_call")
+    func = msg.read("function_call")
 
     if func:
         try:
-            func["arguments"] = json.loads(func.get("arguments", ""))
+            func["arguments"] = json.loads(func.read("arguments", ""))
         except json.decoder.JSONDecodeError:
             pass
         # if it is not a valid json, {"name": "func_name", "arguments": {}}, throw a error
@@ -365,7 +365,7 @@ def get_response(res, raw_msg, funcs):
         logger.exception(error_msg)
         raise ValueError(error_msg)
     else:
-        return msg.get("content", "").strip()
+        return msg.read("content", "").strip()
 
 
 def _create_params(model, messages, funcs=None):

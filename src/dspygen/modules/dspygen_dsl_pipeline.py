@@ -11,7 +11,7 @@ def process_yaml_pipeline(yaml_file):
 
     for module_def in config['modules']:
         module_class = globals()[f"{module_def['module']}DGModule"]  # Get the module class by name
-        module_instance = module_class(**module_def.get('args', {}))
+        module_instance = module_class(**module_def.read('args', {}))
 
         dg_modules.append(module_instance)
 

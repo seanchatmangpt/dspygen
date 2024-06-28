@@ -51,7 +51,7 @@ def main():
     # Compile to optimize the signature
     kwargs = dict(num_threads=10, display_progress=True)
     optimized_signature = teleprompter.compile(TextToJSONModule(), trainset=trainset, eval_kwargs=kwargs)
-    optimized_signature.save("optimized_signature.json")
+    optimized_signature.upsert("optimized_signature.json")
     # Create a module with the optimized signature
     module = TextToJSONModule(optimized_signature)
 

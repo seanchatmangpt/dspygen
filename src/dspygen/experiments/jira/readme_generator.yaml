@@ -1,0 +1,332 @@
+# readme_generator.yaml
+lm_models:
+  - label: "default"
+    name: "OpenAI"
+    args:
+      model: "gpt-4o"
+      max_tokens: 4000
+  - label: "smart"
+    name: "OpenAI"
+    args:
+      model: "gpt-4o"
+      max_tokens: 4000
+
+signatures:
+  - name: "ProjectOverview"
+    docstring: "Generates an in-depth overview of the project, providing a clear and concise description of the project's purpose, target audience, and main functionalities. The overview should include specific use cases, examples of how the project can be utilized, and any unique features or benefits it offers. Synthesize mock data and scenarios to illustrate the project's capabilities."
+    inputs:
+      - name: "user_input"
+        desc: "A high-level description of the project, including its main goals, intended users, key features, specific use cases, and examples."
+    outputs:
+      - name: "project_overview"
+        desc: "A detailed and comprehensive overview of the project, including its purpose, target audience, key functionalities, unique features, specific use cases, and examples of utilization."
+        prefix: "```json\n"
+
+  - name: "GenerateFeatures"
+    docstring: "Generates a detailed list of features based on the project overview. Each feature should be described thoroughly, highlighting its functionality, benefits, real-world applications, and how it contributes to the overall project. Include specific scenarios where each feature would be particularly useful. Use creative synthesis to generate new feature descriptions and applications."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context and background information about the project's objectives and scope."
+    outputs:
+      - name: "features"
+        desc: "A detailed and organized list of features, with each feature explained in terms of its functionality, benefits, real-world applications, and specific scenarios of use."
+
+  - name: "GenerateAPIReference"
+    docstring: "Generates a comprehensive API reference section based on the project overview. This section should include detailed information about each API endpoint, including its purpose, parameters, request/response formats, and examples. Ensure that each endpoint is accompanied by practical examples and explanations of how it can be used in different scenarios. Create new, hypothetical examples to illustrate API usage."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the API reference, including the project's functionality and the role of the API within it."
+    outputs:
+      - name: "api_reference"
+        desc: "A detailed API reference section, including descriptions of each endpoint, parameters, request/response formats, practical examples, and explanations of different usage scenarios."
+        prefix: "```openapi"
+
+  - name: "GenerateDemo"
+    docstring: "Generates a demo section that showcases the project in action. This section should include links to live demos, GIFs, or videos that illustrate the project's features and functionality. Provide a narrative or walkthrough that explains what the user is seeing and how the demo showcases the project’s capabilities. Invent new, illustrative demo scenarios to highlight key features."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the demo, including its main features and functionalities."
+    outputs:
+      - name: "demo_section"
+        desc: "A demo section with links to live demos, GIFs, or videos, along with detailed descriptions and narratives explaining the key features and functionalities showcased."
+
+  - name: "GenerateDeploymentInstructions"
+    docstring: "Generates detailed deployment instructions for the project. This section should cover the steps required to deploy the project to a production environment, including any prerequisites, configuration steps, and commands. Provide examples and potential troubleshooting tips to ensure a smooth deployment process. Include novel deployment scenarios and mock troubleshooting cases."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the deployment instructions, including the project's architecture and deployment requirements."
+    outputs:
+      - name: "deployment_section"
+        desc: "A comprehensive deployment section with step-by-step instructions, prerequisites, configuration details, commands, examples, and troubleshooting tips for deploying the project to a production environment."
+        prefix: "```bash"
+
+  - name: "GenerateDocumentationLink"
+    docstring: "Generates a section that provides links to the project's documentation. This should include links to various parts of the documentation, such as setup guides, API references, tutorials, and other relevant resources. Provide brief descriptions of what users can expect to find in each linked document. Synthesize hypothetical examples of documentation sections."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the documentation links, including key areas that require detailed documentation."
+    outputs:
+      - name: "documentation_section"
+        desc: "A section with organized links to various parts of the project's documentation, including setup guides, API references, tutorials, and other essential resources, with brief descriptions of each link."
+
+  - name: "GenerateEnvironmentVariables"
+    docstring: "Generates a detailed environment variables section. This section should list all required environment variables, along with descriptions of what each variable is for and how to set it. Include examples of valid values and any tips for managing these variables securely. Invent mock environment variables and their uses to illustrate setup."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the environment variables, including how they are used within the project."
+    outputs:
+      - name: "env_variables_section"
+        desc: "A detailed environment variables section listing each required variable, its purpose, how to set it, examples of valid values, and tips for secure management."
+        prefix: "```.env"
+
+  - name: "GenerateFAQ"
+    docstring: "Generates a comprehensive FAQ section based on the project overview. This section should address common questions and concerns that users or developers might have about the project. Provide detailed answers and reference relevant parts of the documentation or other resources for further reading. Create new, plausible FAQ entries to cover a wide range of potential questions."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the FAQ, including common issues or questions that users or developers might encounter."
+    outputs:
+      - name: "faq_section"
+        desc: "A comprehensive FAQ section that addresses common questions and concerns, providing detailed answers and referencing relevant documentation or resources for further reading."
+
+  - name: "GenerateInstallationInstructions"
+    docstring: "Generates detailed installation instructions for the project. This section should cover all necessary steps to install the project, including prerequisites, setup commands, and any configuration required. Provide examples and potential troubleshooting tips to ensure a smooth installation process. Invent new installation scenarios and mock troubleshooting cases."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the installation instructions, including system requirements and dependencies."
+    outputs:
+      - name: "installation_section"
+        desc: "A comprehensive installation section with step-by-step instructions, prerequisites, setup commands, configuration details, examples, and troubleshooting tips for installing the project."
+        prefix: "```bash"
+
+  - name: "GenerateLessonsLearned"
+    docstring: "Generates a lessons learned section that reflects on the development process of the project. This section should discuss challenges faced, solutions implemented, and key takeaways from the project. Include specific anecdotes and examples to illustrate the learning points. Create new, hypothetical examples to explain lessons learned."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the lessons learned, including the development process and any significant challenges."
+    outputs:
+      - name: "lessons_learned_section"
+        desc: "A detailed lessons learned section that discusses challenges faced during development, solutions implemented, key takeaways, and specific anecdotes and examples illustrating the learning points."
+
+  - name: "GenerateOptimizations"
+    docstring: "Generates an optimizations section that describes any performance improvements, code refactoring, or other optimizations made to the project. Provide detailed explanations of the changes made, why they were necessary, and the impact they had on the project. Invent hypothetical scenarios and examples to illustrate optimizations."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the optimizations, including any performance or maintainability goals."
+    outputs:
+      - name: "optimizations_section"
+        desc: "A detailed optimizations section that describes performance improvements, code refactoring, and other optimizations, including explanations of the changes, their necessity, and their impact on the project."
+
+  - name: "GenerateRoadmap"
+    docstring: "Generates a roadmap section that outlines future plans for the project. This section should detail upcoming features, improvements, and milestones. Include timelines and priorities to give a clear picture of the project's future direction. Synthesize new milestones and future plans to create a dynamic roadmap."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the roadmap, including current features and any long-term goals."
+    outputs:
+      - name: "roadmap_section"
+        desc: "A comprehensive roadmap section that outlines future plans, upcoming features, improvements, key milestones, timelines, and priorities for the project."
+
+  - name: "GenerateRunLocallyInstructions"
+    docstring: "Generates detailed instructions for running the project locally. This section should cover cloning the repository, installing dependencies, and starting the local development server. Provide examples and potential troubleshooting tips to ensure a smooth local setup process. Invent new local setup scenarios and mock troubleshooting cases."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the local setup instructions, including any special requirements or dependencies."
+    outputs:
+      - name: "run_locally_section"
+        desc: "A detailed run locally section with step-by-step instructions for cloning the repository, installing dependencies, starting the local development server, examples, and troubleshooting tips."
+        prefix: "```bash"
+
+  - name: "GenerateSupportInfo"
+    docstring: "Generates a support section that provides information on how to get help or support for the project. This section should include contact details, links to support channels, and any other relevant resources. Provide guidelines on how to ask for help effectively and any response time expectations. Invent new support scenarios and contact methods to enhance the support section."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the support information, including common issues users might encounter."
+    outputs:
+      - name: "support_section"
+        desc: "A detailed support section with contact details, links to support channels, guidelines for asking for help effectively, response time expectations, and other relevant resources."
+
+  - name: "GenerateTechStack"
+    docstring: "Generates a tech stack section that lists the technologies used in the project. This section should provide a brief description of each technology, its role in the project, and why it was chosen. Include links to documentation or resources for each technology. Create new, hypothetical examples of how each technology integrates within the project."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the tech stack, including the project's architecture and technology choices."
+    outputs:
+      - name: "tech_stack_section"
+        desc: "A detailed tech stack section that lists the technologies used in the project, with descriptions of each technology, its role, reasons for its choice, and links to documentation or resources."
+
+  - name: "GenerateRunningTestsInstructions"
+    docstring: "Generates detailed instructions for running tests in the project. This section should cover setting up the test environment, running tests, and interpreting the results. Provide examples and potential troubleshooting tips to ensure a smooth testing process. Invent new testing scenarios and mock troubleshooting cases to illustrate the testing process."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the testing instructions, including the types of tests available and their purpose."
+    outputs:
+      - name: "running_tests_section"
+        desc: "A comprehensive running tests section with step-by-step instructions for setting up the test environment, running tests, interpreting the results, examples, and troubleshooting tips."
+
+  - name: "GenerateUsageExamples"
+    docstring: "Generates a usage examples section that provides code snippets and examples demonstrating how to use the project's features and API. This section should be detailed and cover various use cases. Provide clear explanations and context for each example to ensure users can understand and replicate them. Invent new, creative examples to showcase different features and API uses."
+    inputs:
+      - name: "project_overview"
+        desc: "An overview of the project that provides context for the usage examples, including the main functionalities and use cases."
+    outputs:
+      - name: "usage_examples_section"
+        desc: "A detailed usage examples section with code snippets and examples demonstrating how to use the project's features and API in various scenarios, with clear explanations and context."
+
+modules:
+  - name: "ProjectOverviewModule"
+    signature: "ProjectOverview"
+    predictor: "ChainOfThought"
+
+  - name: "FeaturesModule"
+    signature: "GenerateFeatures"
+    predictor: "ChainOfThought"
+
+  - name: "APIReferenceModule"
+    signature: "GenerateAPIReference"
+    predictor: "ChainOfThought"
+
+  - name: "DemoModule"
+    signature: "GenerateDemo"
+    predictor: "ChainOfThought"
+
+  - name: "DeploymentModule"
+    signature: "GenerateDeploymentInstructions"
+    predictor: "ChainOfThought"
+
+  - name: "DocumentationModule"
+    signature: "GenerateDocumentationLink"
+    predictor: "ChainOfThought"
+
+  - name: "EnvironmentVariablesModule"
+    signature: "GenerateEnvironmentVariables"
+    predictor: "ChainOfThought"
+
+  - name: "FAQModule"
+    signature: "GenerateFAQ"
+    predictor: "ChainOfThought"
+
+  - name: "InstallationModule"
+    signature: "GenerateInstallationInstructions"
+    predictor: "ChainOfThought"
+
+  - name: "LessonsLearnedModule"
+    signature: "GenerateLessonsLearned"
+    predictor: "ChainOfThought"
+
+  - name: "OptimizationsModule"
+    signature: "GenerateOptimizations"
+    predictor: "ChainOfThought"
+
+  - name: "RoadmapModule"
+    signature: "GenerateRoadmap"
+    predictor: "ChainOfThought"
+
+  - name: "RunLocallyModule"
+    signature: "GenerateRunLocallyInstructions"
+    predictor: "ChainOfThought"
+
+  - name: "SupportModule"
+    signature: "GenerateSupportInfo"
+    predictor: "ChainOfThought"
+
+  - name: "TechStackModule"
+    signature: "GenerateTechStack"
+    predictor: "ChainOfThought"
+
+  - name: "RunningTestsModule"
+    signature: "GenerateRunningTestsInstructions"
+    predictor: "ChainOfThought"
+
+  - name: "UsageExamplesModule"
+    signature: "GenerateUsageExamples"
+    predictor: "ChainOfThought"
+
+steps:
+  - module: "ProjectOverviewModule"
+    signature: "ProjectOverview"
+    args:
+      user_input: "{{ user_input }}"
+
+  - module: "FeaturesModule"
+    signature: "GenerateFeatures"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "APIReferenceModule"
+    signature: "GenerateAPIReference"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "DemoModule"
+    signature: "GenerateDemo"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "DeploymentModule"
+    signature: "GenerateDeploymentInstructions"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "DocumentationModule"
+    signature: "GenerateDocumentationLink"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "EnvironmentVariablesModule"
+    signature: "GenerateEnvironmentVariables"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "FAQModule"
+    signature: "GenerateFAQ"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "InstallationModule"
+    signature: "GenerateInstallationInstructions"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "LessonsLearnedModule"
+    signature: "GenerateLessonsLearned"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "OptimizationsModule"
+    signature: "GenerateOptimizations"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "RoadmapModule"
+    signature: "GenerateRoadmap"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "RunLocallyModule"
+    signature: "GenerateRunLocallyInstructions"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "SupportModule"
+    signature: "GenerateSupportInfo"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "TechStackModule"
+    signature: "GenerateTechStack"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "RunningTestsModule"
+    signature: "GenerateRunningTestsInstructions"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "UsageExamplesModule"
+    signature: "GenerateUsageExamples"
+    args:
+      project_overview: "{{ project_overview }}"
+
+  - module: "ReadmeGeneratorModule"
+    lm_model: "smart"
+    args:
+      readme_sections: "{{ [ project_title, features, api_reference, demo_section, deployment_section, documentation_section, env_variables_section, faq_section, installation_section, lessons_learned_section, optimizations_section, roadmap_section, run_locally_section, support_section, tech_stack_section, running_tests_section, usage_examples_section] | join(', ') }}"

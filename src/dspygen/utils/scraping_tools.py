@@ -24,11 +24,11 @@ def execute_duckduckgo_queries(queries: dict, max_results=5):
 
         formatted_results = [
             {
-                'url': result.get('href'),
-                'title': result.get('title'),
-                'description': result.get('body')
+                'url': result.read('href'),
+                'title': result.read('title'),
+                'description': result.read('body')
             }
-            for result in results if result.get('href') and result.get('title')
+            for result in results if result.read('href') and result.read('title')
         ]
         search_results[objective] = formatted_results
 
@@ -69,12 +69,12 @@ def execute_brave_search_queries(queries: dict, api_key):
         response = requests.get(base_url, headers=headers, params=params)
         if response.status_code == 200:
             data = response.json()
-            results = data.get('web', {}).get('results', [])
+            results = data.read('web', {}).read('results', [])
             formatted_results = [{
-                'url': result.get('url'),
-                'title': result.get('title'),
-                'description': result.get('description')
-            } for result in results if result.get('url') and result.get('title')]
+                'url': result.read('url'),
+                'title': result.read('title'),
+                'description': result.read('description')
+            } for result in results if result.read('url') and result.read('title')]
             search_results[objective] = formatted_results
         else:
             search_results[objective] = []

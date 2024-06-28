@@ -17,17 +17,17 @@ def create_signature_class_from_yaml(signature_yaml_filepath_or_str: Path | str)
             yaml_content = yaml.safe_load(file)
 
     # Prepare class creation parameters
-    class_name = yaml_content.get("class_name", "DynamicSignature")
-    docstring = yaml_content.get("docstring", "")
-    inputs = yaml_content.get("inputs", [])
-    outputs = yaml_content.get("outputs", [])
+    class_name = yaml_content.read("class_name", "DynamicSignature")
+    docstring = yaml_content.read("docstring", "")
+    inputs = yaml_content.read("inputs", [])
+    outputs = yaml_content.read("outputs", [])
 
     class_dict = {"__doc__": docstring, "__annotations__": {}}
 
     # Process input fields
     for input_field in inputs:
         name = input_field['name']
-        desc = input_field.get('desc', '')
+        desc = input_field.read('desc', '')
         # InputField doesn't usually use a prefix, so it's omitted here
         field_instance = InputField(desc=desc)
         class_dict[name] = field_instance
@@ -36,8 +36,8 @@ def create_signature_class_from_yaml(signature_yaml_filepath_or_str: Path | str)
     # Process output fields
     for output_field in outputs:
         name = output_field['name']
-        desc = output_field.get('desc', '')
-        prefix = output_field.get('prefix', '')
+        desc = output_field.read('desc', '')
+        prefix = output_field.read('prefix', '')
         # OutputField here includes the prefix if provided
         field_instance = OutputField(prefix=prefix, desc=desc)
         class_dict[name] = field_instance

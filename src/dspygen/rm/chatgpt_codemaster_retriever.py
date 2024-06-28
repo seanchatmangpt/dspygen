@@ -298,7 +298,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
         metadatas = results.get("metadatas", [[]])[0]
 
         # Combine documents and their corresponding metadata into a list of dictionaries
-        return [{"code": doc, "description": meta.get("description", ""), "id": meta.get("id", "")}
+        return [{"code": doc, "description": meta.read("description", ""), "id": meta.read("id", "")}
                 for doc, meta in zip(documents, metadatas)]
 
     def generate_powershell_script(self, code_files: List[str], directory_structure: str):

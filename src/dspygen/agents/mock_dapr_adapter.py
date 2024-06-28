@@ -44,7 +44,7 @@ class MockDaprClientAdapter(IDaprClientAdapter):
     def raise_workflow_event(self, instance_id, workflow_component, event_name, event_data):
         self.events[instance_id] = (event_name, event_data)
         logging.info(f"{instance_id} Event raised: {event_name}")
-        if event_data.get('approval', False):
+        if event_data.read('approval', False):
             workflow = self.workflows[instance_id]
             workflow['status'] = 'Approved'
             logging.info(f"Payment for order {instance_id} has been approved!")

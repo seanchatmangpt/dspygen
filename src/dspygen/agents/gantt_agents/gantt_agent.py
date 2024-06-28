@@ -1,4 +1,6 @@
+import json
 from enum import Enum, auto
+from loguru import logger
 from typing import List, Optional
 
 import dspy
@@ -38,6 +40,23 @@ class GanttChart(BaseModel):
     weekday: Optional[str] = Field(None, description="Start day of the week for tickInterval")
     axis_format: Optional[str] = Field(None, alias='axisFormat', description="Format of the dates on the axis")
 
+
+
+# Define a function to format logs as JSON
+def json_formatter(record):
+    log_record = {
+        "timestamp": record["time"].strftime("%Y-%m-%d %H:%M:%S"),
+        "level": record["level"].name,
+        "message": record["message"]
+    }
+    return json.dumps(log_record)
+
+
+# Configure loguru to write logs to a file with JSON formatting
+logger.remove()  # Remove the default logger
+logger.add("logs/gantt_agent.log", format=json_formatter, rotation="10 MB")
+
+
 # Define the GanttAgent class with FSM
 class GanttAgent(FSMMixin):
     def __init__(self):
@@ -49,41 +68,45 @@ class GanttAgent(FSMMixin):
 
     @trigger(source=GanttState.INITIALIZING, dest=GanttState.PLANNING)
     def start_planning(self):
-        print("Starting planning phase.")
-        # self.plan = dspy.Predict("task -> plan")(task=self.task.model_dump_json()).plan
-        self.plan = """Plan: 
+        logger.info("Starting planning phase.")
+        self.plan = dspy.Predict("task -> plan")(task=str(self.task)).plan
+        logger.info(self.plan)
 
-1. Review the completed task details, including status and timeline.
-2. Analyze any dependencies that were involved in this task to understand their impact on related tasks.
-3. Update project documentation or records with the completion of this task for future reference.
-4. Communicate the successful completion of the task to relevant stakeholders if necessary.
-5. Assess and plan next steps, including any follow-up actions required due to dependencies or outcomes from this completed task."""
         self.start_execution()
 
     @trigger(source=GanttState.PLANNING, dest=GanttState.EXECUTING)
     def start_execution(self):
-        print("Starting execution phase.")
+        logger.info("Starting execution phase.")
         self.execution = dspy.Predict("plan -> execution")(plan=self.plan).execution
+        logger.info(self.execution)
         self.start_monitoring()
 
     @trigger(source=GanttState.EXECUTING, dest=GanttState.MONITORING)
     def start_monitoring(self):
-        print("Starting monitoring phase.")
-        raise NotImplementedError("Monitoring phase not yet implemented.")
+        logger.info("Starting monitoring phase.")
+        self.monitoring = dspy.Predict("execution -> monitoring")(execution=self.execution).monitoring
+        logger.info(self.monitoring)
+        self.complete_tasks()
 
     @trigger(source=GanttState.MONITORING, dest=GanttState.COMPLETING)
     def complete_tasks(self):
-        print("Completing all tasks.")
-        raise NotImplementedError("Task completion not yet implemented.")
+        logger.info("Completing all tasks.")
+        self.completion = dspy.Predict("monitoring -> completion")(monitoring=self.monitoring).completion
+        logger.info(self.completion)
 
     @trigger(source=GanttState.COMPLETING, dest=GanttState.INITIALIZING)
     def reset(self):
-        print("Resetting for a new cycle.")
+        logger.info("Resetting for a new cycle.")
+        self.task = None
+        self.plan = None
+        self.execution = None
+        self.monitoring = None
+        self.completion = None
 
 # Example usage of GanttAgent and GanttChart
 def main():
     from dspygen.utils.dspy_tools import init_ol
-    init_ol()
+    init_ol(model="qwen2:7b-instruct", timeout=30)
     # Initialize the Gantt chart data
     gantt_chart = GanttChart(
         dateFormat="YYYY-MM-DD",

@@ -20,3 +20,9 @@ def configure(binder):
 
     binder.bind(Credentials, creds)
     binder.bind(gspread.Client, client)
+
+    from dapr.ext.workflow import WorkflowRuntime
+    from dapr.clients import DaprClient
+
+    binder.bind(DaprClient, DaprClient())
+    binder.bind(WorkflowRuntime, WorkflowRuntime())

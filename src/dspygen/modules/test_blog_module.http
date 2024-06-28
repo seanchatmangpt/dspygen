@@ -1,0 +1,16 @@
+### Test POST request to generate a blog article
+POST http://localhost:8000/blog/
+Content-Type: application/json
+
+{
+  "subject": "Introduction to Python"
+}
+
+
+### Test POST request to generate a blog article
+POST http://localhost:8000/text_summarizer/
+Content-Type: application/json
+
+{
+  "text": "Introduction to Python"
+}

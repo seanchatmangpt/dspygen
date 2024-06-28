@@ -1,6 +1,10 @@
 import dspy
 
 
+class OpenAIModels:
+    gpt3 = ""
+
+
 def init_dspy(model: str = "gpt-3.5-turbo-instruct", lm_class=dspy.OpenAI, max_tokens: int = 800, lm_instance=None, api_key=None):
     if lm_instance:
         dspy.settings.configure(lm=lm_instance)
@@ -11,7 +15,15 @@ def init_dspy(model: str = "gpt-3.5-turbo-instruct", lm_class=dspy.OpenAI, max_t
         return lm
 
 
-def init_ol(model: str = "phi3:instruct", base_url="http://0.0.0.0:11434", max_tokens: int = 800, lm_instance=None, lm_class=dspy.OllamaLocal, timeout=10):
+class OllamaModels:
+    phi = "phi3:instruct"
+    qwen = "qwen2:7b-instruct"
+    deepseek = "deepseek-coder-v2"
+    llama = "llama3"
+    mixtral = "mixtral:8x22b"
+
+
+def init_ol(model: str = OllamaModels.qwen, base_url="http://0.0.0.0:11434", max_tokens: int = 800, lm_instance=None, lm_class=dspy.OllamaLocal, timeout=10):
     if lm_instance:
         dspy.settings.configure(lm=lm_instance)
         return lm_instance

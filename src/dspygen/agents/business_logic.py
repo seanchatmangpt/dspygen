@@ -21,7 +21,7 @@ def process_payment_activity(order_id, amount):
 
 def verify_inventory_activity(item_name, quantity, inventory):
     """Check if there is enough inventory present for the purchase."""
-    available = inventory.get(item_name, 0)
+    available = inventory.read(item_name, 0)
     if available >= quantity:
         logging.info(f"VerifyInventoryActivity: There are {available} {item_name}s available for purchase")
         return True

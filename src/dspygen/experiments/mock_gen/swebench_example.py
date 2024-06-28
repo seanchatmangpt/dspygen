@@ -55,7 +55,7 @@ def main():
     teleprompter = BootstrapFewShot(metric=swebench_metric, **config)
     optimized_cot = teleprompter.compile(CoT(), trainset=swe_bench_trainset)
     from time import time
-    optimized_cot.save(f"optimized_cot_sig_{str(time())}.json")
+    optimized_cot.upsert(f"optimized_cot_sig_{str(time())}.json")
 
     from dspy.evaluate import Evaluate
 

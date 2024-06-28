@@ -21,7 +21,7 @@ class BlogArticleGenerationSignature(dspy.Signature):
 
     subject = dspy.InputField(desc="The main subject or topic for the blog article.")
 
-    markdown_blog_article = dspy.OutputField(desc="Generated blog article in markdown format.", prefix="```markdown")
+    markdown_blog_article = dspy.OutputField(desc="Generated blog article in markdown format.")
 
 
 class BlogModule(dspy.Module):
@@ -57,10 +57,14 @@ router = APIRouter()
 @router.post("/blog/")
 async def blog_route(data: dict):
     # Your code generation logic here
-    init_dspy()
-    
+    model = "gpt-4"
+    print(model)
+    init_dspy(model=model)
+
     print(data)
-    return blog_call(**data)
+    result = blog_call(**data)
+    print(result)
+    return result
 
 
 def main():

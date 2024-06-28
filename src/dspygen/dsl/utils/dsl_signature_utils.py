@@ -24,7 +24,7 @@ def _process_module_signatures(global_signatures, module_def, step):
     """
     sig_key = get_sig_key(module_def, step)
 
-    if sig_key in global_signatures:
+    if sig_key in global_signatures or sig_key == '':
         return
 
     sig_cls = _load_signature_class(sig_key)

@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]  # https://python-poetry.org/docs/pyproject/
 name = "dspygen"
-version = "2024.6.7"
+version = "2024.6.19"
 description = "A Ruby on Rails style framework for the DSPy (Demonstrate, Search, Predict) project for Language Models like GPT, BERT, and LLama."
 authors = ["Sean Chatman <info@chatmangpt.com>"]
 readme = "README.md"
@@ -70,6 +70,8 @@ httpx = "^0.27.0"
 inject = "^5.2.1"
 pddlpy = "^0.4.4"
 clingo = "^5.7.1"
+numpy = "1.26.4"
+dapr-ext-workflow-dev = "^0.2.0rc1.dev2031"
 
 [tool.poetry.group.test.dependencies]  # https://python-poetry.org/docs/master/managing-dependencies/
 coverage = { extras = ["toml"], version = ">=7.2.5" }
@@ -146,19 +148,13 @@ pub = "poetry publish --build"
       uvicorn \
         --host $host \
         --port $port \
-        --graceful-timeout 30 \
-        --keep-alive 30
-        --timeout 30 \
         --reload \
         dspygen.api:app
     } else {
       gunicorn \
         --access-logfile - \
         --bind $host:$port \
-        --graceful-timeout 30 \
-        --keep-alive 30 \
         --log-file - \
-        --timeout 30 \
         --worker-class uvicorn.workers.UvicornWorker \
         --workers 1 \
         dspygen.api:app
@@ -182,6 +178,7 @@ pub = "poetry publish --build"
     type = "boolean"
     name = "dev"
     options = ["--dev"]
+    default = "true"
 
   [tool.poe.tasks.app]
   help = "Serve a Streamlit app"
