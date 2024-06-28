@@ -76,6 +76,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
             embedding_function=self.embedding_function,
         )
         self.persist_directory.mkdir(parents=True, exist_ok=True)
+        self.code_path = "."
 
         if not check_for_updates:
             return
@@ -112,7 +113,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
                         #print(f"Processing conversation #{count} {conversation['title']}")
                         #logger.info(f"Processing conversation #{count} {conversation['title']}")
 
-                        if conversation['title'] in ["DSPy Data Preprocessing", "Splitting `chatgpt_chromadb_retriever.py`"]:
+                        if conversation['title'] in ["Tetris Python Game Tutorial","DSPy Data Preprocessing"]: #, "Splitting `chatgpt_chromadb_retriever.py`"]:
                             temp_code_directory = Path(f"data/temp_code/{conversation['title']}")
                             temp_code_directory.mkdir(parents=True, exist_ok=True)
                             try:
@@ -154,7 +155,12 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
                                                     )
                                                     logger.debug(f"Added document with ID: {document_id}")
 
-                                                save_code_snippet(temp_code_directory, f"{snip_count}_{document_id}", snippet, description)
+                                                self.code_path = save_code_snippet(temp_code_directory, f"{snip_count}_{document_id}", snippet, description)
+                                                self.collection.update(
+                                                        ids=[document_id],
+                                                        documents=[snippet],
+                                                        metadatas=[{"id": validated_data.id, "code_path": str(self.code_path)}]
+                                                )
 
                             except ValidationError as e:
                                 logger.error(f"Validation error: {e}")
@@ -225,7 +231,8 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
                                     meta = {
                                         "id": validated_data.id,
                                         "role": validated_data.message.author.role,
-                                        "title": validated_conversation.title
+                                        "title": validated_conversation.title,
+                                        "code_path": self.code_path
                                     }
 
                                     self.collection.update(metadatas=[meta], ids=[validated_data.id])
@@ -350,7 +357,7 @@ def main():
     retriever._process_and_store_conversations()  # use only for enforced overriding
     # retriever._update_collection_metadata()
 
-    query = "Please provide the final best and last code for Splitting `chatgpt_chromadb_retriever.py` in Python."
+    query = "Please provide the final best and last code for Code Wizard from chat title `New Python Project Setup`, start with the directory_structure and use retriever.generate_powershell_script(code_files, directory_structure) "
     matched_conversations = retriever.forward(query, k=5)
 
     code_files = []
@@ -366,6 +373,7 @@ def main():
         save_code_snippet(temp_code_directory, doc_id, code, description)
         code_files.append(str(temp_code_directory / f"{doc_id}_{i}"))
 
+    # to be coded tested and refined by the new wizard
     # directory_structure = "C:\\path\\to\\dspygen-composable-architecture"
     # retriever.generate_powershell_script(code_files, directory_structure)
 

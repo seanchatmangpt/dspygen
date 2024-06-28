@@ -66,47 +66,42 @@ class MessageFactory:
     """Factory class to convert YAML data into appropriate Message types."""
 
     @classmethod
-    def create_message(cls, data: dict) -> T:
+    def create_message(cls, data: dict) -> BaseMessage:
         """Create a message of the appropriate type based on the data provided.
 
         Parameters:
         - data (dict): A dictionary containing the message data.
 
         Returns:
-        - Type[BaseModel]: The appropriate message type.
+        - BaseMessage: The appropriate message type.
         """
         message_class = cls._get_message_class(data["message_type"])
-        return BaseMessage(**data)
+        return message_class(**data)
 
     @classmethod
-    def create_messages_from_list(cls, data_list: list[dict]) -> list[T]:
+    def create_messages_from_list(cls, data_list: list[dict]) -> list[BaseMessage]:
         """Create a list of messages from a list of YAML data dictionaries.
 
         Parameters:
-        - data_list (List[dict]): A list of dictionaries containing message  data.
+        - data_list (List[dict]): A list of dictionaries containing message data.
 
         Returns:
-        - List[Type[BaseModel]]: A list of appropriate message types.
+        - List[BaseMessage]: A list of appropriate message types.
         """
         messages = [cls.create_message(data) for data in data_list]
         return messages
 
     @classmethod
-    def _get_message_class(cls, module_name: str) -> type[T]:
+    def _get_message_class(cls, module_name: str) -> type[BaseMessage]:
         """Get the message class corresponding to the module name. Import the module if not already imported.
 
         Parameters:
         - module_name (str): The module name containing the message class.
 
         Returns:
-        - Type[BaseModel]: The message class.
+        - Type[BaseMessage]: The message class.
         """
-        # module_name = 'livingcharter.domain.collaboration_context.AgentCreated'
-        # slice off the last period
         module_path, class_name = module_name.rsplit(".", 1)
-
-        # Assuming that the message class is named the same as the last part of the module name
         module = import_module(module_path)
         message_class = getattr(module, class_name)
-
         return message_class

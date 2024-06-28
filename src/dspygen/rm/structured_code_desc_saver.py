@@ -52,3 +52,4 @@ def save_code_snippet(temp_code_directory: Path, document_id: str, snippet: str,
         logger.debug(f"Saving code snippet to {snippet}")
         file.write(f"# {description}\n{snippet}")
     logger.debug(f"Saved code snippet to {file_path}")
+    return file_path

@@ -34,6 +34,7 @@ class CodeRetriever(dspy.Retrieve):
                     and not self.is_binary(file_path)
             ):
                 try:
+                    print(file_path)
                     with file_path.open("r", encoding="utf-8") as f:
                         file_content = f.read()
                         file_dict[file_path] = file_content
@@ -85,19 +86,20 @@ def get_files_from_directory(directory, query, gitignore=None):
 
 
 def main():
-    # init_ol(model="llava-phi3", max_tokens=2000)
-    init_dspy(model="gpt-4o", max_tokens=3000)
+    init_ol(model="phi3", max_tokens=2000)
+    #init_dspy(model="gpt-4o", max_tokens=3000)
     path = "/Users/sac/dev/nuxt-ai-chatbot/stores"
     gitignore = "/.gitignore"  # Optional
 
     code_retriever = CodeRetriever(path, gitignore)
-    result = code_retriever.forward()
+    result = code_retriever.forward("*.py") # and only the code after ```python and ending with ``` ")
+    print(result.passages)
 
     for file_content in result.passages:
-        from dspygen.modules.nuxt_module import nuxt_call
+        #from dspygen.modules.nuxt_module import nuxt_call
         print(file_content)
-        nuxt = nuxt_call(path=path, readme=file_content)
-        print(nuxt)
+        #nuxt = nuxt_call(path=path, readme=file_content)
+        #print(nuxt)
     # for file_content in result.passages:
     #     print(file_content)  # Here, you can instead write to a Markdown file or process further.
 
