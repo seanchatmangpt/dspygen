@@ -11,7 +11,7 @@ def init_dspy(model: str = "gpt-3.5-turbo-instruct", lm_class=dspy.OpenAI, max_t
         return lm
 
 
-def init_ol(model: str = "phi3:instruct", base_url="http://localhost:11434", max_tokens: int = 800, lm_instance=None, lm_class=dspy.OllamaLocal, timeout=100, temperature=0.6):
+def init_ol(model: str = "qwen2:7b-instruct", base_url="http://localhost:11434", max_tokens: int = 800, lm_instance=None, lm_class=dspy.OllamaLocal, timeout=100, temperature=0.6):
     if lm_instance:
         dspy.settings.configure(lm=lm_instance)
         return lm_instance

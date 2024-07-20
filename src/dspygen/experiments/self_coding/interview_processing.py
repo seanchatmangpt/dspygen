@@ -1,7 +1,7 @@
 import dspy
 
 from dspygen.lm.groq_lm import Groq
-from dspygen.utils.dspy_tools import init_dspy
+from dspygen.utils.dspy_tools import init_dspy, init_ol
 
 class ContextEstablishment(dspy.Signature):
     """Sets the stage for the interaction, providing necessary background."""
@@ -33,10 +33,12 @@ class FeedbackAndRetry(dspy.Signature):
 
 def main2():
     """Main function"""
-    init_dspy(lm_class=Groq, max_tokens=1000, model="llama3-70b-8192")  # for Groq you must pass the Groq existing model
+    #init_dspy(lm_class=Groq, max_tokens=1000, model="llama3-70b-8192")  # for Groq you must pass the Groq existing model
+    init_ol()
 
     story = ("You are a software engineer preparing for a technical interview. "
              "You have been given a coding challenge to solve. The challenge involves a NuxtJS frontend with a Convex API backend. ")
+    print(story)
 
     # Establish the context for the interaction
     context = dspy.ChainOfThought(ContextEstablishment)(story=story).context
