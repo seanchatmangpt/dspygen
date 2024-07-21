@@ -2,7 +2,7 @@ import dspy
 
 from dspygen.utils.dspy_tools import init_ol
 
-init_ol()
+#init_ol() - breaks auto poe tests  >> TBD move into main
 
 
 class NLtoSQL(dspy.Signature):
