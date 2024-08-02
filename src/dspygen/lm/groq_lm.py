@@ -15,7 +15,7 @@ class Groq(LM):
         #model="llama3-70b-8192" # this is a fix cs somewhere the the model getting still set to openai gpt-3.5-turbo-instruct
         super().__init__(model)
         
-        print("Groq model used today: " + model)
+        #print("Groq model used today: " + model)
         self.provider = "default"
         self.history = []
         groq_api_key = os.environ.get("GROQ_API_KEY")

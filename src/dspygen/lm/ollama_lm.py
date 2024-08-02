@@ -16,7 +16,7 @@ class Ollama(LM):
         super().__init__(model)
         
         # Print which model is being used
-        print("Ollama model used today: " + model)
+        #print("Ollama model used today: " + model)
         self.provider = "default"
         self.history = []
 
@@ -41,7 +41,7 @@ class Ollama(LM):
 # Main function to initialize dspy with Ollama and run a prediction
 def main():
     # Initialize dspy with the Ollama class and specified model
-    init_dspy(Ollama, model=default_ollama_model, max_tokens=8000)
+    init_dspy(lm_class=Ollama, model=default_ollama_model, max_tokens=8000)
     
     # Generate prediction for a specific prompt
     pred = dspy.Predict("prompt -> code")(prompt="Fast API CRUD endpoint for fire alarm global IoT network")
