@@ -1,7 +1,7 @@
 """assert"""
 import typer
 
-from dspygen.typetemp.functional import render
+from sungen.typetemp.functional import render
 
 app = typer.Typer(help="Generate assertions for dspy.")
 

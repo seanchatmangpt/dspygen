@@ -5,7 +5,7 @@ import dspy
 from dspy import InputField, OutputField, Signature
 
 from dspygen.modules.gen_pydantic_instance import GenPydanticInstance
-from dspygen.typetemp.functional import render
+from sungen.typetemp.functional import render
 
 
 class FieldTemplateSpecificationModel(BaseModel):

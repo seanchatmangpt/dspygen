@@ -42,7 +42,7 @@ class PytestAgent(FSMMixin):
         """Generate basic pytest tests with mocks."""
 
         # Generate with dspygen
-        from dspygen.typetemp.functional import render
+        from sungen.typetemp.functional import render
         from dspygen.utils.dspy_tools import init_ol
         lm = init_ol()
         # source_code = bad_code

@@ -1,7 +1,7 @@
 import dspy
 
 from dspygen.dsl.dsl_pydantic_models import PipelineDSLModel
-from dspygen.typetemp.functional import render
+from sungen.typetemp.functional import render
 from dspygen.utils.dspy_tools import init_dspy
 
 

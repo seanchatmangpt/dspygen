@@ -7,7 +7,7 @@ from typing import Optional
 
 import loguru
 
-from dspygen.typetemp.template.typed_template import TypedTemplate
+from sungen.typetemp.template.typed_template import TypedTemplate
 from dspygen.utils.complete import achat, create
 from dspygen.utils.file_tools import write
 from dspygen.utils.models import get_model

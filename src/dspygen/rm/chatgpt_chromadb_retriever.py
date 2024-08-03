@@ -262,8 +262,8 @@ def main():
     retriever = ChatGPTChromaDBRetriever(check_for_updates=False)
     # retriever._update_collection_metadata()
 
-    query = "YAML"
-    matched_conversations = retriever.forward(query, k=10, contains="interactible")
+    query = "AGI Thin Air"
+    matched_conversations = retriever.forward(query, k=10, contains="OSIRIS")
     # print(count_tokens(str(matched_conversations) + "\nI want a DSPy module that generates Python source code."))
     for conversation in matched_conversations:
         logger.info(conversation)

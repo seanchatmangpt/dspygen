@@ -266,7 +266,7 @@ def main():
     # print(data)
     data = revops_fsm
 
-    from dspygen.typetemp.functional import render
+    from sungen.typetemp.functional import render
     output = render(tmpl, to="{{ class_name | underscore }}.py",
                     class_name=data.class_name, states=data.states, transitions=data.transitions, methods=data.methods)
     print(output)

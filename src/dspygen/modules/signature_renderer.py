@@ -5,7 +5,7 @@ from dspy import Signature
 from dspy.signatures.field import InputField, OutputField
 
 # from dspygen.modules.gen_pydantic_instance_module import gen_pydantic_instance_call
-from dspygen.typetemp.template.typed_template import TypedTemplate
+from sungen.typetemp.template.typed_template import TypedTemplate
 
 
 class InputFieldTemplateSpecModel(BaseModel):

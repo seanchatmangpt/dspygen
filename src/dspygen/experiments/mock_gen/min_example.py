@@ -3,14 +3,16 @@ from dspy.datasets.gsm8k import GSM8K, gsm8k_metric
 
 from dspygen.utils.dspy_tools import init_ol
 
-# Set up the LM
-lm = init_ol()
+def main():
+    """Main function"""
+    from dspygen.utils.dspy_tools import init_ol
+    init_ol()
 
-# Load math questions from the GSM8K dataset
-gsm8k = GSM8K()
-gsm8k_trainset, gsm8k_devset = gsm8k.train[:10], gsm8k.dev[:10]
 
-print(gsm8k_trainset)
+
+
+
+
 
 
 class CoT(dspy.Module):
@@ -24,6 +26,13 @@ class CoT(dspy.Module):
 
 def main():
     """Main function"""
+    lm = init_ol()
+
+    # Load math questions from the GSM8K dataset
+    gsm8k = GSM8K()
+    gsm8k_trainset, gsm8k_devset = gsm8k.train[:10], gsm8k.dev[:10]
+
+    print(gsm8k_trainset)
     from dspy.teleprompt import BootstrapFewShot
 
     # Set up the optimizer: we want to "bootstrap" (i.e., self-generate) 4-shot examples of our CoT program.

@@ -1,8 +1,8 @@
 import os
 from jinja2 import Template, FileSystemLoader, Environment
 
-from dspygen.typetemp.environment.typed_environment import environment
-from dspygen.typetemp.functional import render
+from sungen.typetemp.environment.typed_environment import environment
+from sungen.typetemp.functional import render
 
 # Jinja Templates
 BASE_TEMPLATE = '''

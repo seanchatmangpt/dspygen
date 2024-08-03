@@ -1,7 +1,7 @@
 import copy
 from typing import Optional, Dict, Any
 
-from dspygen.typetemp.functional import render, render_native
+from sungen.typetemp.functional import render, render_native
 from dspygen.workflow.workflow_models import Workflow, Action, Job
 from loguru import logger
 

@@ -11,6 +11,7 @@ import typer
 from munch import Munch
 
 from dspygen.utils.cli_tools import chatbot
+from dspygen.utils.dspy_tools import init_ol
 from dspygen.utils.file_tools import source_dir
 from dspygen.utils.module_tools import module_to_dict
 
@@ -165,9 +166,9 @@ Use this information to guide the usage of the DSPyGen CLI and its modules.
 def tutor(question: str = ""):
     """Guide you through developing a project with DSPyGen."""
     from dspygen.utils.dspy_tools import init_dspy
-    init_dspy(max_tokens=3000, model="gpt-4")
+    init_ol(max_tokens=3000, model="qwen2:7b-instruct")
 
-    chatbot(question, TUTOR_CONTEXT)
+    chatbot(question, "")
 
 
 def main():

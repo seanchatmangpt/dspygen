@@ -37,7 +37,10 @@ def chatbot(question, context, history=""):
         if confirm.lower() in ["y", "yes"]:
             confirmed = True
         else:
-            want = typer.prompt("How can I help more?")
+            if confirm != "N":
+                want = confirm
+            else:
+                want = typer.prompt("How can I help more?")
 
             response = qa(question=want, context=context, conversation_history=history).answer
             history += response

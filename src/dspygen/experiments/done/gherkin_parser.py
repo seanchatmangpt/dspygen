@@ -8,7 +8,7 @@ import inflection
 
 from slugify import slugify
 
-from dspygen.typetemp.environment.typed_environment import environment as env
+from sungen.typetemp.environment.typed_environment import environment as env
 
 
 # Custom Jinja2 filter

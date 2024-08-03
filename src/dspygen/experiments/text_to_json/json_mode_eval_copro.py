@@ -4,7 +4,7 @@ def main():
 
     """Main function"""
     from dspygen.utils.dspy_tools import init_ol
-    init_ol()
+    init_ol(model="phi3:medium-128k")
 
     # dataset = JsonModeEvalDataset()
     dataset = JsonModeErrorDataset()

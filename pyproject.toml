@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]  # https://python-poetry.org/docs/pyproject/
 name = "dspygen"
-version = "2024.6.7"
+version = "2024.8.3"
 description = "A Ruby on Rails style framework for the DSPy (Demonstrate, Search, Predict) project for Language Models like GPT, BERT, and LLama."
 authors = ["Sean Chatman <info@chatmangpt.com>"]
 readme = "README.md"
@@ -23,7 +23,6 @@ python = ">=3.10,<4.0"
 streamlit = ">=1.19.0"
 typer = { extras = ["all"], version = ">=0.9.0" }
 uvicorn = { extras = ["standard"], version = ">=0.20.0" }
-faker = "^23.2.1"
 jinja2 = "^3.1.3"
 inflection = "^0.5.1"
 jinja2-time = "^0.2.0"
@@ -31,10 +30,9 @@ jinja2-ext = "^0.1"
 dspy-ai = "^2.4.5"
 openai = "^1.12.0"
 pyperclip = "^1.8.2"
-asyncer = "^0.0.5"
+asyncer = "0.0.7"
 loguru = "^0.7.2"
 groq = "^0.4.1"
-tiktoken = "^0.6.0"
 reactivex = "^4.0.4"
 pytest-asyncio = "^0.23.5"
 playwright = "^1.41.2"
@@ -53,7 +51,6 @@ pypdf = "^4.1.0"
 sqlmodel = "^0.0.16"
 icontract = "^2.6.6"
 tzlocal = "^5.2"
-aiofiles = "^23.2.1"
 pydantic-settings = "^2.2.1"
 anyio = "^4.3.0"
 docutils = "0.21"
@@ -70,6 +67,12 @@ httpx = "^0.27.0"
 inject = "^5.2.1"
 pddlpy = "^0.4.4"
 clingo = "^5.7.1"
+sungen = "^2024.7.4.2"
+numpy = "<2.0.0"
+confz = "^2.0.1"
+python-pptx = "^0.6.23"
+pm4py = "^2.7.11.11"
+protobuf = ">=3.20,<3.21"
 
 [tool.poetry.group.test.dependencies]  # https://python-poetry.org/docs/master/managing-dependencies/
 coverage = { extras = ["toml"], version = ">=7.2.5" }
@@ -146,8 +149,7 @@ pub = "poetry publish --build"
       uvicorn \
         --host $host \
         --port $port \
-        --graceful-timeout 30 \
-        --keep-alive 30
+        --timeout-keep-alive 30
         --timeout 30 \
         --reload \
         dspygen.api:app
@@ -155,8 +157,7 @@ pub = "poetry publish --build"
       gunicorn \
         --access-logfile - \
         --bind $host:$port \
-        --graceful-timeout 30 \
-        --keep-alive 30 \
+        --timeout-keep-alive 30 \
         --log-file - \
         --timeout 30 \
         --worker-class uvicorn.workers.UvicornWorker \

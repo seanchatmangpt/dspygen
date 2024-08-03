@@ -1,0 +1,94 @@
+title: Summary
+
+prefix_chapters:
+  - title: Introduction
+    path: README.md
+
+numbered_chapters:
+  - title: User Guide
+    subchapters:
+      - title: Getting Started
+        path: guide/getting_started.md
+        subchapters:
+          - title: Overview of ChapmanGPT Stack
+            path: guide/overview.md
+          - title: Installation Guide
+            path: guide/installation.md
+  - title: Core Components
+    subchapters:
+      - title: Process Mining
+        subchapters:
+          - title: Introduction to Process Mining
+            path: core_components/process_mining/intro.md
+      - title: Automated Machine Learning (AutoML)
+        subchapters:
+          - title: Introduction to AutoML
+            path: core_components/automl/intro.md
+      - title: IoC (Infrastructure as Code)
+        subchapters:
+          - title: Introduction to IoC
+            path: core_components/ioc/intro.md
+      - title: Scalable Backend
+        subchapters:
+          - title: Introduction to Scalable Backend
+            path: core_components/backend/intro.md
+      - title: Dynamic Frontend
+        subchapters:
+          - title: Introduction to Dynamic Frontend
+            path: core_components/frontend/intro.md
+  - title: Technical Integration
+    subchapters:
+      - title: Integrating Phoenix with Dapr
+        path: tech_integration/phoenix_dapr.md
+      - title: Infrastructure as Code with OpenTofu and Ansible
+        path: tech_integration/iac_opentofu_ansible.md
+      - title: Automating Workflows with Airflow
+        path: tech_integration/airflow.md
+  - title: Security and Compliance
+    subchapters:
+      - title: Security and Compliance
+        path: security_compliance.md
+  - title: Benefits of the ChapmanGPT Stack
+    subchapters:
+      - title: Operational Efficiency
+        path: benefits/operational_efficiency.md
+      - title: Scalability
+        path: benefits/scalability.md
+      - title: Cost Savings
+        path: benefits/cost_savings.md
+  - title: Use Cases
+    subchapters:
+      - title: Healthcare
+        path: use_cases/healthcare.md
+      - title: Cybersecurity
+        path: use_cases/cybersecurity.md
+      - title: Sales and Marketing
+        path: use_cases/sales_marketing.md
+  - title: Hackathon Guide
+    subchapters:
+      - title: Introduction to Hackathons
+        path: hackathon_guide/introduction.md
+      - title: Setting Up Your Environment
+        path: hackathon_guide/setup_environment.md
+      - title: Creating Custom Solutions
+        path: hackathon_guide/custom_solutions.md
+  - title: Advanced Topics
+    subchapters:
+      - title: Scalability and Performance
+        path: advanced_topics/scalability.md
+      - title: Security Best Practices
+        path: advanced_topics/security.md
+      - title: Integration with External Systems
+        path: advanced_topics/integration.md
+  - title: Developer Resources
+    subchapters:
+      - title: API Reference
+        path: developer_resources/api_reference.md
+      - title: CLI Tools
+        path: developer_resources/cli_tools.md
+      - title: Contributing to ChapmanGPT
+        path: developer_resources/contributing.md
+
+suffix_chapters:
+  - title: Contributors
+    path: misc/contributors.md

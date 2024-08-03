@@ -1,0 +1,875 @@
+domains:
+  taxplanninggpt:
+    name: "Tax Planning GPT"
+    description: "Content for Tax Planning GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  onlineshoppinggpt:
+    name: "Online Shopping GPT"
+    description: "Content for Online Shopping GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  cryptocurrencytradinggpt:
+    name: "Cryptocurrency Trading GPT"
+    description: "Content for Cryptocurrency Trading GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  futurestradinggpt:
+    name: "Futures Trading GPT"
+    description: "Content for Futures Trading GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  wealthmanagegpt:
+    name: "Wealth Manage GPT"
+    description: "Content for Wealth Manage GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  generateleadsgpt:
+    name: "Generate Leads GPT"
+    description: "Content for Generate Leads GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  crmsgpt:
+    name: "CRM GPT"
+    description: "Content for CRM GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  seokeywordsgpt:
+    name: "SEO Keywords GPT"
+    description: "Content for SEO Keywords GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  realestateagentgpt:
+    name: "Real Estate Agent GPT"
+    description: "Content for Real Estate Agent GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  wealthplanninggpt:
+    name: "Wealth Planning GPT"
+    description: "Content for Wealth Planning GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  realestatebrokergpt:
+    name: "Real Estate Broker GPT"
+    description: "Content for Real Estate Broker GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  execassistantgpt:
+    name: "Executive Assistant GPT"
+    description: "Content for Executive Assistant GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  wealthplannergpt:
+    name: "Wealth Planner GPT"
+    description: "Content for Wealth Planner GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  chiefofstaffgpt:
+    name: "Chief of Staff GPT"
+    description: "Content for Chief of Staff GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  businesspartnergpt:
+    name: "Business Partner GPT"
+    description: "Content for Business Partner GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  sidehustlesgpt:
+    name: "Side Hustles GPT"
+    description: "Content for Side Hustles GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  getrichquickgpt:
+    name: "Get Rich Quick GPT"
+    description: "Content for Get Rich Quick GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  youtubergpt:
+    name: "YouTuber GPT"
+    description: "Content for YouTuber GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  celebsgpt:
+    name: "Celebrities GPT"
+    description: "Content for Celebrities GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  historiangpt:
+    name: "Historian GPT"
+    description: "Content for Historian GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  librariesgpt:
+    name: "Libraries GPT"
+    description: "Content for Libraries GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  sixsigmagpt:
+    name: "Six Sigma GPT"
+    description: "Content for Six Sigma GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  studentloansgpt:
+    name: "Student Loans GPT"
+    description: "Content for Student Loans GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  paydayloansgpt:
+    name: "Payday Loans GPT"
+    description: "Content for Payday Loans GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  homeequitygpt:
+    name: "Home Equity GPT"
+    description: "Content for Home Equity GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  homeequityloangpt:
+    name: "Home Equity Loan GPT"
+    description: "Content for Home Equity Loan GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  debtconsoldationgpt:
+    name: "Debt Consolidation GPT"
+    description: "Content for Debt Consolidation GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  comparisonsgpt:
+    name: "Comparisons GPT"
+    description: "Content for Comparisons GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  venturecapitalgpt:
+    name: "Venture Capital GPT"
+    description: "Content for Venture Capital GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  franchisesgpt:
+    name: "Franchises GPT"
+    description: "Content for Franchises GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  personalinjurylawgpt:
+    name: "Personal Injury Law GPT"
+    description: "Content for Personal Injury Law GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  sbagpt:
+    name: "SBA GPT"
+    description: "Content for SBA GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  classactionlawsuitgpt:
+    name: "Class Action Lawsuit GPT"
+    description: "Content for Class Action Lawsuit GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  solarpanelsgpt:
+    name: "Solar Panels GPT"
+    description: "Content for Solar Panels GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  carloansgpt:
+    name: "Car Loans GPT"
+    description: "Content for Car Loans GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  mortgagecalculatorgpt:
+    name: "Mortgage Calculator GPT"
+    description: "Content for Mortgage Calculator GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  morgagegpt:
+    name: "Mortgage GPT"
+    description: "Content for Mortgage GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  bridgeloangpt:
+    name: "Bridge Loan GPT"
+    description: "Content for Bridge Loan GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  creditcheckgpt:
+    name: "Credit Check GPT"
+    description: "Content for Credit Check GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  refinancinggpt:
+    name: "Refinancing GPT"
+    description: "Content for Refinancing GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  mortgageratesgpt:
+    name: "Mortgage Rates GPT"
+    description: "Content for Mortgage Rates GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  fhaloansgpt:
+    name: "FHA Loans GPT"
+    description: "Content for FHA Loans GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  mortgagerefinancinggpt:
+    name: "Mortgage Refinancing GPT"
+    description: "Content for Mortgage Refinancing GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  secondmortgagegpt:
+    name: "Second Mortgage GPT"
+    description: "Content for Second Mortgage GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  mortgagelendersgpt:
+    name: "Mortgage Lenders GPT"
+    description: "Content for Mortgage Lenders GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  intrestgpt:
+    name: "Interest GPT"
+    description: "Content for Interest GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  salespeoplegpt:
+    name: "Salespeople GPT"
+    description: "Content for Salespeople GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  mortgagebrokersgpt:
+    name: "Mortgage Brokers GPT"
+    description: "Content for Mortgage Brokers GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  seokeywordgpt:
+    name: "SEO Keyword GPT"
+    description: "Content for SEO Keyword GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  workerscompgpt:
+    name: "Workers Comp GPT"
+    description: "Content for Workers Comp GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  loanofficergpt:
+    name: "Loan Officer GPT"
+    description: "Content for Loan Officer GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  accidentattorneygpt:
+    name: "Accident Attorney GPT"
+    description: "Content for Accident Attorney GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  criminaldefenseattorneygpt:
+    name: "Criminal Defense Attorney GPT"
+    description: "Content for Criminal Defense Attorney GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  personalinjuryattorneygpt:
+    name: "Personal Injury Attorney GPT"
+    description: "Content for Personal Injury Attorney GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  divorceattorneygpt:
+    name: "Divorce Attorney GPT"
+    description: "Content for Divorce Attorney GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  employmentattorneygpt:
+    name: "Employment Attorney GPT"
+    description: "Content for Employment Attorney GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  bankruptcyattorneygpt:
+    name: "Bankruptcy Attorney GPT"
+    description: "Content for Bankruptcy Attorney GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  estateplanningattorneygpt:
+    name: "Estate Planning Attorney GPT"
+    description: "Content for Estate Planning Attorney GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  immigrationattorneygpt:
+    name: "Immigration Attorney GPT"
+    description: "Content for Immigration Attorney GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  intellectualpropertyattorneygpt:
+    name: "Intellectual Property Attorney GPT"
+    description: "Content for Intellectual Property Attorney GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  depositgpt:
+    name: "Deposit GPT"
+    description: "Content for Deposit GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  bransongpt:
+    name: "Branson GPT"
+    description: "Content for Branson GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  personalloansgpt:
+    name: "Personal Loans GPT"
+    description: "Content for Personal Loans GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  skiresortsgpt:
+    name: "Ski Resorts GPT"
+    description: "Content for Ski Resorts GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  forsalebyownergpt:
+    name: "For Sale By Owner GPT"
+    description: "Content for For Sale By Owner GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  399gpt:
+    name: "399 GPT"
+    description: "Content for 399 GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  989gpt:
+    name: "989 GPT"
+    description: "Content for 989 GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  899gpt:
+    name: "899 GPT"
+    description: "Content for 899 GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  exterminatorgpt:
+    name: "Exterminator GPT"
+    description: "Content for Exterminator GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  antispywaregpt:
+    name: "Anti-Spyware GPT"
+    description: "Content for Anti-Spyware GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  rebatesgpt:
+    name: "Rebates GPT"
+    description: "Content for Rebates GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  financialaidgpt:
+    name: "Financial Aid GPT"
+    description: "Content for Financial Aid GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  sportinggoodsgpt:
+    name: "Sporting Goods GPT"
+    description: "Content for Sporting Goods GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  boardgamesgpt:
+    name: "Board Games GPT"
+    description: "Content for Board Games GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  autoinsurancegpt:
+    name: "Auto Insurance GPT"
+    description: "Content for Auto Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  arearugsgpt:
+    name: "Area Rugs GPT"
+    description: "Content for Area Rugs GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  systematicgpt:
+    name: "Systematic GPT"
+    description: "Content for Systematic GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  lowfaregpt:
+    name: "Low Fare GPT"
+    description: "Content for Low Fare GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  cgmgpt:
+    name: "CGM GPT"
+    description: "Content for CGM GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  partysuppliesgpt:
+    name: "Party Supplies GPT"
+    description: "Content for Party Supplies GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  wirelessphonegpt:
+    name: "Wireless Phone GPT"
+    description: "Content for Wireless Phone GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  giftbasketgpt:
+    name: "Gift Basket GPT"
+    description: "Content for Gift Basket GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  rvrentalgpt:
+    name: "RV Rental GPT"
+    description: "Content for RV Rental GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  financialaidegpt:
+    name: "Financial Aide GPT"
+    description: "Content for Financial Aide GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  xmasgpt:
+    name: "Christmas GPT"
+    description: "Content for Christmas GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  accomodationgpt:
+    name: "Accommodation GPT"
+    description: "Content for Accommodation GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  shoppingcartgpt:
+    name: "Shopping Cart GPT"
+    description: "Content for Shopping Cart GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  werkgpt:
+    name: "Werk GPT"
+    description: "Content for Werk GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  yearbookgpt:
+    name: "Yearbook GPT"
+    description: "Content for Yearbook GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  insuranceratesgpt:
+    name: "Insurance Rates GPT"
+    description: "Content for Insurance Rates GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  freequotesgpt:
+    name: "Free Quotes GPT"
+    description: "Content for Free Quotes GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  loancalculatorgpt:
+    name: "Loan Calculator GPT"
+    description: "Content for Loan Calculator GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  rehabsgpt:
+    name: "Rehabs GPT"
+    description: "Content for Rehabs GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  insurancequotegpt:
+    name: "Insurance Quote GPT"
+    description: "Content for Insurance Quote GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  insurancequotesgpt:
+    name: "Insurance Quotes GPT"
+    description: "Content for Insurance Quotes GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  insurancecompanygpt:
+    name: "Insurance Company GPT"
+    description: "Content for Insurance Company GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  insurancecompaniesgpt:
+    name: "Insurance Companies GPT"
+    description: "Content for Insurance Companies GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  commoditiestradinggpt:
+    name: "Commodities Trading GPT"
+    description: "Content for Commodities Trading GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  asbestosgpt:
+    name: "Asbestos GPT"
+    description: "Content for Asbestos GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  mesotheliomagpt:
+    name: "Mesothelioma GPT"
+    description: "Content for Mesothelioma GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  dentalinsurancegpt:
+    name: "Dental Insurance GPT"
+    description: "Content for Dental Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  petinsurancegpt:
+    name: "Pet Insurance GPT"
+    description: "Content for Pet Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  onlinedegreegpt:
+    name: "Online Degree GPT"
+    description: "Content for Online Degree GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  motorcycleinsurancegpt:
+    name: "Motorcycle Insurance GPT"
+    description: "Content for Motorcycle Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  businessinsurancegpt:
+    name: "Business Insurance GPT"
+    description: "Content for Business Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  apartmentinsurancegpt:
+    name: "Apartment Insurance GPT"
+    description: "Content for Apartment Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  rentersinsurancegpt:
+    name: "Renters Insurance GPT"
+    description: "Content for Renters Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  weddinginsurancegpt:
+    name: "Wedding Insurance GPT"
+    description: "Content for Wedding Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  disabilityinsurancegpt:
+    name: "Disability Insurance GPT"
+    description: "Content for Disability Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  jewelryinsurancegpt:
+    name: "Jewelry Insurance GPT"
+    description: "Content for Jewelry Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  boatinsurancegpt:
+    name: "Boat Insurance GPT"
+    description: "Content for Boat Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  rvinsurancegpt:
+    name: "RV Insurance GPT"
+    description: "Content for RV Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  liabilityinsurancegpt:
+    name: "Liability Insurance GPT"
+    description: "Content for Liability Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  commercialinsurancegpt:
+    name: "Commercial Insurance GPT"
+    description: "Content for Commercial Insurance GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  cloudstoragegpt:
+    name: "Cloud Storage GPT"
+    description: "Content for Cloud Storage GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  socialmediamarketinggpt:
+    name: "Social Media Marketing GPT"
+    description: "Content for Social Media Marketing GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  payperclickgpt:
+    name: "Pay Per Click GPT"
+    description: "Content for Pay Per Click GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  affiliatemarketgpt:
+    name: "Affiliate Market GPT"
+    description: "Content for Affiliate Market GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  conversionrategpt:
+    name: "Conversion Rate GPT"
+    description: "Content for Conversion Rate GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  influencermarketinggpt:
+    name: "Influencer Marketing GPT"
+    description: "Content for Influencer Marketing GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  videomarketinggpt:
+    name: "Video Marketing GPT"
+    description: "Content for Video Marketing GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  leadgenerationgpt:
+    name: "Lead Generation GPT"
+    description: "Content for Lead Generation GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  retirementplanninggpt:
+    name: "Retirement Planning GPT"
+    description: "Content for Retirement Planning GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  realestateinvestmentgpt:
+    name: "Real Estate Investment GPT"
+    description: "Content for Real Estate Investment GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"
+
+  financialplanninggpt:
+    name: "Financial Planning GPT"
+    description: "Content for Financial Planning GPT"
+    ads:
+      adClient: "ca-pub-xxxxxxxxxx"
+      adSlot: "xxxxxxx"

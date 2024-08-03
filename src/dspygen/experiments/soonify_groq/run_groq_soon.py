@@ -10,7 +10,7 @@ from dspygen.lm.groq_lm import Groq
 from faker import Faker
 
 from dspygen.rm.chatgpt_chromadb_retriever import ChatGPTChromaDBRetriever
-from dspygen.typetemp.functional import render
+from sungen.typetemp.functional import render
 
 dfss_black_belt_curriculum = [
     # Introduction

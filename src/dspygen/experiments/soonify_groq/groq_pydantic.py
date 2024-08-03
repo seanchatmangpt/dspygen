@@ -15,7 +15,7 @@ from dspygen.utils.pydantic_tools import extract_valid_dicts
 
 fake = Faker()
 
-from dspygen.typetemp.functional import render
+from sungen.typetemp.functional import render
 
 
 class Contact(BaseModel):

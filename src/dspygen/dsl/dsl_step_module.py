@@ -6,7 +6,7 @@ from dspygen.dsl.utils.dsl_language_model_utils import _get_language_model_insta
 from dspygen.dsl.utils.dsl_lm_module_utils import _get_lm_module_instance
 from dspygen.dsl.utils.dsl_retrieval_model_utils import _get_retrieval_model_instance
 from dspygen.dsl.utils.dsl_rm_module_utils import _get_rm_module_instance
-from dspygen.typetemp.functional import render
+from sungen.typetemp.functional import render
 from munch import Munch
 from dspygen.dsl.dsl_pydantic_models import PipelineDSLModel, StepDSLModel
 

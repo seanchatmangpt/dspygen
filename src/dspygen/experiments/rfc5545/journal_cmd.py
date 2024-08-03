@@ -13,7 +13,7 @@ from pathlib import Path
 import yaml
 from typer import Context
 
-from dspygen.typetemp.template.smart_template import SmartTemplate
+# from sungen.typetemp.template.smart_template import SmartTemplate
 from dspygen.utils.complete import create
 # from utils.prompt_tools import timer
 
@@ -21,17 +21,17 @@ from dspygen.utils.complete import create
 app = typer.Typer(help="Shipit journaling utilities.")
 
 
-class ShipitTemplate(SmartTemplate):
-    """Template for the message sent to the language model."""
-
-    prompt = ""
-    page = ""
-    source = """
-    # {{ page }}
-    {{ prompt }}
-
-    We are making a AI assistant to help coders with their calendar and code.
-    """
+# class ShipitTemplate(SmartTemplate):
+#     """Template for the message sent to the language model."""
+#
+#     prompt = ""
+#     page = ""
+#     source = """
+#     # {{ page }}
+#     {{ prompt }}
+#
+#     We are making a AI assistant to help coders with their calendar and code.
+#     """
 
 
 async def render_pages_from_yaml(ctx: Context, yaml_file):
@@ -46,10 +46,10 @@ async def render_pages_from_yaml(ctx: Context, yaml_file):
                 if config.directory
                 else Path(item["file"])
             )
-            template = ShipitTemplate(**item)
+            # template = ShipitTemplate(**item)
             # template = ShipitTemplate(**item, config=None)
-            template.to = str(output_path)
-            tg.start_soon(template.render)
+            # template.to = str(output_path)
+            # tg.start_soon(template.render)
 
 
 @app.command()

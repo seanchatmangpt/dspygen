@@ -10,7 +10,7 @@ import dspy
 from pydantic import BaseModel, Field
 from typer import Typer
 
-from dspygen.typetemp.functional import render
+from sungen.typetemp.functional import render
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.utils.yaml_tools import YAMLMixin
 

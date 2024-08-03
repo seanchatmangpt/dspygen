@@ -1,7 +1,7 @@
 import dspy
 from pydantic import BaseModel
 
-from dspygen.typetemp.functional import render
+from sungen.typetemp.functional import render
 
 
 class AssertionModel(BaseModel):
