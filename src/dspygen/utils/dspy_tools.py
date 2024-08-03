@@ -1,7 +1,7 @@
 import dspy
 
 
-def init_dspy(model: str = "gpt-3.5-turbo-instruct", lm_class=dspy.OpenAI, max_tokens: int = 800, lm_instance=None, api_key=None, temperature=0.6):
+def init_dspy(model: str = "gpt-4o-mini", lm_class=dspy.OpenAI, max_tokens: int = 800, lm_instance=None, api_key=None, temperature=0.6):
     if lm_instance:
         dspy.settings.configure(lm=lm_instance)
         return lm_instance

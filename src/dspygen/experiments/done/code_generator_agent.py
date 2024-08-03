@@ -1,10 +1,10 @@
 from dspygen.modules.gen_keyword_arguments_module import invoke
 from dspygen.modules.python_expert_module import python_expert_call
-from dspygen.utils.dspy_tools import init_dspy
+from dspygen.utils.dspy_tools import init_ol
 
 
 def main():
-    init_dspy()
+    init_ol()
     result = invoke(python_expert_call, "User Story: FastAPI CRUD routes for Fire Alarm IoT")
     print(result)
 
