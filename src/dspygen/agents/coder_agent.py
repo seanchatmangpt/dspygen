@@ -60,7 +60,7 @@ class CoderAgent(FSMMixin):
         conditions=['errors_resolved'],
         after=['optimize_code']
     )
-    def refactor_code(self):
+    def refinhabitant_code(self):
         """Refactor code after errors are resolved."""
         print("Refactoring code.")
 

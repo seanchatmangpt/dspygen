@@ -64,11 +64,11 @@ def get_all_snippets_from_temp_code(retriever, selected_title):
     return snippets
 
 def main():
-    # Workflow steps and states - might be frozen into a Coder Actor-System after best practice settled
+    # Workflow steps and states - might be frozen into a Coder Inhabitant-System after best practice settled
     print("Create (OpenAI - ChatGPT / local soon...) Code-Creating conversations and note the title(s) to focus on new code / create a new repo.")
     print("Get to code to a most final state for real testing or deploy levels.")
     print("Download the conversation.zip / JSON by the download button once you recieve the mail and place the file into data/chatgpt_logs/. ")
-    print("A TBD DSPyGen actors will get triggered and will run the code_master_retriever workflow for full STP processing")
+    print("A TBD DSPyGen inhabitants will get triggered and will run the code_master_retriever workflow for full STP processing")
     print("This dspygen/rm/wizard.py should help you first set all needed things up / create if missing - use/improve all the exiting DSPyGEN tools too.")
 
     retriever = ChatGPTChromaDBRetriever(check_for_updates=True)

@@ -5,8 +5,8 @@ from asyncio.subprocess import Process
 
 from loguru import logger
 
-from dspygen.rdddy.base_actor import BaseActor
-from dspygen.rdddy.actor_system import ActorSystem
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
+from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.rdddy.browser.browser_domain import *
 from dspygen.rdddy.browser.browser_worker import BrowserWorker
 
@@ -14,9 +14,9 @@ from dspygen.rdddy.browser.browser_worker import BrowserWorker
 os.environ["PLAYWRIGHT_BROWSER"] = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 
-class BrowserProcessSupervisor(BaseActor):
-    def __init__(self, actor_system):
-        super().__init__(actor_system)
+class BrowserProcessSupervisor(BaseInhabitant):
+    def __init__(self, service_colony):
+        super().__init__(service_colony)
         self.processes: dict[str, Process] = {}  # Tracks browser processes by ID
         self.default_args = ["--remote-debugging-port=9222"]  # Default browser args
         self.health_check_running = False
@@ -89,15 +89,15 @@ class BrowserProcessSupervisor(BaseActor):
 
 # Example usage
 async def main():
-    actor_system = ActorSystem()
-    proc_supervisor = await actor_system.actor_of(BrowserProcessSupervisor)
-    browser_actor = await actor_system.actor_of(BrowserWorker, )
+    service_colony = ServiceColony()
+    proc_supervisor = await service_colony.inhabitant_of(BrowserProcessSupervisor)
+    browser_inhabitant= await service_colony.inhabitant_of(BrowserWorker, )
 
     # Start Chrome Browser
-    await actor_system.publish(StartBrowserCommand())
-    # await actor_system.publish(Goto(url="https://www.google.com"))
+    await service_colony.publish(StartBrowserCommand())
+    # await service_colony.publish(Goto(url="https://www.google.com"))
 
-    # await actor_system.publish(StopBrowserCommand())
+    # await service_colony.publish(StopBrowserCommand())
 
     # Perform browser actions using BrowserActor
     logger.info("Main function done.")

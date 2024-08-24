@@ -41,20 +41,20 @@ def call(video_streams):
     """VideoStreamFeatureExtractorModule"""
     init_dspy()
 
-    print(video_stream_feature_extractor_call(video_streams=video_streams))
+    print(video_stream_feature_extrinhabitant_call(video_streams=video_streams))
 
 
 
-def video_stream_feature_extractor_call(video_streams):
+def video_stream_feature_extrinhabitant_call(video_streams):
     video_stream_feature_extractor = VideoStreamFeatureExtractorModule()
-    return video_stream_feature_extractor.forward(video_streams=video_streams)
+    return video_stream_feature_extrinhabitant.forward(video_streams=video_streams)
 
 
 
 def main():
     init_dspy()
     video_streams = ""
-    result = video_stream_feature_extractor_call(video_streams=video_streams)
+    result = video_stream_feature_extrinhabitant_call(video_streams=video_streams)
     print(result)
 
 
@@ -63,12 +63,12 @@ from fastapi import APIRouter
 router = APIRouter()
 
 @router.post("/video_stream_feature_extractor/")
-async def video_stream_feature_extractor_route(data: dict):
+async def video_stream_feature_extrinhabitant_route(data: dict):
     # Your code generation logic here
     init_dspy()
 
     print(data)
-    return video_stream_feature_extractor_call(**data)
+    return video_stream_feature_extrinhabitant_call(**data)
 
 
 
@@ -83,7 +83,7 @@ video_streams = st.text_input("Enter video_streams")
 if st.button("Submit VideoStreamFeatureExtractorModule"):
     init_dspy()
 
-    result = video_stream_feature_extractor_call(video_streams=video_streams)
+    result = video_stream_feature_extrinhabitant_call(video_streams=video_streams)
     st.write(result)
 """
 

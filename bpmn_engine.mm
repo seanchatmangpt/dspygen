@@ -1,6 +1,6 @@
 graph LR
-    subgraph ActorSystem
-    AS(Actor System)
+    subgraph ServiceColony
+    AS(Inhabitant System)
     BPMNEngine[BPMN Workflow Engine]
     ProcessManager[Process Manager]
     TaskExecutor[Task Executor]
@@ -22,5 +22,5 @@ graph LR
     DecisionGateway -->|Decision Made| ProcessManager
     ProcessManager -->|Process Completed| BPMNEngine
 
-    classDef actor fill:#f9f,stroke:#333,stroke-width:2px;
-    class BPMNEngine,ProcessManager,TaskExecutor,DecisionGateway,ExternalService,EventListener,UserTaskHandler actor;
+    classDef inhabitant fill:#f9f,stroke:#333,stroke-width:2px;
+    class BPMNEngine,ProcessManager,TaskExecutor,DecisionGateway,ExternalService,EventListener,UserTaskHandler inhabitant;

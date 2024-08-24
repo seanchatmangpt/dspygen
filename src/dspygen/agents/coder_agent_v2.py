@@ -38,7 +38,7 @@ class CoderAgent(FSMMixin):
         print("Handling coding errors.")
 
     @trigger(source="*", dest=CoderAgentState.REFACTORING_CODE, conditions=['errors_resolved'])
-    def refactor_code(self):
+    def refinhabitant_code(self):
         """Refactor code after errors are resolved."""
         print("Refactoring code.")
 
@@ -68,7 +68,7 @@ def main():
     assert agent.state == CoderAgentState.TESTING_CODE.name, "Should be in TESTING_CODE after testing code"
     agent.handle_errors()  # Will not transition if errors_detected returns False
     assert agent.state == CoderAgentState.TESTING_CODE.name, "Should still be in TESTING_CODE if no errors detected"
-    agent.refactor_code()  # Assuming no errors, directly to refactoring to simulate resolved state
+    agent.refinhabitant_code()  # Assuming no errors, directly to refactoring to simulate resolved state
     assert agent.state == CoderAgentState.REFACTORING_CODE.name, "Should be in REFACTORING_CODE after handling errors"
     agent.complete_task()
     assert agent.state == CoderAgentState.COMPLETING_TASK.name, "Should be in COMPLETING_TASK after completing task"

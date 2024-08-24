@@ -57,7 +57,7 @@ class CoderAgent(FSMMixin):
         self.errors.clear()
 
     @trigger(source=[CoderAgentState.TESTING_CODE, CoderAgentState.HANDLING_ERRORS], dest=CoderAgentState.REFACTORING_CODE, conditions=['errors_resolved'])
-    def refactor_code(self):
+    def refinhabitant_code(self):
         """Refactor code after errors are resolved."""
         self.code = "# Added by refactoring\n" + self.code
         print("Code after refactoring:\n", self.code)

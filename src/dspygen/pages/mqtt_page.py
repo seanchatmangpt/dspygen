@@ -18,7 +18,7 @@
 #     client = mqtt.Client(CallbackAPIVersion.VERSION2)
 #     client.on_message = on_message
 #     client.connect("localhost", 1883)
-#     client.subscribe("actor_system/publish")
+#     client.subscribe("service_colony/publish")
 #     # Start the loop
 #     client.loop_start()
 #     return client

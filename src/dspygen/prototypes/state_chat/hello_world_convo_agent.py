@@ -4,10 +4,10 @@ from enum import Enum, auto
 
 import dspy
 
-from dspygen.rdddy.base_actor import BaseActor
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
 from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.base_event import BaseEvent
-from dspygen.rdddy.actor_system import ActorSystem
+from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.utils.dspy_tools import init_dspy
 
 
@@ -27,7 +27,7 @@ class AnswerProvidedEvent(BaseEvent):
     """Event for when an answer has been provided."""
 
 
-class SocraticTeacherActor(BaseActor):
+class SocraticTeacherInhabitant(BaseInhabitant):
     async def handle_cmd(self, command: AskQuestionCommand):
         # Logic to formulate a question
         pred = dspy.ChainOfThought("ask -> question")
@@ -43,7 +43,7 @@ class SocraticTeacherActor(BaseActor):
         await self.publish(AskQuestionCommand(content=follow_up_question))
 
 
-class StudentActor(BaseActor):
+class StudentInhabitant(BaseInhabitant):
     async def handle_cmd(self, command: AnswerQuestionCommand):
         # The student processes the question and provides an answer
         pred = dspy.ChainOfThought("question -> answer")
@@ -62,14 +62,14 @@ class StudentActor(BaseActor):
 
 async def main2():
     init_dspy()
-    actor_system = ActorSystem()
-    teacher_actor = await actor_system.actor_of(SocraticTeacherActor)
-    student_actor = await actor_system.actor_of(StudentActor)
+    service_colony = ServiceColony()
+    teacher_inhabitant= await service_colony.inhabitant_of(SocraticTeacherInhabitant)
+    student_inhabitant= await service_colony.inhabitant_of(StudentInhabitant)
 
     # Start the dialogue with an initial question
-    await actor_system.publish(AskQuestionCommand(content="the significance of learning."))
+    await service_colony.publish(AskQuestionCommand(content="the significance of learning."))
 
-    # The loop continues based on the actors' responses and the system's design
+    # The loop continues based on the inhabitants' responses and the system's design
     # For demonstration, let's simulate a short delay to see the conversation unfold
     await asyncio.sleep(10)
 
@@ -88,12 +88,12 @@ class StudentState(Enum):
     ANSWERING = auto()
 
 
-class StateActor(BaseActor):
+class StateInhabitant(BaseInhabitant):
     states = [state.name for state in TeacherState]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.machine = Machine(model=self, states=StateActor.states, initial=TeacherState.IDLE)
+        self.machine = Machine(model=self, states=StateInhabitant.states, initial=TeacherState.IDLE)
         self.machine.add_transition(trigger='ask', source=TeacherState.IDLE, dest=TeacherState.ASKING)
         self.machine.add_transition(trigger='receive_answer', source=TeacherState.ASKING,
                                     dest=TeacherState.WAITING_FOR_ANSWER)
@@ -102,7 +102,7 @@ class StateActor(BaseActor):
     async def handle_cmd(self, command: AskQuestionCommand):
         # State-based logic for asking a question
         # print(str(self.__dict__))
-        # with open("state_actor.txt", "a") as f:
+        # with open("state_inhabitant.txt", "a") as f:
         #     f.write(str(self.__dict__))
         print(f"State transition possibilities: {state_transition_possibilities(self)}")
         assert not self.may_receive_answer()  # not ready yet :(
@@ -110,14 +110,14 @@ class StateActor(BaseActor):
         # Logic to formulate a question
 
 
-def state_transition_possibilities(actor):
+def state_transition_possibilities(inhabitant):
     transition_dict = {}
-    for event in actor.machine.events:
+    for event in inhabitant.machine.events:
         if event.startswith('to_'):
             continue
 
         # Check if a transition to this state is possible
-        transition_possible = getattr(actor.machine.model, f'may_{event}')()
+        transition_possible = getattr(inhabitant.machine.model, f'may_{event}')()
         transition_dict[event] = transition_possible
     return transition_dict
 
@@ -125,13 +125,13 @@ def state_transition_possibilities(actor):
 async def main():
     init_dspy()
 
-    actor_system = ActorSystem()
-    teacher_actor = await actor_system.actor_of(StateActor)
+    service_colony = ServiceColony()
+    teacher_inhabitant= await service_colony.inhabitant_of(StateInhabitant)
 
     # Start the dialogue with an initial question
-    await actor_system.publish(AskQuestionCommand(content="the significance of learning."))
+    await service_colony.publish(AskQuestionCommand(content="the significance of learning."))
 
-    # The loop continues based on the actors' responses and the system's design
+    # The loop continues based on the inhabitants' responses and the system's design
     # For demonstration, let's simulate a short delay to see the conversation unfold
     await asyncio.sleep(10)
 

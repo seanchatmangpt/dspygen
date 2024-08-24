@@ -1,6 +1,6 @@
 import inspect
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from importlib import import_module
 from typing import Any, TypeVar
 
@@ -10,26 +10,58 @@ from dspygen.utils.yaml_tools import YAMLMixin
 
 
 class BaseMessage(BaseModel):
-    """Base message class for serialization/deserialization compatibility with a TypeScript equivalent."""
-    data: dict = Field(default_factory=dict, description="Key-value pairs for additional metadata, akin to headers.")
-    datacontenttype: str = Field(default='application/json', description="The content type of the data.")
+    """Base message class for serialization/deserialization compatibility with AsyncAPI."""
+
+    # Identification fields
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="A unique identifier for the message.")
-    pubsubname: str = Field(default='pubsub', description="The name of the pub/sub component.")
-    source: str = Field("", description="The Dapr application ID.")
-    specversion: str = Field(default='1.0', description="The pubsub spec version.")
-    topic: str = Field("", description="The topic name.")
-    traceid: str = Field(default_factory=lambda: str(uuid.uuid4()), description="A unique identifier for the trace.")
-    traceparent: str = Field(default_factory=lambda: str(uuid.uuid4()), description="The parent trace identifier.")
-    tracestate: str = Field(default_factory=lambda: str(uuid.uuid4()), description="The trace state.")
-    type: str = Field("", description="The Dapr message type.")
+    correlation_id: str = Field(default_factory=lambda: str(uuid.uuid4()),
+                                description="A unique identifier used for message correlation.")
+
+    # Metadata fields
+    type: str = Field(None, description="The message type, often corresponding to an event or action.")
+    content_type: str = Field(default='application/json', description="The content type of the message payload.")
+    source: str = Field("service_colony", description="The source of the message, usually a service or application ID.")
+    time: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat(),
+                      description="The timestamp of when the message was created.")    # Data payload
+
+    data: dict = Field(default_factory=dict,
+                       description="The main payload of the message, typically containing the business data.")
+
+    # Optional tracing fields
+    trace_id: str = Field(default_factory=lambda: str(uuid.uuid4()),
+                          description="A unique identifier for tracing the message flow.")
+    trace_parent: str = Field(default_factory=lambda: str(uuid.uuid4()),
+                              description="The parent trace identifier, if applicable.")
+    trace_state: str = Field(default_factory=lambda: str(uuid.uuid4()),
+                             description="Additional trace state information, if applicable.")
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "id": "123e4567-e89b-12d3-a456-426614174000",
+                "correlation_id": "123e4567-e89b-12d3-a456-426614174001",
+                "type": "order.created",
+                "content_type": "application/json",
+                "source": "order-service",
+                "time": "2023-08-20T15:41:05.235Z",
+                "data": {
+                    "order_id": "abc123",
+                    "user_id": "user456",
+                    "amount": 99.99
+                },
+                "trace_id": "123e4567-e89b-12d3-a456-426614174002",
+                "trace_parent": "123e4567-e89b-12d3-a456-426614174003",
+                "trace_state": "123e4567-e89b-12d3-a456-426614174004"
+            }
+        }
 
     @property
-    def actor_id(self) -> int:
-        return self.data.get('actor_id', -1)
+    def inhabitant_id(self) -> int:
+        return self.data.get('inhabitant_id', -1)
 
-    @actor_id.setter
-    def actor_id(self, value: int):
-        self.data['actor_id'] = value
+    @inhabitant_id.setter
+    def inhabitant_id(self, value: int):
+        self.data['inhabitant_id'] = value
 
     @property
     def content(self) -> str:
@@ -56,7 +88,7 @@ class ExceptionMessage(BaseMessage):
 
 
 class TerminationMessage(BaseMessage):
-    """Message indicating an actor should be terminated."""
+    """Message indicating an inhabitant should be terminated."""
 
 
 T = TypeVar("T", bound="Message")

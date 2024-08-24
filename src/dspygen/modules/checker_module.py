@@ -2,11 +2,7 @@
 
 """
 import dspy
-from typer import Typer
 from dspygen.utils.dspy_tools import init_dspy
-
-
-app = Typer()        
 
 
 class CheckerModule(dspy.Module):
@@ -23,30 +19,10 @@ def checker_call(prompt, assertion):
     return checker.forward(prompt=prompt, assertion=assertion)
 
 
-@app.command()
-def call(prompt, assertion):
-    """CheckerModule"""
-    init_dspy()
-    
-    print(checker_call(prompt=prompt, assertion=assertion))
-
-
-from fastapi import APIRouter
-router = APIRouter()
-
-@router.post("/checker/")
-async def checker_route(data: dict):
-    # Your code generation logic here
-    init_dspy()
-    
-    print(data)
-    return checker_call(**data)
-
-
 def main():
     init_dspy()
-    prompt = ""
-    assertion = ""
+    prompt = "The earth is flat"
+    assertion = "True"
     print(checker_call(prompt=prompt, assertion=assertion))
     
 

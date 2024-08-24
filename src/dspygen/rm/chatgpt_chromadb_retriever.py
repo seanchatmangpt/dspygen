@@ -268,7 +268,7 @@ def main():
     for conversation in matched_conversations:
         logger.info(conversation)
 
-    # logger.info(python_source_code_call(str(matched_conversations)))
+    logger.info(python_source_code_call(str(matched_conversations)))
 
 
 def main2():

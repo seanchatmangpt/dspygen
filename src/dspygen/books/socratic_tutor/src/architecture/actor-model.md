@@ -1,1 +1,1 @@
-# Actor Model
+# Inhabitant Model

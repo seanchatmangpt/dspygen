@@ -4,21 +4,21 @@ from typing import Optional
 from loguru import logger
 from playwright.async_api import async_playwright
 
-from dspygen.rdddy.base_actor import BaseActor
-from dspygen.rdddy.actor_system import ActorSystem
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
+from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.rdddy.browser.browser_domain import *
 from dspygen.rdddy.base_message import *
 
 
-class BrowserWorker(BaseActor):
+class BrowserWorker(BaseInhabitant):
     def __init__(
         self,
-        actor_system: ActorSystem,
-        actor_id: Optional[int] = None,
+        service_colony: ServiceColony,
+        inhabitant_id: Optional[int] = None,
         page: Optional[Page] = None,
         browser=None
     ):
-        super().__init__(actor_system, actor_id)
+        super().__init__(service_colony, inhabitant_id)
         self.page = page
         self.browser = browser
 
@@ -53,7 +53,7 @@ class BrowserWorker(BaseActor):
         # response = await process_new_responses(self.component)
         # await asyncio.sleep(SLEEP)
 
-        # await self.actor_system.publish(ChatGPTResponse(content=response))
+        # await self.service_colony.publish(ChatGPTResponse(content=response))
         # await asyncio.sleep(SLEEP)
         # print(send_cmd.prompt)
 
@@ -121,9 +121,9 @@ async def main():
 
         await page.goto("https://chat.openai.com", wait_until="domcontentloaded")
 
-        asys = ActorSystem()
+        asys = ServiceColony()
 
-        actor = await asys.actor_of(BrowserWorker, browser=browser, page=page)
+        inhabitant = await asys.inhabitant_of(BrowserWorker, browser=browser, page=page)
 
         # List of prompts for generating documents
         prompts = [

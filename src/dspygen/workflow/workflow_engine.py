@@ -1,10 +1,10 @@
 from pydantic import Field
 
-from dspygen.rdddy.base_actor import BaseActor
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
 from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.base_event import BaseEvent
 from dspygen.rdddy.base_query import BaseQuery
-from dspygen.rdddy.actor_system import ActorSystem
+from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.workflow.workflow_executor import execute_workflow
 from dspygen.workflow.workflow_models import Workflow
@@ -32,9 +32,9 @@ class JobCommand(BaseCommand):
     tasks: list[str]
 
 
-class WorkflowEngine(BaseActor):
-    def __init__(self, actor_system, actor_id=None):
-        super().__init__(actor_system, actor_id)
+class WorkflowEngine(BaseInhabitant):
+    def __init__(self, service_colony, inhabitant_id=None):
+        super().__init__(service_colony, inhabitant_id)
         self.status = "idle"
 
     async def handle_status(self, query: StatusQuery):
@@ -82,8 +82,8 @@ class WorkflowEngine(BaseActor):
 
 
 async def main():
-    asys = ActorSystem()
-    engine = await asys.actor_of(WorkflowEngine)
+    asys = ServiceColony()
+    engine = await asys.inhabitant_of(WorkflowEngine)
 
     wf_path = "/Users/sac/dev/dspygen/src/dspygen/workflow/data_analysis_workflow.yaml"
     await asys.publish(StartCommand(wf_path=wf_path))

@@ -4,7 +4,7 @@ import asyncio
 import typer
 
 from dspygen.async_typer import AsyncTyper
-from dspygen.rdddy.actor_system import ActorSystem
+from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.rdddy.browser.browser_domain import StartBrowserCommand
 from dspygen.rdddy.browser.browser_process_supervisor import BrowserProcessSupervisor
 from dspygen.rdddy.browser.browser_worker import BrowserWorker
@@ -21,12 +21,12 @@ def browser():
 @app.command(name="start")
 async def browser_start():
     """Start a browser with a browser process supervisor."""
-    actor_system = ActorSystem()
-    proc_supervisor = await actor_system.actor_of(BrowserProcessSupervisor)
-    browser_actor = await actor_system.actor_of(BrowserWorker)
+    service_colony = ServiceColony()
+    proc_supervisor = await service_colony.inhabitant_of(BrowserProcessSupervisor)
+    browser_inhabitant= await service_colony.inhabitant_of(BrowserWorker)
 
     # Start Chrome Browser
-    await actor_system.publish(StartBrowserCommand())
+    await service_colony.publish(StartBrowserCommand())
 
     # Perform browser actions using BrowserActor
     typer.echo("Main function done.")

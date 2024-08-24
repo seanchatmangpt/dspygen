@@ -62,7 +62,7 @@ class CoderAgent(FSMMixin):
         print("Task completed without errors.")
 
     @trigger(source=CoderAgentState.HANDLING_ERRORS, dest=CoderAgentState.REFACTORING_CODE, conditions=['errors_resolved'])
-    def refactor_code(self):
+    def refinhabitant_code(self):
         """Refactor code after errors are resolved."""
         # Simple refactoring example by adding comments
         self.code = "# Added by refactoring\n" + self.code
@@ -91,7 +91,7 @@ def main():
     agent.test_code()
     if agent.errors_detected():
         agent.handle_errors()
-        agent.refactor_code()
+        agent.refinhabitant_code()
     agent.complete_task()
     print("Final state:", agent.state)
 

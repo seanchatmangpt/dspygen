@@ -1,4 +1,5 @@
 """dspygen CLI."""
+import asyncio
 import json
 import sys
 from importlib import import_module, metadata
@@ -10,6 +11,7 @@ from pathlib import Path
 import typer
 from munch import Munch
 
+from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.utils.cli_tools import chatbot
 from dspygen.utils.dspy_tools import init_ol
 from dspygen.utils.file_tools import source_dir
@@ -123,9 +125,9 @@ dspygen is a command-line tool.
 It helps generate various components for a project.
 Usage includes options and commands.
 Options like --install-completion, --show-completion, and --help are available.
-Commands include actor, assert, browser, command, help, init, lm, module, sig, and tutor.
+Commands include inhabitant, assert, browser, command, help, init, lm, module, sig, and tutor.
 Each command serves a specific purpose:
-actor: Related to actors.
+actor: Related to inhabitants.
 assert: Generates assertions for dspy.
 browser: Pertains to browser functionality.
 command: Generates or adds subcommands.
@@ -171,17 +173,24 @@ def tutor(question: str = ""):
     chatbot(question, "")
 
 
+
+
+def configure_injections(broker_url: str):
+    def config(binder):
+        from dspygen.rdddy.async_realtime_client import AsyncRealtimeClient
+        realtime_client = AsyncRealtimeClient(broker_url)
+        binder.bind(AsyncRealtimeClient, realtime_client)
+
+    import inject
+    inject.configure(config)
+
+
 def main():
-    print("Welcome to DSPyGen CLI!")
-    # init("test_project")
+    broker_url = "ws://localhost:4000/socket/websocket"
+    configure_injections(broker_url)
 
-    # import json
-    # import yaml
-
-    # current_module = sys.modules[__name__]
-    # module_dict = module_to_dict(current_module, include_docstring=False)
-    # print(yaml.dump(module_dict))
-    # print(json.dumps(module_dict, indent=2))
+    service_colony = ServiceColony()
+    asyncio.run(service_colony.connect())
 
 
 

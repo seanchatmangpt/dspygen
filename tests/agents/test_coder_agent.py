@@ -36,7 +36,7 @@
 #     coder_agent.start_coding()
 #     coder_agent.test_code()
 #     coder_agent.handle_errors()
-#     coder_agent.refactor_code()  # Transition to REFACTORING_CODE
+#     coder_agent.refinhabitant_code()  # Transition to REFACTORING_CODE
 #     return coder_agent
 #
 #
@@ -45,7 +45,7 @@
 #     coder_agent.start_coding()
 #     coder_agent.test_code()
 #     coder_agent.handle_errors()
-#     coder_agent.refactor_code()
+#     coder_agent.refinhabitant_code()
 #     coder_agent.complete_task()  # Transition to COMPLETING_TASK
 #     return coder_agent
 #

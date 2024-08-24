@@ -1,7 +1,7 @@
-from dspygen.rdddy.base_actor import BaseActor
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
 
 
-class BasePolicy(BaseActor):
+class BasePolicy(BaseInhabitant):
     """Outlines the framework for decision-making logic that governs the system's operations, translating business
     rules and conditions into actionable guidance. Policies play a crucial role in defining the behavior of the
     system under various circumstances, ensuring that operations adhere to the defined business logic and

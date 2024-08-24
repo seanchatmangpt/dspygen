@@ -3,11 +3,11 @@
 {% endfor %}
 
 
-from dspygen.rdddy.base_actor import BaseActor
+from dspygen.rdddy.base_inhabitantimport BaseInhabitant
 
-class {{ actor_name }}(BaseActor):
-    def __init__(self, actor_system, actor_id=None):
-        super().__init__(actor_system, actor_id)
+class {{ inhabitant_name }}(BaseInhabitant):
+    def __init__(self, service_colony, inhabitant_id=None):
+        super().__init__(service_colony, inhabitant_id)
 
     {% for message in messages %}
     async def handle_{{ message.type|lower }}(self, message: {{ message.class_name }}):

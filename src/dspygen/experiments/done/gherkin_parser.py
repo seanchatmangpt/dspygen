@@ -168,11 +168,11 @@ Feature: Email Parsing and Interpretation
   Scenario: Parsing and Interpreting an Email
     Given an incoming email to the UnixEmailSystem
     When the email is parsed
-    Then the system should extract the <actor_id>, <subject>, and <body>
+    Then the system should extract the <inhabitant_id>, <subject>, and <body>
     And interpret the body to determine the required action
 
     Examples:
-      | actor_id            | subject            | body                                     |
+      | inhabitant_id            | subject            | body                                     |
       | "user@example.com" | "Task Assignment"  | "Please review the attached report..." |
 """
 

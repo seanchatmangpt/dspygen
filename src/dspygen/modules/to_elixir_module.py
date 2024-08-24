@@ -32,21 +32,6 @@ def call(code):
     print(to_elixir_call(code=code))
 
 
-# TODO: Add streamlit component
-
-
-from fastapi import APIRouter
-router = APIRouter()
-
-@router.post("/to_elixir/")
-async def to_elixir_route(data: dict):
-    # Your code generation logic here
-    init_dspy()
-    
-    print(data)
-    return to_elixir_call(**data)
-
-
 def main():
     init_dspy()
     code = ""

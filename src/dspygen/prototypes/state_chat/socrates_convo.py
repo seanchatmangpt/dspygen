@@ -3,10 +3,10 @@ from transitions import Machine
 from transitions.extensions.states import add_state_features, Tags
 from enum import Enum, auto
 
-from dspygen.rdddy.base_actor import BaseActor
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
 from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.base_event import BaseEvent
-from dspygen.rdddy.actor_system import ActorSystem
+from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.utils.dspy_tools import init_dspy
 
 
@@ -83,7 +83,7 @@ class ConcludeDialogueEvent(BaseEvent):
     """Dialogue has been concluded."""
 
 
-class SocratesActor(BaseActor):
+class SocratesInhabitant(BaseInhabitant):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.machine = CustomStateMachine(model=self, states=SocratesState, initial=SocratesState.IDLE)
@@ -114,7 +114,7 @@ class SocratesActor(BaseActor):
         await self.publish(ConcludeDialogueEvent(content=conclusion))
 
 
-class StudentActor(BaseActor):
+class StudentInhabitant(BaseInhabitant):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.machine = CustomStateMachine(model=self, states=StudentState, initial=StudentState.IDLE)
@@ -131,14 +131,14 @@ class StudentActor(BaseActor):
         await self.publish(FollowUpAskedEvent(content=consideration))
 
 
-def state_transition_possibilities(actor):
+def state_transition_possibilities(inhabitant):
     transition_dict = {}
-    for event in actor.machine.events:
+    for event in inhabitant.machine.events:
         if event.startswith('to_'):
             continue
 
         # Check if a transition to this state is possible
-        transition_possible = getattr(actor.machine.model, f'may_{event}')()
+        transition_possible = getattr(inhabitant.machine.model, f'may_{event}')()
         if transition_possible:
             transition_dict[event] = transition_possible
     return transition_dict
@@ -147,60 +147,60 @@ def state_transition_possibilities(actor):
 async def main():
     init_dspy()
 
-    actor_system = ActorSystem()
-    socrates_actor = await actor_system.actor_of(SocratesActor)
-    student_actor = await actor_system.actor_of(StudentActor)
+    service_colony = ServiceColony()
+    socrates_inhabitant= await service_colony.inhabitant_of(SocratesInhabitant)
+    student_inhabitant= await service_colony.inhabitant_of(StudentInhabitant)
 
     # Socrates starts the dialogue
-    await actor_system.publish(AskQuestionCommand(content="You suggest that the expectation of unchanged prices in Mississippi next year, despite the ongoing issues, weakens the prediction about the parasite's impact outside Mississippi. What led you to this conclusion?"))
+    await service_colony.publish(AskQuestionCommand(content="You suggest that the expectation of unchanged prices in Mississippi next year, despite the ongoing issues, weakens the prediction about the parasite's impact outside Mississippi. What led you to this conclusion?"))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Student responds
-    await actor_system.publish(AnswerCommand(content="I thought if prices don't change despite the parasites, maybe the impact isn’t as severe, so the same might happen outside Mississippi."))
+    await service_colony.publish(AnswerCommand(content="I thought if prices don't change despite the parasites, maybe the impact isn’t as severe, so the same might happen outside Mississippi."))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Socrates dives deeper
-    await actor_system.publish(FollowUpQuestionCommand(content="Interesting thought. Let's explore further—what factors could potentially influence the severity of the parasite attack outside Mississippi, distinct from what's happening in Mississippi?"))
+    await service_colony.publish(FollowUpQuestionCommand(content="Interesting thought. Let's explore further—what factors could potentially influence the severity of the parasite attack outside Mississippi, distinct from what's happening in Mississippi?"))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Student speculates on environmental factors
-    await actor_system.publish(AnswerCommand(content="Maybe the environment or climate could be different?"))
+    await service_colony.publish(AnswerCommand(content="Maybe the environment or climate could be different?"))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Socrates pushes for more detailed analysis
-    await actor_system.publish(FollowUpQuestionCommand(content="Indeed, environmental differences can greatly affect such situations. Given this, what else might differ in an environment that could influence the impact of parasites?"))
+    await service_colony.publish(FollowUpQuestionCommand(content="Indeed, environmental differences can greatly affect such situations. Given this, what else might differ in an environment that could influence the impact of parasites?"))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Student considers biological interactions
-    await actor_system.publish(AnswerCommand(content="Could it be something like different plants or maybe animals that interact with the parasites?"))
+    await service_colony.publish(AnswerCommand(content="Could it be something like different plants or maybe animals that interact with the parasites?"))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Socrates confirms and extends the discussion
-    await actor_system.publish(FollowUpQuestionCommand(content="Precisely, interactions with local flora and fauna can indeed play a significant role. How might the presence of certain animals affect the situation with parasites outside Mississippi?"))
+    await service_colony.publish(FollowUpQuestionCommand(content="Precisely, interactions with local flora and fauna can indeed play a significant role. How might the presence of certain animals affect the situation with parasites outside Mississippi?"))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Student acknowledges the role of natural controls
-    await actor_system.publish(AnswerCommand(content="If there are animals that eat or control these parasites, they could reduce the damage?"))
+    await service_colony.publish(AnswerCommand(content="If there are animals that eat or control these parasites, they could reduce the damage?"))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Socrates clarifies and concludes
-    await actor_system.publish(FollowUpQuestionCommand(content="Exactly. So, if such a natural control exists outside Mississippi, might that change your view on how the unchanged prices in Mississippi relate to the broader impact of parasites?"))
+    await service_colony.publish(FollowUpQuestionCommand(content="Exactly. So, if such a natural control exists outside Mississippi, might that change your view on how the unchanged prices in Mississippi relate to the broader impact of parasites?"))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Student realizes the implications
-    await actor_system.publish(AnswerCommand(content="Yes, I see now. If there are natural controls outside Mississippi, the unchanged prices in Mississippi might not really tell us what could happen elsewhere."))
+    await service_colony.publish(AnswerCommand(content="Yes, I see now. If there are natural controls outside Mississippi, the unchanged prices in Mississippi might not really tell us what could happen elsewhere."))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Socrates concludes with a reflection
-    await actor_system.publish(ConcludeDialogueCommand(content="Very well reasoned! Considering these natural differences, how do you think this knowledge could help us better prepare or adjust agricultural strategies?"))
+    await service_colony.publish(ConcludeDialogueCommand(content="Very well reasoned! Considering these natural differences, how do you think this knowledge could help us better prepare or adjust agricultural strategies?"))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Student offers a final insight
-    await actor_system.publish(AnswerCommand(content="It seems like understanding and possibly enhancing these natural controls could be important for managing the parasites better."))
+    await service_colony.publish(AnswerCommand(content="It seems like understanding and possibly enhancing these natural controls could be important for managing the parasites better."))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Socrates praises the discussion
-    await actor_system.publish(ConcludeDialogueCommand(content="Excellent discussion today! You've adeptly navigated through the complexities of agricultural impacts and the role of local ecological conditions. Your ability to reconsider your initial assumptions when presented with new information shows a strong critical thinking capability. Very well done."))
+    await service_colony.publish(ConcludeDialogueCommand(content="Excellent discussion today! You've adeptly navigated through the complexities of agricultural impacts and the role of local ecological conditions. Your ability to reconsider your initial assumptions when presented with new information shows a strong critical thinking capability. Very well done."))
 
     print("Dialogue completed.")
 

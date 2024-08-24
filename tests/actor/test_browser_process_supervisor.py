@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from dspygen.rdddy.actor_system import ActorSystem
+from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.rdddy.browser.browser_domain import *
 from dspygen.rdddy.browser.browser_process_supervisor import BrowserProcessSupervisor
 
@@ -46,40 +46,40 @@ class MockAsyncProcess:
 
 
 @pytest.fixture()
-def actor_system(event_loop):
-    return ActorSystem(event_loop)
+def service_colony(event_loop):
+    return ServiceColony(event_loop)
 
 
 @pytest.mark.asyncio()
 @pytest.mark.skip(reason="This test is not working as expected")
-async def test_chrome_browser_restart(actor_system):
+async def test_chrome_browser_restart(service_colony):
     mock_process = MockAsyncProcess()
 
     with patch("asyncio.create_subprocess_exec", return_value=mock_process):
-        supervisor = await actor_system.actor_of(BrowserProcessSupervisor)
+        supervisor = await service_colony.inhabitant_of(BrowserProcessSupervisor)
 
-        await actor_system.publish(StartBrowserCommand())
+        await service_colony.publish(StartBrowserCommand())
 
-        # Allow time for the actor to process the logs and restart Chrome Browser
+        # Allow time for the inhabitant to process the logs and restart Chrome Browser
         await asyncio.sleep(0.1)  # Adjust sleep time if necessary
 
         mock_process.terminate()
 
         message: BrowserStatusEvent = cast(
-            BrowserStatusEvent, await actor_system.wait_for_message(BrowserStatusEvent)
+            BrowserStatusEvent, await service_colony.wait_for_message(BrowserStatusEvent)
         )
 
         assert message.status == "dead"
 
         start_cmd = cast(
             StartBrowserCommand,
-            await actor_system.wait_for_message(StartBrowserCommand),
+            await service_colony.wait_for_message(StartBrowserCommand),
         )
 
         mock_process.returncode = None
 
         message = cast(
-            BrowserStatusEvent, await actor_system.wait_for_message(BrowserStatusEvent)
+            BrowserStatusEvent, await service_colony.wait_for_message(BrowserStatusEvent)
         )
 
         assert message.status == "alive"

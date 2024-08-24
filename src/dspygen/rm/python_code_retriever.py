@@ -30,11 +30,11 @@ class PythonCodeRetriever:
 
     def process_content(self, source_code):
         tree = ast.parse(source_code)
-        extractor = CodeExtractor(source_code, self.include_signatures, self.include_docstrings, self.include_executable_code)
-        extractor.visit(tree)
-        return extractor.filtered_code
+        extractor = CodeExtrinhabitant(source_code, self.include_signatures, self.include_docstrings, self.include_executable_code)
+        extrinhabitant.visit(tree)
+        return extrinhabitant.filtered_code
 
-class CodeExtractor(ast.NodeVisitor):
+class CodeExtrinhabitant(ast.NodeVisitor):
     def __init__(self, source_code, include_signatures, include_docstrings, include_executable_code):
         self.source_code = source_code
         self.include_signatures = include_signatures

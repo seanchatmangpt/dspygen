@@ -107,7 +107,7 @@ def json_call(model: type[Model], text: str) -> Model:
 
 
 def main():
-    init_ol()
+    init_ol(model="deepseek-coder-v2")
     # Create fake data
     import faker
     fake = faker.Faker()

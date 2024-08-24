@@ -7,7 +7,7 @@ import signal
 
 from dspygen.async_typer import AsyncTyper
 from dspygen.rdddy.base_command import BaseCommand
-from dspygen.rdddy.actor_system import ActorSystem
+from dspygen.rdddy.service_colony import ServiceColony
 
 app = AsyncTyper(help="Full lifecycle for the Agent system. Generation to deployment.")
 
@@ -56,8 +56,8 @@ async def start_mqtt(broker_path: str = MOSQUITTO_BINARY, config_path: str = MOS
 
 @app.command(name="sys")
 async def sys_cmd():
-    """Starts the ActorSystem."""
-    actor_system = ActorSystem()
+    """Starts the ServiceColony."""
+    service_colony = ServiceColony()
 
     while True:
         await asyncio.sleep(5)
@@ -83,16 +83,16 @@ def stop_mqtt():
 
 
 @app.command(name="msg")
-async def start_actor_system(message: str):
-    """Starts the actor system with MQTT integration."""
-    actor_system = ActorSystem()
+async def start_service_colony(message: str):
+    """Starts the inhabitant system with MQTT integration."""
+    service_colony = ServiceColony()
 
-    await actor_system.publish(BaseCommand(content=message))
+    await service_colony.publish(BaseCommand(content=message))
 
 
 @app.command(name="new")
-async def new_actor():
-    """Uses a Jinja template to generate a new actor."""
+async def new_inhabitant():
+    """Uses a Jinja template to generate a new inhabitant."""
 
 
 if __name__ == "__main__":

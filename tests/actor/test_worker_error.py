@@ -1,11 +1,11 @@
 import asyncio
 
-from dspygen.rdddy.base_actor import BaseActor
-from dspygen.rdddy.actor_system import ActorSystem
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
+from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.rdddy.base_message import ExceptionMessage, TerminationMessage
 
 
-class WorkerActor(BaseActor):
+class WorkerInhabitant(BaseInhabitant):
     async def start_working(self):
         try:
             # Simulate some work
@@ -15,31 +15,31 @@ class WorkerActor(BaseActor):
         except Exception as e:
             await self.publish(ExceptionMessage(content=str(e)))
             await self.publish(
-                TerminationMessage(content=str(e), actor_id=self.actor_id)
+                TerminationMessage(content=str(e), inhabitant_id=self.inhabitant_id)
             )
 
 
-class SupervisorActor(BaseActor):
-    def __init__(self, actor_system, actor_id=None):
-        super().__init__(actor_system, actor_id)
-        self.worker_actor = None
+class SupervisorInhabitant(BaseInhabitant):
+    def __init__(self, service_colony, inhabitant_id=None):
+        super().__init__(service_colony, inhabitant_id)
+        self.worker_inhabitant= None
         self.restart_count = 0
 
     async def handle_exception(self, message: ExceptionMessage):
         # If an error message is received, restart the worker
         if "error" in message.content:
             self.restart_count += 1
-            self.worker_actor = await self.actor_system.actor_of(WorkerActor)
+            self.worker_inhabitant= await self.service_colony.inhabitant_of(WorkerInhabitant)
 
     async def start_worker(self):
-        self.worker_actor = await self.actor_system.actor_of(WorkerActor)
-        await self.worker_actor.start_working()
+        self.worker_inhabitant= await self.service_colony.inhabitant_of(WorkerInhabitant)
+        await self.worker_inhabitant.start_working()
 
 
-class RootSupervisorActor(BaseActor):
-    def __init__(self, actor_system, actor_id=None):
-        super().__init__(actor_system, actor_id)
-        self.supervisor_actor = None
+class RootSupervisorInhabitant(BaseInhabitant):
+    def __init__(self, service_colony, inhabitant_id=None):
+        super().__init__(service_colony, inhabitant_id)
+        self.supervisor_inhabitant= None
         self.restart_count = 0
 
     async def handle_exception(self, message: ExceptionMessage):
@@ -48,27 +48,27 @@ class RootSupervisorActor(BaseActor):
 
     async def handle_termination(self, message: TerminationMessage):
         # Handle termination logic
-        await self.actor_system.remove_actor(message.actor_id)
+        await self.service_colony.remove_inhabitant(message.inhabitant_id)
 
     async def start_supervisor(self):
-        self.supervisor_actor = await self.actor_system.actor_of(SupervisorActor)
-        await self.supervisor_actor.start_worker()
+        self.supervisor_inhabitant= await self.service_colony.inhabitant_of(SupervisorInhabitant)
+        await self.supervisor_inhabitant.start_worker()
 
 
 import pytest
 
-from dspygen.rdddy.actor_system import ActorSystem
+from dspygen.rdddy.service_colony import ServiceColony
 
 
 @pytest.fixture()
-def actor_system(event_loop):
-    return ActorSystem(event_loop)
+def service_colony(event_loop):
+    return ServiceColony(event_loop)
 
 
 @pytest.mark.skip
 @pytest.mark.asyncio()
-async def test_worker_restart(actor_system):
-    root_supervisor = await actor_system.actor_of(RootSupervisorActor)
+async def test_worker_restart(service_colony):
+    root_supervisor = await service_colony.inhabitant_of(RootSupervisorInhabitant)
     await root_supervisor.start_supervisor()
 
     await asyncio.sleep(0)  # Give enough time for the hierarchy to react

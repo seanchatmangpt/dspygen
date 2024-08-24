@@ -1,0 +1,64 @@
+{
+  "name": "Sean Chatman",
+  "headline": "Available for Distinguished Front End Generative AI Web Development",
+  "location": "Los Angeles, California, United States",
+  "contact_info": "linkedin.com/seanchatman",
+  "followers": 21519,
+  "connections": 500,
+  "experiences": [
+    {
+      "title": "Distinguished Front End Generative AI Web Development Contractor",
+      "company": "Consulting",
+      "duration": "May 2023 - Aug 2024",
+      "location": "Los Angeles County, California, United States · Remote"
+    },
+    {
+      "title": "Staff Software Engineer - Artificial Intelligence, Analytics, and Data",
+      "company": "Intuit",
+      "duration": "Dec 2021 - Jun 2023",
+      "location": "Los Angeles, California, United States · Remote"
+    },
+    {
+      "title": "Full-Stack Software Consultant - Artificial Intelligence, Analytics, and Data",
+      "company": "Intuit",
+      "duration": "Feb 2021 - Dec 2021",
+      "location": "Los Angeles Metropolitan Area"
+    },
+    {
+      "title": "Principal Engineer (Web)",
+      "company": "Method Studios",
+      "duration": "Feb 2018 - Jun 2020",
+      "location": "Greater Los Angeles Area"
+    },
+    {
+      "title": "Lead Software Engineer",
+      "company": "AT&T",
+      "duration": "Feb 2016 - Nov 2017",
+      "location": "Greater Los Angeles Area"
+    },
+    {
+      "title": "Software Architect",
+      "company": "Playsino",
+      "duration": "Jun 2012 - May 2015",
+      "location": "Santa Monica, CA"
+    }
+  ],
+  "education": [],
+  "skills": [
+    {
+      "name": "Artificial Intelligence (AI)"
+    },
+    {
+      "name": "TypeScript"
+    },
+    {
+      "name": "Python (Programming Language)"
+    },
+    {
+      "name": "Generative AI"
+    },
+    {
+      "name": "Revenue & Profit Growth"
+    }
+  ]
+}

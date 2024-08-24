@@ -66,7 +66,7 @@ async def blog_route(data: dict):
 def main():
     #init_dspy(lm_class=Groq, model="llama3-70b-8192", max_tokens=8000) # with Groq you must set the model!
     #init_ol("codellama:python", max_tokens=12000)
-    init_ol( max_tokens=5000 , timeout=500)
+    init_ol( max_tokens=5000, timeout=500)
 
     #init_dspy(Ollama, model="llama3:8b-instruct-q5_1", max_tokens=8000) # with Ollama you must set the model! -- llama3:70b-instruct ollama run llama3:70b-instruct-q3_K_M
     subject = "The Qix Atari Arcade  Game logic , simple but working : in 100 lines" # 300 did not end ok with ollama mistral

@@ -1,7 +1,7 @@
-from dspygen.rdddy.base_actor import BaseActor
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
 
 
-class BaseAggregate(BaseActor):
+class BaseAggregate(BaseInhabitant):
     """Serves as the cornerstone of the domain model within the RDDDY framework, encapsulating a cluster of domain
     objects that are treated as a single unit for the purposes of data changes. An aggregate guarantees the
     consistency of changes to the domain objects it encompasses by enforcing invariants across the entire group,

@@ -5,7 +5,7 @@ import dspy
 import pyperclip
 from typer import Typer
 
-from dspygen.rdddy.base_actor import BaseActor
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
 from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.base_event import BaseEvent
 from dspygen.utils.dspy_tools import init_dspy
@@ -36,7 +36,7 @@ class InsightTweetModuleEvent(BaseEvent):
     """Generate Tweet"""
 
 
-class InsightTweetModuleActor(BaseActor):
+class InsightTweetModuleInhabitant(BaseInhabitant):
     async def handle_tax_return(self, command: InsightTweetModuleCommand):
         await self.publish(InsightTweetModuleEvent(content=insight_tweet_call(command.content)))
 

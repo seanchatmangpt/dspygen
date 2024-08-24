@@ -73,6 +73,10 @@ confz = "^2.0.1"
 python-pptx = "^0.6.23"
 pm4py = "^2.7.11.11"
 protobuf = ">=3.20,<3.21"
+osascript = "^2020.12.3"
+websockets = "^12.0"
+realtime = "^2.0.1"
+trafilatura = "^1.12.1"
 
 [tool.poetry.group.test.dependencies]  # https://python-poetry.org/docs/master/managing-dependencies/
 coverage = { extras = ["toml"], version = ">=7.2.5" }
