@@ -1,0 +1,18 @@
+{
+    "sourceFile": "tests/experiments/cal_apps/reminder_app.feature",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1724784857165,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1724784857165,
+            "name": "Commit-0",
+            "content": "Feature: Reminder App Functionality\n  As a user of the Reminder App\n  I want to manage my reminders and lists\n  So that I can organize my tasks effectively\n\n  Scenario: Create a new reminder list\n    Given the Reminder App is initialized\n    When I add a new reminder list called \"Work Tasks\"\n    Then the \"Work Tasks\" list should be in the app's lists\n\n  Scenario: Add a reminder to a list\n    Given the Reminder App is initialized\n    And a reminder list called \"Personal Tasks\" exists\n    When I select the \"Personal Tasks\" list\n    And I add a reminder \"Buy groceries\" with due date \"2023-05-01 18:00\"\n    Then the \"Personal Tasks\" list should contain the reminder \"Buy groceries\"\n\n  Scenario: Mark a reminder as completed\n    Given the Reminder App is initialized\n    And a reminder list called \"Home Chores\" exists\n    And the list \"Home Chores\" has a reminder \"Clean the kitchen\"\n    When I select the \"Home Chores\" list\n    And I mark the reminder \"Clean the kitchen\" as completed\n    Then the reminder \"Clean the kitchen\" should be marked as completed\n\n  Scenario: Remove a reminder list\n    Given the Reminder App is initialized\n    And a reminder list called \"Temporary Tasks\" exists\n    When I remove the \"Temporary Tasks\" list\n    Then the \"Temporary Tasks\" list should not be in the app's lists\n\n  Scenario: Clear completed reminders\n    Given the Reminder App is initialized\n    And a reminder list called \"Daily Tasks\" exists\n    And the list \"Daily Tasks\" has a completed reminder \"Make bed\"\n    And the list \"Daily Tasks\" has an incomplete reminder \"Do laundry\"\n    When I select the \"Daily Tasks\" list\n    And I clear completed reminders\n    Then the \"Daily Tasks\" list should not contain the reminder \"Make bed\"\n    And the \"Daily Tasks\" list should contain the reminder \"Do laundry\""
+        }
+    ]
+}

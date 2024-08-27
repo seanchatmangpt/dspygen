@@ -1,0 +1,18 @@
+{
+    "sourceFile": "tests/test_reminder_app.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1724784526871,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1724784526871,
+            "name": "Commit-0",
+            "content": "import pytest\nfrom pytest_bdd import scenarios, given, when, then\nfrom ReminderApp import ReminderApp, Reminder, ReminderList\n\n# Load the Gherkin scenarios\nscenarios('../features/reminder_app.feature')\n\n@pytest.fixture\ndef reminder_app():\n    app = ReminderApp()\n    app.request_access()\n    return app\n\n@given('the ReminderApp is initialized')\ndef initialize_app(reminder_app):\n    pass  # The fixture handles this\n\n@given('I have granted access to reminders')\ndef grant_access(reminder_app):\n    pass  # The fixture handles this\n\n@given('I create a new list named \"Test List\"')\ndef create_list(reminder_app):\n    try:\n        reminder_app.select_list(\"Test List\")\n    except ValueError:\n        test_list = ReminderList(\"Test List\", reminder_app.event_store)\n        reminder_app.add_list(test_list)\n        reminder_app.select_list(\"Test List\")\n\n@when('I add a reminder titled \"{title}\" with due date \"{due_date}\" to the \"{list_name}\"')\ndef add_reminder(reminder_app, title, due_date, list_name):\n    reminder_app.select_list(list_name)\n    reminder = Reminder(title=title, due_date=due_date)\n    reminder_app.add_reminder_to_selected(reminder)\n\n@when('I mark the reminder \"{title}\" as completed')\ndef mark_reminder_as_completed(reminder_app, title):\n    reminders = reminder_app.get_reminders()\n    for reminder in reminders:\n        if reminder.title == title:\n            reminder.mark_as_completed()\n            reminder.save(reminder_app.event_store)\n            break\n\n@when('I clear completed reminders from \"{list_name}\"')\ndef clear_completed_reminders(reminder_app, list_name):\n    reminder_app.select_list(list_name)\n    reminder_app.clear_completed_reminders()\n\n@then('the reminder \"{title}\" should exist in the \"{list_name}\"')\ndef verify_reminder_exists(reminder_app, title, list_name):\n    reminder_app.select_list(list_name)\n    reminders = reminder_app.get_reminders()\n    assert any(reminder.title == title for reminder in reminders), f\"Reminder '{title}' does not exist.\"\n\n@then('the reminder \"{title}\" should be marked as completed in the \"{list_name}\"')\ndef verify_reminder_completed(reminder_app, title, list_name):\n    reminder_app.select_list(list_name)\n    reminders = reminder_app.get_reminders(completed=True)\n    assert any(reminder.title == title for reminder in reminders), f\"Reminder '{title}' is not marked as completed.\"\n\n@then('the reminder \"{title}\" should no longer exist in the \"{list_name}\"')\ndef verify_reminder_cleared(reminder_app, title, list_name):\n    reminder_app.select_list(list_name)\n    reminders = reminder_app.get_reminders()\n    assert all(reminder.title != title for reminder in reminders), f\"Completed reminder '{title}' was not cleared.\""
+        }
+    ]
+}

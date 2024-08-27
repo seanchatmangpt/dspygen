@@ -1,0 +1,22 @@
+{
+    "sourceFile": "tests/experiments/cal_apps/conftest.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1724788408563,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1724789173714,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,10 @@\n import pytest\n from unittest.mock import patch\n-from dspygen.experiments.cal_apps.eventkit_mocks import MockEventKit\n+from dspygen.experiments.cal_apps.eventkit_mocks import MockEventKit, MockEKReminder\n \n @pytest.fixture(autouse=True)\n def mock_eventkit():\n-    with patch.dict('sys.modules', {'EventKit': MockEventKit()}):\n\\ No newline at end of file\n-        yield\n+    mock_ek = MockEventKit()\n+    with patch.dict('sys.modules', {'EventKit': mock_ek}):\n+        with patch('EventKit.EKReminder', MockEKReminder):\n+            yield mock_ek\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1724788408563,
+            "name": "Commit-0",
+            "content": "import pytest\nfrom unittest.mock import patch\nfrom dspygen.experiments.cal_apps.eventkit_mocks import MockEventKit\n\n@pytest.fixture(autouse=True)\ndef mock_eventkit():\n    with patch.dict('sys.modules', {'EventKit': MockEventKit()}):\n        yield"
+        }
+    ]
+}

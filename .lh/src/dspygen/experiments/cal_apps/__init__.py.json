@@ -1,0 +1,30 @@
+{
+    "sourceFile": "src/dspygen/experiments/cal_apps/__init__.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1724784607061,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1724784719629,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,1 @@\n-from .reminder import Reminder\n-from .reminder_list import ReminderList\n-from .reminder_app import ReminderApp\n \n-__all__ = ['Reminder', 'ReminderList', 'ReminderApp']\n"
+                },
+                {
+                    "date": 1724784726474,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,5 @@\n+from .reminder import Reminder\n+from .reminder_list import ReminderList\n+from .reminder_app import ReminderApp\n \n+__all__ = ['Reminder', 'ReminderList', 'ReminderApp']\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1724789841592,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +0,0 @@\n-from .reminder import Reminder\n-from .reminder_list import ReminderList\n-from .reminder_app import ReminderApp\n-\n-__all__ = ['Reminder', 'ReminderList', 'ReminderApp']\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1724784607061,
+            "name": "Commit-0",
+            "content": "from .reminder import Reminder\nfrom .reminder_list import ReminderList\nfrom .reminder_app import ReminderApp\n\n__all__ = ['Reminder', 'ReminderList', 'ReminderApp']\n"
+        }
+    ]
+}

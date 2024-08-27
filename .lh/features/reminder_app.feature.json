@@ -1,0 +1,18 @@
+{
+    "sourceFile": "features/reminder_app.feature",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1724784519315,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1724784519315,
+            "name": "Commit-0",
+            "content": "Feature: Managing reminders in the ReminderApp\n\n  Scenario: Creating a new reminder in a new list\n    Given the ReminderApp is initialized\n    And I have granted access to reminders\n    And I create a new list named \"Test List\"\n    When I add a reminder titled \"Test Reminder\" with due date \"2024-08-28 07:00\" to the \"Test List\"\n    Then the reminder \"Test Reminder\" should exist in the \"Test List\"\n\n  Scenario: Completing a reminder\n    Given the ReminderApp is initialized\n    And I have granted access to reminders\n    And I create a new list named \"Test List\"\n    And I add a reminder titled \"Complete Reminder\" with due date \"2024-08-28 07:00\" to the \"Test List\"\n    When I mark the reminder \"Complete Reminder\" as completed\n    Then the reminder \"Complete Reminder\" should be marked as completed in the \"Test List\"\n\n  Scenario: Clearing completed reminders\n    Given the ReminderApp is initialized\n    And I have granted access to reminders\n    And I create a new list named \"Test List\"\n    And I add a reminder titled \"Clear Me\" with due date \"2024-08-28 07:00\" to the \"Test List\"\n    And I mark the reminder \"Clear Me\" as completed\n    When I clear completed reminders from \"Test List\"\n    Then the reminder \"Clear Me\" should no longer exist in the \"Test List\""
+        }
+    ]
+}

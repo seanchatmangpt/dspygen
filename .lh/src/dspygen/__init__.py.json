@@ -1,0 +1,42 @@
+{
+    "sourceFile": "src/dspygen/__init__.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 6,
+            "patches": [
+                {
+                    "date": 1724789562262,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1724789900180,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,10 +1,9 @@\n-# import inject\n-# from dspygen.di_configure import configure\n-#\n-# inject.configure(configure)\n+import inject\n+import EventKit\n \n # Configure the injector\n def configure_injector(binder):\n     binder.bind(EventKit.EKEventStore, EventKit.EKEventStore.alloc().init())\n+    binder.bind('reminder_factory', EventKit.EKReminder.reminderWithEventStore_)\n \n inject.configure(configure_injector)\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1724789938007,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,9 @@\n+import inject\n+import EventKit\n+\n+# Configure the injector\n+def configure_injector(binder):\n+    binder.bind(EventKit.EKEventStore, EventKit.EKEventStore.alloc().init())\n+    binder.bind('EKReminder', EventKit.EKReminder)\n+\n+inject.configure(configure_injector)\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1724790009352,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,7 +3,7 @@\n \n # Configure the injector\n def configure_injector(binder):\n     binder.bind(EventKit.EKEventStore, EventKit.EKEventStore.alloc().init())\n-    binder.bind('EKReminder', EventKit.EKReminder)\n+    binder.bind(EventKit.EKReminder, EventKit.EKReminder)\n \n inject.configure(configure_injector)\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1724790091192,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,17 +2,9 @@\n import EventKit\n \n # Configure the injector\n def configure_injector(binder):\n+    event\n     binder.bind(EventKit.EKEventStore, EventKit.EKEventStore.alloc().init())\n     binder.bind(EventKit.EKReminder, EventKit.EKReminder)\n \n-inject.configure(configure_injector)\n-import inject\n-import EventKit\n-\n-# Configure the injector\n-def configure_injector(binder):\n-    binder.bind(EventKit.EKEventStore, EventKit.EKEventStore.alloc().init())\n-    binder.bind('reminder_factory', EventKit.EKReminder.reminderWithEventStore_)\n-\n inject.configure(configure_injector)\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1724790113776,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,12 @@\n import inject\n import EventKit\n \n+# import inject\n+# from dspygen.di_configure import configure\n+#\n+# inject.configure(configure)\n+\n # Configure the injector\n def configure_injector(binder):\n     event_store = EventKit.EKEventStore.alloc().init()\n     binder.bind(EventKit.EKEventStore, event_store)\n"
+                },
+                {
+                    "date": 1724790140639,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,7 +9,7 @@\n # Configure the injector\n def configure_injector(binder):\n     event_store = EventKit.EKEventStore.alloc().init()\n     binder.bind(EventKit.EKEventStore, event_store)\n-    binder.bind(EventKit.EKReminder, )\n+    binder.bind(EventKit.EKReminder, EventK)\n \n inject.configure(configure_injector)\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1724789562262,
+            "name": "Commit-0",
+            "content": "# import inject\n# from dspygen.di_configure import configure\n#\n# inject.configure(configure)\n\n# Configure the injector\ndef configure_injector(binder):\n    binder.bind(EventKit.EKEventStore, EventKit.EKEventStore.alloc().init())\n\ninject.configure(configure_injector)"
+        }
+    ]
+}

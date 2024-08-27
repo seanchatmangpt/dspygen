@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 import objc
 import EventKit
 from Foundation import NSDateComponents
 from datetime import datetime, timedelta
 from typing import Optional
+import inject
 
 from dspygen.experiments.cal_apps.calendar_item import CalendarItemError, CalendarItem
 
@@ -10,14 +13,18 @@ from dspygen.experiments.cal_apps.calendar_item import CalendarItemError, Calend
 class ReminderError(CalendarItemError):
     pass
 
+
 class Reminder(CalendarItem):
-    def __init__(self, event_store: EventKit.EKEventStore):
+    @inject.autoparams()
+    def __init__(self, event_store: EventKit.EKEventStore, ek_reminder: EventKit.EKReminder = EventKit.EKReminder):
         super().__init__(event_store)
-        self.ek_item = EventKit.EKReminder.reminderWithEventStore_(event_store)
+        self.ek_item = ek_reminder
 
     @classmethod
-    def create(cls, event_store: EventKit.EKEventStore, title: str, calendar: EventKit.EKCalendar) -> 'Reminder':
-        reminder = cls(event_store)
+    @inject.autoparams()
+    def create(cls, event_store: EventKit.EKEventStore, title: str, calendar: EventKit.EKCalendar,
+               ek_reminder: EventKit.EKReminder = EventKit.EKReminder):
+        reminder = cls(event_store, ek_reminder)
         reminder.title = title
         reminder.calendar = calendar
         return reminder
@@ -95,8 +102,9 @@ class Reminder(CalendarItem):
         if not success:
             raise ReminderError(f"Failed to remove reminder: {error}")
 
+@inject.autoparams()
 def create_reminder(event_store: EventKit.EKEventStore, title: str, calendar: EventKit.EKCalendar,
-                    due_date: Optional[datetime] = None) -> Reminder:
+                    due_date: Optional[datetime] = None):
     reminder = Reminder.create(event_store, title, calendar)
     if due_date:
         reminder.due_date = due_date
@@ -104,7 +112,8 @@ def create_reminder(event_store: EventKit.EKEventStore, title: str, calendar: Ev
     print(f"Reminder '{title}' created successfully.")
     return reminder
 
-def read_reminder(event_store: EventKit.EKEventStore, reminder_id: str) -> Reminder:
+@inject.autoparams()
+def read_reminder(event_store: EventKit.EKEventStore, reminder_id: str):
     ek_reminder = event_store.calendarItemWithIdentifier_(reminder_id)
     if ek_reminder and isinstance(ek_reminder, EventKit.EKReminder):
         reminder = Reminder(event_store)
@@ -128,9 +137,8 @@ def update_reminder(reminder: Reminder, title: Optional[str] = None, due_date: O
 def delete_reminder(reminder: Reminder) -> None:
     reminder.remove()
 
-def main():
-    event_store = EventKit.EKEventStore.alloc().init()
-
+@inject.autoparams()
+def main(event_store: EventKit.EKEventStore):
     def request_access_callback(granted, error):
         if not granted:
             raise PermissionError("Access to reminders denied.")
@@ -140,7 +148,7 @@ def main():
     default_calendar = event_store.defaultCalendarForNewReminders()
 
     # Create a new reminder
-    new_reminder = create_reminder(event_store, "Test Reminder", default_calendar, datetime.now() + timedelta(days=1))
+    new_reminder = create_reminder(title="Test Reminder", calendar=default_calendar, due_date=datetime.now() + timedelta(days=1))
 
     # Test calendar item functions
     print(f"Calendar Item Identifier: {new_reminder.calendar_item_identifier}")

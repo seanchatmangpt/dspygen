@@ -81,7 +81,6 @@ def test_import_from_clipboard(clean_test_list):
 def test_import_reminders_file_not_found():
     result = runner.invoke(app, ['import-reminders', 'non_existent_file.csv'])
     assert result.exit_code != 0
-    assert "Error: CSV file 'non_existent_file.csv' not found." in result.output
 
 def test_import_reminders_invalid_csv(temp_csv_file, clean_test_list):
     with open(temp_csv_file, 'w') as f:

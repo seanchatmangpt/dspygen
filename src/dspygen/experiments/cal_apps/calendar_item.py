@@ -3,11 +3,13 @@ import EventKit
 from Foundation import NSDateComponents, NSURL, NSDate
 from datetime import datetime
 from typing import Optional, List
+import inject
 
 class CalendarItemError(Exception):
     pass
 
 class CalendarItem:
+    @inject.autoparams()
     def __init__(self, event_store: EventKit.EKEventStore):
         self.event_store = event_store
         self.ek_item = None  # This will be set by subclasses
@@ -116,3 +118,5 @@ class CalendarItem:
 
     def remove(self) -> None:
         raise NotImplementedError("Subclasses must implement the remove method")
+
+
