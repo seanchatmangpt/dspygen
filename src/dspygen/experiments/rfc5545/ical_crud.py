@@ -20,7 +20,7 @@ delete = True
 @require(lambda summary: summary is None or isinstance(summary, str))
 @require(lambda description: description is None or isinstance(description, str))
 @require(lambda calendar_id: calendar_id is None or isinstance(calendar_id, int))
-@ensure(lambda result: result.id is not None)
+@ensure(lambda result: result.ci_id is not None)
 def create_journal(
     dtstart: datetime = None,
     summary: str = None,

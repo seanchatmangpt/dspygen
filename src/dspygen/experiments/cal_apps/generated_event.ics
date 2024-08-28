@@ -1,0 +1,43 @@
+BEGIN:VCALENDAR
+
+VERSION:2.0
+
+PRODID:-//dspygen//CalendarEvent//EN
+
+CALSCALE:GREGORIAN
+
+BEGIN:VEVENT
+
+UID:20240828T130000Z-001@example.com
+
+DTSTAMP:20240828T130000Z
+
+SUMMARY:Quarterly Project Review
+
+DESCRIPTION:Team meeting to discuss project review and planning.
+
+LOCATION:Conference Room A
+
+DTSTART:20240831T140000Z
+
+DTEND:20240831T153000Z
+
+ORGANIZER;CN=David Miller:mailto:david@example.com
+
+ATTENDEE;CN=Alice Smith;RSVP=TRUE:mailto:alice@example.com
+
+ATTENDEE;CN=Bob Johnson;RSVP=TRUE:mailto:bob@example.com
+
+BEGIN:VALARM
+
+TRIGGER:-PT15M
+
+DESCRIPTION:Reminder: Quarterly Project Review
+
+ACTION:DISPLAY
+
+END:VALARM
+
+END:VEVENT
+
+END:VCALENDAR

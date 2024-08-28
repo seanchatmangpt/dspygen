@@ -8,7 +8,12 @@ from typing import Optional
 import inject
 
 from dspygen.experiments.cal_apps.calendar_item import CalendarItemError, CalendarItem
+from dspygen.modules.generate_icalendar_module import generate_i_calendar_call
+from icalendar import Calendar
+import logging
 
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 class ReminderError(CalendarItemError):
     pass
@@ -16,18 +21,74 @@ class ReminderError(CalendarItemError):
 
 class Reminder(CalendarItem):
     @inject.autoparams()
-    def __init__(self, event_store: EventKit.EKEventStore, ek_reminder: EventKit.EKReminder = EventKit.EKReminder):
+    def __init__(self, event_store: EventKit.EKEventStore):
         super().__init__(event_store)
-        self.ek_item = ek_reminder
+        self.ek_item = EventKit.EKReminder.reminderWithEventStore_(event_store)
 
     @classmethod
     @inject.autoparams()
-    def create(cls, event_store: EventKit.EKEventStore, title: str, calendar: EventKit.EKCalendar,
-               ek_reminder: EventKit.EKReminder = EventKit.EKReminder):
-        reminder = cls(event_store, ek_reminder)
+    def create(cls, event_store: EventKit.EKEventStore, title: str, calendar: EventKit.EKCalendar):
+        reminder = cls(event_store)
         reminder.title = title
         reminder.calendar = calendar
         return reminder
+
+    @classmethod
+    @inject.autoparams()
+    def from_ek_reminder(cls, event_store: EventKit.EKEventStore, ek_reminder: EventKit.EKReminder):
+        reminder = cls(event_store)
+        reminder.ek_item = ek_reminder
+        return reminder
+
+    @classmethod
+    @inject.autoparams()
+    def from_id(cls, event_store: EventKit.EKEventStore, reminder_id: str):
+        ek_reminder = event_store.calendarItemWithIdentifier_(reminder_id)
+        if ek_reminder is None or not isinstance(ek_reminder, EventKit.EKReminder):
+            raise ValueError(f"Invalid reminder ID: {reminder_id}")
+        return cls.from_ek_reminder(event_store, ek_reminder)
+
+    @classmethod
+    def create_from_rfc5545(cls, event_store: EventKit.EKEventStore, ical_string: str, calendar: EventKit.EKCalendar):
+        """Create a reminder from RFC5545 iCalendar data and add it to the calendar."""
+        logger.info("Received iCalendar text:")
+        logger.info(ical_string)
+        
+        # Validate the iCalendar string
+        cls._validate_ical(ical_string)
+        
+        # Parse the iCalendar data
+        cal = Calendar.from_ical(ical_string)
+        event = list(cal.walk('VEVENT'))[0]
+        
+        # Create a new reminder
+        reminder = cls.create(event_store, event.get('summary'), calendar)
+        reminder.notes = event.get('description')
+        reminder.due_date = event.get('dtstart').dt
+        
+        # Set other properties if available
+        if 'rrule' in event:
+            # Parse and set recurrence rule
+            # This would require additional logic to convert iCal RRULE to EKRecurrenceRule
+            pass
+        
+        # Save the reminder
+        reminder.save()
+        
+        return reminder
+
+    @staticmethod
+    def _validate_ical(ical_string: str):
+        """Validate the iCalendar string."""
+        try:
+            cal = Calendar.from_ical(ical_string)
+            events = list(cal.walk('VEVENT'))
+            if not events:
+                raise ValueError("No VEVENT component found in the iCalendar data")
+            logger.info("iCalendar data validated successfully")
+        except Exception as e:
+            logger.error(f"Invalid iCalendar data: {e}")
+            raise
 
     @property
     def due_date(self) -> Optional[datetime]:
@@ -79,19 +140,6 @@ class Reminder(CalendarItem):
     def has_recurrence_rule(self) -> bool:
         return self.ek_item.hasRecurrenceRules()
 
-    @property
-    def recurrence_rule(self) -> Optional[EventKit.EKRecurrenceRule]:
-        rules = self.ek_item.recurrenceRules()
-        return rules[0] if rules else None
-
-    def set_recurrence_rule(self, rule: Optional[EventKit.EKRecurrenceRule]):
-        if rule:
-            self.ek_item.addRecurrenceRule_(rule)
-        else:
-            current_rule = self.recurrence_rule
-            if current_rule:
-                self.ek_item.removeRecurrenceRule_(current_rule)
-
     def save(self) -> None:
         success, error = self.event_store.saveReminder_commit_error_(self.ek_item, True, objc.nil)
         if not success:
@@ -102,107 +150,68 @@ class Reminder(CalendarItem):
         if not success:
             raise ReminderError(f"Failed to remove reminder: {error}")
 
-@inject.autoparams()
-def create_reminder(event_store: EventKit.EKEventStore, title: str, calendar: EventKit.EKCalendar,
-                    due_date: Optional[datetime] = None):
-    reminder = Reminder.create(event_store, title, calendar)
-    if due_date:
-        reminder.due_date = due_date
-    reminder.save()
-    print(f"Reminder '{title}' created successfully.")
-    return reminder
+    def __str__(self):
+        recurrence = self.recurrence_rule
+        recurrence_str = str(recurrence) if recurrence else "None"
+        
+        return (
+            f"Reminder: {self.title}\n"
+            f"ID: {self.id}\n"
+            f"Calendar: {self.calendar.title()}\n"
+            f"Due Date: {self.due_date}\n"
+            f"Completed: {self.completed}\n"
+            f"Priority: {self.priority}\n"
+            f"Has Recurrence Rule: {self.has_recurrence_rule}\n"
+            f"Recurrence Rule: {recurrence_str}\n"
+            f"Notes: {self.notes}"
+        )
+    def set_recurrence(self, frequency: EventKit.EKRecurrenceFrequency, interval: int = 1, 
+                       end_date: Optional[datetime] = None, occurrences: Optional[int] = None,
+                       days_of_week: Optional[List[int]] = None, 
+                       days_of_month: Optional[List[int]] = None,
+                       months_of_year: Optional[List[int]] = None,
+                       weeks_of_year: Optional[List[int]] = None,
+                       days_of_year: Optional[List[int]] = None,
+                       set_positions: Optional[List[int]] = None) -> None:
+        """
+        Set a nuanced recurrence rule for the reminder.
 
-@inject.autoparams()
-def read_reminder(event_store: EventKit.EKEventStore, reminder_id: str):
-    ek_reminder = event_store.calendarItemWithIdentifier_(reminder_id)
-    if ek_reminder and isinstance(ek_reminder, EventKit.EKReminder):
-        reminder = Reminder(event_store)
-        reminder.ek_item = ek_reminder
-        return reminder
-    else:
-        raise ReminderError(f"Reminder with id '{reminder_id}' not found.")
+        :param frequency: EKRecurrenceFrequency (Daily, Weekly, Monthly, or Yearly)
+        :param interval: How often the rule repeats (default: 1)
+        :param end_date: Optional end date for the recurrence
+        :param occurrences: Optional number of occurrences
+        :param days_of_week: Optional list of days of the week (0 = Sunday, 1 = Monday, etc.)
+        :param days_of_month: Optional list of days of the month (1 to 31, or -1 to -31 for last day of month)
+        :param months_of_year: Optional list of months (1 to 12)
+        :param weeks_of_year: Optional list of weeks of the year (1 to 53, or -1 to -53 for last week)
+        :param days_of_year: Optional list of days of the year (1 to 366, or -1 to -366 for last day)
+        :param set_positions: Optional list of set positions (-366 to 366, excluding 0)
+        """
+        # Create recurrence end if specified
+        recurrence_end = None
+        if end_date:
+            recurrence_end = EventKit.EKRecurrenceEnd.recurrenceEndWithEndDate_(end_date)
+        elif occurrences:
+            recurrence_end = EventKit.EKRecurrenceEnd.recurrenceEndWithOccurrenceCount_(occurrences)
 
-def update_reminder(reminder: Reminder, title: Optional[str] = None, due_date: Optional[datetime] = None,
-                    completed: Optional[bool] = None, priority: Optional[int] = None) -> None:
-    if title is not None:
-        reminder.title = title
-    if due_date is not None:
-        reminder.due_date = due_date
-    if completed is not None:
-        reminder.completed = completed
-    if priority is not None:
-        reminder.priority = priority
-    reminder.save()
+        # Create days of week array if specified
+        ek_days_of_week = None
+        if days_of_week:
+            ek_days_of_week = [EventKit.EKRecurrenceDayOfWeek.dayOfWeek_(day) for day in days_of_week]
 
-def delete_reminder(reminder: Reminder) -> None:
-    reminder.remove()
+        # Create recurrence rule
+        recurrence_rule = EventKit.EKRecurrenceRule.alloc().initRecurrenceWithFrequency_interval_daysOfTheWeek_daysOfTheMonth_monthsOfTheYear_weeksOfTheYear_daysOfTheYear_setPositions_end_(
+            frequency,
+            interval,
+            ek_days_of_week,
+            days_of_month,
+            months_of_year,
+            weeks_of_year,
+            days_of_year,
+            set_positions,
+            recurrence_end
+        )
 
-@inject.autoparams()
-def main(event_store: EventKit.EKEventStore):
-    def request_access_callback(granted, error):
-        if not granted:
-            raise PermissionError("Access to reminders denied.")
+        # Set the recurrence rule
+        self.set_recurrence_rule(recurrence_rule)
 
-    event_store.requestAccessToEntityType_completion_(EventKit.EKEntityTypeReminder, request_access_callback)
-
-    default_calendar = event_store.defaultCalendarForNewReminders()
-
-    # Create a new reminder
-    new_reminder = create_reminder(title="Test Reminder", calendar=default_calendar, due_date=datetime.now() + timedelta(days=1))
-
-    # Test calendar item functions
-    print(f"Calendar Item Identifier: {new_reminder.calendar_item_identifier}")
-    print(f"Calendar Item External Identifier: {new_reminder.calendar_item_external_identifier}")
-    print(f"Title: {new_reminder.title}")
-    print(f"Calendar: {new_reminder.calendar.title()}")
-    print(f"Creation Date: {new_reminder.creation_date}")
-    print(f"Last Modified Date: {new_reminder.last_modified_date}")
-    print(f"Time Zone: {new_reminder.time_zone}")
-
-    # Test setting and getting location
-    new_reminder.location = "Home Office"
-    print(f"Location: {new_reminder.location}")
-
-    # Test setting and getting notes
-    new_reminder.notes = "This is a test reminder created by the calendar item base class."
-    print(f"Notes: {new_reminder.notes}")
-
-    # Test setting and getting URL
-    new_reminder.url = "https://example.com/test-reminder"
-    print(f"URL: {new_reminder.url}")
-
-    # Test adding and removing alarms
-    alarm = EventKit.EKAlarm.alarmWithRelativeOffset_(-3600)  # 1 hour before
-    new_reminder.add_alarm(alarm)
-    print(f"Alarms count: {len(new_reminder.alarms)}")
-    new_reminder.remove_alarm(alarm)
-    print(f"Alarms count after removal: {len(new_reminder.alarms)}")
-
-    # Test setting and removing recurrence rule
-    # recurrence_rule = EventKit.EKRecurrenceRule.recurrenceWithFrequency_interval_end_(
-    #     EventKit.EKRecurrenceFrequencyDaily,
-    #     1,
-    #     None  # No end date
-    # )
-    # new_reminder.set_recurrence_rule(recurrence_rule)
-    # print(f"Has Recurrence Rule: {new_reminder.has_recurrence_rule}")
-    # print(f"Recurrence Rule: {new_reminder.recurrence_rule}")
-    #
-    # new_reminder.set_recurrence_rule(None)
-    # print(f"Has Recurrence Rule after removal: {new_reminder.has_recurrence_rule}")
-
-    # Test reminder-specific functions
-    print(f"Due Date: {new_reminder.due_date}")
-    print(f"Completed: {new_reminder.completed}")
-    print(f"Priority: {new_reminder.priority}")
-
-    # Update the reminder
-    update_reminder(new_reminder, title="Updated Test Reminder", completed=False, priority=1)
-    print(f"Updated reminder: {new_reminder.title}, Completed: {new_reminder.completed}, Priority: {new_reminder.priority}")
-
-    # Delete the reminder
-    delete_reminder(new_reminder)
-    print("Reminder deleted successfully.")
-
-if __name__ == "__main__":
-    main()

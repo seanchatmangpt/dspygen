@@ -41,22 +41,22 @@ def test_request_access(event_kit_service, mock_event_kit):
 
 def test_get_calendars(event_kit_service, mock_event_kit, sample_calendar):
     mock_calendar = Mock()
-    mock_calendar.calendarIdentifier.return_value = str(sample_calendar.id)
+    mock_calendar.calendarIdentifier.return_value = str(sample_calendar.ci_id)
     mock_calendar.title.return_value = sample_calendar.title
     event_kit_service.store.calendarsForEntityType_.return_value = [mock_calendar]
 
     calendars = event_kit_service.get_calendars()
     assert len(calendars) == 1
-    assert calendars[0].id == sample_calendar.id
+    assert calendars[0].ci_id == sample_calendar.ci_id
     assert calendars[0].title == sample_calendar.title
 
 def test_get_reminders(event_kit_service, mock_event_kit, sample_calendar, sample_reminder):
     mock_calendar = Mock()
-    mock_calendar.calendarIdentifier.return_value = str(sample_calendar.id)
+    mock_calendar.calendarIdentifier.return_value = str(sample_calendar.ci_id)
     event_kit_service.store.calendarsForEntityType_.return_value = [mock_calendar]
 
     mock_reminder = Mock()
-    mock_reminder.calendarItemIdentifier.return_value = str(sample_reminder.id)
+    mock_reminder.calendarItemIdentifier.return_value = str(sample_reminder.ci_id)
     mock_reminder.title.return_value = sample_reminder.title
     mock_reminder.dueDateComponents.return_value.date.return_value = sample_reminder.due_date
     mock_reminder.isCompleted.return_value = sample_reminder.completed
@@ -64,22 +64,22 @@ def test_get_reminders(event_kit_service, mock_event_kit, sample_calendar, sampl
 
     event_kit_service.store.remindersMatchingPredicate_.return_value = [mock_reminder]
 
-    reminders = event_kit_service.get_reminders(sample_calendar.id)
+    reminders = event_kit_service.get_reminders(sample_calendar.ci_id)
     assert len(reminders) == 1
-    assert reminders[0].id == sample_reminder.id
+    assert reminders[0].ci_id == sample_reminder.ci_id
     assert reminders[0].title == sample_reminder.title
     assert reminders[0].due_date == sample_reminder.due_date
     assert reminders[0].completed == sample_reminder.completed
     assert reminders[0].notes == sample_reminder.notes
-    assert reminders[0].calendar_id == sample_calendar.id
+    assert reminders[0].calendar_id == sample_calendar.ci_id
 
 def test_add_reminder(event_kit_service, mock_event_kit, sample_calendar, sample_reminder):
     mock_calendar = Mock()
-    mock_calendar.calendarIdentifier.return_value = str(sample_calendar.id)
+    mock_calendar.calendarIdentifier.return_value = str(sample_calendar.ci_id)
     event_kit_service.store.calendarsForEntityType_.return_value = [mock_calendar]
 
     mock_new_reminder = Mock()
-    mock_new_reminder.calendarItemIdentifier.return_value = str(sample_reminder.id)
+    mock_new_reminder.calendarItemIdentifier.return_value = str(sample_reminder.ci_id)
     mock_new_reminder.title.return_value = sample_reminder.title
     mock_new_reminder.dueDateComponents.return_value.date.return_value = sample_reminder.due_date
     mock_new_reminder.isCompleted.return_value = sample_reminder.completed
@@ -87,13 +87,13 @@ def test_add_reminder(event_kit_service, mock_event_kit, sample_calendar, sample
 
     mock_event_kit.EKReminder.reminderWithEventStore_.return_value = mock_new_reminder
 
-    added_reminder = event_kit_service.add_reminder(sample_calendar.id, sample_reminder)
-    assert added_reminder.id == sample_reminder.id
+    added_reminder = event_kit_service.add_reminder(sample_calendar.ci_id, sample_reminder)
+    assert added_reminder.ci_id == sample_reminder.ci_id
     assert added_reminder.title == sample_reminder.title
     assert added_reminder.due_date == sample_reminder.due_date
     assert added_reminder.completed == sample_reminder.completed
     assert added_reminder.notes == sample_reminder.notes
-    assert added_reminder.calendar_id == sample_calendar.id
+    assert added_reminder.calendar_id == sample_calendar.ci_id
 
     event_kit_service.store.saveReminder_commit_error_.assert_called_once()
 
@@ -105,9 +105,9 @@ def test_update_reminder(event_kit_service, mock_event_kit, sample_calendar, sam
     updated_reminder_data.title = "Updated Title"
     updated_reminder_data.completed = True
 
-    updated_reminder = event_kit_service.update_reminder(sample_calendar.id, sample_reminder.id, updated_reminder_data)
+    updated_reminder = event_kit_service.update_reminder(sample_calendar.ci_id, sample_reminder.ci_id, updated_reminder_data)
     
-    assert updated_reminder.id == sample_reminder.id
+    assert updated_reminder.ci_id == sample_reminder.ci_id
     assert updated_reminder.title == "Updated Title"
     assert updated_reminder.completed == True
     event_kit_service.add_reminder.assert_called_once()
@@ -117,7 +117,7 @@ def test_delete_reminder(event_kit_service, mock_event_kit, sample_calendar, sam
     mock_reminder_to_delete = Mock()
     event_kit_service.store.calendarItemWithIdentifier_.return_value = mock_reminder_to_delete
 
-    event_kit_service.delete_reminder(sample_calendar.id, sample_reminder.id)
+    event_kit_service.delete_reminder(sample_calendar.ci_id, sample_reminder.ci_id)
 
     event_kit_service.store.removeReminder_commit_error_.assert_called_once_with(mock_reminder_to_delete, True, None)
 
@@ -125,10 +125,10 @@ def test_reminder_not_found(event_kit_service, sample_calendar):
     event_kit_service.get_reminders = Mock(return_value=[])
     
     with pytest.raises(StopIteration):
-        event_kit_service.update_reminder(sample_calendar.id, UUID('00000000-0000-0000-0000-000000000000'), Reminder(title="Non-existent Reminder", calendar_id=sample_calendar.id))
+        event_kit_service.update_reminder(sample_calendar.ci_id, UUID('00000000-0000-0000-0000-000000000000'), Reminder(title="Non-existent Reminder", calendar_id=sample_calendar.ci_id))
 
     with pytest.raises(StopIteration):
-        event_kit_service.delete_reminder(sample_calendar.id, UUID('00000000-0000-0000-0000-000000000000'))
+        event_kit_service.delete_reminder(sample_calendar.ci_id, UUID('00000000-0000-0000-0000-000000000000'))
 
 def test_calendar_not_found(event_kit_service, mock_event_kit):
     event_kit_service.store.calendarsForEntityType_.return_value = []

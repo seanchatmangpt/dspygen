@@ -201,7 +201,7 @@ class Event(SQLModel, table=True):
 
     @staticmethod
     @require(lambda event_id: isinstance(event_id, int))
-    @ensure(lambda result, event_id: result.id == event_id)
+    @ensure(lambda result, event_id: result.ci_id == event_id)
     def read(event_id: int) -> "Event":
         return get_model(Event, event_id)
 
@@ -258,7 +258,7 @@ class Todo(SQLModel, table=True):
 
     @staticmethod
     @require(lambda summary: summary is isinstance(summary, str))
-    @ensure(lambda result: result.id is not None)
+    @ensure(lambda result: result.ci_id is not None)
     def create(
             summary: str,
             dtstart: str | datetime = None,

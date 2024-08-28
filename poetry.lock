@@ -2545,6 +2545,21 @@ files = [
 pyreadline3 = {version = "*", markers = "sys_platform == \"win32\" and python_version >= \"3.8\""}
 
 [[package]]
+name = "icalendar"
+version = "5.0.13"
+description = "iCalendar parser/generator"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "icalendar-5.0.13-py3-none-any.whl", hash = "sha256:5ded5415e2e1edef5ab230024a75878a7a81d518a3b1ae4f34bf20b173c84dc2"},
+    {file = "icalendar-5.0.13.tar.gz", hash = "sha256:92799fde8cce0b61daa8383593836d1e19136e504fa1671f471f98be9b029706"},
+]
+
+[package.dependencies]
+python-dateutil = "*"
+pytz = "*"
+
+[[package]]
 name = "icontract"
 version = "2.6.6"
 description = "Provide design-by-contract with informative violation messages."
@@ -11525,4 +11540,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "ad78afb40e930bd6cb40083294536d3b94e9e87bcfd2df7a07bb1142e74d0d5f"
+content-hash = "4fa33866b04135213f403d3e605b177ad3ec01dfdc44b7bb5a5434207468fc2b"

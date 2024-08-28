@@ -153,3 +153,6 @@ node_modules/
 project-with-doublehyphen
 projectwithhyphenatend
 .aider*
+
+.lh
+.vscode
