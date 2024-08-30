@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 import logging
 
+from dspygen.pyautomator.calendar.calendar_app import CalendarApp
 from dspygen.utils.dspy_tools import init_dspy
-from dspygen.experiments.cal_apps.calendar_app import CalendarApp
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)

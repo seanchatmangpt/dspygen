@@ -114,7 +114,7 @@ class EventStore:
                     reminder.calendarItemIdentifier(),  # Reminder ID
                     reminder.calendar().title(),
                     reminder.title(),
-                    reminder.dueDate().date() if reminder.dueDate() else today,  # Use today's date if no due date
+                    reminder.dueDate() if reminder.dueDate() else today,  # Use today's date if no due date
                     reminder.priority(),
                     1 if reminder.isCompleted() else 0,  # Use 1 for completed, 0 for not completed
                     reminder.notes() or "",

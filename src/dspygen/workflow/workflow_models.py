@@ -23,6 +23,7 @@ Intended for data scientists, developers, and analysts, this module simplifies t
 
 from typing import List, Union, Dict, Any, Optional
 from pydantic import BaseModel, Field
+from datetime import datetime
 
 from dspygen.utils.yaml_tools import YAMLMixin
 
@@ -116,10 +117,15 @@ class Job(BaseModel):
     sla_seconds: Optional[int] = Field(None,
                                        description="Service Level Agreement for the job completion, specified in seconds.")
 
-# class Trigger(BaseModel):
-#     schedule: Optional[str] = Field(None, description="Cron-like schedule for automated workflow triggering.")
-#     webhook: Optional[str] = Field(None, description="Webhook URL for external triggering of the workflow.")
+class CronTrigger(BaseModel):
+    type: str = Field("cron")
+    cron: str = Field(..., description="Cron-like schedule for workflow triggering")
 
+class DateTrigger(BaseModel):
+    type: str = Field("date")
+    run_date: Union[str, datetime] = Field(..., description="Date and time to run the workflow, or 'now' for immediate execution")
+
+Trigger = Union[CronTrigger, DateTrigger]
 
 class Workflow(BaseModel, YAMLMixin):
     """
@@ -132,8 +138,7 @@ class Workflow(BaseModel, YAMLMixin):
     """
     name: str = Field(..., description="The unique name of the workflow.")
     description: Optional[str] = Field(None, description="A brief description of the workflow.")
-    # triggers: Union[Trigger, List[Trigger]] = Field(..., description="Events that trigger the workflow execution.")
-    triggers: Optional[Union[str, List[str]]] = Field([], description="Events that trigger the workflow execution.")
+    triggers: List[Union[CronTrigger, DateTrigger]] = Field([], description="List of triggers for the workflow execution.")
     jobs: List[Job] = Field(
         ..., description="A collection of jobs that are defined within the workflow."
     )

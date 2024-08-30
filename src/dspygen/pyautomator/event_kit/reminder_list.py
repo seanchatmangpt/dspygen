@@ -4,7 +4,8 @@ import EventKit
 from typing import Optional, List
 import inject
 from faker import Faker
-from dspygen.experiments.cal_apps.reminder import Reminder, ReminderError
+
+from dspygen.pyautomator.event_kit.reminder import Reminder
 
 
 class ReminderList:

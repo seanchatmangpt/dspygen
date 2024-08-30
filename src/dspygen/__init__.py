@@ -11,4 +11,5 @@ def configure_injector(binder):
     event_store = EventKit.EKEventStore.alloc().init()
     binder.bind(EventKit.EKEventStore, event_store)
 
+
 inject.configure(configure_injector)

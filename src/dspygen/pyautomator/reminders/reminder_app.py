@@ -6,17 +6,20 @@ import os
 import csv
 import pandas as pd
 
-from dspygen.experiments.cal_apps.event_store import EventStore
-from dspygen.experiments.cal_apps.reminder_list import ReminderList
+from dspygen.pyautomator.base_app import BaseApp
+from dspygen.pyautomator.event_kit.event_store import EventStore
+from dspygen.pyautomator.event_kit.reminder import Reminder
+from dspygen.pyautomator.event_kit.reminder_list import ReminderList
 from dspygen.rm.data_retriever import DataRetriever
 from datetime import datetime, timedelta
-from dspygen.experiments.cal_apps.reminder import Reminder
 from dspygen.modules.df_sql_module import dfsql_call
 from dspygen.modules.generate_icalendar_module import generate_i_calendar_call
 
-class ReminderApp:
+
+class RemindersApp(BaseApp):
     @inject.autoparams()
     def __init__(self, event_store: EventKit.EKEventStore):
+        super().__init__("Reminders")
         self.event_store = event_store
         self.lists: List[ReminderList] = []
         self._load_existing_lists()
@@ -51,7 +54,7 @@ class ReminderApp:
         data_retriever = DataRetriever(file_path=self.export_reminders())
 
         results = data_retriever.forward(query=query)
-        
+
         reminders = []
         for row in results:
             reminder = Reminder.from_id(self.event_store, row['ID'])
@@ -64,23 +67,23 @@ class ReminderApp:
         """Perform a natural language query and return a list of Reminder objects."""
         # Export reminders to a temporary CSV file
         csv_file = self.export_reminders()
-        
+
         # Read the CSV file into a pandas DataFrame
         df = pd.read_csv(csv_file)
-        
+
         # Get the DataFrame schema and data
         df_schema = df.columns.tolist()
         df_data = df.values.tolist()
-        
+
         # Use DFSQLModule to convert natural language to SQL
         sql_query = dfsql_call(text=text, df_schema=df_schema, df_data=df_data)
-        
+
         # Use the generated SQL query to fetch reminders
         reminders = self.query(sql_query)
-        
+
         # Clean up the temporary CSV file
         os.unlink(csv_file)
-        
+
         return reminders
 
     def export_reminders(self, filename=None, days=7) -> str:
@@ -102,13 +105,14 @@ class ReminderApp:
 
         # Generate iCalendar data from the prompt
         ical_string = generate_i_calendar_call(prompt)
-        
+
         # Create the reminder using the generated iCalendar data
         reminder = Reminder.create_from_rfc5545(self.event_store, ical_string, reminder_list.ek_calendar)
         return reminder
 
+
 def main():
-    app = ReminderApp()
+    app = RemindersApp()
     app.request_access()
 
     try:
@@ -173,10 +177,11 @@ def main():
         # Verify the list was removed
         print("Final lists:", app.get_all_lists())
 
+
 def main2():
     from dspygen.utils.dspy_tools import init_dspy
     init_dspy()
-    app = ReminderApp()
+    app = RemindersApp()
 
     # Test natural language query
     # search_results = app.text_query("Find all reminders")
@@ -184,6 +189,7 @@ def main2():
     print("Natural language query results:")
     for reminder in search_results:
         print(reminder)
+
 
 if __name__ == "__main__":
     main2()

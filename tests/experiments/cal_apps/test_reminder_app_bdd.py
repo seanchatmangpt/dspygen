@@ -1,13 +1,14 @@
+import EventKit
 import pytest
 from pytest_bdd import scenario, given, when, then
-from dspygen.experiments.cal_apps.reminder_app import ReminderApp
-from dspygen.experiments.cal_apps.reminder_list import ReminderList
-from dspygen.experiments.cal_apps.reminder import Reminder
+from dspygen.pyautomator.reminders.reminder_app import RemindersApp
+from dspygen.pyautomator.event_kit.reminder_list import ReminderList
+from dspygen.pyautomator.event_kit.reminder import Reminder
 
 
 @pytest.fixture
 def reminder_app():
-    app = ReminderApp()
+    app = RemindersApp()
     app.event_store = MockEventStore()
     # Mock the EventKit.EKCalendar class
     EventKit.EKCalendar = MockCalendar
@@ -78,7 +79,7 @@ def test_clear_completed_reminders():
 
 @given('the Reminder App is initialized')
 def reminder_app_initialized(reminder_app):
-    assert isinstance(reminder_app, ReminderApp)
+    assert isinstance(reminder_app, RemindersApp)
 
 
 @when('I add a new reminder list called "{list_name}"')

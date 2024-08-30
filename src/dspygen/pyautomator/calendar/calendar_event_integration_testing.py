@@ -1,11 +1,14 @@
 from datetime import datetime, timedelta
 import inject
 import EventKit
-from dspygen.experiments.cal_apps.calendar_event import CalendarEvent
-from dspygen.experiments.cal_apps.alarm import Alarm
+
 import subprocess
 import tempfile
 import os
+
+from dspygen.pyautomator.event_kit.alarm import Alarm
+from dspygen.pyautomator.event_kit.calendar_event import CalendarEvent
+
 
 @inject.autoparams()
 def create_event(event_store: EventKit.EKEventStore, title: str, calendar: EventKit.EKCalendar,

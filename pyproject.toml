@@ -80,6 +80,9 @@ trafilatura = "^1.12.1"
 pyobjc = "^10.3.1"
 pyobjc-framework-eventkit = "^10.3.1"
 icalendar = "^5.0.13"
+pyobjc-framework-contacts = "^10.3.1"
+pytz = "^2024.1"
+apscheduler = "^3.10.4"
 
 [tool.poetry.group.test.dependencies]  # https://python-poetry.org/docs/master/managing-dependencies/
 coverage = { extras = ["toml"], version = ">=7.2.5" }

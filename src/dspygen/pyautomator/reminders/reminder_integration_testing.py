@@ -3,9 +3,11 @@ from typing import Optional
 
 import inject
 
-from dspygen.experiments.cal_apps.reminder import Reminder, ReminderError
-from dspygen.experiments.cal_apps.alarm import Alarm
+
 import EventKit
+
+from dspygen.pyautomator.event_kit.alarm import Alarm
+from dspygen.pyautomator.event_kit.reminder import Reminder, ReminderError
 
 
 @inject.autoparams()

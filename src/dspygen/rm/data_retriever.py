@@ -73,6 +73,10 @@ def read_any(filepath, query, read_options=None):
 
 
 class DataRetriever(dspy.Retrieve):
+    supported_extensions = ['.csv', '.xls', '.xlsx', '.pickle', '.pkl', '.h5', '.hdf', 
+                            '.sql', '.db', '.json', '.parquet', '.orc', '.feather', 
+                            '.gbq', '.html', '.xml', '.stata', '.sas', '.sav', '.dta', '.fwf']
+
     def __init__(self, file_path: str | Path, query: str = "", return_columns=None,
                  read_options=None, pipeline=None, step=None, **kwargs):
         super().__init__()
@@ -90,6 +94,10 @@ class DataRetriever(dspy.Retrieve):
 
         # Read the data using the read_any function
         self.df = read_any(file_path, query, read_options)  # No SQL query here
+
+    @classmethod
+    def supports_file_type(cls, file_extension: str) -> bool:
+        return file_extension.lower() in cls.supported_extensions
 
     def forward(self, query: str = None, k: int = None, **kwargs) -> list[dict]:
         # Check if a SQL query is provided

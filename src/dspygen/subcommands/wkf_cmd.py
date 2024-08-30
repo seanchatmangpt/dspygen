@@ -1,11 +1,52 @@
 import typer
-
+import os
+from pathlib import Path
+import yaml
+from datetime import datetime, timedelta
+from apscheduler.schedulers.background import BackgroundScheduler
 from dspygen.utils.cli_tools import chatbot
-from dspygen.workflow.workflow_executor import execute_workflow
-from dspygen.workflow.workflow_models import Workflow
+from dspygen.workflow.workflow_executor import execute_workflow, schedule_workflow
+from dspygen.workflow.workflow_models import Workflow, Job
+from sungen.typetemp.functional import render
+from dspygen.utils.file_tools import rm_dir
 
 app = typer.Typer(help="Language Workflow Domain Specific Language commands for DSPyGen.")
 
+# Workflow template
+workflow_template = """
+name: {{ name }}
+triggers:
+  - cron: "0 0 * * *"  # Daily at midnight
+
+jobs:
+  - name: ExampleJob
+    runner: python
+    steps:
+      - name: ExampleStep
+        code: |
+          print("Hello from {{ name }} workflow!")
+
+"""
+
+def wf_dir():
+    """Returns the directory where workflows are stored."""
+    return os.path.join(os.path.dirname(__file__), "..", "workflows")
+
+@app.command("new")
+def new_workflow(name: str = typer.Argument(...)):
+    """Generates a new workflow YAML file."""
+    to = wf_dir()
+    os.makedirs(to, exist_ok=True)
+    file_path = os.path.join(to, f"{name.lower()}_workflow.yaml")
+    
+    content = render(workflow_template, name=name)
+    
+    with open(file_path, 'w') as f:
+        f.write(content)
+    
+    typer.echo(f"New workflow created at: {file_path}")
+    typer.echo("Workflow content:")
+    typer.echo(content)
 
 @app.command("run")
 def run_workflow(yaml_file: str = typer.Argument("/Users/sac/dev/dspygen/src/dspygen/experiments/workflow/control_flow_workflow.yaml")):
@@ -14,8 +55,65 @@ def run_workflow(yaml_file: str = typer.Argument("/Users/sac/dev/dspygen/src/dsp
     """
     wf = Workflow.from_yaml(yaml_file)
     result = execute_workflow(wf)
-    # print(result)
+    typer.echo(f"Workflow execution result: {result}")
 
+def run_workflows_in_directory(directory: str, recursive: bool = True):
+    """
+    Run all YAML workflow files in the specified directory and its subdirectories.
+    """
+    scheduler = BackgroundScheduler()
+    scheduler.start()
+
+    workflows_found = False
+
+    def process_workflow_file(file_path):
+        nonlocal workflows_found
+        try:
+            workflow = Workflow.from_yaml(file_path)
+            typer.echo(f"Scheduling workflow from file: {file_path}")
+            schedule_workflow(workflow, scheduler)
+            workflows_found = True
+        except Exception as e:
+            typer.echo(f"Error processing workflow file {file_path}: {str(e)}", err=True)
+
+    def search_workflows(path):
+        for root, _, files in os.walk(path):
+            for file in files:
+                if file.endswith(('.yaml', '.yml')):
+                    file_path = os.path.join(root, file)
+                    process_workflow_file(file_path)
+            if not recursive:
+                break  # Stop after processing the top-level directory
+
+    search_workflows(directory)
+
+    if not workflows_found:
+        typer.echo("No workflows found or scheduled.")
+        scheduler.shutdown()
+        return None
+
+    return scheduler
+
+@app.command("run-all")
+def run_all_workflows(
+    directory: str = typer.Argument(".", help="Directory containing YAML workflow files"),
+    recursive: bool = typer.Option(True, help="Search subdirectories recursively")
+):
+    """
+    Run all YAML workflow files in the specified directory and its subdirectories.
+    """
+    scheduler = run_workflows_in_directory(directory, recursive)
+    if scheduler:
+        typer.echo("All workflows scheduled. Press Ctrl+C to exit.")
+        try:
+            # Keep the script running
+            scheduler.print_jobs()
+            while True:
+                pass
+        except (KeyboardInterrupt, SystemExit):
+            typer.echo("Shutting down scheduler...")
+            scheduler.shutdown()
+            typer.echo("Scheduler shut down. Exiting.")
 
 TUTOR_CONTEXT = '''The DSPyGen DSL has several key elements that you'll need to grasp:
 
@@ -183,7 +281,6 @@ Debugging Help: Assistance with troubleshooting DSL implementation and workflow 
 
 '''
 
-
 @app.command(name="tutor")
 def tutor(question: str = ""):
     """Guide you through developing a project with DSPyGen DSL."""
@@ -191,3 +288,181 @@ def tutor(question: str = ""):
 
     init_dspy(max_tokens=3000, model="gpt-4")
     chatbot(question, TUTOR_CONTEXT)
+
+@app.command("list")
+def list_workflows(directory: str = typer.Argument(wf_dir(), help="Directory containing workflow files")):
+    """List all workflows in a specified directory."""
+    workflows = []
+    for file in os.listdir(directory):
+        if file.endswith(('.yaml', '.yml')):
+            workflows.append(file)
+    
+    if workflows:
+        typer.echo("Available workflows:")
+        for wf in workflows:
+            typer.echo(f"- {wf}")
+    else:
+        typer.echo("No workflows found in the specified directory.")
+
+@app.command("show")
+def show_workflow(workflow_name: str):
+    """Display details about a specific workflow."""
+    file_path = os.path.join(wf_dir(), f"{workflow_name}.yaml")
+    if not os.path.exists(file_path):
+        typer.echo(f"Workflow {workflow_name} not found.")
+        return
+    
+    with open(file_path, 'r') as f:
+        content = f.read()
+    
+    typer.echo(f"Content of workflow {workflow_name}:")
+    typer.echo(content)
+
+@app.command("delete")
+def delete_workflow(workflow_name: str):
+    """Delete a specific workflow file."""
+    file_path = os.path.join(wf_dir(), f"{workflow_name}.yaml")
+    if not os.path.exists(file_path):
+        typer.echo(f"Workflow {workflow_name} not found.")
+        return
+    
+    os.remove(file_path)
+    typer.echo(f"Workflow {workflow_name} has been deleted.")
+
+@app.command("trigger")
+def trigger_workflow(workflow_name: str):
+    """Manually trigger a specific workflow."""
+    file_path = os.path.join(wf_dir(), f"{workflow_name}.yaml")
+    if not os.path.exists(file_path):
+        typer.echo(f"Workflow {workflow_name} not found.")
+        return
+    
+    wf = Workflow.from_yaml(file_path)
+    result = execute_workflow(wf)
+    typer.echo(f"Workflow {workflow_name} triggered. Execution result: {result}")
+
+@app.command("pause")
+def pause_workflow(workflow_name: str):
+    """Pause a specific workflow."""
+    file_path = os.path.join(wf_dir(), f"{workflow_name}.yaml")
+    if not os.path.exists(file_path):
+        typer.echo(f"Workflow {workflow_name} not found.")
+        return
+    
+    wf = Workflow.from_yaml(file_path)
+    wf.paused = True
+    wf.to_yaml(file_path)
+    typer.echo(f"Workflow {workflow_name} has been paused.")
+
+@app.command("unpause")
+def unpause_workflow(workflow_name: str):
+    """Unpause a specific workflow."""
+    file_path = os.path.join(wf_dir(), f"{workflow_name}.yaml")
+    if not os.path.exists(file_path):
+        typer.echo(f"Workflow {workflow_name} not found.")
+        return
+    
+    wf = Workflow.from_yaml(file_path)
+    wf.paused = False
+    wf.to_yaml(file_path)
+    typer.echo(f"Workflow {workflow_name} has been unpaused.")
+
+@app.command("test")
+def test_workflow(workflow_name: str):
+    """Test a workflow without executing its tasks."""
+    file_path = os.path.join(wf_dir(), f"{workflow_name}.yaml")
+    if not os.path.exists(file_path):
+        typer.echo(f"Workflow {workflow_name} not found.")
+        return
+    
+    wf = Workflow.from_yaml(file_path)
+    typer.echo(f"Testing workflow: {workflow_name}")
+    typer.echo(f"Number of jobs: {len(wf.jobs)}")
+    for job in wf.jobs:
+        typer.echo(f"  Job: {job.name}")
+        typer.echo(f"    Number of steps: {len(job.steps)}")
+    typer.echo("Workflow structure is valid.")
+
+@app.command("list-jobs")
+def list_jobs(workflow_name: str):
+    """List all jobs in a specific workflow."""
+    file_path = os.path.join(wf_dir(), f"{workflow_name}.yaml")
+    if not os.path.exists(file_path):
+        typer.echo(f"Workflow {workflow_name} not found.")
+        return
+    
+    wf = Workflow.from_yaml(file_path)
+    typer.echo(f"Jobs in workflow {workflow_name}:")
+    for job in wf.jobs:
+        typer.echo(f"- {job.name}")
+
+@app.command("test-job")
+def test_job(workflow_name: str, job_name: str):
+    """Test a specific job in a workflow."""
+    file_path = os.path.join(wf_dir(), f"{workflow_name}.yaml")
+    if not os.path.exists(file_path):
+        typer.echo(f"Workflow {workflow_name} not found.")
+        return
+    
+    wf = Workflow.from_yaml(file_path)
+    job = next((job for job in wf.jobs if job.name == job_name), None)
+    if not job:
+        typer.echo(f"Job {job_name} not found in workflow {workflow_name}.")
+        return
+    
+    typer.echo(f"Testing job: {job_name}")
+    typer.echo(f"Number of steps: {len(job.steps)}")
+    for step in job.steps:
+        typer.echo(f"  Step: {step.name}")
+        typer.echo(f"    Code: {step.code[:50]}...")  # Show first 50 characters of code
+    typer.echo("Job structure is valid.")
+
+@app.command("clear-job")
+def clear_job(workflow_name: str, job_name: str):
+    """Clear the state of a specific job instance."""
+    file_path = os.path.join(wf_dir(), f"{workflow_name}.yaml")
+    if not os.path.exists(file_path):
+        typer.echo(f"Workflow {workflow_name} not found.")
+        return
+    
+    wf = Workflow.from_yaml(file_path)
+    job = next((job for job in wf.jobs if job.name == job_name), None)
+    if not job:
+        typer.echo(f"Job {job_name} not found in workflow {workflow_name}.")
+        return
+    
+    # Implement job state clearing logic here
+    typer.echo(f"Clearing state for job {job_name} in workflow {workflow_name}... (Not implemented)")
+
+@app.command("backfill")
+def backfill(workflow_name: str, start_date: str, end_date: str):
+    """Run a workflow for a specified historical time range."""
+    typer.echo(f"Backfilling workflow {workflow_name} from {start_date} to {end_date}... (Not implemented)")
+
+@app.command("logs")
+def show_logs(workflow_name: str, job_name: str):
+    """Display logs for a specific job run."""
+    typer.echo(f"Showing logs for job {job_name} in workflow {workflow_name}... (Not implemented)")
+
+@app.command("export")
+def export_workflow(workflow_name: str, output_file: str):
+    """Export a workflow definition to a file."""
+    typer.echo(f"Exporting workflow {workflow_name} to {output_file}... (Not implemented)")
+
+@app.command("import")
+def import_workflow(input_file: str):
+    """Import a workflow definition from a file."""
+    typer.echo(f"Importing workflow from {input_file}... (Not implemented)")
+
+@app.command("scheduler-health")
+def scheduler_health():
+    """Check the status of the scheduler."""
+    typer.echo("Checking scheduler health... (Not implemented)")
+
+@app.command("version")
+def version():
+    """Display the version of the workflow system."""
+    typer.echo("Workflow system version: X.Y.Z (Not implemented)")
+
+if __name__ == "__main__":
+    app()

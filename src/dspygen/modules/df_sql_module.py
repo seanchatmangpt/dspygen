@@ -59,7 +59,7 @@ def dfsql_call(text, df_schema, df_data):
 
 def main():
     init_dspy()
-    # app = ReminderApp()
+    # app = RemindersApp()
     # app.export_reminders("reminders.csv")
     # dr = DataRetriever(file_path="reminders.csv")
     # df_schema = dr.df.columns.tolist()

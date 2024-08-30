@@ -66,10 +66,15 @@ def read_any(file_path):
 
 
 class DocRetriever(dspy.Retrieve):
+    supported_extensions = ['.epub', '.pdf', '.txt', '.md', '.docx']
+
     def __init__(self, path, **kwargs):
-        # Read the file from any acceptable text file type
         super().__init__()
         self.path = path
+
+    @classmethod
+    def supports_file_type(cls, file_extension: str) -> bool:
+        return file_extension.lower() in cls.supported_extensions
 
     def read_chunks(self, chunk_chars):
         text = read_any(self.path)

@@ -1,5 +1,6 @@
 import time
-from dspygen.experiments.cal_apps.reminder import Reminder
+
+from dspygen.pyautomator.event_kit.reminder import Reminder
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.modules.comment_module import comment_call
 

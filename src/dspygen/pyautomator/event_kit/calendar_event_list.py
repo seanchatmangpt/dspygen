@@ -3,7 +3,8 @@ import EventKit
 from typing import List, Optional
 import inject
 
-from dspygen.experiments.cal_apps.calendar_event import CalendarEvent
+from dspygen.pyautomator.event_kit.calendar_event import CalendarEvent
+
 
 class CalendarEventList:
     @inject.autoparams()

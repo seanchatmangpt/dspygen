@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 import inject
 import EventKit
-from dspygen.experiments.cal_apps.reminder import Reminder
-from dspygen.experiments.cal_apps.alarm import Alarm
+
+from dspygen.pyautomator.event_kit.alarm import Alarm
+from dspygen.pyautomator.event_kit.reminder import Reminder
 
 
 @inject.autoparams()

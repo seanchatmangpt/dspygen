@@ -4,13 +4,14 @@ import objc
 import EventKit
 from Foundation import NSDateComponents
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, List
 import inject
 
-from dspygen.experiments.cal_apps.calendar_item import CalendarItemError, CalendarItem
 from dspygen.modules.generate_icalendar_module import generate_i_calendar_call
 from icalendar import Calendar
 import logging
+
+from dspygen.pyautomator.event_kit.calendar_item import CalendarItemError, CalendarItem
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
