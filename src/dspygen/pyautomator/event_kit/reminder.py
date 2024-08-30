@@ -16,6 +16,7 @@ from dspygen.pyautomator.event_kit.calendar_item import CalendarItemError, Calen
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+
 class ReminderError(CalendarItemError):
     pass
 
@@ -54,28 +55,28 @@ class Reminder(CalendarItem):
         """Create a reminder from RFC5545 iCalendar data and add it to the calendar."""
         logger.info("Received iCalendar text:")
         logger.info(ical_string)
-        
+
         # Validate the iCalendar string
         cls._validate_ical(ical_string)
-        
+
         # Parse the iCalendar data
         cal = Calendar.from_ical(ical_string)
         event = list(cal.walk('VEVENT'))[0]
-        
+
         # Create a new reminder
         reminder = cls.create(event_store, event.get('summary'), calendar)
         reminder.notes = event.get('description')
         reminder.due_date = event.get('dtstart').dt
-        
+
         # Set other properties if available
         if 'rrule' in event:
             # Parse and set recurrence rule
             # This would require additional logic to convert iCal RRULE to EKRecurrenceRule
             pass
-        
+
         # Save the reminder
         reminder.save()
-        
+
         return reminder
 
     @staticmethod
@@ -154,10 +155,10 @@ class Reminder(CalendarItem):
     def __str__(self):
         recurrence = self.recurrence_rule
         recurrence_str = str(recurrence) if recurrence else "None"
-        
+
         return (
             f"Reminder: {self.title}\n"
-            f"ID: {self.id}\n"
+            f"ID: {self.ci_id}\n"
             f"Calendar: {self.calendar.title()}\n"
             f"Due Date: {self.due_date}\n"
             f"Completed: {self.completed}\n"
@@ -166,9 +167,10 @@ class Reminder(CalendarItem):
             f"Recurrence Rule: {recurrence_str}\n"
             f"Notes: {self.notes}"
         )
-    def set_recurrence(self, frequency: EventKit.EKRecurrenceFrequency, interval: int = 1, 
+
+    def set_recurrence(self, frequency: EventKit.EKRecurrenceFrequency, interval: int = 1,
                        end_date: Optional[datetime] = None, occurrences: Optional[int] = None,
-                       days_of_week: Optional[List[int]] = None, 
+                       days_of_week: Optional[List[int]] = None,
                        days_of_month: Optional[List[int]] = None,
                        months_of_year: Optional[List[int]] = None,
                        weeks_of_year: Optional[List[int]] = None,
@@ -215,4 +217,3 @@ class Reminder(CalendarItem):
 
         # Set the recurrence rule
         self.set_recurrence_rule(recurrence_rule)
-

@@ -40,7 +40,7 @@ def sample_workflow_yaml(tmp_path):
 def test_integration_workflow_execution(sample_workflow_yaml, mock_linkedin_app, mock_email_responder):
     with patch('dspygen.subcommands.wkf_cmd.Workflow.from_yaml') as mock_from_yaml, \
          patch('dspygen.subcommands.wkf_cmd.execute_workflow') as mock_execute, \
-         patch('dspygen.experiments.pyautomator.linkedin_app.LinkedInApp', return_value=mock_linkedin_app), \
+         patch('dspygen.pyautomator.linkedin.linkedin_app.LinkedInApp', return_value=mock_linkedin_app), \
          patch('dspygen.modules.automated_email_responder_module.AutomatedEmailResponderModule', return_value=mock_email_responder):
 
         # Set up mock returns
@@ -75,7 +75,7 @@ def test_integration_cli_trigger(sample_workflow_yaml, mock_linkedin_app, mock_e
     
     with patch('dspygen.subcommands.wkf_cmd.Workflow.from_yaml') as mock_from_yaml, \
          patch('dspygen.subcommands.wkf_cmd.execute_workflow') as mock_execute, \
-         patch('dspygen.experiments.pyautomator.linkedin_app.LinkedInApp', return_value=mock_linkedin_app), \
+         patch('dspygen.pyautomator.linkedin.linkedin_app.LinkedInApp', return_value=mock_linkedin_app), \
          patch('dspygen.modules.automated_email_responder_module.AutomatedEmailResponderModule', return_value=mock_email_responder):
 
         # Set up mock returns
@@ -97,7 +97,7 @@ def test_integration_cli_trigger(sample_workflow_yaml, mock_linkedin_app, mock_e
 def test_integration_error_handling(sample_workflow_yaml, mock_linkedin_app, mock_email_responder):
     with patch('dspygen.subcommands.wkf_cmd.Workflow.from_yaml') as mock_from_yaml, \
          patch('dspygen.subcommands.wkf_cmd.execute_workflow') as mock_execute, \
-         patch('dspygen.experiments.pyautomator.linkedin_app.LinkedInApp', return_value=mock_linkedin_app), \
+         patch('dspygen.pyautomator.linkedin.linkedin_app.LinkedInApp', return_value=mock_linkedin_app), \
          patch('dspygen.modules.automated_email_responder_module.AutomatedEmailResponderModule', return_value=mock_email_responder):
 
         # Simulate an error in LinkedIn profile fetching

@@ -153,6 +153,16 @@ def schedule_workflow(workflow: Workflow, scheduler: BaseScheduler):
                 timezone=pytz.UTC
             )
             logger.debug(f"Job added: {str(job)}")
+        elif isinstance(trigger, DateTrigger):
+            logger.debug(f"Adding date job for trigger: {trigger.run_date}")
+            run_date = trigger.run_date if trigger.run_date != "now" else datetime.now(pytz.UTC)
+            job = scheduler.add_job(
+                execute_workflow,
+                APSchedulerDateTrigger(run_date=run_date, timezone=pytz.UTC),
+                args=[workflow],
+                timezone=pytz.UTC
+            )
+            logger.debug(f"Job added: {str(job)}")
         else:
             logger.error(f"Unknown trigger type: {type(trigger)}")
 
