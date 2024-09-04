@@ -1,4 +1,4 @@
-# Import necessary modules and classes
+# Import necessary dspy_modules and classes
 import dspy
 
 from dspygen.dsl.dsl_pydantic_models import StepDSLModel, PipelineDSLModel, LanguageModelConfig

@@ -26,7 +26,7 @@ class GenModule(Module):
             ", ".join(self.input_keys) + f", error -> {self.output_key}"
         )
 
-        # DSPy modules for generation and correction
+        # DSPy dspy_modules for generation and correction
         self.generate = ChainOfThought(self.signature)
         self.correct_generate = ChainOfThought(self.correction_signature)
 

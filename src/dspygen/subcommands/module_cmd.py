@@ -39,7 +39,7 @@ def new_module(
     print(f"Module saved to {file_name}")
 
 
-def load_commands(directory: str = "modules"):
+def load_commands(directory: str = "dspy_modules"):
     subcommands_dir = source_dir() / directory
 
     for filename in os.listdir(subcommands_dir):

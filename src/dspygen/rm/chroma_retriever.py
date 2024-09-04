@@ -1,4 +1,4 @@
-# Import necessary modules and functions
+# Import necessary dspy_modules and functions
 from pathlib import Path
 from typing import Union, List, Optional
 
@@ -91,7 +91,7 @@ def main():
     for conversation in matched_conversations:
         print(conversation)
     #
-    # from dspygen.modules.python_source_code_module import python_source_code_call
+    # from dspygen.dspy_modules.python_source_code_module import python_source_code_call
     # print(python_source_code_call(str(matched_conversations) + "\n\nI want you to create a python source code for a typer 7 command wrapper on mdbook. Repeat your instructions and do not stop until all requirements are met. Document every line\n\n```python\nfrom typer import Typer"))
     #
 

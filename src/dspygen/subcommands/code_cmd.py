@@ -2,7 +2,7 @@
 # import typer
 # from loguru import logger
 #
-# from dspygen.modules.python_source_code_module import python_source_code_call
+# from dspygen.dspy_modules.python_source_code_module import python_source_code_call
 # from dspygen.rm.chatgpt_chromadb_retriever import ChatGPTChromaDBRetriever
 # from dspygen.utils.dspy_tools import init_dspy
 # from dspygen.lm.groq_lm import Groq

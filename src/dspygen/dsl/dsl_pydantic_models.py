@@ -107,9 +107,9 @@ class PipelineDSLModel(BaseModel, YAMLMixin):
     signatures: list[SignatureDSLModel] = Field(default=[],
                                                 description="list of signatures defined for use in the pipeline.")
     lm_modules: list[LMModuleDSLModel] = Field(default=[],
-                                               description="list of language model modules defined for execution in the pipeline.")
+                                               description="list of language model dspy_modules defined for execution in the pipeline.")
     rm_modules: list[RMModuleDSLModel] = Field(default=[],
-                                               description="list of retriever model modules defined for execution in the pipeline.")
+                                               description="list of retriever model dspy_modules defined for execution in the pipeline.")
     steps: list[StepDSLModel] = Field(default=[],
                                       description="Sequential steps to be executed in the pipeline.")
     context: dict = Field(default=Munch(),

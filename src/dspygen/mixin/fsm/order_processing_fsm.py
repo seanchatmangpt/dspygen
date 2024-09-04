@@ -152,7 +152,7 @@ class Choice(BaseModel):
 #
 #     init_dspy()
 #     poss = fsm.possible_triggers()
-#     # from dspygen.modules.json_module import json_call
+#     # from dspygen.dspy_modules.json_module import json_call
 #     # response = json_call(schema=Choice.model_json_schema(),
 #     #           text=f"{{\"possible_triggers\": {str(poss)}, \"prompt\": \"{message}\"}}")
 #     choice = dspy.Predict("possible_triggers, prompt -> choice")(possible_triggers=str(poss), prompt=message).choice

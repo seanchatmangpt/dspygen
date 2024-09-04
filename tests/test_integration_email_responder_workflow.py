@@ -41,7 +41,7 @@ def test_integration_workflow_execution(sample_workflow_yaml, mock_linkedin_app,
     with patch('dspygen.subcommands.wkf_cmd.Workflow.from_yaml') as mock_from_yaml, \
          patch('dspygen.subcommands.wkf_cmd.execute_workflow') as mock_execute, \
          patch('dspygen.pyautomator.linkedin.linkedin_app.LinkedInApp', return_value=mock_linkedin_app), \
-         patch('dspygen.modules.automated_email_responder_module.AutomatedEmailResponderModule', return_value=mock_email_responder):
+         patch('dspygen.dspy_modules.automated_email_responder_module.AutomatedEmailResponderModule', return_value=mock_email_responder):
 
         # Set up mock returns
         mock_linkedin_app.get_profile_markdown.return_value = "Mocked LinkedIn Profile"
@@ -76,7 +76,7 @@ def test_integration_cli_trigger(sample_workflow_yaml, mock_linkedin_app, mock_e
     with patch('dspygen.subcommands.wkf_cmd.Workflow.from_yaml') as mock_from_yaml, \
          patch('dspygen.subcommands.wkf_cmd.execute_workflow') as mock_execute, \
          patch('dspygen.pyautomator.linkedin.linkedin_app.LinkedInApp', return_value=mock_linkedin_app), \
-         patch('dspygen.modules.automated_email_responder_module.AutomatedEmailResponderModule', return_value=mock_email_responder):
+         patch('dspygen.dspy_modules.automated_email_responder_module.AutomatedEmailResponderModule', return_value=mock_email_responder):
 
         # Set up mock returns
         mock_linkedin_app.get_profile_markdown.return_value = "Mocked LinkedIn Profile"
@@ -98,7 +98,7 @@ def test_integration_error_handling(sample_workflow_yaml, mock_linkedin_app, moc
     with patch('dspygen.subcommands.wkf_cmd.Workflow.from_yaml') as mock_from_yaml, \
          patch('dspygen.subcommands.wkf_cmd.execute_workflow') as mock_execute, \
          patch('dspygen.pyautomator.linkedin.linkedin_app.LinkedInApp', return_value=mock_linkedin_app), \
-         patch('dspygen.modules.automated_email_responder_module.AutomatedEmailResponderModule', return_value=mock_email_responder):
+         patch('dspygen.dspy_modules.automated_email_responder_module.AutomatedEmailResponderModule', return_value=mock_email_responder):
 
         # Simulate an error in LinkedIn profile fetching
         mock_linkedin_app.get_profile_markdown.side_effect = Exception("Network error")

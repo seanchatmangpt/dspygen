@@ -167,7 +167,7 @@ def get_services():
 
 def get_modules():
     """Retrieves code snippets from the '/Users/sac/dev/soc/src/soc/services' directory."""
-    return get_files_from_directory('/Users/sac/dev/soc/src/soc/modules')
+    return get_files_from_directory('/Users/sac/dev/soc/src/soc/dspy_modules')
 
 
 def main():

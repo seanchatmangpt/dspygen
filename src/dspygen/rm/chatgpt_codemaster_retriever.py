@@ -317,7 +317,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
             "$directories = @(",
             '"$baseDir/src/dspygen/rm",',
             '"$baseDir/src/dspygen/utils",',
-            '"$baseDir/src/dspygen/modules",',
+            '"$baseDir/src/dspygen/dspy_modules",',
             '"$baseDir/data/chatgpt_logs"',
             ")",
             "",

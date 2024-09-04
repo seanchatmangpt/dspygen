@@ -120,7 +120,7 @@ def main():
     # Convert the SignatureModel to a DSPy Signature class
     QuestionAnswering = create_signature_class_from_model(question_answering_signature)
 
-    context = """Chaining language model (LM) calls as composable modules is fueling a new powerful
+    context = """Chaining language model (LM) calls as composable dspy_modules is fueling a new powerful
     way of programming. However, ensuring that LMs adhere to important constraints remains a key
     challenge, one often addressed with heuristic “prompt engineering”. We introduce LM Assertions,
      a new programming construct for expressing computational constraints that LMs should satisfy.

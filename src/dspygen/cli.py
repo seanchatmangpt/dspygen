@@ -110,16 +110,16 @@ def init(project_name: str = typer.Argument(...),
 
 
 TUTOR_CONTEXT = """DSPyGen: AI Development Simplified
-DSPyGen revolutionizes AI development by bringing the "Convention over Configuration" philosophy to language model (LM) pipelines. Inspired by Ruby on Rails, it offers a CLI for creating, developing, and deploying with DSPy modules, emphasizing quick setup and modular design for streamlined project workflows.
+DSPyGen revolutionizes AI development by bringing the "Convention over Configuration" philosophy to language model (LM) pipelines. Inspired by Ruby on Rails, it offers a CLI for creating, developing, and deploying with DSPy dspy_modules, emphasizing quick setup and modular design for streamlined project workflows.
 
 Key Features:
 
 Quick Initialization: Rapidly configure your AI project, mirroring the simplicity of Ruby on Rails.
-Modular Design: Generate and enhance DSPy modules with ease, promoting a scalable and flexible development environment.
+Modular Design: Generate and enhance DSPy dspy_modules with ease, promoting a scalable and flexible development environment.
 User-Friendly Commands: Manage your AI projects effortlessly through an intuitive command structure.
 Chatbot Assistance: Embedded support to guide through the development process, enhancing user experience.
 Using DSPyGen Modules:
-DSPyGen's core lies in its modules, designed for seamless integration and code optimization. Here’s how to leverage them:
+DSPyGen's core lies in its dspy_modules, designed for seamless integration and code optimization. Here’s how to leverage them:
 
 dspygen is a command-line tool.
 It helps generate various components for a project.
@@ -134,34 +134,34 @@ command: Generates or adds subcommands.
 help: Provides assistance and updates help files.
 init: Initializes a DSPygen project.
 lm: Generates language models.
-module: Deals with generating or calling DSPy modules.
+module: Deals with generating or calling DSPy dspy_modules.
 sig: Generates dspy.Signatures.
 tutor: Guides through project development with DSPyGen.
 
-blog: Calls modules related to blogging.
-book_appointment: Invokes modules for scheduling appointments.
+blog: Calls dspy_modules related to blogging.
+book_appointment: Invokes dspy_modules for scheduling appointments.
 chat_bot: Initiates module calls for chatbots.
-checker: Calls modules for checking or validating.
+checker: Calls dspy_modules for checking or validating.
 choose_function: Initiates module calls involving choice or selection functions.
-dflss: Related to Six Sigma methodology, possibly for invoking process improvement modules.
-gen_cli: Triggers modules for command-line interfaces.
-gen_dspy: Calls modules specific to DSPy.
+dflss: Related to Six Sigma methodology, possibly for invoking process improvement dspy_modules.
+gen_cli: Triggers dspy_modules for command-line interfaces.
+gen_dspy: Calls dspy_modules specific to DSPy.
 gen_keyword_arguments: Initiates module calls with keyword arguments.
-gen_signature: Invokes signature-related modules.
-html: For modules related to HTML.
-insight_tweet: Calls modules for generating insightful tweets.
+gen_signature: Invokes signature-related dspy_modules.
+html: For dspy_modules related to HTML.
+insight_tweet: Calls dspy_modules for generating insightful tweets.
 message: Initiates module calls for messaging.
-module_docstring: Triggers module calls for documenting modules.
+module_docstring: Triggers module calls for documenting dspy_modules.
 product_bot: Invokes module calls for product-related bots.
-prompt_function_call: Triggers modules for prompting function calls.
-python_expert: For modules related to Python expertise.
+prompt_function_call: Triggers dspy_modules for prompting function calls.
+python_expert: For dspy_modules related to Python expertise.
 python_source_code: Initiates module calls for generating Python source code.
 source_code_pep8_docs: Triggers module calls for source code with PEP8 documentation.
 subject_destination_audience_newsletter_article: Initiates module calls for newsletter articles.
-text_summary_module: Calls modules for summarizing text.
-to_elixir: Initiates module calls to convert modules to Elixir format.
+text_summary_module: Calls dspy_modules for summarizing text.
+to_elixir: Initiates module calls to convert dspy_modules to Elixir format.
 
-Use this information to guide the usage of the DSPyGen CLI and its modules.
+Use this information to guide the usage of the DSPyGen CLI and its dspy_modules.
 """
 
 @app.command(name="tutor")

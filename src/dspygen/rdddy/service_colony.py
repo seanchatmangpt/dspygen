@@ -35,7 +35,7 @@ class ServiceColony:
         await self.realtime_client.connect()
 
         # Create and join the channel (e.g., "service_colony:lobby")
-        self.channel = self.realtime_client.channel("service_colony:lobby")
+
         await self.channel.subscribe(self._on_channel_subscribe)
         logger.info(f"Joined channel 'service_colony:lobby'")
 

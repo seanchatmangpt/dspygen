@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Create DSPyGen modules required for the Bullwhip platform
+# Create DSPyGen dspy_modules required for the Bullwhip platform
 echo "Creating DSPyGen modules for Bullwhip platform..."
 
 # Example 1: Create a module to transform JSON data to a structured report

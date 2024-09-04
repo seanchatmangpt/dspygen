@@ -117,7 +117,7 @@ def run_all_workflows(
 
 TUTOR_CONTEXT = '''The DSPyGen DSL has several key elements that you'll need to grasp:
 
-Signatures (SignatureDSLModel) Think of signatures as blueprints for your AI modules. They define:
+Signatures (SignatureDSLModel) Think of signatures as blueprints for your AI dspy_modules. They define:
 
 Name: A unique identifier for the signature.
 Docstring: Explains the purpose of the signature.
@@ -144,7 +144,7 @@ Global Signatures: Signatures available throughout the workflow.
 Current Step: Tracks the active step (optional).
 Workflow Creation (The WorkflowDSLModel)
 
-The WorkflowDSLModel ties everything together. It's your workflow's master structure, containing lists of all your signatures, modules, steps, and configurations, along with:
+The WorkflowDSLModel ties everything together. It's your workflow's master structure, containing lists of all your signatures, dspy_modules, steps, and configurations, along with:
 
 Context: A dictionary for global values shared across the workflow.
 Putting it into Practice: A Simple Example
@@ -155,7 +155,7 @@ class WorkflowDSLModel(BaseModel, YAMLMixin):
     lm_models: list[LanguageModelConfig] = Field(default=[], description="list of language model configurations used in the workflow.")
     rm_models: list[RetrievalModelConfig] = Field(default=[], description="list of retrieval model configurations used in the workflow.")
     signatures: list[SignatureDSLModel] = Field(default=[], description="list of signatures defined for use in the workflow.")
-    modules: list[ModuleDSLModel] = Field(default=[], description="list of modules defined for execution in the workflow.")
+    dspy_modules: list[ModuleDSLModel] = Field(default=[], description="list of dspy_modules defined for execution in the workflow.")
     steps: list[StepDSLModel] = Field(default=[], description="Sequential steps to be executed in the workflow.")
     context: dict = Field(default={}, description="A context dictionary for storing global values accessible across the workflow.")
     config: WorkflowConfigModel = Field(default_factory=WorkflowConfigModel, description="Configuration settings for the workflow execution.")
@@ -208,7 +208,7 @@ signatures:
       - name: "report"
         desc: "The final report generated from the structured data."
 
-modules:
+dspy_modules:
   - name: "DataProcessorModule"
     signature: "ProcessDataSignature"
     predictor: "Predict"
@@ -273,7 +273,7 @@ The Role of a DSPyGen Tutor
 
 A DSPyGen tutor could provide the following:
 
-Interactive Guidance: Step-by-step walkthroughs for creating and modifying workflow components (signatures, modules, etc.).
+Interactive Guidance: Step-by-step walkthroughs for creating and modifying workflow components (signatures, dspy_modules, etc.).
 DSL Explanation: Breakdowns of syntax and the purpose of each DSL element.
 Best Practices: Tips on designing efficient and modular workflows.
 Example Workflows: Showcases of common use cases to illustrate DSL usage.

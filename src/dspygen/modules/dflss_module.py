@@ -1,5 +1,5 @@
 """
-This code imports the necessary libraries and modules to run the DFLSSModule.
+This code imports the necessary libraries and dspy_modules to run the DFLSSModule.
 """
 import dspy
 from dspygen.utils.dspy_tools import init_dspy
@@ -52,7 +52,7 @@ Business Case:
 The current order processing system, implemented via a finite state machine, is functional but lacks the flexibility and modularity needed for easy scalability and maintenance. By integrating DSPy, the system can benefit from more structured data handling, automatic state management, and enhanced debugging capabilities through systematic logging and validation.
 
 Project Scope:
-Convert existing order processing methods and transitions into DSPy-compatible modules.
+Convert existing order processing methods and transitions into DSPy-compatible dspy_modules.
 Use DSPy's capabilities to handle different states of an order's lifecycle within a declarative pipeline environment.
 Implement validation and action triggers as modular components.
 Integrate state change triggers with conditions and actions based on DSPy’s event-driven architecture.

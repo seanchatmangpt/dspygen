@@ -33,7 +33,7 @@ class TempModule(dspy.Module):
                 return summary
 
 
-story = """Chaining language model (LM) calls as com- posable modules is fueling a new powerful way of programming. 
+story = """Chaining language model (LM) calls as com- posable dspy_modules is fueling a new powerful way of programming. 
 However, ensuring that LMs adhere to important constraints remains a key challenge, one often addressed with 
 heuristic “prompt engineering”. We introduce LM Asser- tions, a new programming construct for express- ing 
 computational constraints that LMs should satisfy. We integrate our constructs into the re- cent DSPy programming 

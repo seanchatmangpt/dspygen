@@ -103,7 +103,7 @@ def main():
     inst = instance(EventStormingDomainSpecificationModel, requirements)
     print(inst)
 
-    # from dspygen.modules.json_module import json_call
+    # from dspygen.dspy_modules.json_module import json_call
     # mdl = json_call(EventStormingDomainSpecificationModel, requirements)
     # print(mdl)
 

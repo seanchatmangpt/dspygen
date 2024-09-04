@@ -17,7 +17,7 @@ def run_pipeline(yaml_file: str = "pipeline.yaml"):
 
 TUTOR_CONTEXT = '''The DSPyGen DSL has several key elements that you'll need to grasp:
 
-Signatures (SignatureDSLModel) Think of signatures as blueprints for your AI modules. They define:
+Signatures (SignatureDSLModel) Think of signatures as blueprints for your AI dspy_modules. They define:
 
 Name: A unique identifier for the signature.
 Docstring: Explains the purpose of the signature.
@@ -44,7 +44,7 @@ Global Signatures: Signatures available throughout the pipeline.
 Current Step: Tracks the active step (optional).
 Pipeline Creation (The PipelineDSLModel)
 
-The PipelineDSLModel ties everything together. It's your pipeline's master structure, containing lists of all your signatures, modules, steps, and configurations, along with:
+The PipelineDSLModel ties everything together. It's your pipeline's master structure, containing lists of all your signatures, dspy_modules, steps, and configurations, along with:
 
 Context: A dictionary for global values shared across the pipeline.
 Putting it into Practice: A Simple Example
@@ -55,7 +55,7 @@ class PipelineDSLModel(BaseModel, YAMLMixin):
     lm_models: list[LanguageModelConfig] = Field(default=[], description="list of language model configurations used in the pipeline.")
     rm_models: list[RetrievalModelConfig] = Field(default=[], description="list of retrieval model configurations used in the pipeline.")
     signatures: list[SignatureDSLModel] = Field(default=[], description="list of signatures defined for use in the pipeline.")
-    modules: list[ModuleDSLModel] = Field(default=[], description="list of modules defined for execution in the pipeline.")
+    dspy_modules: list[ModuleDSLModel] = Field(default=[], description="list of dspy_modules defined for execution in the pipeline.")
     steps: list[StepDSLModel] = Field(default=[], description="Sequential steps to be executed in the pipeline.")
     context: dict = Field(default={}, description="A context dictionary for storing global values accessible across the pipeline.")
     config: PipelineConfigModel = Field(default_factory=PipelineConfigModel, description="Configuration settings for the pipeline execution.")
@@ -108,7 +108,7 @@ signatures:
       - name: "report"
         desc: "The final report generated from the structured data."
 
-modules:
+dspy_modules:
   - name: "DataProcessorModule"
     signature: "ProcessDataSignature"
     predictor: "Predict"
@@ -173,7 +173,7 @@ The Role of a DSPyGen Tutor
 
 A DSPyGen tutor could provide the following:
 
-Interactive Guidance: Step-by-step walkthroughs for creating and modifying pipeline components (signatures, modules, etc.).
+Interactive Guidance: Step-by-step walkthroughs for creating and modifying pipeline components (signatures, dspy_modules, etc.).
 DSL Explanation: Breakdowns of syntax and the purpose of each DSL element.
 Best Practices: Tips on designing efficient and modular pipelines.
 Example Pipelines: Showcases of common use cases to illustrate DSL usage.

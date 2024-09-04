@@ -1,6 +1,7 @@
 import logging
 from enum import Enum, auto
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
 
 
 class SalesState(Enum):
@@ -14,7 +15,7 @@ class SalesState(Enum):
     COMPLETING = auto()
 
 
-class ChallengerSalesAgent(FSMMixin):
+class ChallengerSalesAgent(FSMMixin, BaseInhabitant):
     def __init__(self):
         super().__init__()
         self.setup_fsm(state_enum=SalesState, initial=SalesState.INITIALIZING)

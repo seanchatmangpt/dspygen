@@ -16,7 +16,6 @@ class PrefectApp:
     @task
     def read_flow(self, name: str) -> Optional[Dict]:
         return self.flow_manager.read_flow(name)
-
     @task
     def update_flow(self, name: str, description: str = None, tasks: List[Dict] = None) -> str:
         return self.flow_manager.update_flow(name, description, tasks)

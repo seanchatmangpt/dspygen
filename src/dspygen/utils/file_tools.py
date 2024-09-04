@@ -81,7 +81,7 @@ def subcommands_dir(file_name="") -> Path:
 
 
 def dspy_modules_dir(file_name="") -> Path:
-    return source_dir() / "modules" / file_name
+    return source_dir() / "dspy_modules" / file_name
 
 
 def signatures_dir(file_name="") -> Path:

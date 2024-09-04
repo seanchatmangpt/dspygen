@@ -3,12 +3,12 @@
 # from unittest.mock import patch, MagicMock
 # from dspygen.subcommands.wkf_cmd import run_workflows_in_directory, app
 # from dspygen.experiments.pyautomator.linkedin_app import LinkedInApp
-# from dspygen.modules.automated_email_responder_module import AutomatedEmailResponderModule, AutomatedEmailResponderSignature
+# from dspygen.dspy_modules.automated_email_responder_module import AutomatedEmailResponderModule, AutomatedEmailResponderSignature
 # from dspygen.ai.assistant import AIAssistant
 # from dspygen.task_management import TaskManager
 # from dspygen.utils.dspy_tools import init_dspy
 # from dspygen.subcommands.wrt_cmd import new_rm
-# from dspygen.modules.ask_data_module import AskDataModule
+# from dspygen.dspy_modules.ask_data_module import AskDataModule
 # from typer.testing import CliRunner
 # from apscheduler.schedulers.background import BackgroundScheduler
 # import dspy
@@ -92,10 +92,10 @@
 #     with patch('dspygen.subcommands.wkf_cmd.Workflow.from_yaml') as mock_from_yaml, \
 #          patch('dspygen.subcommands.wkf_cmd.execute_workflow') as mock_execute, \
 #          patch('dspygen.experiments.pyautomator.linkedin_app.LinkedInApp', return_value=mock_linkedin_app), \
-#          patch('dspygen.modules.automated_email_responder_module.AutomatedEmailResponderModule', return_value=mock_email_responder), \
+#          patch('dspygen.dspy_modules.automated_email_responder_module.AutomatedEmailResponderModule', return_value=mock_email_responder), \
 #          patch('dspygen.ai.assistant.AIAssistant', return_value=mock_ai_assistant), \
 #          patch('dspygen.task_management.TaskManager', return_value=mock_task_manager), \
-#          patch('dspygen.modules.ask_data_module.AskDataModule', return_value=mock_ask_data_module):
+#          patch('dspygen.dspy_modules.ask_data_module.AskDataModule', return_value=mock_ask_data_module):
 #
 #         # Set up mock returns
 #         mock_ai_assistant.analyze_job_market_trends.return_value = {

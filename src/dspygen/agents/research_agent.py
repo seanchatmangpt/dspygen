@@ -8,7 +8,7 @@ from dspygen.utils.dspy_tools import init_dspy
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 from dspygen.modules.condition_sufficient_info_module import condition_sufficient_info_call
 from dspygen.modules.query_generator_module import query_generator_call
-#from dspygen.modules.refine_results_module import refine_results_module_call
+#from dspygen.dspy_modules.refine_results_module import refine_results_module_call
 from dspygen.modules.source_selector_module import source_selector_call
 from dspygen.utils.scraping_tools import execute_brave_search_queries, scrape_urls, execute_duckduckgo_queries
 

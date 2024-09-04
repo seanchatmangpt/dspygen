@@ -29,7 +29,7 @@ def main2():
 
     # module = GenModuleModel.to_inst(f"name: RawToStructure, raw_to_structure_signature, Predict {signature}")
 
-    module = GenLMModuleModel.from_yaml(str(dsl_dir("modules/raw_to_structure_module.yaml")))
+    module = GenLMModuleModel.from_yaml(str(dsl_dir("dspy_modules/raw_to_structure_module.yaml")))
 
     # print(module)
 

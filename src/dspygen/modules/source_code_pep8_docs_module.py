@@ -1,5 +1,5 @@
 """The `SourceCodePep8DocsModule` class is used to create documentation for source code using best practices. It
-first imports the necessary libraries and modules, including `dspy`, `pyperclip`, and `typer`. Then, in the `forward`
+first imports the necessary libraries and dspy_modules, including `dspy`, `pyperclip`, and `typer`. Then, in the `forward`
 method, it checks if a context is provided and if not, sets a default context. The source code is then formatted and
 passed through a `ChainOfThought` model to generate the pep8_docs. The `source_code_pep8_docs_call` function calls
 the `forward` method and returns the result. In the `call` command, the source code is passed through `pyperclip` and

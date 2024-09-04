@@ -9,13 +9,13 @@ def process_yaml_pipeline(yaml_file):
 
     dg_modules = []
 
-    for module_def in config['modules']:
+    for module_def in config['dspy_modules']:
         module_class = globals()[f"{module_def['module']}DGModule"]  # Get the module class by name
         module_instance = module_class(**module_def.get('args', {}))
 
         dg_modules.append(module_instance)
 
-    # Pipe the modules together because we need to do __or__ operations
+    # Pipe the dspy_modules together because we need to do __or__ operations
     for i in range(len(dg_modules) - 1):
         dg_modules[i] | dg_modules[i + 1]
 

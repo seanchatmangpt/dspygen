@@ -4,9 +4,9 @@
 #
 # import streamlit as st
 #
-# from dspygen.modules.chat_bot_module import chat_bot_call
-# from dspygen.modules.insight_tweet_module import insight_tweet_call
-# from dspygen.modules.streamlit_bot_module import streamlit_bot_call
+# from dspygen.dspy_modules.chat_bot_module import chat_bot_call
+# from dspygen.dspy_modules.insight_tweet_module import insight_tweet_call
+# from dspygen.dspy_modules.streamlit_bot_module import streamlit_bot_call
 # from dspygen.utils.dspy_tools import init_dspy
 # from dspygen.utils.file_tools import source_dir, pages_dir
 #

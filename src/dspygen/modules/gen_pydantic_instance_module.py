@@ -89,7 +89,7 @@ class GenPydanticInstance(dspy.Module):
             [inspect.getsource(model) for model in self.models]
         )
 
-        # Initialize DSPy ChainOfThought modules for generation and correction
+        # Initialize DSPy ChainOfThought dspy_modules for generation and correction
         self.generate = ChainOfThought(generate_sig)
         self.correct_generate = ChainOfThought(correct_generate_sig)
         self.validation_error = None

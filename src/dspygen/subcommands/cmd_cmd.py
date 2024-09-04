@@ -22,7 +22,7 @@ def {{ sub_command_name }}_{{ new_command_name }}():
 '''
 
 
-# Define the subcommand to generate subcommand modules
+# Define the subcommand to generate subcommand dspy_modules
 @app.command(
     name="new",
 )

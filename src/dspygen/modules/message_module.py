@@ -6,7 +6,7 @@ import inspect
 import dspy
 from typer import Typer
 
-# from dspygen.modules.gen_pydantic_instance_module import GenPydanticInstance
+# from dspygen.dspy_modules.gen_pydantic_instance_module import GenPydanticInstance
 from dspygen.rdddy.browser.browser_domain import TypeText
 from dspygen.utils.dspy_tools import init_dspy
 

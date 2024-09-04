@@ -1,0 +1,34 @@
+C4Context
+    title System Context Diagram for an Inhabitant
+
+    %% Inhabitant Boundary
+    System_Boundary(b0, "Inhabitant") {
+        System(SelfManagement, "Self-Management Module", "Monitors and manages the internal state, health, and behavior of the inhabitant.")
+        System(LocalDecisionEngine, "Local Decision Engine", "Makes decisions autonomously based on internal and external inputs following predefined rules (e.g., Robert's Rules of Order).")
+        System(LocalMessageQueue, "Local Message Queue", "Handles incoming and outgoing messages for internal and external communication.")
+        System(LocalKnowledgeBase, "Local Knowledge Base", "Stores historical data, learning models, and decision rules for autonomous decision-making.")
+        System(LocalReactor, "Local Reactor", "Enables reactive programming for real-time adaptation to changes or events.")
+        System(LocalActionExecutor, "Action Executor", "Executes actions and commands based on the decisions made by the Local Decision Engine.")
+    }
+
+    %% External Components
+    System_Ext(MessageBroker, "External Message Broker", "Facilitates communication between different inhabitants and external systems.")
+
+    %% Internal Interactions
+    Rel(SelfManagement, LocalDecisionEngine, "Provides state and health data")
+    Rel(SelfManagement, LocalKnowledgeBase, "Stores and retrieves internal monitoring data")
+
+    Rel(LocalDecisionEngine, LocalMessageQueue, "Sends and receives decision-related messages")
+    Rel(LocalDecisionEngine, LocalActionExecutor, "Issues commands for execution")
+
+    Rel(LocalMessageQueue, LocalReactor, "Triggers events based on messages")
+    Rel(LocalReactor, LocalDecisionEngine, "Notifies about external or internal events")
+
+    Rel(LocalKnowledgeBase, LocalDecisionEngine, "Provides historical data and rules")
+    Rel(LocalKnowledgeBase, LocalActionExecutor, "Provides execution context")
+
+    Rel(LocalActionExecutor, SelfManagement, "Reports execution status and outcomes")
+
+    %% External Interactions
+    Rel(LocalMessageQueue, MessageBroker, "Communicates with external systems")
+    BiRel(LocalKnowledgeBase, MessageBroker, "Exchanges knowledge and data")
