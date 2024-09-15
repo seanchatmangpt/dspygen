@@ -10,7 +10,8 @@ from reactivex.scheduler.eventloop import AsyncIOScheduler
 from realtime import RealtimeSubscribeStates
 
 from dspygen.rdddy.async_realtime_client import AsyncRealtimeClient
-from dspygen.rdddy.base_message import BaseMessage, MessageFactory
+from dspygen.rdddy.base_message import BaseMessage
+from dspygen.rdddy.message_factory import MessageFactory
 
 if TYPE_CHECKING:
     from dspygen.rdddy.base_inhabitant import BaseInhabitant

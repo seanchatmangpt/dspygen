@@ -1,3 +1,5 @@
+from typing import Any
+
 from playwright.async_api import Page
 
 from dspygen.rdddy.base_command import BaseCommand

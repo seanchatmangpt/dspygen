@@ -1,5 +1,8 @@
 from datetime import datetime
 
+from dspygen.pyautomator.base_app import BaseApp
+
+
 class KeynoteApp(BaseApp):
     def __init__(self):
         super().__init__("Keynote")

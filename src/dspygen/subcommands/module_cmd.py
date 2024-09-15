@@ -59,7 +59,7 @@ def main():
 if __name__ == "__main__":
     main()
 else:
-    load_commands()
+    load_commands("modules")
 
 
 @app.command("help")

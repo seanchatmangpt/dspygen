@@ -19,7 +19,7 @@ class MDBookSummarySignature(dspy.Signature):
     Example:
         # Summary
 
-    [Introduction](README.md)
+    README.md)
 
     # User Guide
 

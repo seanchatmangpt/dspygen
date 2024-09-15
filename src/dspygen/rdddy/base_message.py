@@ -4,6 +4,8 @@ from datetime import datetime, timezone
 
 from pydantic import BaseModel, Field
 
+from sungen.utils.yaml_tools import YAMLMixin
+
 
 class BaseMessage(BaseModel):
     """Base message class for the Exodus Service Colony framework, designed to facilitate communication
@@ -74,4 +76,16 @@ class BaseMessage(BaseModel):
         """Returns the full import path of the message class."""
         module = inspect.getmodule(self)
         return f"{module.__name__}.{self.__class__.__name__}"
+
+
+class MessageList(YAMLMixin, BaseModel):
+    messages: list[BaseMessage] = []
+
+
+class ExceptionMessage(BaseMessage):
+    """Generic exception message"""
+
+
+class TerminationMessage(BaseMessage):
+    """Message indicating an actor should be terminated."""
 

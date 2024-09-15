@@ -9,7 +9,8 @@ class Proposal(BaseModel):
     proposalId: str = Field(..., description="Unique identifier for the proposal.")
     proposer: str = Field(..., description="Name of the Loa proposing the action.")
     proposalType: str = Field(..., description="Type of proposal.",
-                              regex="^(serviceRegistration|securityPolicyUpdate|serviceComposition|capabilityUpdate|other)$")
+                              pattern="^(serviceRegistration|securityPolicyUpdate|serviceComposition|capabilityUpdate"
+                                      "|other)$")
     description: str = Field(..., description="Details of the proposal.")
     timestamp: datetime = Field(..., description="Time when the proposal was submitted.")
 
@@ -24,7 +25,7 @@ class Debate(BaseModel):
 class Vote(BaseModel):
     proposalId: str = Field(..., description="Unique identifier for the proposal being voted on.")
     voteType: str = Field(..., description="Type of vote (yes, no, abstain).",
-                          regex="^(yes|no|abstain)$")
+                          pattern="^(yes|no|abstain)$")
     initiatedBy: str = Field(..., description="Name of the Loa initiating the vote.")
     timestamp: datetime = Field(..., description="Time when the vote was initiated.")
 
