@@ -19,7 +19,7 @@ into a Jinja2 template that follows best practices and is easy to maintain. Ensu
 Jinja2's features effectively. Use Jinja2's template syntax and filters appropriately.
 
 You are generating a Jinja2 template for a specific task. The template should be ready to be used
-in a production environment.
+in a production environments.
 
 ```prompt
 {{prompt}}
@@ -89,7 +89,7 @@ Use the standard library and built-in functions unless the library is specified 
 Use functional programming without classes. Do not use the keyword pass.
 
 You are generating answer code for a job interview question. The code should be production-ready and
-ready to be deployed to a production environment.
+ready to be deployed to a production environments.
 
 ```prompt
 {{prompt}}

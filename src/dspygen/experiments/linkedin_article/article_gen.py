@@ -182,7 +182,7 @@ def main():
 
         art2 = linkedin_article_call(text + task_master)
         print(art2)
-        # Get the PDF file name without extension
+        # Get the PDF file name without extensions
         pdf_name = Path(pdf_path).stem
 
         # Create a safe filename by replacing spaces with underscores and removing special characters

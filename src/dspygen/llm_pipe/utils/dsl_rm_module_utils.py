@@ -2,7 +2,7 @@ import importlib
 
 import dspy
 
-from dspygen.dsl.dsl_pydantic_models import RMModuleDSLModel
+from dspygen.llm_pipe.dsl_pydantic_models import RMModuleDSLModel
 from dspygen.rm.data_retriever import DataRetriever
 
 

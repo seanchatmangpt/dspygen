@@ -7,8 +7,10 @@ from dspygen.mixin.fsm.fsm_mixin import trigger, FSMMixin
 from dspygen.modules.function_invoke_module import function_invoke_call
 from dspygen.modules.python_source_code_module import python_source_code_call
 
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
 
-class CoderAgent(FSMMixin):
+
+class CoderAgent(FSMMixin, BaseInhabitant):
     def __init__(self, requirements: str):
         super().setup_fsm(CoderAgentState, initial=CoderAgentState.ANALYZING_REQUIREMENTS)
         self.requirements = requirements

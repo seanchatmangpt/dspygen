@@ -87,7 +87,7 @@ example_code = """def fetch_user_name(user_id):
 """
 
 def main():
-    init_dspy(max_tokens=3000)  # Initialize the dspy environment
+    init_dspy(max_tokens=3000)  # Initialize the dspy environments
     code_agent = CoderAgent()
     agent = PytestAgent(code=example_code)
     print("Initial state:", agent.state)

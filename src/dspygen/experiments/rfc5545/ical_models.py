@@ -93,7 +93,7 @@ class Event(SQLModel, table=True):
         ics_str += "END:VCALENDAR\n"
 
         # If path is a directory, save the ICS content to a file in that directory
-        # the file name will be the event slugged summary and dtstart with a .ics extension
+        # the file name will be the event slugged summary and dtstart with a .ics extensions
         if file_path and Path(file_path).is_dir():
             file_name = (
                 f"{slugify(self.summary)}_{self.dtstart.strftime('%Y%m%dT%H%M%SZ')}.ics"

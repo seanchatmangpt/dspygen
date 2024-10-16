@@ -43,9 +43,6 @@ def call(story):
     print(jsx_call(story=story))
 
 
-# TODO: Add streamlit component
-
-
 from fastapi import APIRouter
 router = APIRouter()
 

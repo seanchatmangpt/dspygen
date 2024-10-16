@@ -1,6 +1,6 @@
 import importlib
 import dspy
-from dspygen.dsl.dsl_pydantic_models import SignatureDSLModel, GenSignatureModel
+from dspygen.llm_pipe.dsl_pydantic_models import SignatureDSLModel, GenSignatureModel
 from dspygen.utils.file_tools import dsl_dir
 
 def get_sig_key(module_def, step):

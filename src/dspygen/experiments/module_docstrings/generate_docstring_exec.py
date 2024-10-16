@@ -3,7 +3,7 @@ import os
 import inflection
 from slugify import slugify
 
-from dspygen.dsl.dsl_pipeline_executor import execute_pipeline
+from dspygen.llm_pipe.dsl_pipeline_executor import execute_pipeline
 
 
 def feature_code_generation():

@@ -7,9 +7,9 @@ from dspygen.utils.dspy_tools import init_ol
 class IssueToPatchSignature(dspy.Signature):
     """ Transforms detailed descriptions of software issues, especially those occurring in high-stakes, large-scale production environments (such as those at FAANG companies), into actionable, ready-to-deploy git patch files. This Signature class focuses on creating highly reliable and targeted solutions that can be applied with a near-certain guarantee of success, backed by a deep understanding of system architecture and software engineering best practices. Ideal for simulating the process of a FAANG System Architect resolving complex software issues under stringent operational requirements, where patches must achieve near-perfect reliability to maintain system integrity and performance. """
     # Input field: Detailed issue description including specific technologies involved,
-    # error logs, system environment details, and failure impact assessment.
+    # error logs, system environments details, and failure impact assessment.
     issue = dspy.InputField(desc="Comprehensive, multi-faceted description of the software issue, \
-including stack traces, environment specifics, configurations, and a criticality assessment, \
+including stack traces, environments specifics, configurations, and a criticality assessment, \
 to ensure a highly contextual and accurate patch formulation.")
 
     # Output field: A git-formatted patch file, thoroughly commented and adhering to best

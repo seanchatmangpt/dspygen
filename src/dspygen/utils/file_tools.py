@@ -9,7 +9,7 @@ from fnmatch import fnmatch
 import tempfile
 from contextlib import contextmanager
 
-
+import dspy.clients.lm
 def extract_code(text: str) -> str:
     # Use a regular expression to find code blocks enclosed in triple backticks.
     text_code = re.findall(r"```([\s\S]+?)```", text)
@@ -105,7 +105,7 @@ def pages_dir(file_name="") -> Path:
 
 
 def dsl_dir(file_name="") -> Path:
-    return source_dir() / "dsl" / file_name
+    return source_dir() / "llm_pipe" / file_name
 
 
 def get_source(filename):
@@ -145,11 +145,11 @@ async def write(
         time_stamp=False,
         path="",
 ):
-    # if extension == "yaml" or extension == "yml":
+    # if extensions == "yaml" or extensions == "yml":
     #     contents = yaml.dump(
     #         contents, default_style="", default_flow_style=False, width=1000
     #     )
-    # elif extension == "json":
+    # elif extensions == "json":
     #     contents = json.dumps(contents)
 
     async with await anyio.open_file(path + filename, mode=mode) as f:

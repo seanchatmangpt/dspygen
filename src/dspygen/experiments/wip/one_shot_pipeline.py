@@ -1,5 +1,5 @@
-from dspygen.dsl.dsl_pipeline_executor import execute_pipeline
-from dspygen.dsl.dsl_pydantic_models import GenPipelineModel
+from dspygen.llm_pipe.dsl_pipeline_executor import execute_pipeline
+from dspygen.llm_pipe.dsl_pydantic_models import GenPipelineModel
 
 
 REACT_CODE = """import React, { useState, useEffect } from 'react';

@@ -8,8 +8,8 @@ from dspygen.email_utils import create_message, send_email, login_to_smtp, main
 @pytest.fixture
 def email_env_vars(monkeypatch):
     """
-    Fixture to set environment variables for email address and password.
-    Uses monkeypatch to temporarily set environment variables for testing.
+    Fixture to set environments variables for email address and password.
+    Uses monkeypatch to temporarily set environments variables for testing.
     """
     monkeypatch.setenv('EMAIL_ADDRESS', 'your_email@example.com')
     monkeypatch.setenv('EMAIL_PASSWORD', 'your_password')

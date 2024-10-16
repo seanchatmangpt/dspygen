@@ -141,7 +141,7 @@ export default function DSLPage() {
       <button onClick={handleClick}>Generate Assessment</button>
 
       {/*<textarea*/}
-      {/*  value={dsl}*/}
+      {/*  value={llm_pipe}*/}
       {/*  readOnly*/}
       {/*  style={{ width: '100%', height: '300px' }}*/}
       {/*/>*/}

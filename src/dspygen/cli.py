@@ -83,18 +83,18 @@ def init(project_name: str = typer.Argument(...),
                            "--extra-context", f'{json.dumps(extra_context)}',
                            "--no-input"])
 
-    # We need to install dspygen in the project's virtual environment
-    # It uses poetry to manage the virtual environment
+    # We need to install dspygen in the project's virtual environments
+    # It uses poetry to manage the virtual environments
     # Change to the project directory
-    # Run the command to initialize the virtual environment
-    # Run the command to install dspygen in the virtual environment
+    # Run the command to initialize the virtual environments
+    # Run the command to install dspygen in the virtual environments
 
     os.chdir(project_name)
 
     subprocess.check_call(["poetry", "install"])
-    # Create the virtual environment
+    # Create the virtual environments
     subprocess.check_call(["poetry", "env", "use", "python"])
-    # Install the project in the virtual environment
+    # Install the project in the virtual environments
     subprocess.check_call(["poetry", "add", "dspygen"])
 
     subprocess.check_call(["poetry", "run", "pip", "install", "-e", "."])
@@ -110,7 +110,7 @@ DSPyGen revolutionizes AI development by bringing the "Convention over Configura
 Key Features:
 
 Quick Initialization: Rapidly configure your AI project, mirroring the simplicity of Ruby on Rails.
-Modular Design: Generate and enhance DSPy dspy_modules with ease, promoting a scalable and flexible development environment.
+Modular Design: Generate and enhance DSPy dspy_modules with ease, promoting a scalable and flexible development environments.
 User-Friendly Commands: Manage your AI projects effortlessly through an intuitive command structure.
 Chatbot Assistance: Embedded support to guide through the development process, enhancing user experience.
 Using DSPyGen Modules:

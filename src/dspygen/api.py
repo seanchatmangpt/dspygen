@@ -18,7 +18,7 @@ app = FastAPI()
 from importlib import import_module
 import os
 
-from dspygen.dsl.dsl_pipeline_executor import router as pipeline_router
+from dspygen.llm_pipe.dsl_pipeline_executor import router as pipeline_router
 
 
 @app.on_event("startup")

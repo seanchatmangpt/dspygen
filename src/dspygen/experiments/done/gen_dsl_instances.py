@@ -1,8 +1,8 @@
 import os
 import tempfile
 
-from dspygen.dsl.dsl_pipeline_executor import execute_pipeline
-from dspygen.dsl.dsl_pydantic_models import *
+from dspygen.llm_pipe.dsl_pipeline_executor import execute_pipeline
+from dspygen.llm_pipe.dsl_pydantic_models import *
 from dspygen.utils.file_tools import dsl_dir
 from dspygen.utils.pydantic_tools import InstanceMixin
 from dspygen.utils.yaml_tools import YAMLMixin

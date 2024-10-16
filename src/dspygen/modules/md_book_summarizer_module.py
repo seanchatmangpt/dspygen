@@ -44,7 +44,7 @@ class MDBookSummarySignature(dspy.Signature):
             - [General](format/configuration/general.md)
             - [Preprocessors](format/configuration/preprocessors.md)
             - [Renderers](format/configuration/renderers.md)
-            - [Environment Variables](format/configuration/environment-variables.md)
+            - [Environment Variables](format/configuration/environments-variables.md)
         - [Theme](format/theme/README.md)
             - [index.hbs](format/theme/index-hbs.md)
             - [Syntax highlighting](format/theme/syntax-highlighting.md)

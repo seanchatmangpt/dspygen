@@ -1,3 +1,5 @@
+from typing import Optional
+
 import dspy
 
 
@@ -32,3 +34,4 @@ def init_ol(model: str = "phi3:instruct",
         lm = lm_class(model=model, base_url=base_url, max_tokens=max_tokens, timeout_s=timeout, temperature=temperature)
         dspy.settings.configure(lm=lm, experimental=experimental)
         return lm
+

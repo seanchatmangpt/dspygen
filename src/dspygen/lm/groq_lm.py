@@ -21,7 +21,7 @@ class Groq(LM):
         groq_api_key = os.environ.get("GROQ_API_KEY")
 
         if groq_api_key is None:
-            raise ValueError("GROQ_API_KEY environment variable not found")
+            raise ValueError("GROQ_API_KEY environments variable not found")
 
         self.client = GroqClient(api_key=os.environ.get("GROQ_API_KEY"))
 

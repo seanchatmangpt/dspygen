@@ -2,7 +2,7 @@
 #
 # import pytest
 # #
-# from dspygen.dsl.dsl_pipeline_executor import execute_pipeline
+# from dspygen.llm_pipe.dsl_pipeline_executor import execute_pipeline
 # from dspygen.rm.data_retriever import DataRetriever
 #
 #
@@ -45,7 +45,7 @@
 # #     return str(file_path)
 # #
 # #
-# # @pytest.skip("Chinook.db is not available in the CI environment")
+# # @pytest.skip("Chinook.db is not available in the CI environments")
 # # def test_data_retriever(sample_csv_file):
 # #     # SQL query to filter data
 # #     query = "SELECT * FROM df WHERE age > 30"
@@ -66,7 +66,7 @@
 # #     assert filtered_results == expected_results, "The filtered results did not match the expected output."
 # #
 # #
-# # @pytest.skip("Chinook.db is not available in the CI environment")
+# # @pytest.skip("Chinook.db is not available in the CI environments")
 # # def test_csv_pipeline():
 # #     context = execute_pipeline(f'/Users/sac/dev/dspygen/tests/pipeline/data_hello_world_pipeline.yaml',
 # #                                init_ctx={"csv_file": "/Users/sac/dev/dspygen/tests/data/greek.csv"})

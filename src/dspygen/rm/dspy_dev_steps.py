@@ -7,8 +7,8 @@ from dspygen.utils.dspy_tools import init_dspy, init_ol
 from dspygen.rm.dynamical_signature_util import create_dynamic_signature_class
 
 class SetupPygameEnv(dspy.Signature):
-    """Sets up the Pygame environment."""
-    task_description = dspy.InputField(desc="Description of the task to set up the Pygame environment.")
+    """Sets up the Pygame environments."""
+    task_description = dspy.InputField(desc="Description of the task to set up the Pygame environments.")
     code_snippet = dspy.OutputField(desc="Generated code snippet for setting up Pygame.")
 
 class CreateGameWindow(dspy.Signature):
@@ -126,7 +126,7 @@ def main():
     pygame_topic = "composable architecture Tetris pygame"
 
     steps = [
-        (SetupPygameEnv, f"Set up environment for {pygame_topic}"),
+        (SetupPygameEnv, f"Set up environments for {pygame_topic}"),
         (CreateGameWindow, f"Create game window and main loop for {pygame_topic}"),
         (ImplementGameGrid, f"Implement game grid for {pygame_topic}"),
         (CreateTetrisShapes, f"Create shapes and movement buttons for {pygame_topic}"),

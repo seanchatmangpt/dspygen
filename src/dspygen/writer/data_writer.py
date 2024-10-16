@@ -11,7 +11,7 @@ class DataWriter:
             write_options = {}
         self.file_path = file_path
         
-        # Determine file extension
+        # Determine file extensions
         _, file_extension = os.path.splitext(self.file_path)
         file_extension = file_extension.lower()
 
@@ -108,7 +108,7 @@ class DataFrameContextGenerator(BaseModel):
 
 class FileNameModel(BaseModel):
     file_name: str = Field(..., description="Unique CSV filename based on the data provided.")
-    extension: str = Field("csv", description="File extension for the output file.")
+    extension: str = Field("csv", description="File extensions for the output file.")
 
 def main():
     # Test case 1: No ID column (should add 'ID' column)

@@ -1,0 +1,270 @@
+accessibility_features:
+  high_contrast_mode: false
+  keyboard_navigation: true
+  screen_reader_support: true
+  version: 1.0.0
+commands:
+- description: GitHub CLI main command for interacting with GitHub repositories and services.
+  global_options:
+  - aliases: null
+    default: null
+    description: Display the version of GitHub CLI.
+    name: --version
+    required: false
+    type: boolean
+    version: 1.0.0
+  - aliases: null
+    default: null
+    description: Show help information for GitHub CLI.
+    name: --help
+    required: false
+    type: boolean
+    version: 1.0.0
+  name: gh
+  subcommands:
+  - arguments:
+    - description: Name of the repository.
+      name: name
+      required: true
+      version: 1.0.0
+    description: Manage GitHub repositories.
+    examples:
+    - gh repo create my-repo --public
+    - gh repo clone my-repo
+    name: repo
+    options:
+    - aliases: null
+      default: null
+      description: Create a public repository.
+      name: --public
+      required: false
+      type: boolean
+      version: 1.0.0
+    - aliases: null
+      default: null
+      description: Create a private repository.
+      name: --private
+      required: false
+      type: boolean
+      version: 1.0.0
+    subcommands:
+    - arguments:
+      - description: The repository to clone.
+        name: repository
+        required: true
+        version: 1.0.0
+      description: Clone a repository to your local machine.
+      examples:
+      - gh repo clone owner/repo
+      - gh repo clone owner/repo --depth 1
+      name: clone
+      options:
+      - aliases: null
+        default: null
+        description: Create a shallow clone with a history truncated to the specified number of commits.
+        name: --depth
+        required: false
+        type: integer
+        version: 1.0.0
+      subcommands: null
+      version: 1.0.0
+    version: 1.0.0
+  version: 1.0.0
+configurations:
+  globals:
+    editor:
+      default: vim
+      description: Default text editor for GitHub CLI operations.
+      type: string
+    pager:
+      default: less
+      description: Default pager for displaying command outputs.
+      type: string
+    theme:
+      default: auto
+      description: Color theme for GitHub CLI output.
+      type: string
+  repository:
+    default_branch:
+      default: main
+      description: Default branch name for new repositories.
+      type: string
+    visibility:
+      default: private
+      description: Default visibility for new repositories.
+      type: string
+  version: 1.0.0
+extensions:
+- commands:
+  - description: Extra tools and utilities.
+    name: extras
+    subcommands:
+    - arguments:
+      - description: Repository to deploy.
+        name: repository
+        required: true
+        version: 1.0.0
+      description: Deploy the repository to a specified environment.
+      examples:
+      - gh extras deploy owner/repo --env production
+      name: deploy
+      options:
+      - aliases: null
+        default: null
+        description: Target environment for deployment.
+        name: --env
+        required: true
+        type: string
+        version: 1.0.0
+      subcommands: null
+      version: 1.0.0
+    - arguments:
+      - description: Repository to backup.
+        name: repository
+        required: true
+        version: 1.0.0
+      description: Backup the repository data.
+      examples:
+      - gh extras backup owner/repo --destination /backups/repo-backup.tar.gz
+      name: backup
+      options:
+      - aliases: null
+        default: null
+        description: Backup destination path.
+        name: --destination
+        required: true
+        type: string
+        version: 1.0.0
+      subcommands: null
+      version: 1.0.0
+    version: 1.0.0
+  description: Additional commands and functionalities for GitHub CLI.
+  name: gh-extras
+  version: 1.0.0
+integrations:
+  hygen:
+    commands:
+    - arguments:
+      - description: Name of the component to scaffold.
+        name: component-name
+        required: true
+      description: Code scaffolding using Hygen templates.
+      examples:
+      - gh hygen --template react component Button
+      - gh hygen --template node service AuthService
+      name: hygen
+      options:
+      - description: Select template for scaffolding.
+        name: --template
+        required: true
+        type: string
+    description: Integrate Hygen for code scaffolding.
+  llm_code_assistants:
+    commands:
+    - arguments:
+      - description: File to apply assistant's suggestions.
+        name: code-file
+        required: false
+      description: Interact with LLM-powered code assistants.
+      examples:
+      - gh assist --prompt 'Optimize this function' main.py
+      - gh assist --prompt 'Generate unit tests' src/utils.py --model gpt-4-turbo
+      name: assist
+      options:
+      - description: Provide a prompt for the assistant.
+        name: --prompt
+        required: true
+        type: string
+      - default: gpt-4
+        description: Specify the LLM model to use.
+        name: --model
+        type: string
+    description: Integrate LLM-powered code assistants for enhanced code generation and assistance.
+  version: 1.0.0
+marketplace:
+  description: A marketplace for GitHub CLI plugins and extensions.
+  name: GitHub Marketplace
+  subcommands:
+  - arguments:
+    - description: Search query term.
+      name: query
+      required: false
+      version: 1.0.0
+    description: Browse available plugins and extensions in the GitHub Marketplace.
+    examples:
+    - gh marketplace browse --category productivity
+    - gh marketplace browse --sort popularity
+    name: browse
+    options:
+    - aliases: null
+      default: null
+      description: Filter by category.
+      name: --category
+      required: false
+      type: string
+      version: 1.0.0
+    - aliases: null
+      default: null
+      description: Sort results by criteria (e.g., popularity, date).
+      name: --sort
+      required: false
+      type: string
+      version: 1.0.0
+    version: 1.0.0
+  - arguments:
+    - description: Name of the plugin or extension to install.
+      name: item-name
+      required: true
+      version: 1.0.0
+    description: Install a plugin or extension from the GitHub Marketplace.
+    examples:
+    - gh marketplace install gh-extras/gh-deploy-plugin
+    name: install
+    options:
+    - aliases: null
+      default: null
+      description: Source repository of the plugin or extension.
+      name: --source
+      required: true
+      type: string
+      version: 1.0.0
+    version: 1.0.0
+  version: 1.0.0
+metadata:
+  author: GitHub, Inc.
+  description: A command-line tool for interacting with GitHub.
+  name: GitHub CLI
+  version: 2.35.0
+plugins:
+- commands:
+  - description: Organizational tools provided by the octo-plugin.
+    name: octo
+    subcommands:
+    - arguments:
+      - description: Name of the organization to synchronize.
+        name: organization
+        required: true
+        version: 1.0.0
+      description: Synchronize organizational repositories.
+      examples:
+      - gh octo sync octo-org --force
+      name: sync
+      options:
+      - aliases: null
+        default: null
+        description: Force synchronization even if conflicts exist.
+        name: --force
+        required: false
+        type: boolean
+        version: 1.0.0
+      subcommands: null
+      version: 1.0.0
+    version: 1.0.0
+  description: A plugin to enhance GitHub CLI with additional organizational tools.
+  name: octo-org/octo-plugin
+  version: 1.0.0
+version: 1.0.0
+voice_settings:
+  version: 1.0.0
+  voice_format: wav
+  voice_language: en

@@ -1,0 +1,10 @@
+context_files:
+- .context.md
+description: This blueprint defines a configuration for implementing an example feature that demonstrates YAML configuration for a code blueprint.
+files_to_create:
+- blueprint.yaml
+files_to_edit:
+- blueprint.yaml
+message: hello blueprint
+read_only_files:
+- .context.md

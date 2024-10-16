@@ -53,7 +53,7 @@ The current order processing system, implemented via a finite state machine, is 
 
 Project Scope:
 Convert existing order processing methods and transitions into DSPy-compatible dspy_modules.
-Use DSPy's capabilities to handle different states of an order's lifecycle within a declarative pipeline environment.
+Use DSPy's capabilities to handle different states of an order's lifecycle within a declarative pipeline environments.
 Implement validation and action triggers as modular components.
 Integrate state change triggers with conditions and actions based on DSPy’s event-driven architecture.
 Maintain all functionality within Python, ensuring no external system dependencies at this stage.

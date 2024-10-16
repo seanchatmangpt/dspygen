@@ -61,7 +61,7 @@ class RMModuleDSLModel(BaseModel):
 
 # Define PipelineStepModel for pipeline steps
 class StepDSLModel(BaseModel):
-    module: Optional[str] = Field("dspygen.dsl.dsl_dspy_module.DSLModule",
+    module: Optional[str] = Field("dspygen.llm_pipe.dsl_dspy_module.DSLModule",
                                   description="Name of the module to be executed in this step of the pipeline.")
     signature: Optional[str] = Field(default="",
                                      description="Signature associated with this step.")

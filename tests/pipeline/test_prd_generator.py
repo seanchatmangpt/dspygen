@@ -3,7 +3,7 @@ from pprint import pprint
 import inflection
 import pytest
 
-from dspygen.dsl.dsl_pipeline_executor import execute_pipeline
+from dspygen.llm_pipe.dsl_pipeline_executor import execute_pipeline
 from dspygen.rm.data_retriever import DataRetriever
 
 FEATURE_CSV_CONTENT = """FeatureID,FeatureDescription

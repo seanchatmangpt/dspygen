@@ -127,7 +127,7 @@ class StudentInhabitant(BaseInhabitant):
         await self.publish(AnswerReceivedEvent(content=response))
 
     async def handle_FollowUpQuestionCommand(self, message: FollowUpQuestionCommand):
-        consideration = "Perhaps the environment or climate could be different?"
+        consideration = "Perhaps the environments or climate could be different?"
         await self.publish(FollowUpAskedEvent(content=consideration))
 
 
@@ -164,11 +164,11 @@ async def main():
     await asyncio.sleep(1)  # Simulate processing time
 
     # Student speculates on environmental factors
-    await service_colony.publish(AnswerCommand(content="Maybe the environment or climate could be different?"))
+    await service_colony.publish(AnswerCommand(content="Maybe the environments or climate could be different?"))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Socrates pushes for more detailed analysis
-    await service_colony.publish(FollowUpQuestionCommand(content="Indeed, environmental differences can greatly affect such situations. Given this, what else might differ in an environment that could influence the impact of parasites?"))
+    await service_colony.publish(FollowUpQuestionCommand(content="Indeed, environmental differences can greatly affect such situations. Given this, what else might differ in an environments that could influence the impact of parasites?"))
     await asyncio.sleep(1)  # Simulate processing time
 
     # Student considers biological interactions

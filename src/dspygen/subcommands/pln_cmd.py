@@ -1,6 +1,6 @@
 import typer
 
-from dspygen.dsl.dsl_pipeline_executor import execute_pipeline
+from dspygen.llm_pipe.dsl_pipeline_executor import execute_pipeline
 from dspygen.utils.cli_tools import chatbot
 
 app = typer.Typer(help="Language Pipeline Domain Specific Language commands for DSPyGen.")

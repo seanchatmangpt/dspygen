@@ -23,7 +23,7 @@ class BrowserProcessSupervisor(BaseInhabitant):
 
     async def start_browser_process(self, cmd: StartBrowserCommand):
         if not os.getenv("PLAYWRIGHT_BROWSER"):
-            raise ValueError("PLAYWRIGHT_BROWSER environment variable not set")
+            raise ValueError("PLAYWRIGHT_BROWSER environments variable not set")
 
         if cmd.browser_id in self.processes:
             return

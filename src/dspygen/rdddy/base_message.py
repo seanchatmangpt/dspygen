@@ -2,12 +2,13 @@ import inspect
 import uuid
 from datetime import datetime, timezone
 
-from pydantic import BaseModel, Field
+from pydantic import Field
 
-from sungen.utils.yaml_tools import YAMLMixin
+from dslmodel import DSLModel
 
 
-class BaseMessage(BaseModel):
+
+class BaseMessage(DSLModel):
     """Base message class for the Exodus Service Colony framework, designed to facilitate communication
     between autonomous services."""
 
@@ -78,7 +79,7 @@ class BaseMessage(BaseModel):
         return f"{module.__name__}.{self.__class__.__name__}"
 
 
-class MessageList(YAMLMixin, BaseModel):
+class MessageList(DSLModel):
     messages: list[BaseMessage] = []
 
 

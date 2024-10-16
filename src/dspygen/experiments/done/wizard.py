@@ -5,7 +5,7 @@ import yaml
 import os
 import json
 
-from dspygen.dsl.dsl_pydantic_models import PipelineConfigModel
+from dspygen.llm_pipe.dsl_pydantic_models import PipelineConfigModel
 
 app = typer.Typer()
 

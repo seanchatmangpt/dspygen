@@ -24,7 +24,7 @@ class Cerebras(LM):
         self.kwargs.setdefault('max_tokens', 4096)
         self.kwargs.setdefault('model', default_model)
 
-        # No environment variable or SDK; use direct HTTP requests
+        # No environments variable or SDK; use direct HTTP requests
         self.client = httpx.Client(base_url='https://api.cerebras.ai/v1')
 
     def basic_request(self, prompt, **kwargs):

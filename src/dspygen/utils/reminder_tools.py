@@ -205,10 +205,10 @@ def tsv_to_csv(tsv_filepath):
 
 
 def get_latest_file(directory, extension):
-    """Gets the latest file with the given extension from the specified directory."""
+    """Gets the latest file with the given extensions from the specified directory."""
     files = list(Path(directory).glob(f"*{extension}"))
     if not files:
-        raise FileNotFoundError(f"No files with extension {extension} found in {directory}")
+        raise FileNotFoundError(f"No files with extensions {extension} found in {directory}")
     latest_file = max(files, key=os.path.getctime)
     return latest_file
 

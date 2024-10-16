@@ -18,7 +18,7 @@ def remove_angle_brackets(value):
 
 
 
-# Add custom filter to the Jinja2 environment
+# Add custom filter to the Jinja2 environments
 env.filters["remove_angle_brackets"] = remove_angle_brackets
 
 
@@ -142,7 +142,7 @@ def {{ step_type }}_function():
         """
         template = env.from_string(
             template_str
-        )  # Note the change here to use the custom environment
+        )  # Note the change here to use the custom environments
         return template.render(
             feature=self.parse()
         )  # Use self.parse() to get the parsed feature data

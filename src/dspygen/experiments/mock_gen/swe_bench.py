@@ -20,7 +20,7 @@ class SWEBenchData(BaseModel):
     test_patch: str = Field(description="A test-file patch that was contributed by the solution PR.")
     problem_statement: str = Field(description="The issue title and body.")
     version: str = Field(description="Installation version to use for running evaluation.")
-    environment_setup_commit: str = Field(description="Commit hash to use for environment setup and installation.")
+    environment_setup_commit: str = Field(description="Commit hash to use for environments setup and installation.")
     # FAIL_TO_PASS: Optional[List[str]] = Field(default=None, description="A list of strings that represent the set of tests resolved by the PR and tied to the issue resolution.")
     # PASS_TO_PASS: Optional[List[str]] = Field(default=None, description="A list of strings that represent tests that should pass before and after the PR application.")
 

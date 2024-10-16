@@ -291,7 +291,7 @@ if __name__ == "__main__":
     dspy.settings.configure(lm=lm)
 
     prompt = """
-Develop a Full Stack application utilizing the GRDDDFLSSFramework to showcase the seamless integration of Design for Lean Six Sigma (DFLSS) methodologies within a Reactive Domain-Driven Design (RDD) environment. The project aims to create a secure, compliant, and operationally excellent software system by embedding DFLSS principles directly into the codebase, leveraging Python for its dynamic and expressive capabilities.
+Develop a Full Stack application utilizing the GRDDDFLSSFramework to showcase the seamless integration of Design for Lean Six Sigma (DFLSS) methodologies within a Reactive Domain-Driven Design (RDD) environments. The project aims to create a secure, compliant, and operationally excellent software system by embedding DFLSS principles directly into the codebase, leveraging Python for its dynamic and expressive capabilities.
 
 ### Project Overview
 

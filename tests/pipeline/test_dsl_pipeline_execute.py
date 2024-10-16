@@ -2,11 +2,11 @@
 # from unittest.mock import patch
 # from dspy.utils import DummyLM
 #
-# from dspygen.dsl.dsl_pipeline_executor import execute_pipeline
+# from dspygen.llm_pipe.dsl_pipeline_executor import execute_pipeline
 #
 #
 # # def test_example_pipeline():
-# #     context = execute_pipeline('/Users/sac/dev/dspygen/src/dspygen/dsl/examples/example_pipeline.yaml')
+# #     context = execute_pipeline('/Users/sac/dev/dspygen/src/dspygen/llm_pipe/examples/example_pipeline.yaml')
 # #
 # #     assert "John" in context.processed_data
 # #     assert "Jane" in context.report
@@ -42,7 +42,7 @@
 # End of Report."""]
 #
 #
-# @patch('dspygen.dsl.dsl_step_module._get_language_model_instance')
+# @patch('dspygen.llm_pipe.dsl_step_module._get_language_model_instance')
 # def test_execute_pipeline(mock_get_lm, example_lm_response):
 #     # Setup the mock to return a DummyLM instance with the specified response
 #     mock_get_lm.return_value = DummyLM(example_lm_response)
@@ -51,7 +51,7 @@
 #
 #     # Execute your pipeline function. Adjust arguments as needed.
 #     # For demonstration, assuming `execute_pipeline` takes a YAML string directly.
-#     context = execute_pipeline('/Users/sac/dev/dspygen/src/dspygen/dsl/examples/example_pipeline.yaml',
+#     context = execute_pipeline('/Users/sac/dev/dspygen/src/dspygen/llm_pipe/examples/example_pipeline.yaml',
 #                                init_ctx=init_ctx)
 #
 #     # Now you can make assertions about the result

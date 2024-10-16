@@ -1,4 +1,4 @@
-from dspygen.dsl.dsl_pipeline_executor import execute_pipeline
+from dspygen.llm_pipe.dsl_pipeline_executor import execute_pipeline
 from dspygen.rm.code_retriever import CodeRetriever
 
 from loguru import logger

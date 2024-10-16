@@ -8,13 +8,13 @@ from pydantic import BaseModel
 LogType = Union[pd.DataFrame, pm4py.objects.log.obj.EventLog, pm4py.objects.log.obj.EventStream]
 
 
-class Slide(BaseModel):
+class Slide(DSLModel):
     title: str
     content: Union[str, List[str]]
     image_path: Optional[str] = None
 
 
-class Presentation(BaseModel):
+class Presentation(DSLModel):
     title: str
     subtitle: str
     slides: List[Slide]

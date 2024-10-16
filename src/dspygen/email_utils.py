@@ -3,7 +3,7 @@ import smtplib
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+# Load environments variables from .env file
 load_dotenv()
 
 
@@ -28,7 +28,7 @@ def send_email(server, msg, from_email, to_email):
 
 def login_to_smtp():
     """
-    Logs in to the SMTP server using credentials from environment variables.
+    Logs in to the SMTP server using credentials from environments variables.
     Returns an authenticated SMTP server object.
     """
     from_email = os.getenv('EMAIL_ADDRESS')

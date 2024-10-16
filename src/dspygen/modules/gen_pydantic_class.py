@@ -4,7 +4,9 @@ from pydantic import BaseModel, Field
 import dspy
 from dspy import InputField, OutputField, Signature
 
+from dspygen.lm.groq_lm import Groq
 from dspygen.modules.gen_pydantic_instance import GenPydanticInstance
+from dspygen.utils.dspy_tools import init_dspy
 from sungen.typetemp.functional import render
 
 
@@ -160,17 +162,25 @@ class PromptToPydanticInstanceErrorSignature(Signature):
 
 # Example usage
 def main():
-    lm = dspy.OpenAI(max_tokens=1000)
-    dspy.settings.configure(lm=lm)
+    # lm = dspy.OpenAI(max_tokens=1000)
+    # dspy.settings.configure(lm=lm)
+    #
+    # model_prompt = "I need a verbose contact model named ContactModel from the friend of a friend ontology with 10 fields, each with length constraints"
+    #
+    # model_module = GenPydanticInstance(
+    #     root_model=PydanticClassTemplateSpecificationModel,
+    #     child_models=[FieldTemplateSpecificationModel],
+    # )
 
-    model_prompt = "I need a verbose contact model named ContactModel from the friend of a friend ontology with 10 fields, each with length constraints"
+    # from dspygen.utils.dspy_tools import init_lm
+    # init_lm("groq/llama-3.2-1b-preview")
 
-    model_module = GenPydanticInstance(
-        root_model=PydanticClassTemplateSpecificationModel,
-        child_models=[FieldTemplateSpecificationModel],
-    )
+    # model_inst = model_module.forward(model_prompt)
+    init_dspy(lm_class=Groq, model="llama-3.2-1b-preview")
 
-    model_inst = model_module.forward(model_prompt)
+    from sungen.utils.dspy_tools import predict_type
+    model_inst = predict_type({"instruction": "I need a verbose contact model named ContactField from the friend of a friend ontology"}, 
+                              FieldTemplateSpecificationModel)
 
     # Render the Pydantic class from the specification
     rendered_class_str = render(class_template_str, model=model_inst)
@@ -181,147 +191,149 @@ def main():
     )
 
 
-icalendar_entities = {
-    "VEVENT": "This is one of the most commonly used components in iCalendar and represents an event.",
-    "VTODO": "Represents a to-do task or action item.",
-    "VJOURNAL": "Represents a journal entry or a note.",
-    "VFREEBUSY": "Represents information about the free or busy time of a calendar user.",
-    "VTIMEZONE": "Represents time zone information.",
-    "VAVAILABILITY": "Represents availability information for a calendar user.",
-    "VALARM": "Represents an alarm or reminder associated with an event or to-do.",
-}
+# icalendar_entities = {
+#     "VEVENT": "This is one of the most commonly used components in iCalendar and represents an event.",
+#     "VTODO": "Represents a to-do task or action item.",
+#     "VJOURNAL": "Represents a journal entry or a note.",
+#     "VFREEBUSY": "Represents information about the free or busy time of a calendar user.",
+#     "VTIMEZONE": "Represents time zone information.",
+#     "VAVAILABILITY": "Represents availability information for a calendar user.",
+#     "VALARM": "Represents an alarm or reminder associated with an event or to-do.",
+# }
 
 
-class GenPydanticClass(dspy.Module):
-    """A DSPy module that generates Pydantic class definition based on a prompt"""
+# class GenPydanticClass(dspy.Module):
+#     """A DSPy module that generates Pydantic class definition based on a prompt"""
 
-    def forward(self, prompt: str, to_dir: str = "") -> str:
-        spec = dspy.Predict("prompt -> pydantic_class")
-
-
-        instance_module = GenPydanticInstance(
-            model=PydanticClassTemplateSpecificationModel,
-            generate_sig=PromptToPydanticInstanceSignature,
-            correct_generate_sig=PromptToPydanticInstanceErrorSignature,
-        )
-
-        instance = instance_module.forward(prompt)
-
-        rendered_class_str = render(class_template_str, model=instance)
-
-        if to_dir:
-            write_pydantic_class_to_file(
-                rendered_class_str,
-                f"{to_dir}/{inflection.underscore(instance.class_name)}.py",
-            )
-
-        return rendered_class_str
+#     def forward(self, prompt: str, to_dir: str = "") -> str:
+#         spec = dspy.Predict("prompt -> pydantic_class")
 
 
-def generate_icalendar_models():
-    for entity, description in icalendar_entities.items():
-        # Define a Pydantic class dynamically for each entity
-        model_prompt = f"I need a model named {entity}Model that has all of the relevant fields for RFC 5545 compliance."
+#         instance_module = GenPydanticInstance(
+#             model=PydanticClassTemplateSpecificationModel,
+#             generate_sig=PromptToPydanticInstanceSignature,
+#             correct_generate_sig=PromptToPydanticInstanceErrorSignature,
+#         )
 
-        model_module = GenPydanticInstance(
-            root_model=PydanticClassTemplateSpecificationModel,
-            child_models=[FieldTemplateSpecificationModel],
-            generate_sig=PromptToPydanticInstanceSignature,
-            correct_generate_sig=PromptToPydanticInstanceErrorSignature,
-        )
+#         instance = instance_module.forward(prompt)
 
-        model_inst = model_module.forward(model_prompt)
+#         rendered_class_str = render(class_template_str, model=instance)
 
-        # Render the Pydantic class from the specification
-        rendered_class_str = render(class_template_str, model=model_inst)
+#         if to_dir:
+#             write_pydantic_class_to_file(
+#                 rendered_class_str,
+#                 f"{to_dir}/{inflection.underscore(instance.class_name)}.py",
+#             )
 
-        # Write the rendered class to a Python file
-        write_pydantic_class_to_file(
-            rendered_class_str,
-            f"ical/{inflection.underscore(model_inst.class_name)}.py",
-        )
-
-        print(f"{model_inst.class_name} written to {model_inst.class_name}.py")
+#         return rendered_class_str
 
 
-from pydantic import BaseModel, Field
+# def generate_icalendar_models():
+#     for entity, description in icalendar_entities.items():
+#         # Define a Pydantic class dynamically for each entity
+#         model_prompt = f"I need a model named {entity}Model that has all of the relevant fields for RFC 5545 compliance."
+
+#         model_module = GenPydanticInstance(
+#             root_model=PydanticClassTemplateSpecificationModel,
+#             child_models=[FieldTemplateSpecificationModel],
+#             generate_sig=PromptToPydanticInstanceSignature,
+#             correct_generate_sig=PromptToPydanticInstanceErrorSignature,
+#         )
+
+#         model_inst = model_module.forward(model_prompt)
+
+#         # Render the Pydantic class from the specification
+#         rendered_class_str = render(class_template_str, model=model_inst)
+
+#         # Write the rendered class to a Python file
+#         write_pydantic_class_to_file(
+#             rendered_class_str,
+#             f"ical/{inflection.underscore(model_inst.class_name)}.py",
+#         )
+
+#         print(f"{model_inst.class_name} written to {model_inst.class_name}.py")
 
 
-class GRDDDFLSSFramework(BaseModel):
-    digital_twin_integration: str = Field(
-        ...,
-        description="Represents the cumulative impact of real-time monitoring and predictive analytics on project management effectiveness. Calculus: Σ(RealTimeMonitoring(t) + PredictiveAnalytics(t)) over time t.",
-    )
-    gp_optimization: str = Field(
-        ...,
-        description="Quantifies the continuous optimization of project management strategies over the project timeline. Calculus: ∫(AdaptationStrategies(t) * ResourceEfficiency(t)) dt from t0 to tf.",
-    )
-    cp_compliance: str = Field(
-        ...,
-        description="Represents the multiplicative effect of adhering to quality standards and compliance measures across all project constraints. Calculus: ∏(QualityStandards(i) + ComplianceMeasures(i)) for each constraint i.",
-    )
-    project_change_management: str = Field(
-        ...,
-        description="Quantifies the change in project efficiency as a result of analyzing interdependencies and optimizing interfaces over time. Calculus: Δ(ΣInterdependenciesAnalysis(i, t) + ΣInterfacesOptimization(i, t)) over all components i and time t.",
-    )
-    digital_twin_semantic_enrichment: str = Field(
-        ...,
-        description="Indicates the use of semantic enrichment for advanced change management within digital twins. Impact: Enhances the digital twin's ability to manage change by identifying and visualizing complex interdependencies.",
-    )
-    genetic_programming_adaptation_impact: str = Field(
-        ...,
-        description="Integral of adaptation strategies over time, highlighting the role of GP in adapting project management strategies. Calculus: ∫AdaptationStrategies(t) dt.",
-    )
-    constraint_programming_quality_impact: str = Field(
-        ...,
-        description="Product of quality standards across constraints, underlining CP's role in ensuring project quality and compliance. Calculus: ∏QualityStandards(i).",
-    )
-    change_management_interdependency_analysis: str = Field(
-        ...,
-        description="Change in efficiency due to interdependency analysis over time, integral to managing change within projects. Calculus: ΔΣInterdependenciesAnalysis(i, t).",
-    )
-    change_management_interface_optimization: str = Field(
-        ...,
-        description="Change in efficiency due to interface optimization over time, crucial for effective change management in projects. Calculus: ΔΣInterfacesOptimization(i, t).",
-    )
+# from pydantic import BaseModel, Field
 
+
+# class GRDDDFLSSFramework(BaseModel):
+#     digital_twin_integration: str = Field(
+#         ...,
+#         description="Represents the cumulative impact of real-time monitoring and predictive analytics on project management effectiveness. Calculus: Σ(RealTimeMonitoring(t) + PredictiveAnalytics(t)) over time t.",
+#     )
+#     gp_optimization: str = Field(
+#         ...,
+#         description="Quantifies the continuous optimization of project management strategies over the project timeline. Calculus: ∫(AdaptationStrategies(t) * ResourceEfficiency(t)) dt from t0 to tf.",
+#     )
+#     cp_compliance: str = Field(
+#         ...,
+#         description="Represents the multiplicative effect of adhering to quality standards and compliance measures across all project constraints. Calculus: ∏(QualityStandards(i) + ComplianceMeasures(i)) for each constraint i.",
+#     )
+#     project_change_management: str = Field(
+#         ...,
+#         description="Quantifies the change in project efficiency as a result of analyzing interdependencies and optimizing interfaces over time. Calculus: Δ(ΣInterdependenciesAnalysis(i, t) + ΣInterfacesOptimization(i, t)) over all components i and time t.",
+#     )
+#     digital_twin_semantic_enrichment: str = Field(
+#         ...,
+#         description="Indicates the use of semantic enrichment for advanced change management within digital twins. Impact: Enhances the digital twin's ability to manage change by identifying and visualizing complex interdependencies.",
+#     )
+#     genetic_programming_adaptation_impact: str = Field(
+#         ...,
+#         description="Integral of adaptation strategies over time, highlighting the role of GP in adapting project management strategies. Calculus: ∫AdaptationStrategies(t) dt.",
+#     )
+#     constraint_programming_quality_impact: str = Field(
+#         ...,
+#         description="Product of quality standards across constraints, underlining CP's role in ensuring project quality and compliance. Calculus: ∏QualityStandards(i).",
+#     )
+#     change_management_interdependency_analysis: str = Field(
+#         ...,
+#         description="Change in efficiency due to interdependency analysis over time, integral to managing change within projects. Calculus: ΔΣInterdependenciesAnalysis(i, t).",
+#     )
+#     change_management_interface_optimization: str = Field(
+#         ...,
+#         description="Change in efficiency due to interface optimization over time, crucial for effective change management in projects. Calculus: ΔΣInterfacesOptimization(i, t).",
+#     )
 
 if __name__ == "__main__":
-    lm = dspy.OpenAI(max_tokens=3000)
-    dspy.settings.configure(lm=lm)
+    main()
 
-    prompt = """
-Develop a Full Stack application utilizing the GRDDDFLSSFramework to showcase the seamless integration of Design for Lean Six Sigma (DFLSS) methodologies within a Reactive Domain-Driven Design (RDD) environment. The project aims to create a secure, compliant, and operationally excellent software system by embedding DFLSS principles directly into the codebase, leveraging Python for its dynamic and expressive capabilities.
+# if __name__ == "__main__":
+#     lm = dspy.OpenAI(max_tokens=3000)
+#     dspy.settings.configure(lm=lm)
 
-### Project Overview
+#     prompt = """
+# Develop a Full Stack application utilizing the GRDDDFLSSFramework to showcase the seamless integration of Design for Lean Six Sigma (DFLSS) methodologies within a Reactive Domain-Driven Design (RDD) environments. The project aims to create a secure, compliant, and operationally excellent software system by embedding DFLSS principles directly into the codebase, leveraging Python for its dynamic and expressive capabilities.
 
-The Full Stack application will serve as a dynamic reporting tool for analyzing and visualizing performance metrics, security vulnerabilities, and compliance adherence in real-time. It will feature a user-friendly interface for navigating through data, accompanied by a backend system that efficiently processes, stores, and retrieves information according to DFLSS principles.
+# ### Project Overview
 
-### Objectives
+# The Full Stack application will serve as a dynamic reporting tool for analyzing and visualizing performance metrics, security vulnerabilities, and compliance adherence in real-time. It will feature a user-friendly interface for navigating through data, accompanied by a backend system that efficiently processes, stores, and retrieves information according to DFLSS principles.
 
-- **Security Optimization**: Apply continuous security assessments and improvements to minimize vulnerabilities.
-- **Compliance Assurance**: Ensure strict adherence to industry standards and regulatory requirements.
-- **Operational Excellence**: Enhance system performance and reliability through DFLSS-driven continuous improvement.
+# ### Objectives
 
-### Technical Specification
+# - **Security Optimization**: Apply continuous security assessments and improvements to minimize vulnerabilities.
+# - **Compliance Assurance**: Ensure strict adherence to industry standards and regulatory requirements.
+# - **Operational Excellence**: Enhance system performance and reliability through DFLSS-driven continuous improvement.
 
-- **Frontend**: Develop a responsive web interface using React, embedding DFLSS principles in component design and state management.
-- **Backend**: Implement a Python-based server utilizing Flask, with domain models, services, and entities designed around RDD and DFLSS methodologies.
-- **Database**: Integrate a PostgreSQL database, applying normalization and indexing strategies to optimize data retrieval and storage efficiency in compliance with DFLSS measures.
+# ### Technical Specification
 
-### DFLSS Integration Calculus
+# - **Frontend**: Develop a responsive web interface using React, embedding DFLSS principles in component design and state management.
+# - **Backend**: Implement a Python-based server utilizing Flask, with domain models, services, and entities designed around RDD and DFLSS methodologies.
+# - **Database**: Integrate a PostgreSQL database, applying normalization and indexing strategies to optimize data retrieval and storage efficiency in compliance with DFLSS measures.
 
-- **Define Phase**: Define security and compliance requirements using domain models, calculating the alignment with business objectives.
-    - \\( \text{Define}_{RDD} = \\sum (\text{DomainModels} + \text{SecurityAnnotations} + \text{ComplianceConstraints}) \\)
-- **Measure Phase**: Instrument the system to log key performance metrics, identifying and addressing security vulnerabilities and compliance deviations.
-    - \\( \text{Measure}_{RDD} = \\int (\text{DomainEvents} \rightarrow \text{Log}( \text{PerformanceMetrics} + \text{SecurityVulnerabilities} + \text{ComplianceAdherence})) \\,dt \\)
-- **Explore Phase**: Conduct domain-driven experiments to explore security configurations and compliance scenarios for system optimization.
-    - \\( \text{Explore}_{RDD} = \text{DomainExperiments}( \text{SecurityConfigurations} \times \text{ComplianceScenarios
-"""
+# ### DFLSS Integration Calculus
 
-    model_module = GenPydanticInstance(root_model=GRDDDFLSSFramework)
-    model_inst = model_module(prompt=prompt)
-    print(model_inst)
+# - **Define Phase**: Define security and compliance requirements using domain models, calculating the alignment with business objectives.
+#     - \\( \text{Define}_{RDD} = \\sum (\text{DomainModels} + \text{SecurityAnnotations} + \text{ComplianceConstraints}) \\)
+# - **Measure Phase**: Instrument the system to log key performance metrics, identifying and addressing security vulnerabilities and compliance deviations.
+#     - \\( \text{Measure}_{RDD} = \\int (\text{DomainEvents} \rightarrow \text{Log}( \text{PerformanceMetrics} + \text{SecurityVulnerabilities} + \text{ComplianceAdherence})) \\,dt \\)
+# - **Explore Phase**: Conduct domain-driven experiments to explore security configurations and compliance scenarios for system optimization.
+#     - \\( \text{Explore}_{RDD} = \text{DomainExperiments}( \text{SecurityConfigurations} \times \text{ComplianceScenarios
+# """
 
-    # generate_icalendar_models()
-    # main()
+#     model_module = GenPydanticInstance(root_model=GRDDDFLSSFramework)
+#     model_inst = model_module(prompt=prompt)
+#     print(model_inst)
+
+#     # generate_icalendar_models()
+#     # main()

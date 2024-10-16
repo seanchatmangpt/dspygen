@@ -2,9 +2,9 @@ import importlib
 
 import dspy
 
-from dspygen.dsl.dsl_pydantic_models import LMModuleDSLModel
-from dspygen.dsl.utils.dsl_signature_utils import _process_module_signatures, get_sig_key
-from dspygen.dsl.dsl_predict_module import DSLPredictModule
+from dspygen.llm_pipe.dsl_pydantic_models import LMModuleDSLModel
+from dspygen.llm_pipe.utils.dsl_signature_utils import _process_module_signatures, get_sig_key
+from dspygen.llm_pipe.dsl_predict_module import DSLPredictModule
 
 
 def _create_lm_module_from_model(module_model: LMModuleDSLModel, global_signatures) -> dspy.Module:

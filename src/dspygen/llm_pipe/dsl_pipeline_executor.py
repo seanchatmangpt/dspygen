@@ -7,9 +7,9 @@ from typing import Optional
 import dspy
 from pydantic import BaseModel
 
-from dspygen.dsl.dsl_step_module import execute_step
-from dspygen.dsl.dsl_pydantic_models import PipelineDSLModel, LanguageModelConfig
-from dspygen.dsl.utils.dsl_signature_utils import _create_signature_from_model
+from dspygen.llm_pipe.dsl_step_module import execute_step
+from dspygen.llm_pipe.dsl_pydantic_models import PipelineDSLModel, LanguageModelConfig
+from dspygen.llm_pipe.utils.dsl_signature_utils import _create_signature_from_model
 from munch import Munch
 
 
@@ -83,7 +83,7 @@ async def run_pipeline(request: PipelineRequest):
 
 
 def main():
-    # context = execute_pipeline('/Users/sac/dev/dspygen/src/dspygen/dsl/examples/example_pipeline.yaml')
+    # context = execute_pipeline('/Users/sac/dev/dspygen/src/dspygen/llm_pipe/examples/example_pipeline.yaml')
     # context = execute_pipeline(str(dsl_dir('examples/text_signature_pipeline.yaml')),
     #                            {"raw_data": "id,name,job\n1,Joe,Coder"})
     from dspygen.utils.file_tools import dsl_dir

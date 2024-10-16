@@ -6,7 +6,7 @@ This module introduces a comprehensive system for defining, managing, and execut
 Key Concepts:
 - Workflow: The central organizing structure that encapsulates a complete automated process. It is triggered by specified events and consists of one or more jobs that are executed to accomplish a task or series of tasks.
 - Job: Represents a logical grouping of actions (steps) that are executed as part of the workflow. Jobs can be interdependent, with specific jobs waiting for others to complete before starting.
-- Action: The atomic unit of work within a job, which can range from executing a predefined module with arguments, running custom Python code, to configuring environment variables. Actions can be conditionally executed or repeated over data collections through loops.
+- Action: The atomic unit of work within a job, which can range from executing a predefined module with arguments, running custom Python code, to configuring environments variables. Actions can be conditionally executed or repeated over data collections through loops.
 - Condition: A dynamic expression evaluated at runtime to determine whether certain actions should be executed. This allows for adaptive workflow behavior based on the current execution context.
 - Loop: Enables repeated execution of actions over each item in an iterable, facilitating batch processing or iterative data manipulation within a workflow.
 
@@ -62,7 +62,7 @@ class Action(BaseModel):
     """
     Describes an individual unit of work or operation to be performed as part of a job in the workflow.
     Actions can represent a wide range of operations, from executing a specific module with arguments,
-    running custom Python code, to setting environment variables for the execution context.
+    running custom Python code, to setting environments variables for the execution context.
 
     Conditional execution and looping over actions are supported to allow complex, dynamic workflows.
     """
@@ -131,7 +131,7 @@ class Workflow(BaseModel, YAMLMixin):
     """
     The top-level container for defining a sequence of operations, organized into jobs, to be executed
     when certain triggers occur. Workflows orchestrate the execution of jobs based on defined triggers,
-    managing dependencies between jobs and ensuring the correct execution environment.
+    managing dependencies between jobs and ensuring the correct execution environments.
 
     This class serves as the blueprint for automating complex processes, linking together various
     actions into a cohesive, automated sequence that accomplishes a specific task or set of tasks.
@@ -146,7 +146,7 @@ class Workflow(BaseModel, YAMLMixin):
     context: Optional[Dict[str, Any]] = Field(
         {}, description="Global context variables for the workflow execution."
     )
-    env: Optional[Dict[str, str]] = Field({}, description="Global environment variables for the workflow.")
+    env: Optional[Dict[str, str]] = Field({}, description="Global environments variables for the workflow.")
 
     def process_imports(self) -> None:
         """Process imported workflows and integrate them into the current workflow."""

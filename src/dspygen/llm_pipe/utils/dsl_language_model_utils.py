@@ -1,6 +1,6 @@
 import dspy
 
-from dspygen.dsl.dsl_pydantic_models import PipelineDSLModel
+from dspygen.llm_pipe.dsl_pydantic_models import PipelineDSLModel
 
 
 def _get_language_model_instance(pipeline: PipelineDSLModel, step):

@@ -217,7 +217,7 @@ class ScopeActivity(Activity):
 class ForLoopActivity(Activity):
     """
     Represents a loop activity with a defined start, end, and increment, iterating over a block of activities.
-    Note: This is an extension for convenience and not part of the standard BPEL model.
+    Note: This is an extensions for convenience and not part of the standard BPEL model.
     """
     id: str = Field(..., description="Unique identifier for the for loop activity.")
     start_expression: str = Field(..., description="Expression defining the loop's start value.")

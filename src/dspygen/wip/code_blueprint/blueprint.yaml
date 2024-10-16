@@ -1,0 +1,8 @@
+context_files: []
+description: A blueprint for generating configuration files.
+files_to_create:
+- blueprint.yaml
+files_to_edit: []
+message: hello blueprint
+read_only_files:
+- .context.md
