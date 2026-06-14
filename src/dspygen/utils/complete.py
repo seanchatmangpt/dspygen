@@ -1,7 +1,28 @@
+import os
 from dataclasses import dataclass, field
 from typing import Optional
 
 import openai
+
+# Instantiate the OpenAI client using the v1 API pattern.
+# API key is read from the environment; never hardcode credentials.
+_openai_client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
+# Completion model used by create() / acreate()
+_COMPLETION_MODEL = "gpt-3.5-turbo-instruct"
+
+
+def get_model(alias: str) -> str:
+    """Resolve short model aliases to full OpenAI model identifiers."""
+    _aliases = {
+        "3i": "gpt-3.5-turbo-instruct",
+        "4": "gpt-4",
+        "4o": "gpt-4o",
+        "4o-mini": "gpt-4o-mini",
+        "chatgpt": "gpt-4o",
+        "llama": "llama",  # handled separately in acreate
+    }
+    return _aliases.get(alias, alias)
 
 
 @dataclass
@@ -44,8 +65,9 @@ def create(config: Optional[LLMConfig] = None, **kwargs):
         presence_penalty = kwargs.get("presence_penalty", 0)
         stop = kwargs.get("stop", None)
 
-    response = openai.Completion.create(
-        model="gpt-3.5-turbo-instruct",
+    # Use the v1 client (openai >= 1.0) instead of the deprecated class-method API
+    response = _openai_client.completions.create(
+        model=_COMPLETION_MODEL,
         prompt=prompt,
         temperature=temperature,
         max_tokens=max_tokens,
@@ -102,10 +124,19 @@ async def acreate(*, config: Optional[LLMConfig] = None, **kwargs):
         return choice["text"]
 
     if model == "chatgpt":
-        return await goto_chatgpt(prompt)
+        # Use the async client for chat completions
+        async_client = openai.AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        chat_response = await async_client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens,
+        )
+        return chat_response.choices[0].message.content.strip()
 
     else:
-        response = await client.completions.create(
+        async_client = openai.AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        response = await async_client.completions.create(
             model=model,
             prompt=prompt,
             temperature=temperature,
@@ -168,8 +199,6 @@ def chat(
         write_path (str, optional): Directory or file path to write the response.
         mode (str, optional): File opening mode if writing response to file.
     """
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-
     messages = _create_messages(sys_msg, prompt, msgs)
 
     retry = 0
@@ -187,13 +216,13 @@ def chat(
                 # res = llama.complete(prompt=prompt)
             elif funcs:
                 res = get_response(
-                    openai.chat.completions.create(**params),
+                    _openai_client.chat.completions.create(**params),
                     raw_msg=raw_msg,
                     funcs=funcs,
                 )
             else:
                 res = get_response(
-                    openai.chat.completions.create(**params),
+                    _openai_client.chat.completions.create(**params),
                     raw_msg=raw_msg,
                     funcs=funcs,
                 )
@@ -262,7 +291,7 @@ async def achat(
     """Customized completion function that interacts with the OpenAI API, capable of handling prompts, system messages,
     and specific functions. If the content length is too long, it will shorten the content and retry.
     """
-    openai.api_key = os.getenv("OPENAI_API_KEY")
+    _async_client = openai.AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
     messages = _create_messages(sys_msg, prompt, msgs)
 
@@ -280,13 +309,13 @@ async def achat(
 
             if funcs:
                 res = get_response(
-                    await AsyncCompletions.chat.completions.create(**params),
+                    await _async_client.chat.completions.create(**params),
                     raw_msg=raw_msg,
                     funcs=funcs,
                 )
             else:
                 res = get_response(
-                    await openai.chat.completions.create(**params),
+                    await _async_client.chat.completions.create(**params),
                     raw_msg=raw_msg,
                     funcs=funcs,
                 )

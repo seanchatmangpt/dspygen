@@ -3,9 +3,12 @@ import os
 
 import dspy
 from dsp import LM
-from sungen.utils.dspy_tools import init_dspy
+from dspygen.utils.dspy_tools import init_dspy
 
 default_model = "llama3.1-70b"
+
+# Timeout in seconds for Cerebras API requests
+_DEFAULT_TIMEOUT = 60.0
 
 
 class Cerebras(LM):
@@ -24,63 +27,51 @@ class Cerebras(LM):
         self.kwargs.setdefault('max_tokens', 4096)
         self.kwargs.setdefault('model', default_model)
 
-        # No environments variable or SDK; use direct HTTP requests
-        self.client = httpx.Client(base_url='https://api.cerebras.ai/v1')
+        # Read API key from environment — never hardcode credentials
+        api_key = os.environ.get("CEREBRAS_API_KEY", "")
+        if not api_key:
+            raise ValueError(
+                "CEREBRAS_API_KEY environment variable not set. "
+                "Export your Cerebras API key before using this client."
+            )
+        self._api_key = api_key
+
+        # Persistent client with timeout; caller is responsible for closing or
+        # using this object as a context manager.
+        self._client = httpx.Client(
+            base_url='https://api.cerebras.ai/v1',
+            timeout=_DEFAULT_TIMEOUT,
+        )
 
     def basic_request(self, prompt, **kwargs):
-        # Implementation placeholder for other potential requests
-        pass
-
-    def __call__(self, prompt, only_completed=True, return_sorted=False, **kwargs):
-        # Define the headers
+        """Send a chat-completion request and return the raw response dict."""
         headers = {
             'accept': 'application/json',
-            'accept-language': 'en-US,en;q=0.9',
-            'authorization': 'Bearer demo-xmyc249jrym6xx6r5ty3k4cfkn6rpvyj48dj5k3hffcf2pp5',
             'content-type': 'application/json',
-            'dnt': '1',
-            'origin': 'https://inference.cerebras.ai',
-            'priority': 'u=1, i',
-            'referer': 'https://inference.cerebras.ai/',
-            'sec-ch-ua': '"Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"macOS"',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-site',
-            'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
-            'x-stainless-arch': 'unknown',
-            'x-stainless-lang': 'js',
-            'x-stainless-os': 'Unknown',
-            'x-stainless-package-version': '1.0.1',
-            'x-stainless-runtime': 'browser:chrome',
-            'x-stainless-runtime-version': '128.0.0'
+            'authorization': f'Bearer {self._api_key}',
         }
 
-        # Prepare the payload
         data = {
-            "messages": [
-                {
-                    "role": "user",
-                    "content": prompt,
-                }
-            ],
+            "messages": [{"role": "user", "content": prompt}],
             "model": kwargs.get("model", self.model),
             "stream": False,
             "temperature": kwargs.get("temperature", self.kwargs['temperature']),
             "top_p": kwargs.get("top_p", 1),
-            "max_tokens": kwargs.get("max_tokens", self.kwargs['max_tokens'])
+            "max_tokens": kwargs.get("max_tokens", self.kwargs['max_tokens']),
         }
 
-        # Make the request to the Cerebras API
-        response = self.client.post('/chat/completions', headers=headers, json=data)
+        response = self._client.post('/chat/completions', headers=headers, json=data)
 
-        # Handle response and extract content
-        if response.status_code == 200:
-            response_data = response.json()
-            return [response_data['choices'][0]['message']['content']]
-        else:
-            raise Exception(f"API request failed with status code {response.status_code}: {response.text}")
+        if response.status_code != 200:
+            raise Exception(
+                f"Cerebras API request failed with status {response.status_code}: {response.text}"
+            )
+
+        return response.json()
+
+    def __call__(self, prompt, only_completed=True, return_sorted=False, **kwargs):
+        response_data = self.basic_request(prompt, **kwargs)
+        return [response_data['choices'][0]['message']['content']]
 
 
 class ElixirSolutionArchitect(dspy.Signature):

@@ -7,43 +7,48 @@ from dspygen.utils.dspy_tools import init_dspy
 
 from groq import Groq as GroqClient
 
-default_model = "llama3-70b-8192"
+# Updated to a current, high-performance Groq-hosted model
+default_model = "llama-3.3-70b-versatile"
+
 
 class Groq(LM):
-    def __init__(self, model=default_model, **kwargs):  #model="mixtral-8x7b-32768", **kwargs):
-        # TODO - check of passed model is in list of Groq - if not set to some Groq default
-        #model="llama3-70b-8192" # this is a fix cs somewhere the the model getting still set to openai gpt-3.5-turbo-instruct
+    def __init__(self, model=default_model, **kwargs):
         super().__init__(model)
-        
-        #print("Groq model used today: " + model)
+
         self.provider = "default"
         self.history = []
+
         groq_api_key = os.environ.get("GROQ_API_KEY")
+        if not groq_api_key:
+            raise ValueError(
+                "GROQ_API_KEY environment variable not set. "
+                "Export your Groq API key before using this client."
+            )
 
-        if groq_api_key is None:
-            raise ValueError("GROQ_API_KEY environments variable not found")
-
-        self.client = GroqClient(api_key=os.environ.get("GROQ_API_KEY"))
+        self.client = GroqClient(api_key=groq_api_key)
+        # Store model on instance for use in basic_request / __call__
+        self._model = model
 
     def basic_request(self, prompt, **kwargs):
-        pass
+        """Send a chat-completion request and return the Groq response object."""
+        try:
+            chat_completion = self.client.chat.completions.create(
+                messages=[{"role": "user", "content": prompt}],
+                model=kwargs.get("model", self._model),
+                temperature=kwargs.get("temperature", 0.6),
+                max_tokens=kwargs.get("max_tokens", 2048),
+            )
+            return chat_completion
+        except Exception as exc:
+            raise RuntimeError(f"Groq API request failed: {exc}") from exc
 
     def __call__(self, prompt, only_completed=True, return_sorted=False, **kwargs):
-        chat_completion = self.client.chat.completions.create(
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt,
-                },
-            ],
-            model=self.kwargs.get("model", default_model),
-        )
+        chat_completion = self.basic_request(prompt, **kwargs)
         return [chat_completion.choices[0].message.content]
 
 
 def main():
     init_dspy(lm_class=Groq, model=default_model, max_tokens=2000)
-    # init_dspy(max_tokens=2000)
     pred = dspy.Predict("prompt -> code")(prompt="Fast API CRUD endpoint for fire alarm global IoT network")
     print(pred.code)
 
