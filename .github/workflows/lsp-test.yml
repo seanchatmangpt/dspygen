@@ -1,0 +1,39 @@
+name: LSP Server Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lsp-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install Poetry
+        run: pip install "poetry>=1.8.0"
+
+      - name: Configure Poetry
+        run: poetry config virtualenvs.in-project true
+
+      - name: Cache Poetry virtualenv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
+
+      - name: Install dependencies
+        run: poetry install --with test --no-interaction
+
+      - name: Run LSP tests
+        run: poetry run pytest tests/ -v -m lsp --tb=short
+        env:
+          PYTHONPATH: src

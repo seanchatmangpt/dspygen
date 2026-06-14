@@ -1,0 +1,49 @@
+name: Coverage
+
+on:
+  push:
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install Poetry
+        run: pip install "poetry>=1.8.0"
+
+      - name: Configure Poetry
+        run: poetry config virtualenvs.in-project true
+
+      - name: Cache Poetry virtualenv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
+
+      - name: Install dependencies
+        run: poetry install --with test --no-interaction
+
+      - name: Run pytest with coverage
+        run: >
+          poetry run pytest tests/
+          --cov=src/dspygen
+          --cov-report=xml
+          --cov-report=term
+          -m "not requires_openai and not requires_ollama and not slow"
+          --tb=short
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: coverage.xml
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
