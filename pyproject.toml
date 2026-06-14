@@ -207,7 +207,7 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 xfail_strict = true
 markers = [
-    "slow: marks tests as slow",
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "integration: marks tests as integration tests (multi-component workflows)",
     "mcp: marks tests for the dspygen MCP server and tools (deselect with '-m \"not mcp\"')",
     "lsp: marks tests related to the DSPygen LSP server implementation",
@@ -216,6 +216,8 @@ markers = [
     "requires_ollama: marks tests needing Ollama running",
     "property_based: marks property-based hypothesis tests",
     "benchmark: marks performance benchmark tests",
+    "requires_llm: mark test as requiring a real LLM API key",
+    "dspygen_requires_openai: skip when OPENAI_API_KEY is not set",
 ]
 
 [tool.ruff]  # https://github.com/charliermarsh/ruff
