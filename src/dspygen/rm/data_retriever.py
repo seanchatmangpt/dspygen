@@ -1,15 +1,17 @@
 import sqlite3
+from contextlib import contextmanager
+from collections.abc import Generator
 from pathlib import Path
+from typing import Any, Optional, Union
 
 import dspy
 import pandas as pd
-import os
 
 from pandasql import sqldf
 
 
 # Function to apply an SQL query to a DataFrame
-def apply_sql_to_dataframe(df, query):
+def apply_sql_to_dataframe(df: pd.DataFrame, query: str) -> pd.DataFrame:
     """
     This function applies an SQL query to the given DataFrame.
 
@@ -26,12 +28,48 @@ def apply_sql_to_dataframe(df, query):
     return sqldf(query, local_env)
 
 
-def read_any(filepath, query, read_options=None):
+@contextmanager
+def _sqlite_connection(filepath: Union[str, Path]) -> Generator[sqlite3.Connection, None, None]:
+    """Context manager for a SQLite connection that ensures cleanup on exit."""
+    conn = sqlite3.connect(str(filepath))
+    try:
+        yield conn
+    finally:
+        conn.close()
+
+
+def read_any(filepath: Union[str, Path], query: str, read_options: Optional[dict[str, Any]] = None) -> pd.DataFrame:
+    """Read a data file of any supported type and return a DataFrame.
+
+    For .sql / .db files, ``query`` is executed via ``pd.read_sql_query``.
+    For all other types the file is loaded with the appropriate pandas reader
+    and ``read_options`` are forwarded as keyword arguments.
+
+    Args:
+        filepath: Path to the data file.
+        query: SQL query string (used only for .sql / .db files).
+        read_options: Extra keyword arguments forwarded to the pandas reader.
+            For .sql / .db files, a ``params`` key is passed to
+            ``pd.read_sql_query`` if present.
+
+    Returns:
+        DataFrame containing the loaded data.
+
+    Raises:
+        FileNotFoundError: If *filepath* does not exist.
+        ValueError: If the file type is unsupported or reading fails.
+        sqlite3.Error: If the SQLite query execution fails.
+    """
     if read_options is None:
         read_options = {}
-    _, file_extension = os.path.splitext(filepath)
-    file_extension = file_extension.lower()
-    read_functions = {
+
+    path = Path(filepath)
+    if not path.exists():
+        raise FileNotFoundError(f"Data file not found: {path}")
+
+    file_extension = path.suffix.lower()
+
+    read_functions: dict[str, Any] = {
         '.csv': pd.read_csv,
         '.xls': pd.read_excel,
         '.xlsx': pd.read_excel,
@@ -40,7 +78,7 @@ def read_any(filepath, query, read_options=None):
         '.h5': pd.read_hdf,
         '.hdf': pd.read_hdf,
         '.sql': pd.read_sql,  # Connection argument needed here.
-        '.db': pd.read_sql,  # Connection argument needed here.
+        '.db': pd.read_sql,   # Connection argument needed here.
         '.json': pd.read_json,
         '.parquet': pd.read_parquet,
         '.orc': pd.read_orc,
@@ -55,30 +93,44 @@ def read_any(filepath, query, read_options=None):
         '.fwf': pd.read_fwf,  # Might require formatting arguments.
     }
 
-    if file_extension == '.sql' or file_extension == '.db':
-        connection = sqlite3.connect(filepath)
-        # Updated to pass 'params' from read_options to pd.read_sql_query
-        df = pd.read_sql_query(query, connection, params=read_options.get('params', None))
-        connection.close()
-        return df
+    if file_extension in ('.sql', '.db'):
+        try:
+            with _sqlite_connection(path) as conn:
+                return pd.read_sql_query(query, conn, params=read_options.get('params'))
+        except sqlite3.Error as exc:
+            raise sqlite3.Error(f"SQLite query failed for {path}: {exc}") from exc
+
+    # Use pyarrow engine for parquet when not explicitly overridden
+    if file_extension == '.parquet' and 'engine' not in read_options:
+        read_options = {**read_options, 'engine': 'pyarrow'}
 
     if file_extension in read_functions:
         read_func = read_functions[file_extension]
         try:
-            return read_func(filepath, **read_options)
-        except Exception as e:
-            raise ValueError(f"Failed to read {filepath} due to: {e}")
+            return read_func(str(path), **read_options)
+        except (OSError, ValueError) as exc:
+            raise ValueError(f"Failed to read {path}: {exc}") from exc
     else:
-        raise ValueError(f"Unsupported file type: {file_extension}")
+        raise ValueError(f"Unsupported file type: {file_extension!r}")
 
 
 class DataRetriever(dspy.Retrieve):
-    supported_extensions = ['.csv', '.xls', '.xlsx', '.pickle', '.pkl', '.h5', '.hdf', 
-                            '.sql', '.db', '.json', '.parquet', '.orc', '.feather', 
-                            '.gbq', '.html', '.xml', '.stata', '.sas', '.sav', '.dta', '.fwf']
+    supported_extensions = [
+        '.csv', '.xls', '.xlsx', '.pickle', '.pkl', '.h5', '.hdf',
+        '.sql', '.db', '.json', '.parquet', '.orc', '.feather',
+        '.gbq', '.html', '.xml', '.stata', '.sas', '.sav', '.dta', '.fwf',
+    ]
 
-    def __init__(self, file_path: str | Path, query: str = "", return_columns=None,
-                 read_options=None, pipeline=None, step=None, **kwargs):
+    def __init__(
+        self,
+        file_path: Union[str, Path],
+        query: str = "",
+        return_columns: Optional[list[str]] = None,
+        read_options: Optional[dict[str, Any]] = None,
+        pipeline: Any = None,
+        step: Any = None,
+        **kwargs: Any,
+    ) -> None:
         super().__init__()
         if return_columns is None:
             return_columns = []
@@ -88,18 +140,18 @@ class DataRetriever(dspy.Retrieve):
         self.pipeline = pipeline
         self.step = step
 
-        self.file_path = str(file_path)
+        self.file_path = Path(file_path)
         self.return_columns = return_columns
         self.read_options = read_options
 
         # Read the data using the read_any function
-        self.df = read_any(file_path, query, read_options)  # No SQL query here
+        self.df = read_any(self.file_path, query, read_options)
 
     @classmethod
     def supports_file_type(cls, file_extension: str) -> bool:
         return file_extension.lower() in cls.supported_extensions
 
-    def forward(self, query: str = None, k: int = None, **kwargs) -> list[dict]:
+    def forward(self, query: Optional[str] = None, k: Optional[int] = None, **kwargs: Any) -> list[dict]:
         # Check if a SQL query is provided
         if query:
             # Apply the SQL query to the DataFrame
@@ -122,8 +174,8 @@ class DataRetriever(dspy.Retrieve):
         return result
 
 
-def main():
-    file_path = 'sample_data.csv'
+def main() -> None:
+    file_path = Path('sample_data.csv')
     query = "SELECT name FROM df WHERE age < 30"  # SQL query to filter data
     return_columns = ['name']
 
