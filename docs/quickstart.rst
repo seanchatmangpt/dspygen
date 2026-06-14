@@ -67,7 +67,52 @@ You can also use the ``invoke`` helper for a one-liner:
     post = invoke(topic="Introduction to DSPy", tone="informative", length="short")
     print(post)
 
-3. Run a Pipeline with YAML
+3. End-to-End Example
+---------------------
+
+The following example shows a complete, self-contained workflow — from initialising
+the language model to running a module and composing modules with the pipe operator.
+
+.. code-block:: python
+
+    from dspygen.utils.dspy_tools import init_dspy
+    init_dspy()
+
+    from dspygen.modules.gen_dspy_module import GenDspyModule
+
+    # Run the module end-to-end
+    module = GenDspyModule()
+    result = module.forward(
+        signature="text -> summary",
+        instructions="Summarize the input text in one sentence.",
+    )
+    print(result)
+
+Modules support the **pipe operator** (``|``) for left-to-right composition.
+The output of the left module is forwarded as the input to the right module:
+
+.. code-block:: python
+
+    from dspygen.utils.dspy_tools import init_dspy
+    init_dspy()
+
+    from dspygen.modules.blog_module import BlogModule
+    from dspygen.modules.summarize_module import SummarizeModule
+
+    # Compose two modules with the | operator
+    pipeline = BlogModule() | SummarizeModule()
+
+    result = pipeline.forward(
+        topic="The future of AI-assisted software development",
+        tone="professional",
+        length="medium",
+    )
+    print(result)
+
+Each module's ``forward()`` return value is passed directly to the next module's
+first positional argument.  The final result is the output of the rightmost module.
+
+4. Run a Pipeline with YAML
 ---------------------------
 
 DSPyGen supports declarative pipelines defined in YAML. Create a file called ``my_pipeline.yaml``:
@@ -106,7 +151,7 @@ Or from the CLI:
 
     dspygen pipeline run my_pipeline.yaml --topic "Reactive Domain-Driven Design"
 
-4. Use DSPyGen in Jupyter
+5. Use DSPyGen in Jupyter
 --------------------------
 
 DSPyGen provides a Jupyter magic extension for interactive exploration. Load it in a notebook:
@@ -126,7 +171,7 @@ Then use the ``%%dspygen`` cell magic to run a module inline:
 
 The output is automatically displayed in the notebook and stored in the ``_dspygen_result`` variable.
 
-5. Use the CLI
+6. Use the CLI
 --------------
 
 DSPyGen ships with a Typer-based CLI. Explore available commands:
