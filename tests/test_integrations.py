@@ -65,10 +65,12 @@ class _DspygenMagics:
 
     def dspygen_history(self, line: str):
         """Read history from dspy.settings.lm.history."""
-        try:
-            import dspy
-            history = getattr(getattr(dspy.settings, "lm", None), "history", [])
-        except Exception:
+        # Access via sys.modules so no hard import is required
+        dspy = sys.modules.get("dspy")
+        if dspy is not None:
+            lm = getattr(getattr(dspy, "settings", None), "lm", None)
+            history = getattr(lm, "history", [])
+        else:
             history = []
         return list(history)
 
@@ -154,6 +156,18 @@ def _assert_signature_valid(sig: str) -> None:
         )
 
 
+def _parse_yaml_pipeline(pipeline_yaml: str) -> Dict[str, Any]:
+    """Parse a minimal YAML pipeline without the yaml package."""
+    steps = []
+    current_module = None
+    for line in pipeline_yaml.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("- module:"):
+            current_module = stripped.split("- module:", 1)[1].strip()
+            steps.append({"module": current_module, "status": "ok"})
+    return {"steps": steps, "count": len(steps)}
+
+
 # ---------------------------------------------------------------------------
 # pytest fixtures
 # ---------------------------------------------------------------------------
@@ -167,34 +181,45 @@ def dspy_lm():
 
 @pytest.fixture
 def mock_dspy_predict():
-    with patch("dspy.Predict", autospec=True) as mock_predict_cls:
-        mock_instance = MagicMock()
-        mock_instance.return_value = MagicMock(answer="[mock answer]")
-        mock_predict_cls.return_value = mock_instance
-        yield mock_predict_cls
+    """Patch dspy.Predict via sys.modules injection (no real dspy needed)."""
+    mock_dspy = MagicMock()
+    mock_predict_cls = MagicMock()
+    mock_instance = MagicMock()
+    mock_instance.return_value = MagicMock(answer="[mock answer]")
+    mock_predict_cls.return_value = mock_instance
+    mock_dspy.Predict = mock_predict_cls
+    old = sys.modules.get("dspy")
+    sys.modules["dspy"] = mock_dspy
+    yield mock_predict_cls
+    if old is None:
+        sys.modules.pop("dspy", None)
+    else:
+        sys.modules["dspy"] = old
 
 
 @pytest.fixture
 def dspygen_module_runner(dspy_lm):
-    """Run any dspygen module with a mocked LM."""
+    """Run any dspygen module with a mocked LM injected via sys.modules."""
     def _run(module_fn, *args, **kwargs):
-        with patch("dspy.settings") as mock_settings:
-            mock_settings.lm = dspy_lm
+        mock_dspy = MagicMock()
+        mock_dspy.settings.lm = dspy_lm
+        old = sys.modules.get("dspy")
+        sys.modules["dspy"] = mock_dspy
+        try:
             return module_fn(*args, **kwargs)
+        finally:
+            if old is None:
+                sys.modules.pop("dspy", None)
+            else:
+                sys.modules["dspy"] = old
     return _run
 
 
 @pytest.fixture
 def pipeline_executor():
-    """Execute a simple YAML pipeline dict in tests."""
+    """Execute a simple YAML pipeline dict in tests without yaml import."""
     def _execute(pipeline_yaml: str) -> Dict[str, Any]:
-        import yaml as _yaml
-        data = _yaml.safe_load(pipeline_yaml) or {}
-        steps = data.get("steps", [])
-        results = []
-        for step in steps:
-            results.append({"module": step.get("module"), "status": "ok"})
-        return {"steps": results, "count": len(results)}
+        return _parse_yaml_pipeline(pipeline_yaml)
     return _execute
 
 
@@ -277,10 +302,17 @@ def test_dspygen_history_reads_from_lm_history():
     magics = _load_ipython_extension(ip)
     fake_lm = MagicMock()
     fake_lm.history = [{"prompt": "q1"}, {"prompt": "q2"}]
-    mock_settings = MagicMock()
-    mock_settings.lm = fake_lm
-    with patch("dspy.settings", mock_settings):
+    mock_dspy = MagicMock()
+    mock_dspy.settings.lm = fake_lm
+    old = sys.modules.get("dspy")
+    sys.modules["dspy"] = mock_dspy
+    try:
         history = magics.dspygen_history("")
+    finally:
+        if old is None:
+            sys.modules.pop("dspy", None)
+        else:
+            sys.modules["dspy"] = old
     assert history == [{"prompt": "q1"}, {"prompt": "q2"}]
 
 
@@ -316,7 +348,7 @@ def test_dspy_lm_fixture_callable_and_records(dspy_lm):
 # ===========================================================================
 
 def test_mock_dspy_predict_returns_deterministic_output(mock_dspy_predict):
-    import dspy
+    import dspy  # now resolves to the mock injected by the fixture
     predictor = dspy.Predict("question -> answer")
     result = predictor("What is 2+2?")
     assert mock_dspy_predict.call_count >= 1
