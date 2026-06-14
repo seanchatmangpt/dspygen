@@ -69,12 +69,57 @@ class GanttAgent(FSMMixin):
     @trigger(source=GanttState.EXECUTING, dest=GanttState.MONITORING)
     def start_monitoring(self):
         print("Starting monitoring phase.")
-        raise NotImplementedError("Monitoring phase not yet implemented.")
+        if self.task is None:
+            print("No task assigned; skipping monitoring.")
+            return
+
+        task_name = self.task.name
+        task_status = self.task.status or "pending"
+        print(f"Monitoring task '{task_name}' — current status: {task_status}")
+
+        # Evaluate task readiness based on status flags
+        done_statuses = {"done", "crit, done"}
+        active_statuses = {"active", "crit, active"}
+        milestone_statuses = {"milestone"}
+
+        if task_status in done_statuses:
+            print(f"Task '{task_name}' is already completed.")
+        elif task_status in active_statuses:
+            print(f"Task '{task_name}' is in progress; tracking execution output.")
+            if self.execution:
+                print(f"Execution output snippet: {str(self.execution)[:200]}")
+        elif task_status in milestone_statuses:
+            print(f"Task '{task_name}' is a milestone; verifying date alignment.")
+            if self.task.start_date:
+                print(f"Milestone date: {self.task.start_date}")
+        else:
+            print(f"Task '{task_name}' is scheduled; awaiting activation.")
+
+        # Proceed to completion phase
+        self.complete_tasks()
 
     @trigger(source=GanttState.MONITORING, dest=GanttState.COMPLETING)
     def complete_tasks(self):
         print("Completing all tasks.")
-        raise NotImplementedError("Task completion not yet implemented.")
+        if self.task is None:
+            print("No task to complete.")
+            return
+
+        task_name = self.task.name
+        original_status = self.task.status or "pending"
+
+        # Mark the task as done if it is not already in a terminal state
+        if original_status not in {"done", "crit, done", "milestone"}:
+            self.task.status = "done"
+            print(f"Task '{task_name}' marked as done (was: {original_status}).")
+        else:
+            print(f"Task '{task_name}' was already in a terminal state: {original_status}.")
+
+        print(
+            f"Task summary — name: {task_name}, id: {self.task.id}, "
+            f"start: {self.task.start_date}, end: {self.task.end_date}, "
+            f"duration: {self.task.duration}, dependencies: {self.task.dependencies}"
+        )
 
     @trigger(source=GanttState.COMPLETING, dest=GanttState.INITIALIZING)
     def reset(self):
