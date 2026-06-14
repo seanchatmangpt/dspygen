@@ -11,6 +11,24 @@ Or programmatically::
 
     run_stdio()            # stdio (default for IDE integrations)
     run_tcp("127.0.0.1", 2087)  # TCP (useful for debugging)
+
+Capabilities implemented
+------------------------
+- textDocument/completion
+- textDocument/hover
+- textDocument/publishDiagnostics (via didOpen / didChange)
+- textDocument/definition
+- textDocument/documentSymbol
+- workspace/symbol
+- textDocument/rename  (+prepareRename)
+- textDocument/codeAction
+- textDocument/semanticTokens/full
+- textDocument/formatting
+- textDocument/references
+- textDocument/inlayHint
+- textDocument/foldingRange
+- textDocument/prepareCallHierarchy / callHierarchy/incomingCalls / callHierarchy/outgoingCalls
+- workspace/executeCommand
 """
 
 from __future__ import annotations
@@ -45,7 +63,7 @@ logger.add(
 
 server = LanguageServer(
     name="dspygen-lsp",
-    version="v1.0.0",
+    version="v1.1.0",
     text_document_sync_kind=lsp_types.TextDocumentSyncKind.Incremental,
 )
 
@@ -68,7 +86,7 @@ def on_initialize(params: lsp_types.InitializeParams) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Register feature providers
+# Register feature providers — original 4
 # ---------------------------------------------------------------------------
 
 from .providers.completion import register_completion  # noqa: E402
@@ -80,6 +98,34 @@ register_completion(server)
 register_hover(server)
 register_diagnostics(server)
 register_definition(server)
+
+# ---------------------------------------------------------------------------
+# Register feature providers — 10 new capabilities
+# ---------------------------------------------------------------------------
+
+from .providers.document_symbol import register_document_symbol  # noqa: E402
+from .providers.workspace_symbol import register_workspace_symbol  # noqa: E402
+from .providers.rename import register_rename  # noqa: E402
+from .providers.code_action import register_code_action  # noqa: E402
+from .providers.semantic_tokens import register_semantic_tokens  # noqa: E402
+from .providers.formatting import register_formatting  # noqa: E402
+from .providers.references import register_references  # noqa: E402
+from .providers.inlay_hint import register_inlay_hint  # noqa: E402
+from .providers.folding_range import register_folding_range  # noqa: E402
+from .providers.call_hierarchy import register_call_hierarchy  # noqa: E402
+from .providers.execute_command import register_execute_command  # noqa: E402
+
+register_document_symbol(server)
+register_workspace_symbol(server)
+register_rename(server)
+register_code_action(server)
+register_semantic_tokens(server)
+register_formatting(server)
+register_references(server)
+register_inlay_hint(server)
+register_folding_range(server)
+register_call_hierarchy(server)
+register_execute_command(server)
 
 # ---------------------------------------------------------------------------
 # Public run helpers
