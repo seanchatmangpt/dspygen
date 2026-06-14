@@ -3,7 +3,8 @@
         mcp-serve lsp-serve api-serve \
         docker-build docker-up docker-down docker-test \
         pre-commit-install pre-commit-run \
-        clean clean-all
+        clean clean-all \
+        bump-patch bump-minor release version
 
 # ---------------------------------------------------------------------------
 # Python / Poetry
@@ -140,6 +141,26 @@ pre-commit-install:
 ## Run pre-commit on all files
 pre-commit-run:
 	poetry run pre-commit run --all-files --color always
+
+# ---------------------------------------------------------------------------
+# Version management
+# ---------------------------------------------------------------------------
+
+## Bump the patch version (e.g. 1.2.3 -> 1.2.4)
+bump-patch:
+	python scripts/bump_version.py patch
+
+## Bump the minor version (e.g. 1.2.3 -> 1.3.0)
+bump-minor:
+	python scripts/bump_version.py minor
+
+## Build, tag, and push a release
+release:
+	bash scripts/release.sh
+
+## Show current version from pyproject.toml
+version:
+	poetry version
 
 # ---------------------------------------------------------------------------
 # Cleanup
