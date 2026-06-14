@@ -68,6 +68,22 @@ def ping_pong() -> dict:
     return {"message": "pong"}
 
 
+@app.get("/health")
+async def health() -> dict:
+    """Run all registered health checks and return aggregated status."""
+    from dspygen.observability.health import check_all
+    results = check_all()
+    status = "ok" if all(r.status != "fail" for r in results) else "degraded"
+    return {"status": status, "checks": [r.__dict__ for r in results]}
+
+
+@app.get("/metrics")
+async def metrics() -> dict:
+    """Return all collected in-memory metrics."""
+    from dspygen.observability.metrics import get_all_metrics
+    return get_all_metrics()
+
+
 # Add CORS middleware
 cors_origins_env = os.environ.get("CORS_ORIGINS", "*")
 cors_origins = [origin.strip() for origin in cors_origins_env.split(",")] if cors_origins_env != "*" else ["*"]
