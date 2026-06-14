@@ -1,135 +1,78 @@
-"""doctor — environment health check for dspygen."""
+"""dspygen doctor command — check environment health."""
+import importlib
 import os
 import sys
 
 import typer
 
-app = typer.Typer(help="Check the dspygen environment and report status.")
+from dspygen.ui.console import print_error, print_info, print_success, print_table, print_warning, spinner
 
-# Critical checks that affect exit code
-CRITICAL = {"python_version", "dspy", "mcp_server", "lsp_server"}
+app = typer.Typer(help="Check your dspygen environment for common issues.")
+
+# (package_name, import_name, required)
+_CHECKS: list[tuple[str, str, bool]] = [
+    ("dspy-ai", "dspy", True),
+    ("openai", "openai", True),
+    ("rich", "rich", False),
+    ("typer", "typer", True),
+    ("loguru", "loguru", True),
+    ("pydantic", "pydantic", True),
+    ("chromadb", "chromadb", False),
+]
+
+_ENV_CHECKS: list[tuple[str, bool]] = [
+    ("OPENAI_API_KEY", False),
+    ("DSPYGEN_HOME", False),
+]
 
 
-def _ok(label: str) -> str:
-    return typer.style("✓", fg=typer.colors.GREEN) + f"  {label}"
-
-
-def _fail(label: str) -> str:
-    return typer.style("✗", fg=typer.colors.RED) + f"  {label}"
-
-
-def _warn(label: str) -> str:
-    return typer.style("!", fg=typer.colors.YELLOW) + f"  {label}"
+def _check_package(import_name: str) -> bool:
+    """Return True if *import_name* can be imported."""
+    try:
+        importlib.import_module(import_name)
+        return True
+    except ImportError:
+        return False
 
 
 @app.callback(invoke_without_command=True)
-def doctor(ctx: typer.Context):
-    """Check the dspygen environment and report status."""
+def doctor(ctx: typer.Context) -> None:
+    """Run all environment health checks and report results."""
     if ctx.invoked_subcommand is not None:
         return
 
-    failures: list[str] = []
+    print_info("Running dspygen environment checks…")
 
-    typer.echo("\ndspygen doctor\n" + "─" * 40)
+    rows: list[tuple[str, str, str]] = []
+    failures = 0
 
-    # --- Python version ---
-    major, minor = sys.version_info.major, sys.version_info.minor
-    py_ver = f"Python {major}.{minor}.{sys.version_info.micro}"
-    if (major, minor) >= (3, 10):
-        typer.echo(_ok(py_ver))
-    else:
-        typer.echo(_fail(f"{py_ver}  (need >=3.10)"))
-        failures.append("python_version")
+    with spinner("Checking packages…"):
+        for pkg_name, import_name, required in _CHECKS:
+            ok = _check_package(import_name)
+            status = "✓" if ok else ("✗" if required else "–")
+            level = "required" if required else "optional"
+            rows.append((pkg_name, level, status))
+            if not ok and required:
+                failures += 1
 
-    # --- Poetry ---
-    import shutil
-    if shutil.which("poetry"):
-        typer.echo(_ok("poetry found"))
-    else:
-        typer.echo(_warn("poetry not found in PATH"))
+    print_table(
+        headers=["Package", "Level", "Status"],
+        rows=rows,
+        title="Package Checks",
+    )
 
-    # --- API keys ---
-    for key in ("OPENAI_API_KEY", "GROQ_API_KEY"):
-        if os.environ.get(key):
-            typer.echo(_ok(f"{key} is set"))
-        else:
-            typer.echo(_warn(f"{key} is not set"))
+    env_rows: list[tuple[str, str]] = []
+    for var, required in _ENV_CHECKS:
+        present = var in os.environ and bool(os.environ[var])
+        status = "✓ set" if present else ("✗ missing" if required else "– not set")
+        env_rows.append((var, status))
+        if not present and required:
+            failures += 1
 
-    # --- dspy ---
-    try:
-        import dspy
-        typer.echo(_ok(f"dspy {dspy.__version__}"))
-    except Exception as exc:
-        typer.echo(_fail(f"dspy not importable: {exc}"))
-        failures.append("dspy")
+    print_table(headers=["Environment Variable", "Status"], rows=env_rows, title="Environment Variables")
 
-    # --- mcp ---
-    try:
-        import mcp
-        version = getattr(mcp, "__version__", "unknown")
-        typer.echo(_ok(f"mcp {version}"))
-    except Exception as exc:
-        typer.echo(_warn(f"mcp not importable: {exc}"))
-
-    # --- pygls ---
-    try:
-        import pygls
-        version = getattr(pygls, "__version__", "unknown")
-        typer.echo(_ok(f"pygls {version}"))
-    except Exception as exc:
-        typer.echo(_warn(f"pygls not importable: {exc}"))
-
-    # --- Ollama ---
-    try:
-        import urllib.request
-        ollama_host = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
-        req = urllib.request.urlopen(f"{ollama_host}/api/tags", timeout=2)
-        req.read()
-        typer.echo(_ok(f"Ollama reachable at {ollama_host}"))
-    except Exception:
-        typer.echo(_warn("Ollama not reachable (set OLLAMA_HOST if non-default)"))
-
-    # --- ChromaDB ---
-    try:
-        import chromadb  # noqa: F401
-        typer.echo(_ok("chromadb importable"))
-    except Exception as exc:
-        typer.echo(_warn(f"chromadb not importable: {exc}"))
-
-    # --- dspygen MCP server ---
-    try:
-        from dspygen.mcp.server import server  # noqa: F401
-        typer.echo(_ok("dspygen.mcp.server importable"))
-    except Exception as exc:
-        typer.echo(_fail(f"dspygen.mcp.server: {exc}"))
-        failures.append("mcp_server")
-
-    # --- dspygen LSP server ---
-    try:
-        from dspygen.lsp.server import server  # noqa: F401
-        typer.echo(_ok("dspygen.lsp.server importable"))
-    except Exception as exc:
-        typer.echo(_fail(f"dspygen.lsp.server: {exc}"))
-        failures.append("lsp_server")
-
-    typer.echo("─" * 40)
-    critical_failures = [f for f in failures if f in CRITICAL]
-    if critical_failures:
-        typer.echo(
-            typer.style(
-                f"\n{len(critical_failures)} critical check(s) failed: {', '.join(critical_failures)}",
-                fg=typer.colors.RED,
-            )
-        )
+    if failures:
+        print_error(f"{failures} required check(s) failed. See above for details.")
         raise typer.Exit(code=1)
     else:
-        typer.echo(typer.style("\nAll critical checks passed.", fg=typer.colors.GREEN))
-        raise typer.Exit(code=0)
-
-
-def main():
-    app()
-
-
-if __name__ == "__main__":
-    main()
+        print_success("All required checks passed.")

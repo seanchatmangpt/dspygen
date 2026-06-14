@@ -95,6 +95,7 @@ tpot = "^0.12.2"
 mcp = ">=1.0.0"
 pygls = ">=2.0.0"
 lsprotocol = ">=2024.0"
+rich = ">=13.0"
 
 [tool.poetry.group.test.dependencies]  # https://python-poetry.org/docs/master/managing-dependencies/
 coverage = { extras = ["toml"], version = ">=7.2.5" }
