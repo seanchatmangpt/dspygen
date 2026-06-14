@@ -58,7 +58,7 @@ def check_or_install_packages():
 @app.command()
 def init(project_name: str = typer.Argument(...),
          author_email: str = typer.Argument("todo@todo.com"),
-         author_name: str = typer.Argument("TODO")):
+         author_name: str = typer.Argument("")):
     """Initialize the DSPygen project."""
     # If the project has underscores or spaces throw an error
     if "_" in project_name or " " in project_name:

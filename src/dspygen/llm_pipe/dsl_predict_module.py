@@ -119,8 +119,13 @@ class DSLPredictModule(dspy.Module):
 
     def validate_output(self, output):
         print(f"Assertions to run {self.pipeline.config.current_step.assertions}")
-        # Implement validation logic or override in subclass
-        raise NotImplementedError("Validation logic should be implemented in subclass")
+        # Default validation: ensure output is not None and not empty.
+        # Subclasses may override this method for additional validation logic.
+        if output is None:
+            raise ValueError("Output must not be None")
+        if isinstance(output, (str, list, dict)) and not output:
+            raise ValueError("Output must not be empty")
+        return output
 
     def pipe(self, input_str):
         return self.forward(prompt=input_str)
