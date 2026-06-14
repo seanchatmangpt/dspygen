@@ -30,10 +30,13 @@ client (Claude Desktop, Cursor, Continue, Zed, etc.).
 - **Module execution** — ``run_module``, ``list_modules``, ``get_module_schema``
 - **Pipeline execution** — ``run_pipeline``, ``load_pipeline``, ``validate_pipeline``
 - **DSPy configuration** — ``init_lm``, ``set_model``, ``get_config``
-- **Code generation** — ``gen_module``, ``gen_agent``, ``gen_signature``, ``gen_pipeline``, ``gen_test``
-- **File I/O** — ``read_file``, ``write_file``, ``list_directory``, ``create_directory``, ``delete_file``, ``move_file``
+- **Code generation** — ``gen_module``, ``gen_agent``, ``gen_signature``,
+  ``gen_pipeline``, ``gen_test``
+- **File I/O** — ``read_file``, ``write_file``, ``list_directory``,
+  ``create_directory``, ``delete_file``, ``move_file``
 - **Shell execution** — ``run_command``, ``run_script``, ``run_python``
-- **Git integration** — ``git_status``, ``git_diff``, ``git_commit``, ``git_push``, ``git_log``
+- **Git integration** — ``git_status``, ``git_diff``, ``git_commit``,
+  ``git_push``, ``git_log``
 - **Search** — ``grep_codebase``, ``find_files``, ``search_symbols``
 - **Testing** — ``run_tests``, ``run_test_file``, ``run_test_case``
 - **Documentation** — ``build_docs``, ``serve_docs``
@@ -41,7 +44,8 @@ client (Claude Desktop, Cursor, Continue, Zed, etc.).
 - **HTTP client** — ``http_get``, ``http_post``, ``http_put``, ``http_delete``
 - **Environment** — ``get_env``, ``set_env``, ``list_env``
 - **Prompt templates** — ``blog_post``, ``summarize``, ``code_review``
-- **Resources** — ``dspygen://modules``, ``dspygen://pipelines/{name}``, ``dspygen://config``
+- **Resources** — ``dspygen://modules``, ``dspygen://pipelines/{name}``,
+  ``dspygen://config``
 
 Start the server with ``dspygen mcp serve``.  See :doc:`mcp` for full details.
 
@@ -66,7 +70,8 @@ DSPy and DSPyGen projects.
 10. ``textDocument/signatureHelp`` — show ``forward()`` signature while typing
 11. ``textDocument/documentSymbol`` — outline of all module classes in the file
 12. ``workspace/symbol`` — project-wide symbol search
-13. ``workspace/didChangeConfiguration`` — live reload of ``[tool.dspygen.lsp]`` settings
+13. ``workspace/didChangeConfiguration`` — live reload of ``[tool.dspygen.lsp]``
+    settings
 14. ``$/cancelRequest`` — graceful cancellation of long-running operations
 
 Start the server with ``dspygen lsp serve``.  See :doc:`lsp` for full details.
@@ -100,7 +105,8 @@ Load with ``%load_ext dspygen.jupyter.magic``.
 VS Code Extension
 ^^^^^^^^^^^^^^^^^
 
-Published to the _
+Published to the `VS Code Marketplace
+<https://marketplace.visualstudio.com/items?itemName=seanchatmangpt.dspygen>`_
 as ``seanchatmangpt.dspygen``.
 
 - Bundles the LSP server with zero-configuration setup.
@@ -178,8 +184,8 @@ Seven GitHub Actions workflows under ``.github/workflows/``:
 Changed
 ~~~~~~~
 
-- ``init_dspy()`` now accepts a ``provider`` keyword argument (openai,
-  ollama, groq, cerebras) for explicit backend selection.
+- ``init_dspy()`` now accepts a ``provider`` keyword argument (``"openai"``,
+  ``"ollama"``, ``"groq"``, ``"cerebras"``) for explicit backend selection.
 - Pipeline YAML schema updated to version 2; version 1 files are automatically
   migrated on load with a deprecation warning.
 - CLI commands reorganised under ``dspygen mcp ...`` and ``dspygen lsp ...``
