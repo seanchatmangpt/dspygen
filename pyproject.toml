@@ -137,6 +137,7 @@ testpaths = ["src", "tests"]
 xfail_strict = true
 markers = [
     "integration: marks tests as integration tests (multi-component workflows)",
+    "mcp: marks tests for the dspygen MCP server and tools (deselect with '-m \"not mcp\"')",
 ]
 
 [tool.ruff]  # https://github.com/charliermarsh/ruff
