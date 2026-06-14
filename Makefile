@@ -1,177 +1,33 @@
-.PHONY: install install-all test test-all test-mcp test-lsp test-coverage \
-        lint lint-fix typecheck docs \
-        mcp-serve lsp-serve api-serve \
-        docker-build docker-up docker-down docker-test \
-        pre-commit-install pre-commit-run \
-        clean clean-all \
-        bump-patch bump-minor release version
+.PHONY: completions completions-bash completions-zsh completions-fish install-completion-bash install-completion-zsh install-completion-fish
 
-# ---------------------------------------------------------------------------
-# Python / Poetry
-# ---------------------------------------------------------------------------
+# ── Shell completion targets ─────────────────────────────────────────────────
 
-## Install main + test + dev dependencies
-install:
-	poetry install --with test,dev --no-interaction
+## Generate all completion scripts into src/dspygen/completions/
+completions: completions-bash completions-zsh completions-fish
 
-## Install ALL optional dependency groups and extras
-install-all:
-	poetry install --all-extras --with test,dev,docs,jupyter,llm,retrieval --no-interaction
+## Regenerate bash completion script via Typer
+completions-bash:
+	_DSPYGEN_COMPLETE=bash_source dspygen > src/dspygen/completions/bash_completion.sh
+	@echo "Bash completion written to src/dspygen/completions/bash_completion.sh"
 
-# ---------------------------------------------------------------------------
-# Testing
-# ---------------------------------------------------------------------------
+## Regenerate zsh completion script via Typer
+completions-zsh:
+	_DSPYGEN_COMPLETE=zsh_source dspygen > src/dspygen/completions/zsh_completion.zsh
+	@echo "Zsh completion written to src/dspygen/completions/zsh_completion.zsh"
 
-## Run offline tests (excludes slow, requires_openai, requires_ollama)
-test:
-	poetry run pytest tests/ \
-	  -m "not requires_openai and not requires_ollama and not slow" \
-	  --tb=short -v
+## Regenerate fish completion script via Typer
+completions-fish:
+	_DSPYGEN_COMPLETE=fish_source dspygen > src/dspygen/completions/fish_completion.fish
+	@echo "Fish completion written to src/dspygen/completions/fish_completion.fish"
 
-## Run the complete test suite (all markers)
-test-all:
-	poetry run pytest tests/ -v
+## Install bash completion for the current user (~/.bashrc)
+install-completion-bash:
+	dspygen completion install bash
 
-## Run MCP server tests
-test-mcp:
-	poetry run pytest tests/ -v -m mcp --tb=short
+## Install zsh completion for the current user (~/.zshrc)
+install-completion-zsh:
+	dspygen completion install zsh
 
-## Run LSP server tests
-test-lsp:
-	poetry run pytest tests/ -v -m lsp --tb=short
-
-## Run offline tests with HTML + terminal coverage report
-test-coverage:
-	poetry run pytest tests/ \
-	  -m "not requires_openai and not requires_ollama and not slow" \
-	  --cov=src/dspygen \
-	  --cov-report=html:htmlcov \
-	  --cov-report=xml:reports/coverage.xml \
-	  --cov-report=term \
-	  --tb=short
-
-# ---------------------------------------------------------------------------
-# Linting / formatting
-# ---------------------------------------------------------------------------
-
-## Check linting and formatting (CI-safe — no auto-fix)
-lint:
-	poetry run ruff check src/ tests/
-	poetry run ruff format --check src/ tests/
-
-## Auto-fix linting issues and reformat
-lint-fix:
-	poetry run ruff check --fix src/ tests/
-	poetry run ruff format src/ tests/
-
-# ---------------------------------------------------------------------------
-# Type checking
-# ---------------------------------------------------------------------------
-
-## Run mypy type checking
-typecheck:
-	poetry run mypy src/dspygen/ --ignore-missing-imports
-
-# ---------------------------------------------------------------------------
-# Documentation
-# ---------------------------------------------------------------------------
-
-## Build Sphinx HTML docs
-docs:
-	@if [ -f docs/Makefile ]; then \
-	  cd docs && poetry run make html; \
-	else \
-	  poetry run sphinx-build -b html docs/ docs/_build/html; \
-	fi
-
-## Serve docs locally (requires docs build first)
-docs-serve:
-	poetry run python -m http.server 8080 --directory docs/_build/html
-
-# ---------------------------------------------------------------------------
-# Servers (local dev)
-# ---------------------------------------------------------------------------
-
-## Start the MCP server (stdio transport by default)
-mcp-serve:
-	poetry run python -m dspygen.mcp.server
-
-## Start the LSP server (stdio transport by default)
-lsp-serve:
-	poetry run python -m dspygen.lsp.server
-
-## Start the API server (uvicorn, hot-reload)
-api-serve:
-	poetry run uvicorn dspygen.api:app --host 0.0.0.0 --port 8000 --reload
-
-# ---------------------------------------------------------------------------
-# Docker
-# ---------------------------------------------------------------------------
-
-## Build all Docker targets (api, mcp, lsp)
-docker-build:
-	docker build --target api -t dspygen:api .
-	docker build --target mcp -t dspygen:mcp .
-	docker build --target lsp -t dspygen:lsp .
-
-## Start production services (api + chroma + redis)
-docker-up:
-	docker-compose --profile api --profile retrieval --profile cache up -d
-
-## Stop all services
-docker-down:
-	docker-compose down
-
-## Run tests inside Docker (isolated, no env vars needed)
-docker-test:
-	docker-compose -f docker-compose.test.yml run --rm test
-
-## Run coverage inside Docker
-docker-test-coverage:
-	docker-compose -f docker-compose.test.yml run --rm test-coverage
-
-# ---------------------------------------------------------------------------
-# Pre-commit
-# ---------------------------------------------------------------------------
-
-## Install pre-commit hooks
-pre-commit-install:
-	poetry run pre-commit install --install-hooks
-
-## Run pre-commit on all files
-pre-commit-run:
-	poetry run pre-commit run --all-files --color always
-
-# ---------------------------------------------------------------------------
-# Version management
-# ---------------------------------------------------------------------------
-
-## Bump the patch version (e.g. 1.2.3 -> 1.2.4)
-bump-patch:
-	python scripts/bump_version.py patch
-
-## Bump the minor version (e.g. 1.2.3 -> 1.3.0)
-bump-minor:
-	python scripts/bump_version.py minor
-
-## Build, tag, and push a release
-release:
-	bash scripts/release.sh
-
-## Show current version from pyproject.toml
-version:
-	poetry version
-
-# ---------------------------------------------------------------------------
-# Cleanup
-# ---------------------------------------------------------------------------
-
-## Remove Python bytecode and cache files
-clean:
-	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
-	find . -type f -name "*.pyc" -delete 2>/dev/null || true
-	rm -rf .coverage htmlcov/ .mypy_cache/ .ruff_cache/ .pytest_cache/
-
-## Remove everything including build artifacts and reports
-clean-all: clean
-	rm -rf dist/ reports/ docs/_build/ *.egg-info src/*.egg-info
+## Install fish completion for the current user
+install-completion-fish:
+	dspygen completion install fish

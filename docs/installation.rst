@@ -1,148 +1,95 @@
 Installation
 ============
 
-This guide covers how to install DSPyGen and configure your environment.
+Install dspygen using pip or poetry:
 
-Requirements
-------------
-
-- Python 3.10 or higher
-- pip or Poetry package manager
-- An OpenAI API key (or a compatible local model via Ollama)
-
-Installing with pip
--------------------
-
-The simplest way to install DSPyGen is via pip::
+.. code-block:: bash
 
     pip install dspygen
-
-To install with all optional extras::
-
-    pip install "dspygen[jupyter,lsp,mcp]"
-
-Installing with Poetry
-----------------------
-
-If you use Poetry for dependency management, add DSPyGen to your project::
-
+    # or
     poetry add dspygen
 
-To add with optional extras::
-
-    poetry add "dspygen[jupyter,lsp,mcp]"
-
-Installing from Source
-----------------------
-
-To install the latest development version directly from GitHub::
-
-    git clone https://github.com/seanchatmangpt/dspygen.git
-    cd dspygen
-    pip install -e .
-
-Or with Poetry::
-
-    git clone https://github.com/seanchatmangpt/dspygen.git
-    cd dspygen
-    poetry install
-
-Environment Setup
+Shell Completions
 -----------------
 
-DSPyGen requires API credentials for the language model backend you plan to use.
+dspygen supports shell completions for bash, zsh, fish, and PowerShell.
+There are two ways to enable completions:
 
-OpenAI
-~~~~~~
+**Automatic install (recommended)**
 
-Set your OpenAI API key as an environment variable::
+Use the built-in ``completion install`` subcommand to append the necessary
+source line to your shell's RC file automatically:
 
-    export OPENAI_API_KEY="sk-..."
+.. code-block:: bash
 
-You can also add this to your shell profile (``~/.bashrc``, ``~/.zshrc``, etc.) to make it persistent.
+    # Bash
+    dspygen completion install bash
 
-Ollama (Local Models)
-~~~~~~~~~~~~~~~~~~~~~
+    # Zsh
+    dspygen completion install zsh
 
-If you want to use local models via Ollama, install Ollama from https://ollama.com and then set the host::
+    # Fish
+    dspygen completion install fish
 
-    export OLLAMA_HOST="http://localhost:11434"
+    # PowerShell
+    dspygen completion install powershell
 
-Start the Ollama service and pull a model::
+After running the command, reload your shell:
 
-    ollama serve
-    ollama pull llama3
+.. code-block:: bash
 
-Anthropic Claude
-~~~~~~~~~~~~~~~~
+    source ~/.bashrc   # bash
+    source ~/.zshrc    # zsh
+    # fish and PowerShell pick up changes automatically on next launch
 
-To use Anthropic's Claude models::
+**Manual install**
 
-    export ANTHROPIC_API_KEY="sk-ant-..."
+Print the completion script to stdout and source it yourself:
 
-Verifying the Installation
---------------------------
+.. code-block:: bash
 
-After installation, verify that DSPyGen is correctly installed by running::
+    # Bash — add to ~/.bashrc
+    source <(dspygen completion show bash)
 
-    dspygen --version
+    # Zsh — add to ~/.zshrc
+    source <(dspygen completion show zsh)
 
-You should see output similar to::
+    # Fish — write to the completions directory
+    dspygen completion show fish > ~/.config/fish/completions/dspygen.fish
 
-    DSPyGen version 2024.9.14
+**Using Typer's built-in mechanism directly**
 
-You can also run a quick sanity check in Python::
+Typer also exposes completion generation via environment variables:
 
-    python -c "import dspygen; print('DSPyGen installed successfully')"
+.. code-block:: bash
 
-Optional Extras
----------------
+    # Generate and source in one step (bash)
+    source <(_DSPYGEN_COMPLETE=bash_source dspygen)
 
-DSPyGen ships with several optional dependency groups:
+    # Generate and source in one step (zsh)
+    source <(_DSPYGEN_COMPLETE=zsh_source dspygen)
 
-Jupyter Support
-~~~~~~~~~~~~~~~
+**Static completion scripts**
 
-Install the Jupyter integration to use DSPyGen magic commands inside notebooks::
+Pre-built completion scripts ship with dspygen in the
+``src/dspygen/completions/`` directory:
 
-    pip install "dspygen[jupyter]"
+- ``bash_completion.sh`` — Bash
+- ``zsh_completion.zsh`` — Zsh
+- ``fish_completion.fish`` — Fish
 
-Then load the extension inside a notebook cell::
+To use them directly:
 
-    %load_ext dspygen.jupyter_extension
+.. code-block:: bash
 
-LSP Server
-~~~~~~~~~~
+    # Bash
+    source /path/to/site-packages/dspygen/completions/bash_completion.sh
 
-Install the Language Server Protocol server for IDE integration::
+    # Zsh (copy to a directory on your $fpath)
+    cp /path/to/site-packages/dspygen/completions/zsh_completion.zsh \
+        ~/.zsh/completions/_dspygen
+    autoload -Uz compinit && compinit
 
-    pip install "dspygen[lsp]"
-
-See the :doc:`lsp` page for configuration instructions.
-
-MCP Server
-~~~~~~~~~~
-
-Install the Model Context Protocol server for tool-calling integrations::
-
-    pip install "dspygen[mcp]"
-
-See the :doc:`mcp` page for configuration instructions.
-
-Upgrading
----------
-
-To upgrade an existing installation::
-
-    pip install --upgrade dspygen
-
-Or with Poetry::
-
-    poetry update dspygen
-
-Uninstalling
-------------
-
-To remove DSPyGen::
-
-    pip uninstall dspygen
+    # Fish
+    cp /path/to/site-packages/dspygen/completions/fish_completion.fish \
+        ~/.config/fish/completions/dspygen.fish
