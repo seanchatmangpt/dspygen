@@ -12,6 +12,8 @@ from typing import Any, Dict, List, Optional
 
 import pytest
 
+pytestmark = [pytest.mark.slow, pytest.mark.property_based]
+
 hypothesis = pytest.importorskip("hypothesis", reason="hypothesis not installed")
 from hypothesis import given, settings, strategies as st, assume, HealthCheck
 

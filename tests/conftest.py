@@ -46,9 +46,12 @@ except ImportError:
 
 def _make_dslmodel_stub():
     """Create a minimal dslmodel stub that satisfies dspygen's imports."""
-    from pydantic import BaseModel
+    try:
+        from pydantic import BaseModel
+    except ImportError:
+        BaseModel = object
 
-    class DSLModel(BaseModel):
+    class DSLModel(BaseModel if BaseModel is not object else object):
         """Minimal DSLModel stub for test environments."""
 
         class Config:

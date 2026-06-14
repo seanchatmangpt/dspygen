@@ -1,5 +1,5 @@
 """
-Performance benchmarks for dspygen.
+Performance benchmarks for dspygen — skipped by default, run with: pytest -m benchmark
 
 All benchmarks run without real LLM or network calls.
 Tests are marked with pytest.mark.slow so they can be skipped in quick runs.

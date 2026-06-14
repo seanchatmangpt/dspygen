@@ -200,7 +200,7 @@ exclude = ["experiments/", "tests/"]
 
 [tool.pytest.ini_options]  # https://docs.pytest.org/en/latest/reference/reference.html#ini-options-ref
 asyncio_mode = "auto"
-addopts = "-v --tb=short -p no:warnings --junitxml=reports/pytest.xml"
+addopts = "-p no:warnings --tb=short -q -m 'not slow and not benchmark and not requires_openai and not requires_ollama'"
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
