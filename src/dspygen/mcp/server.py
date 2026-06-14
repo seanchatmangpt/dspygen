@@ -11,6 +11,42 @@ Environment variables read at startup:
   DSPYGEN_MODEL     — default LM model name (e.g. 'gpt-4o')
   OPENAI_API_KEY    — OpenAI API key forwarded to dspy
   OLLAMA_HOST       — Ollama base URL (e.g. 'http://localhost:11434')
+
+Tool coverage (maximized):
+  - 5  generic module tools (list, inspect, run, generate signature/module)
+  - 5  agent tools
+  - 4  workflow tools
+  - 3  generic retrieval tools
+  - 12 RDDDY domain tools (create_aggregate, event_storm, scaffold_domain, …)
+  - 20 category-specific module tools (generate_tweet, summarize_document, …)
+  - 8  extended retrieval tools (per-RM-module)
+  - 7  LM configuration and sampling tools
+  - 3  writer tools
+
+Resource coverage (maximized):
+  - dspygen://modules         — full module catalog
+  - dspygen://agents          — full agent catalog
+  - dspygen://workflows       — workflow examples catalog
+  - dspygen://signatures      — all DSPy signature classes
+  - dspygen://rdddy           — RDDDY pattern catalog
+  - dspygen://signatures/all  — all signatures (extended)
+  - dspygen://lm/providers    — LM provider catalog
+  - dspygen://rm/catalog      — retrieval module catalog
+  - dspygen://writers/catalog — writer catalog
+  - dspygen://modules/{name}  — per-module documentation
+  - dspygen://agents/{name}   — per-agent state machine info
+  - dspygen://workflows/examples/{name} — individual workflow YAML
+
+Prompt coverage (maximized):
+  Domain (10): design-bounded-context, create-aggregate-root, event-storm-domain,
+    design-saga, create-value-object, design-api, write-command-handler,
+    implement-policy, generate-read-model, scaffold-microservice
+  Module (10): generate-module, create-signature, optimize-module, debug-module,
+    document-module, test-module, compose-pipeline, chain-modules,
+    benchmark-module, refactor-module
+  Workflow (5): design-workflow, debug-pipeline, convert-to-yaml-dsl,
+    optimize-pipeline, generate-workflow-tests
+  Legacy (2): explain-signature (retained for backwards compat)
 """
 
 from __future__ import annotations
@@ -29,54 +65,12 @@ from mcp.server.stdio import stdio_server
 
 __all__ = ["create_server", "run_stdio", "run_sse"]
 
+
 # ---------------------------------------------------------------------------
-# Built-in Prompts
+# Legacy prompts (kept for backwards compatibility)
 # ---------------------------------------------------------------------------
 
-_PROMPTS: list[types.Prompt] = [
-    types.Prompt(
-        name="generate-module",
-        description=(
-            "Template prompt for generating a new dspygen DSPy module. "
-            "Provide the module purpose and desired inputs/outputs."
-        ),
-        arguments=[
-            types.PromptArgument(
-                name="module_purpose",
-                description="What should the module do?",
-                required=True,
-            ),
-            types.PromptArgument(
-                name="inputs",
-                description="Comma-separated list of input field names",
-                required=True,
-            ),
-            types.PromptArgument(
-                name="outputs",
-                description="Comma-separated list of output field names",
-                required=True,
-            ),
-        ],
-    ),
-    types.Prompt(
-        name="debug-pipeline",
-        description=(
-            "Prompt template for debugging a failing dspygen DSL pipeline. "
-            "Paste the pipeline YAML and the error message."
-        ),
-        arguments=[
-            types.PromptArgument(
-                name="pipeline_yaml",
-                description="The YAML content of the failing pipeline",
-                required=True,
-            ),
-            types.PromptArgument(
-                name="error_message",
-                description="The error or unexpected output observed",
-                required=True,
-            ),
-        ],
-    ),
+_LEGACY_PROMPTS: list[types.Prompt] = [
     types.Prompt(
         name="explain-signature",
         description=(
@@ -92,46 +86,6 @@ _PROMPTS: list[types.Prompt] = [
         ],
     ),
 ]
-
-
-def _render_generate_module(args: dict[str, str]) -> list[types.PromptMessage]:
-    purpose = args.get("module_purpose", "")
-    inputs = args.get("inputs", "")
-    outputs = args.get("outputs", "")
-    text = (
-        "You are an expert DSPy developer working with the dspygen framework.\n\n"
-        "Generate a complete dspygen DSPy module for the following purpose:\n"
-        f"**Purpose:** {purpose}\n\n"
-        f"**Input fields:** {inputs}\n"
-        f"**Output fields:** {outputs}\n\n"
-        "Requirements:\n"
-        "1. Define a `dspy.Signature` subclass with a descriptive docstring.\n"
-        "2. Assign `dspy.InputField(desc=...)` for each input.\n"
-        "3. Assign `dspy.OutputField(desc=...)` for each output.\n"
-        "4. Define a `dspy.Module` subclass using `dspy.ChainOfThought` or `dspy.Predict`.\n"
-        "5. Add a `<module_name>_call(...)` convenience function.\n"
-        "6. Add a Typer CLI `call` command.\n"
-        "7. Follow dspygen naming: file as `<snake_case>_module.py`.\n\n"
-        "Return only the complete Python source code."
-    )
-    return [types.PromptMessage(role="user", content=types.TextContent(type="text", text=text))]
-
-
-def _render_debug_pipeline(args: dict[str, str]) -> list[types.PromptMessage]:
-    pipeline_yaml = args.get("pipeline_yaml", "")
-    error_message = args.get("error_message", "")
-    text = (
-        "You are an expert in the dspygen DSL pipeline system.\n\n"
-        "Analyse the following failing pipeline and diagnose the root cause.\n\n"
-        f"**Pipeline YAML:**\n```yaml\n{pipeline_yaml}\n```\n\n"
-        f"**Error observed:**\n```\n{error_message}\n```\n\n"
-        "Please:\n"
-        "1. Identify the exact cause of the failure.\n"
-        "2. Explain the dspygen DSL concepts involved.\n"
-        "3. Provide a corrected version of the pipeline YAML.\n"
-        "4. Suggest any preventive measures.\n"
-    )
-    return [types.PromptMessage(role="user", content=types.TextContent(type="text", text=text))]
 
 
 def _render_explain_signature(args: dict[str, str]) -> list[types.PromptMessage]:
@@ -151,18 +105,16 @@ def _render_explain_signature(args: dict[str, str]) -> list[types.PromptMessage]
     return [types.PromptMessage(role="user", content=types.TextContent(type="text", text=text))]
 
 
-_PROMPT_RENDERERS = {
-    "generate-module": _render_generate_module,
-    "debug-pipeline": _render_debug_pipeline,
+_LEGACY_RENDERERS = {
     "explain-signature": _render_explain_signature,
 }
 
 
 # ---------------------------------------------------------------------------
-# MCP Resources catalog
+# Base catalog resources (kept for server.py local use)
 # ---------------------------------------------------------------------------
 
-_CATALOG_RESOURCES: list[types.Resource] = [
+_BASE_CATALOG_RESOURCES: list[types.Resource] = [
     types.Resource(
         uri="dspygen://modules",
         name="dspygen Module Catalog",
@@ -212,7 +164,6 @@ def create_server() -> Server:
     async def _list_tools() -> list[types.Tool]:
         try:
             from dspygen.mcp.tools import collect_all_tool_definitions  # lazy
-
             return collect_all_tool_definitions()
         except Exception as exc:
             logger.error(f"list_tools error: {exc}")
@@ -224,7 +175,6 @@ def create_server() -> Server:
     ) -> list[types.TextContent]:
         try:
             from dspygen.mcp.tools import dispatch_tool  # lazy
-
             return await dispatch_tool(name, arguments or {})
         except ValueError:
             return [
@@ -243,16 +193,38 @@ def create_server() -> Server:
             ]
 
     # ------------------------------------------------------------------ #
-    # Resources
+    # Resources — base catalog + extended catalog
     # ------------------------------------------------------------------ #
 
     @server.list_resources()
     async def _list_resources() -> list[types.Resource]:
-        return _CATALOG_RESOURCES
+        resources = list(_BASE_CATALOG_RESOURCES)
+        try:
+            from dspygen.mcp.resources.extended_catalog import get_extended_resources  # lazy
+            extended = get_extended_resources()
+            # Deduplicate by URI
+            existing_uris = {r.uri for r in resources}
+            for r in extended:
+                if r.uri not in existing_uris:
+                    resources.append(r)
+                    existing_uris.add(r.uri)
+        except Exception as exc:
+            logger.warning(f"Could not load extended resources: {exc}")
+        return resources
 
     @server.read_resource()
     async def _read_resource(uri: str) -> str:  # type: ignore[return]
         try:
+            # Try extended catalog first (handles more URIs including dynamic ones)
+            try:
+                from dspygen.mcp.resources.extended_catalog import read_extended_resource  # lazy
+                result = read_extended_resource(uri)
+                if result is not None:
+                    return result
+            except Exception as exc:
+                logger.debug(f"extended_catalog did not handle {uri!r}: {exc}")
+
+            # Fall back to base catalog
             from dspygen.mcp.resources.catalog import (  # lazy
                 _build_module_catalog,
                 _build_agent_catalog,
@@ -271,31 +243,56 @@ def create_server() -> Server:
             else:
                 return json.dumps({"error": f"Unknown resource URI: {uri}"})
             return json.dumps(data, indent=2)
+
         except Exception as exc:
             logger.exception(f"read_resource error for {uri}")
             return json.dumps({"error": str(exc)})
 
     # ------------------------------------------------------------------ #
-    # Prompts
+    # Prompts — all prompt libraries + legacy
     # ------------------------------------------------------------------ #
 
     @server.list_prompts()
     async def _list_prompts() -> list[types.Prompt]:
-        return _PROMPTS
+        prompts: list[types.Prompt] = []
+        try:
+            from dspygen.mcp.prompts import get_all_prompts  # lazy
+            prompts.extend(get_all_prompts())
+        except Exception as exc:
+            logger.warning(f"Could not load extended prompts: {exc}")
+
+        # Add legacy prompts not already in the list
+        existing_names = {p.name for p in prompts}
+        for p in _LEGACY_PROMPTS:
+            if p.name not in existing_names:
+                prompts.append(p)
+
+        return prompts
 
     @server.get_prompt()
     async def _get_prompt(
         name: str, arguments: dict[str, str] | None
     ) -> types.GetPromptResult:
-        renderer = _PROMPT_RENDERERS.get(name)
-        if renderer is None:
-            raise ValueError(f"Unknown prompt: {name!r}")
-        messages = renderer(arguments or {})
-        prompt_obj = next((p for p in _PROMPTS if p.name == name), None)
-        description = prompt_obj.description if prompt_obj else ""
-        return types.GetPromptResult(description=description, messages=messages)
+        # Try extended prompt library first
+        try:
+            from dspygen.mcp.prompts import render_prompt  # lazy
+            return render_prompt(name, arguments or {})
+        except ValueError:
+            pass  # Not found in extended library; try legacy
+        except Exception as exc:
+            logger.warning(f"Extended prompt render failed for {name!r}: {exc}")
 
-    logger.info("dspygen MCP server created successfully")
+        # Try legacy prompts
+        renderer = _LEGACY_RENDERERS.get(name)
+        if renderer is not None:
+            messages = renderer(arguments or {})
+            prompt_obj = next((p for p in _LEGACY_PROMPTS if p.name == name), None)
+            description = prompt_obj.description if prompt_obj else ""
+            return types.GetPromptResult(description=description, messages=messages)
+
+        raise ValueError(f"Unknown prompt: {name!r}")
+
+    logger.info("dspygen MCP server created successfully (maximized — tools/resources/prompts)")
     return server
 
 
@@ -388,7 +385,7 @@ def run_sse(app: Any = None) -> Any:
     server = create_server()
 
     if app is None:
-        app = FastAPI(title="dspygen MCP Server", version="1.0.0")
+        app = FastAPI(title="dspygen MCP Server", version="2.0.0")
 
     sse_transport = SseServerTransport("/mcp/messages")
 

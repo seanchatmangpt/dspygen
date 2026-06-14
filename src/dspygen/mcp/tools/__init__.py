@@ -13,23 +13,35 @@ __all__ = [
     "dispatch_tool",
 ]
 
+# Ordered list of all tool module paths.
+# New modules are appended here — the dispatcher tries each in order and
+# returns on the first non-None result.
+_TOOL_MODULE_PATHS = [
+    "dspygen.mcp.tools.module_tools",
+    "dspygen.mcp.tools.agent_tools",
+    "dspygen.mcp.tools.workflow_tools",
+    "dspygen.mcp.tools.retrieval_tools",
+    "dspygen.mcp.tools.rdddy_tools",
+    "dspygen.mcp.tools.extended_module_tools",
+    "dspygen.mcp.tools.extended_retrieval_tools",
+    "dspygen.mcp.tools.lm_tools",
+    "dspygen.mcp.tools.writer_tools",
+]
+
 
 def collect_all_tool_definitions():
     """Return a flat list of all Tool descriptors from all tool modules."""
+    import importlib
+    import logging
+
+    _log = logging.getLogger(__name__)
     tools = []
-    for module_path in (
-        "dspygen.mcp.tools.module_tools",
-        "dspygen.mcp.tools.agent_tools",
-        "dspygen.mcp.tools.workflow_tools",
-        "dspygen.mcp.tools.retrieval_tools",
-    ):
+    for module_path in _TOOL_MODULE_PATHS:
         try:
-            import importlib
             mod = importlib.import_module(module_path)
             tools.extend(mod.get_tool_definitions())
         except Exception as exc:
-            import logging
-            logging.getLogger(__name__).warning(
+            _log.warning(
                 "Could not load tool definitions from %s: %s", module_path, exc
             )
     return tools
@@ -39,25 +51,22 @@ async def dispatch_tool(name: str, arguments: dict):
     """
     Route a tool call to the owning module.
 
-    Returns the list[TextContent] result, or raises ValueError if no module
-    owns the tool name.
+    Iterates through all registered tool modules and returns the result
+    from the first module that claims the tool (returns non-None).
+
+    Raises ValueError if no module owns the tool name.
     """
     import importlib
+    import json
+    import mcp.types as types
 
-    for module_path in (
-        "dspygen.mcp.tools.module_tools",
-        "dspygen.mcp.tools.agent_tools",
-        "dspygen.mcp.tools.workflow_tools",
-        "dspygen.mcp.tools.retrieval_tools",
-    ):
+    for module_path in _TOOL_MODULE_PATHS:
         try:
             mod = importlib.import_module(module_path)
             result = await mod.handle_tool(name, arguments)
             if result is not None:
                 return result
         except Exception as exc:
-            import mcp.types as types
-            import json
             return [
                 types.TextContent(
                     type="text",
