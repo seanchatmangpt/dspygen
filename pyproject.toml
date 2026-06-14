@@ -14,6 +14,10 @@ repository = "https://github.com/seanchatmangpt/dspygen"
 dspygen = "dspygen.cli:app"
 dspygen-mcp = "dspygen.mcp.server:run_stdio"
 dspygen-lsp = "dspygen.lsp.server:run_stdio"
+dspygen-jupyter = "dspygen.jupyter.kernel:load_ipython_extension"
+
+[tool.poetry.plugins."pytest11"]
+dspygen = "dspygen.pytest_plugin"
 
 [tool.poetry.dependencies]  # https://python-poetry.org/docs/dependency-specification/
 coloredlogs = ">=15.0.1"
@@ -153,9 +157,7 @@ pinecone-client = ">=3.0"
 [tool.poetry.extras]
 mcp = ["mcp"]
 lsp = ["pygls", "lsprotocol"]
-jupyter = ["jupyter", "jupyterlab", "ipykernel", "ipywidgets", "nbformat"]
-docs = ["sphinx", "myst-parser", "sphinx-rtd-theme"]
-all = ["mcp", "pygls", "lsprotocol", "jupyter", "jupyterlab", "ipykernel", "sphinx", "myst-parser"]
+all = ["mcp", "pygls", "lsprotocol"]
 
 [tool.coverage.report]  # https://coverage.readthedocs.io/en/latest/config.html#report
 precision = 1
