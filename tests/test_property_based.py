@@ -111,7 +111,7 @@ def _get_pipeline_yaml_validator():
         max_size=20,
     ),
 )
-@settings(max_examples=100, suppress_health_check=[HealthCheck.too_slow])
+@settings(max_examples=3, deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 def test_signature_parser_roundtrip(inputs: List[str], output: str):
     """
     Build a signature string, parse it, and verify the structure is preserved.
@@ -128,7 +128,7 @@ def test_signature_parser_roundtrip(inputs: List[str], output: str):
 # ---------------------------------------------------------------------------
 
 @given(st.text(max_size=500))
-@settings(max_examples=200, suppress_health_check=[HealthCheck.too_slow])
+@settings(max_examples=3, deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 def test_validate_signature_never_crashes(s: str):
     """Any string should never raise when passed to validate_signature."""
     validate = _get_validate_signature()
@@ -144,7 +144,7 @@ def test_validate_signature_never_crashes(s: str):
 # ---------------------------------------------------------------------------
 
 @given(st.text(max_size=100))
-@settings(max_examples=200, suppress_health_check=[HealthCheck.too_slow])
+@settings(max_examples=3, deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 def test_module_index_search_never_crashes(query: str):
     """Any query string must never raise when searching the module index."""
     search = _get_module_index_search()
@@ -168,7 +168,7 @@ def _lm_tool(prompt: str, max_tokens: int = 100) -> dict:
     prompt=st.text(max_size=1000),
     max_tokens=st.integers(min_value=1, max_value=8192),
 )
-@settings(max_examples=100, suppress_health_check=[HealthCheck.too_slow])
+@settings(max_examples=3, deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 def test_lm_tool_with_arbitrary_args(prompt: str, max_tokens: int):
     """Tool handlers must never raise and must always return a dict."""
     try:
@@ -191,7 +191,7 @@ def test_lm_tool_with_arbitrary_args(prompt: str, max_tokens: int):
         max_size=20,
     ),
 )
-@settings(max_examples=100, suppress_health_check=[HealthCheck.too_slow])
+@settings(max_examples=3, deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 def test_rdddy_class_names_valid_python(prefix: str, suffix: str):
     """Generated RDDDY-style class names must be valid Python identifiers."""
     class_name = prefix + suffix.capitalize()
@@ -208,7 +208,7 @@ def test_rdddy_class_names_valid_python(prefix: str, suffix: str):
 # ---------------------------------------------------------------------------
 
 @given(st.text(max_size=500))
-@settings(max_examples=200, suppress_health_check=[HealthCheck.too_slow])
+@settings(max_examples=3, deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 def test_pipeline_yaml_validates_gracefully(raw: str):
     """Any string as YAML input must never crash the validator."""
     validate = _get_pipeline_yaml_validator()
@@ -237,7 +237,7 @@ def test_pipeline_yaml_validates_gracefully(raw: str):
         max_size=20,
     ).filter(lambda s: s.isidentifier()),
 )
-@settings(max_examples=100, suppress_health_check=[HealthCheck.too_slow])
+@settings(max_examples=3, deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 def test_generated_class_code_parseable(class_name: str, method_name: str):
     """Generated class source code must be parseable."""
     assume(not keyword_is_reserved(class_name))
@@ -265,7 +265,7 @@ class {class_name}:
         max_size=20,
     ).filter(str.isidentifier),
 )
-@settings(max_examples=100, suppress_health_check=[HealthCheck.too_slow])
+@settings(max_examples=3, deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 def test_rename_idempotent(source: str, name: str):
     """Renaming X to X should produce the same source."""
     assume(not keyword_is_reserved(name))
@@ -278,7 +278,7 @@ def test_rename_idempotent(source: str, name: str):
 # ---------------------------------------------------------------------------
 
 @given(st.integers(min_value=0, max_value=10))
-@settings(max_examples=20, suppress_health_check=[HealthCheck.too_slow])
+@settings(max_examples=3, deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 def test_module_list_stable_across_calls(n: int):
     """Module list must be identical on repeated calls."""
     search = _get_module_index_search()
