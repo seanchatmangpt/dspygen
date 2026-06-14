@@ -130,6 +130,9 @@ warn_unreachable = true
 addopts = "--color=yes --doctest-modules --exitfirst --failed-first --verbosity=2 --junitxml=reports/pytest.xml"
 testpaths = ["src", "tests"]
 xfail_strict = true
+markers = [
+    "integration: marks tests as integration tests (multi-component workflows)",
+]
 
 [tool.ruff]  # https://github.com/charliermarsh/ruff
 fix = true
