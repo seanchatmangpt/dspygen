@@ -20,6 +20,28 @@ from dspygen.utils.module_tools import module_to_dict
 app = typer.Typer()
 
 
+def version_callback(value: bool):
+    if value:
+        import importlib.metadata
+        typer.echo(importlib.metadata.version("dspygen"))
+        raise typer.Exit()
+
+
+@app.callback()
+def main_callback(
+    version: bool = typer.Option(
+        None,
+        "--version",
+        "-V",
+        callback=version_callback,
+        is_eager=True,
+        help="Show the dspygen version and exit.",
+    ),
+):
+    """DSPyGen — AI development CLI powered by DSPy."""
+    pass
+
+
 # Load existing subcommands
 def load_commands(directory: str = "subcommands"):
     script_dir = Path(__file__).parent
