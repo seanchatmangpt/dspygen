@@ -105,3 +105,14 @@ def pytest_configure(config):
         "markers",
         "dspygen_requires_openai: skip test if OPENAI_API_KEY is not set",
     )
+
+
+# ---------------------------------------------------------------------------
+# 4. Testing utilities — MockLM, fixtures, snapshot
+# ---------------------------------------------------------------------------
+
+try:
+    from dspygen.testing.fixtures import *  # noqa: F401, F403
+    from dspygen.testing.snapshot import snapshot  # noqa: F401
+except ImportError:
+    pass
