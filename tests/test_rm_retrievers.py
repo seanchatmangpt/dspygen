@@ -30,25 +30,31 @@ def _make_mock_dspy_retrieve():
 class TestWebRetriever:
     def test_instantiation(self):
         from dspygen.rm.web_retriever import WebRetriever
-        wr = WebRetriever(source="<html></html>")
-        assert wr.source == "<html></html>"
+        wr = WebRetriever(k=3)
+        assert wr.k == 3
 
-    def test_forward_returns_none(self):
+    def test_instantiation_default_k(self):
         from dspygen.rm.web_retriever import WebRetriever
-        wr = WebRetriever(source="<html><form><button type='submit'/></form></html>")
-        result = wr.forward(query="button")
-        assert result is None
+        wr = WebRetriever()
+        assert wr.k == 3  # default
+
+    def test_forward_with_mocked_search(self):
+        """Test forward() when DDG returns no results (no network needed)."""
+        from dspygen.rm.web_retriever import WebRetriever
+        import dspygen.rm.web_retriever as _wr_mod
+        with patch.object(_wr_mod, "_ddg_search", return_value=[]):
+            wr = WebRetriever(k=1)
+            result = wr.forward(query="test query")
+            assert hasattr(result, "passages")
+            assert result.passages == []
 
     def test_forward_accepts_arbitrary_query(self):
         from dspygen.rm.web_retriever import WebRetriever
-        wr = WebRetriever(source="<p>hello world</p>")
-        # should not raise
-        wr.forward(query="hello world")
-
-    def test_forward_with_kwargs(self):
-        from dspygen.rm.web_retriever import WebRetriever
-        wr = WebRetriever(source="x")
-        wr.forward(query="x", extra="ignored")
+        import dspygen.rm.web_retriever as _wr_mod
+        with patch.object(_wr_mod, "_ddg_search", return_value=[]):
+            wr = WebRetriever()
+            result = wr.forward(query="hello world")
+            assert hasattr(result, "passages")
 
 
 # ===========================================================================
@@ -137,14 +143,18 @@ class TestPythonCodeRetriever:
 # ===========================================================================
 
 class TestChromaRetriever:
-    def test_instantiation_mocked(self, tmp_path):
-        with patch("dspygen.rm.chroma_retriever.chromadb") as mock_chroma, \
-             patch("dspygen.rm.chroma_retriever.default_embed_fn", MagicMock()):
-            from dspygen.rm.chroma_retriever import ChromaRetriever
-            mock_client = MagicMock()
-            mock_chroma.PersistentClient.return_value = mock_client
-            mock_client.get_or_create_collection.return_value = MagicMock()
+    @pytest.fixture(autouse=True)
+    def _import_module(self):
+        """Ensure module is loaded before any patch.object calls."""
+        import dspygen.rm.chroma_retriever  # noqa: F401
+        self._cr_mod = sys.modules["dspygen.rm.chroma_retriever"]
 
+    def test_instantiation_mocked(self, tmp_path):
+        from dspygen.rm.chroma_retriever import ChromaRetriever
+        mock_client = MagicMock()
+        mock_client.get_or_create_collection.return_value = MagicMock()
+        with patch.object(self._cr_mod, "chromadb") as mock_chroma:
+            mock_chroma.PersistentClient.return_value = mock_client
             r = ChromaRetriever(
                 collection_name="test_col",
                 persist_directory=str(tmp_path),
@@ -156,9 +166,9 @@ class TestChromaRetriever:
         mock_collection = MagicMock()
         mock_collection.query.return_value = {"documents": [["doc1", "doc2"]]}
 
-        with patch("dspygen.rm.chroma_retriever.get_collection", return_value=mock_collection), \
-             patch("dspygen.rm.chroma_retriever.generate_embeddings", return_value=[[0.1, 0.2]]):
-            from dspygen.rm.chroma_retriever import ChromaRetriever
+        from dspygen.rm.chroma_retriever import ChromaRetriever
+        with patch.object(self._cr_mod, "get_collection", return_value=mock_collection), \
+             patch.object(self._cr_mod, "generate_embeddings", return_value=[[0.1, 0.2]]):
             r = ChromaRetriever(
                 collection_name="col",
                 persist_directory=str(tmp_path),
@@ -171,13 +181,10 @@ class TestChromaRetriever:
         mock_collection = MagicMock()
         mock_collection.query.return_value = {"documents": [["matching"]]}
 
-        with patch("dspygen.rm.chroma_retriever.get_collection", return_value=mock_collection), \
-             patch("dspygen.rm.chroma_retriever.generate_embeddings", return_value=[[0.1]]):
-            from dspygen.rm.chroma_retriever import ChromaRetriever
-            r = ChromaRetriever(
-                collection_name="col",
-                persist_directory=str(tmp_path),
-            )
+        from dspygen.rm.chroma_retriever import ChromaRetriever
+        with patch.object(self._cr_mod, "get_collection", return_value=mock_collection), \
+             patch.object(self._cr_mod, "generate_embeddings", return_value=[[0.1]]):
+            r = ChromaRetriever(collection_name="col", persist_directory=str(tmp_path))
             result = r.forward("query", contains="matching")
             assert result is not None
 
@@ -195,69 +202,42 @@ class TestChromaRetriever:
 # ===========================================================================
 
 class TestGoogleSheetRetriever:
-    def test_forward_with_no_query(self):
+    def _make_retriever(self, records):
+        """Build a GoogleSheetRetriever with internals set directly (bypasses inject)."""
         import pandas as pd
-        mock_client = MagicMock()
-        mock_sheet = MagicMock()
-        mock_sheet.get_all_records.return_value = [
-            {"name": "Alice", "age": 30},
-            {"name": "Bob", "age": 25},
-        ]
-        mock_spreadsheet = MagicMock()
-        mock_spreadsheet.worksheet.return_value = mock_sheet
-        mock_client.open_by_key.return_value = mock_spreadsheet
-
-        with patch("dspygen.rm.google_sheets_retriever.inject") as mock_inject:
-            mock_inject.autoparams.return_value = lambda f: f
-            from dspygen.rm.google_sheets_retriever import GoogleSheetRetriever
-            # Bypass inject.autoparams by constructing manually
-            retriever = object.__new__(GoogleSheetRetriever)
-            retriever.pipeline = None
-            retriever.step = None
-            retriever.spreadsheet_id = "fake_id"
-            retriever.sheet_name = "Sheet1"
-            retriever.return_columns = []
-            retriever.client = mock_client
-            retriever.sheet = mock_sheet
-            retriever.df = pd.DataFrame(mock_sheet.get_all_records())
-
-            result = retriever.forward()
-            assert len(result) == 2
-            assert result[0]["name"] == "Alice"
-
-    def test_forward_with_k_limit(self):
-        import pandas as pd
-        mock_sheet = MagicMock()
-        mock_sheet.get_all_records.return_value = [
-            {"id": i} for i in range(10)
-        ]
-
         from dspygen.rm.google_sheets_retriever import GoogleSheetRetriever
+        mock_sheet = MagicMock()
+        mock_sheet.get_all_records.return_value = records
         retriever = object.__new__(GoogleSheetRetriever)
         retriever.pipeline = None
         retriever.step = None
+        retriever.spreadsheet_id = "fake_id"
+        retriever.sheet_name = "Sheet1"
         retriever.return_columns = []
         retriever.sheet = mock_sheet
-        retriever.df = pd.DataFrame(mock_sheet.get_all_records())
+        retriever.df = pd.DataFrame(records)
+        return retriever
 
+    def test_forward_with_no_query(self):
+        retriever = self._make_retriever([
+            {"name": "Alice", "age": 30},
+            {"name": "Bob", "age": 25},
+        ])
+        result = retriever.forward()
+        assert len(result) == 2
+        assert result[0]["name"] == "Alice"
+
+    def test_forward_with_k_limit(self):
+        retriever = self._make_retriever([{"id": i} for i in range(10)])
         result = retriever.forward(k=3)
         assert len(result) == 3
 
     def test_forward_with_return_columns(self):
         import pandas as pd
-        mock_sheet = MagicMock()
-        mock_sheet.get_all_records.return_value = [
-            {"name": "Alice", "age": 30, "city": "NYC"},
-        ]
-
         from dspygen.rm.google_sheets_retriever import GoogleSheetRetriever
-        retriever = object.__new__(GoogleSheetRetriever)
-        retriever.pipeline = None
-        retriever.step = None
+        records = [{"name": "Alice", "age": 30, "city": "NYC"}]
+        retriever = self._make_retriever(records)
         retriever.return_columns = ["name"]
-        retriever.sheet = mock_sheet
-        retriever.df = pd.DataFrame(mock_sheet.get_all_records())
-
         result = retriever.forward()
         assert "age" not in result[0]
         assert "name" in result[0]

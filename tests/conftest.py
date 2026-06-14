@@ -5,7 +5,7 @@ This file is automatically loaded by pytest before any test module.
 
 Key responsibilities:
 1. Add src/ to sys.path so `import dspygen` works without installing.
-2. Provide mock stubs for heavyweight optional dependencies (dslmodel, chromadb, etc.)
+2. Provide mock stubs for heavyweight optional dependencies (dslmodel, etc.)
    so that tests can run in environments where these are not installed.
 3. Register custom pytest marks to silence PytestUnknownMarkWarning.
 """
@@ -13,8 +13,7 @@ Key responsibilities:
 import sys
 import types
 from pathlib import Path
-from typing import Any
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -42,7 +41,7 @@ except ImportError:
 
 
 # ---------------------------------------------------------------------------
-# 2. Stub unavailable heavy dependencies
+# 2b. Stub unavailable heavy dependencies
 # ---------------------------------------------------------------------------
 
 def _make_dslmodel_stub():
@@ -61,39 +60,33 @@ def _make_dslmodel_stub():
     return stub
 
 
-def _register_stub(name: str, stub: types.ModuleType):
-    """Register a module stub in sys.modules if not already present."""
-    if name not in sys.modules:
-        sys.modules[name] = stub
-
-
 # Register dslmodel stub early so any subsequent imports of dspygen.rdddy.* work
-try:
-    import dslmodel  # noqa: F401
-except ModuleNotFoundError:
-    _register_stub("dslmodel", _make_dslmodel_stub())
+if "dslmodel" not in sys.modules:
+    try:
+        import dslmodel  # noqa: F401
+    except ModuleNotFoundError:
+        _stub = _make_dslmodel_stub()
+        sys.modules["dslmodel"] = _stub
 
-# Stub optional heavy deps that may not be installed in CI
-for _mod_name in [
-    "chromadb",
-    "chromadb.utils",
-    "chromadb.utils.embedding_functions",
-    "ebooklib",
-    "ebooklib.epub",
-    "bs4",
-    "docx",
-    "pypdf",
-    "ijson",
+# Stub modules that are truly platform-specific (macOS only) and absent in CI
+_MACOS_ONLY_DEPS = [
     "osascript",
     "pyobjc",
     "pyobjc_framework_eventkit",
     "EventKit",
-    "pm4py",
-    "pygame",
-]:
+    "Foundation",
+    "AppKit",
+    "Contacts",
+    "EventKit",
+]
+
+for _mod_name in _MACOS_ONLY_DEPS:
     if _mod_name not in sys.modules:
         _mock = MagicMock()
-        _mock.__spec__ = types.ModuleType(_mod_name)
+        _mock.__name__ = _mod_name
+        _mock.__package__ = _mod_name.split(".")[0]
+        _mock.__path__ = []
+        _mock.__spec__ = None
         sys.modules[_mod_name] = _mock
 
 
