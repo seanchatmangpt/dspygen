@@ -6,6 +6,7 @@ Registers browsable MCP resources:
   dspygen://agents      — full agent catalog JSON
   dspygen://workflows   — workflow + pipeline example catalog
   dspygen://signatures  — discovered DSPy signature strings
+  dspygen://help        — markdown listing all tool categories with counts
 """
 
 from __future__ import annotations
@@ -205,6 +206,155 @@ def _build_signatures_catalog() -> list[dict]:
     return sigs
 
 
+def _build_help_resource() -> str:
+    """Return a markdown string listing all MCP tool categories with tool counts."""
+    # Tool categories with their tool names as defined across all tool modules
+    _TOOL_CATEGORIES = [
+        (
+            "Module Tools",
+            [
+                "list_modules",
+                "get_module_info",
+                "run_module",
+                "generate_dspy_signature",
+                "generate_dspy_module",
+                "scaffold_module",
+            ],
+        ),
+        (
+            "Agent Tools",
+            [
+                "list_agents",
+                "get_agent_info",
+                "run_agent",
+                "trigger_transition",
+                "get_agent_state",
+            ],
+        ),
+        (
+            "Workflow Tools",
+            [
+                "execute_pipeline",
+                "execute_workflow",
+                "list_workflow_examples",
+                "validate_pipeline",
+                "run_pipeline_from_file",
+            ],
+        ),
+        (
+            "Retrieval Tools",
+            [
+                "retrieve_from_chroma",
+                "retrieve_from_web",
+                "retrieve_from_code",
+            ],
+        ),
+        (
+            "RDDDY Domain Tools",
+            [
+                "create_aggregate",
+                "create_command",
+                "create_event",
+                "create_query",
+                "create_saga",
+                "create_policy",
+                "create_value_object",
+                "create_read_model",
+                "event_storm",
+                "create_inhabitant",
+                "list_rdddy_patterns",
+                "scaffold_domain",
+            ],
+        ),
+        (
+            "Extended Module Tools",
+            [
+                "generate_tweet",
+                "summarize_document",
+                "natural_language_to_sql",
+                "generate_blog_post",
+                "generate_code_comments",
+                "translate_data_format",
+                "classify_customer_feedback",
+                "generate_mermaid_diagram",
+                "cobol_to_python",
+                "generate_pydantic_class",
+                "generate_cli_module",
+                "generate_jsx",
+                "ask_dataframe",
+                "ask_data",
+                "generate_nuxt_component",
+                "chatbot_response",
+                "check_condition",
+                "generate_test",
+                "optimize_bytecode",
+                "translate_bpmn_to_bpel",
+            ],
+        ),
+        (
+            "Extended Retrieval Tools",
+            [
+                "retrieve_from_chatgpt_chroma",
+                "retrieve_from_python_code",
+                "retrieve_from_natural_language_data",
+                "retrieve_from_google_sheets",
+                "retrieve_from_document",
+                "retrieve_with_wizard",
+                "save_structured_code_description",
+                "get_dynamic_signature",
+            ],
+        ),
+        (
+            "LM Tools",
+            [
+                "configure_lm",
+                "list_available_models",
+                "sample_completion",
+                "chain_of_thought",
+                "run_program_of_thought",
+                "optimize_module",
+                "get_lm_history",
+            ],
+        ),
+        (
+            "Writer Tools",
+            [
+                "list_writers",
+                "run_writer",
+                "generate_from_template",
+            ],
+        ),
+    ]
+
+    lines = ["## MCP Tools", ""]
+    total = 0
+    for category, tools in _TOOL_CATEGORIES:
+        count = len(tools)
+        total += count
+        lines.append(f"### {category} ({count})")
+        for tool in tools:
+            lines.append(f"- {tool}")
+        lines.append("")
+
+    lines.append(f"**Total: {total} tools across {len(_TOOL_CATEGORIES)} categories**")
+    lines.append("")
+    lines.append("## Resources")
+    lines.append("")
+    lines.append("- `dspygen://modules` — full module catalog")
+    lines.append("- `dspygen://agents` — full agent catalog")
+    lines.append("- `dspygen://workflows` — workflow + pipeline examples")
+    lines.append("- `dspygen://signatures` — all DSPy signature classes")
+    lines.append("- `dspygen://help` — this help document")
+    lines.append("")
+    lines.append("## Getting Started")
+    lines.append("")
+    lines.append("1. Use `list_modules` to discover available DSPy modules.")
+    lines.append("2. Use `scaffold_module` to generate a new module from scratch.")
+    lines.append("3. Use `execute_pipeline` or `run_pipeline_from_file` to run YAML pipelines.")
+    lines.append("4. Use `dspygen://modules/{name}` resources for per-module docs.")
+    return "\n".join(lines)
+
+
 # ---------------------------------------------------------------------------
 # Resource registration
 # ---------------------------------------------------------------------------
@@ -234,6 +384,12 @@ _RESOURCES = [
         description="All discovered DSPy Signature class definitions across the dspygen module library.",
         mimeType="application/json",
     ),
+    types.Resource(
+        uri="dspygen://help",
+        name="dspygen MCP Help",
+        description="Markdown reference listing all MCP tool categories with tool counts and getting-started guide.",
+        mimeType="text/markdown",
+    ),
 ]
 
 
@@ -249,15 +405,20 @@ def register_resources(server: Server) -> None:
         try:
             if uri == "dspygen://modules":
                 data = _build_module_catalog()
+                return json.dumps(data, indent=2)
             elif uri == "dspygen://agents":
                 data = _build_agent_catalog()
+                return json.dumps(data, indent=2)
             elif uri == "dspygen://workflows":
                 data = _build_workflow_catalog()
+                return json.dumps(data, indent=2)
             elif uri == "dspygen://signatures":
                 data = _build_signatures_catalog()
+                return json.dumps(data, indent=2)
+            elif uri == "dspygen://help":
+                return _build_help_resource()
             else:
                 return json.dumps({"error": f"Unknown resource URI: {uri}"})
-            return json.dumps(data, indent=2)
         except Exception as exc:
             logger.exception(f"read_resource error for {uri}")
             return json.dumps({"error": str(exc)})

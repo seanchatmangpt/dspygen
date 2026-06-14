@@ -4,9 +4,11 @@ dspygen MCP (Model Context Protocol) server package.
 Exposes the entire dspygen framework as MCP tools, resources, and prompts.
 
 Tool surface (maximized):
-  Module tools     — list_modules, get_module_info, run_module, generate_dspy_signature, generate_dspy_module
+  Module tools     — list_modules, get_module_info, run_module, generate_dspy_signature,
+                     generate_dspy_module, scaffold_module
   Agent tools      — list_agents, get_agent_info, run_agent, trigger_transition, get_agent_state
-  Workflow tools   — list_workflows, get_workflow, run_workflow, validate_workflow
+  Workflow tools   — execute_pipeline, execute_workflow, list_workflow_examples,
+                     validate_pipeline, run_pipeline_from_file
   Retrieval tools  — retrieve_from_chroma, retrieve_from_web, retrieve_from_code
   RDDDY tools      — create_aggregate, create_command, create_event, create_query,
                      create_saga, create_policy, create_value_object, create_read_model,
@@ -27,7 +29,7 @@ Tool surface (maximized):
 
 Resource surface (maximized):
   dspygen://modules, dspygen://agents, dspygen://workflows, dspygen://signatures,
-  dspygen://rdddy, dspygen://signatures/all, dspygen://lm/providers,
+  dspygen://help, dspygen://rdddy, dspygen://signatures/all, dspygen://lm/providers,
   dspygen://rm/catalog, dspygen://writers/catalog,
   dspygen://modules/{name}, dspygen://agents/{name},
   dspygen://workflows/examples/{name}
@@ -45,4 +47,6 @@ Prompt surface (maximized — 25 prompts):
 
 from dspygen.mcp.server import create_server, run_stdio, run_sse
 
-__all__ = ["create_server", "run_stdio", "run_sse"]
+__version__ = "1.0.0"
+
+__all__ = ["create_server", "run_stdio", "run_sse", "__version__"]

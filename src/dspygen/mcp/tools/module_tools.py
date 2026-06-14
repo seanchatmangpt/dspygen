@@ -127,6 +127,7 @@ _TOOL_NAMES = {
     "run_module",
     "generate_dspy_signature",
     "generate_dspy_module",
+    "scaffold_module",
 }
 
 
@@ -218,6 +219,38 @@ def get_tool_definitions() -> list[types.Tool]:
                 "required": ["signature"],
             },
         ),
+        types.Tool(
+            name="scaffold_module",
+            description=(
+                "Generate a complete dspygen-style Python module file from scratch. "
+                "Returns a full Python source string with imports, DSPy Signature, "
+                "Module class with forward method, a module_call convenience function, "
+                "and an if __name__ == '__main__' block."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "class_name": {
+                        "type": "string",
+                        "description": "PascalCase class name, e.g. 'BlogPost' (Module suffix added automatically)",
+                    },
+                    "input_fields": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "List of input field names for the DSPy Signature, e.g. ['topic', 'tone']",
+                    },
+                    "output_field": {
+                        "type": "string",
+                        "description": "Single output field name for the DSPy Signature, e.g. 'blog_post'",
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Human-readable description of what this module does (used as docstring)",
+                    },
+                },
+                "required": ["class_name", "input_fields", "output_field", "description"],
+            },
+        ),
     ]
 
 
@@ -243,6 +276,8 @@ async def handle_tool(name: str, arguments: dict) -> list[types.TextContent] | N
         return await _generate_dspy_signature(arguments)
     if name == "generate_dspy_module":
         return await _generate_dspy_module(arguments)
+    if name == "scaffold_module":
+        return await _scaffold_module(arguments)
 
     return _err(f"Unhandled tool: {name}")  # shouldn't happen
 
@@ -262,7 +297,7 @@ async def _list_modules(args: dict) -> list[types.TextContent]:
             )
         return _ok(result)
     except Exception as exc:
-        return _err(f"list_modules failed: {exc}")
+        return _err(f"list_modules failed: {type(exc).__name__}: {exc} — check that dspygen is properly configured and inputs are valid.")
 
 
 async def _get_module_info(args: dict) -> list[types.TextContent]:
@@ -277,7 +312,7 @@ async def _get_module_info(args: dict) -> list[types.TextContent]:
         info = _extract_module_info(matches[0])
         return _ok(info)
     except Exception as exc:
-        return _err(f"get_module_info failed: {exc}")
+        return _err(f"get_module_info failed: {type(exc).__name__}: {exc} — check that dspygen is properly configured and inputs are valid.")
 
 
 async def _run_module(args: dict) -> list[types.TextContent]:
@@ -310,7 +345,7 @@ async def _run_module(args: dict) -> list[types.TextContent]:
         return _ok({"result": str(result)})
     except Exception as exc:
         logger.exception(f"run_module error for {module_name}")
-        return _err(f"run_module failed: {exc}")
+        return _err(f"run_module failed: {type(exc).__name__}: {exc} — check that dspygen is properly configured and inputs are valid.")
 
 
 async def _generate_dspy_signature(args: dict) -> list[types.TextContent]:
@@ -328,7 +363,7 @@ async def _generate_dspy_signature(args: dict) -> list[types.TextContent]:
         return _ok({"signature": str(result)})
     except Exception as exc:
         logger.exception("generate_dspy_signature error")
-        return _err(f"generate_dspy_signature failed: {exc}")
+        return _err(f"generate_dspy_signature failed: {type(exc).__name__}: {exc} — check that dspygen is properly configured and inputs are valid.")
 
 
 async def _generate_dspy_module(args: dict) -> list[types.TextContent]:
@@ -350,4 +385,83 @@ async def _generate_dspy_module(args: dict) -> list[types.TextContent]:
         )
         return _ok({"module_code": template, "class_name": class_name})
     except Exception as exc:
-        return _err(f"generate_dspy_module failed: {exc}")
+        return _err(f"generate_dspy_module failed: {type(exc).__name__}: {exc} — check that dspygen is properly configured and inputs are valid.")
+
+
+async def _scaffold_module(args: dict) -> list[types.TextContent]:
+    class_name: str = (args or {}).get("class_name", "")
+    input_fields: list = (args or {}).get("input_fields", [])
+    output_field: str = (args or {}).get("output_field", "")
+    description: str = (args or {}).get("description", "")
+
+    if not class_name:
+        return _err("class_name argument is required")
+    if not input_fields:
+        return _err("input_fields argument is required and must be non-empty")
+    if not output_field:
+        return _err("output_field argument is required")
+    if not description:
+        return _err("description argument is required")
+
+    try:
+        # Derive snake_case module name and call-function name from PascalCase class_name
+        # e.g. "BlogPost" -> "blog_post_module" / "blog_post_call"
+        import re
+        snake = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "_", class_name).lower()
+        call_fn_name = f"{snake}_call"
+
+        # Build InputField / OutputField lines
+        input_lines = "\n".join(
+            f'    {f} = dspy.InputField(desc="{f.replace("_", " ")}")'
+            for f in input_fields
+        )
+        output_line = f'    {output_field} = dspy.OutputField(desc="{output_field.replace("_", " ")}")'
+
+        call_args = ", ".join(f"{f}: str" for f in input_fields)
+        call_kwargs = ", ".join(f"{f}={f}" for f in input_fields)
+        example_args = ", ".join(f'"{f}_value"' for f in input_fields)
+
+        code = f'''\
+"""
+{description}
+"""
+
+from __future__ import annotations
+
+import dspy
+from dspygen.utils.dspy_tools import init_dspy
+
+
+class {class_name}Signature(dspy.Signature):
+    """{description}"""
+
+{input_lines}
+{output_line}
+
+
+class {class_name}Module(dspy.Module):
+    """{description}"""
+
+    def __init__(self):
+        super().__init__()
+        self.predict = dspy.ChainOfThought({class_name}Signature)
+
+    def forward(self, {call_args}) -> str:
+        result = self.predict({call_kwargs})
+        return getattr(result, "{output_field}", "")
+
+
+def {call_fn_name}({call_args}) -> str:
+    """Convenience wrapper — initialises dspy and runs {class_name}Module."""
+    init_dspy()
+    module = {class_name}Module()
+    return module.forward({call_kwargs})
+
+
+if __name__ == "__main__":
+    result = {call_fn_name}({example_args})
+    print(result)
+'''
+        return [types.TextContent(type="text", text=code)]
+    except Exception as exc:
+        return _err(f"scaffold_module failed: {type(exc).__name__}: {exc} — check that dspygen is properly configured and inputs are valid.")

@@ -64,6 +64,7 @@ _TOOL_NAMES = {
     "execute_workflow",
     "list_workflow_examples",
     "validate_pipeline",
+    "run_pipeline_from_file",
 }
 
 
@@ -133,6 +134,27 @@ def get_tool_definitions() -> list[types.Tool]:
                 "required": ["yaml_content"],
             },
         ),
+        types.Tool(
+            name="run_pipeline_from_file",
+            description=(
+                "Read a pipeline YAML file from disk by path and execute it via DSLPipelineExecutor. "
+                "Returns the resulting context dict as TextContent."
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "file_path": {
+                        "type": "string",
+                        "description": "Absolute or relative path to a pipeline YAML file on disk",
+                    },
+                    "init_ctx": {
+                        "type": "object",
+                        "description": "Optional initial context variables injected into the pipeline",
+                    },
+                },
+                "required": ["file_path"],
+            },
+        ),
     ]
 
 
@@ -154,6 +176,8 @@ async def handle_tool(name: str, arguments: dict) -> list[types.TextContent] | N
         return await _list_workflow_examples(arguments)
     if name == "validate_pipeline":
         return await _validate_pipeline(arguments)
+    if name == "run_pipeline_from_file":
+        return await _run_pipeline_from_file(arguments)
 
     return _err(f"Unhandled tool: {name}")
 
@@ -196,7 +220,7 @@ async def _execute_pipeline(args: dict) -> list[types.TextContent]:
         return _ok({"status": "success", "context": ctx_dict})
     except Exception as exc:
         logger.exception("execute_pipeline error")
-        return _err(f"execute_pipeline failed: {exc}")
+        return _err(f"execute_pipeline failed: {type(exc).__name__}: {exc} — check that dspygen is properly configured and inputs are valid.")
 
 
 async def _execute_workflow(args: dict) -> list[types.TextContent]:
@@ -237,7 +261,7 @@ async def _execute_workflow(args: dict) -> list[types.TextContent]:
         return _ok({"status": "success", "context": ctx_dict})
     except Exception as exc:
         logger.exception("execute_workflow error")
-        return _err(f"execute_workflow failed: {exc}")
+        return _err(f"execute_workflow failed: {type(exc).__name__}: {exc} — check that dspygen is properly configured and inputs are valid.")
 
 
 async def _list_workflow_examples(args: dict) -> list[types.TextContent]:
@@ -260,7 +284,7 @@ async def _list_workflow_examples(args: dict) -> list[types.TextContent]:
                 )
         return _ok(result)
     except Exception as exc:
-        return _err(f"list_workflow_examples failed: {exc}")
+        return _err(f"list_workflow_examples failed: {type(exc).__name__}: {exc} — check that dspygen is properly configured and inputs are valid.")
 
 
 async def _validate_pipeline(args: dict) -> list[types.TextContent]:
@@ -296,4 +320,46 @@ async def _validate_pipeline(args: dict) -> list[types.TextContent]:
         )
     except Exception as exc:
         logger.exception("validate_pipeline error")
-        return _err(f"validate_pipeline failed — invalid pipeline YAML: {exc}")
+        return _err(f"validate_pipeline failed — invalid pipeline YAML: {type(exc).__name__}: {exc} — check that dspygen is properly configured and inputs are valid.")
+
+
+async def _run_pipeline_from_file(args: dict) -> list[types.TextContent]:
+    file_path: str = (args or {}).get("file_path", "")
+    init_ctx: dict = (args or {}).get("init_ctx", {})
+    if not file_path:
+        return _err("file_path argument is required")
+    try:
+        path = Path(file_path).expanduser().resolve()
+        if not path.exists():
+            return _err(f"File not found: {path}")
+        if not path.is_file():
+            return _err(f"Path is not a file: {path}")
+
+        src_dir = str(_dspygen_root())
+        if src_dir not in sys.path:
+            sys.path.insert(0, src_dir)
+
+        from dspygen.llm_pipe.dsl_pipeline_executor import execute_pipeline as _exec  # lazy
+
+        context = _exec(str(path), init_ctx if init_ctx else None)
+
+        if hasattr(context, "toDict"):
+            ctx_dict = context.toDict()
+        elif hasattr(context, "items"):
+            ctx_dict = {
+                k: v
+                for k, v in context.items()
+                if isinstance(v, (str, int, float, bool, list, dict, type(None)))
+            }
+        else:
+            ctx_dict = {"result": str(context)}
+
+        return [
+            types.TextContent(
+                type="text",
+                text=json.dumps({"status": "success", "file": str(path), "context": ctx_dict}, indent=2),
+            )
+        ]
+    except Exception as exc:
+        logger.exception(f"run_pipeline_from_file error for {file_path!r}")
+        return _err(f"run_pipeline_from_file failed: {type(exc).__name__}: {exc} — check that dspygen is properly configured and inputs are valid.")
