@@ -12,6 +12,8 @@ repository = "https://github.com/seanchatmangpt/dspygen"
 
 [tool.poetry.scripts]  # https://python-poetry.org/docs/pyproject/#scripts
 dspygen = "dspygen.cli:app"
+dspygen-mcp = "dspygen.mcp.server:run_stdio"
+dspygen-lsp = "dspygen.lsp.server:run_stdio"
 
 [tool.poetry.dependencies]  # https://python-poetry.org/docs/dependency-specification/
 coloredlogs = ">=15.0.1"
@@ -86,6 +88,9 @@ prefect = "^3.7.4"
 ollama = "^0.6.2"
 dspy-ai = "^2.6.27"
 tpot = "^0.12.2"
+mcp = ">=1.0.0"
+pygls = ">=2.0.0"
+lsprotocol = ">=2024.0"
 
 [tool.poetry.group.test.dependencies]  # https://python-poetry.org/docs/master/managing-dependencies/
 coverage = { extras = ["toml"], version = ">=7.2.5" }
