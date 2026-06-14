@@ -14,4 +14,6 @@ Entry points::
 
 from .server import run_stdio, run_tcp, server
 
-__all__ = ["run_stdio", "run_tcp", "server"]
+__version__ = "1.1.0"
+
+__all__ = ["run_stdio", "run_tcp", "server", "__version__"]

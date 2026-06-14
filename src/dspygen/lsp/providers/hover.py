@@ -3,7 +3,7 @@ Hover provider for the dspygen LSP server.
 
 Shows:
 1. Module class name → docstring + signature + example usage
-2. dspy.Predict / dspy.ChainOfThought call → parsed signature (inputs → outputs)
+2. dspy.Predict / dspy.ChainOfThought / dspy.ReAct / dspy.ProgramOfThought call → parsed signature (inputs → outputs)
 3. init_dspy → available models and descriptions
 4. Signature string literal → parsed inputs / outputs
 """
@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 # ---------------------------------------------------------------------------
 
 _INIT_DSPY_RE = re.compile(r"\binit_dspy\b")
-_PREDICT_RE = re.compile(r"\bdspy\.(Predict|ChainOfThought)\b")
+_PREDICT_RE = re.compile(r"\bdspy\.(Predict|ChainOfThought|ReAct|ProgramOfThought)\b")
 # Matches a string literal that contains "->"
 _SIG_LITERAL_RE = re.compile(r"""['"]([\w\s,]+\s*->\s*[\w\s,]+)['"]""")
 # Identifier under cursor
@@ -43,6 +43,27 @@ _KNOWN_MODELS_MD = """\
 | `anthropic/claude-3-5-sonnet-20241022` | Anthropic Claude 3.5 Sonnet |
 | `groq/llama3-70b-8192` | Meta Llama 3 70B via Groq |
 """
+
+# Static hover documentation for DSPy predictor classes that don't parse a signature.
+_STATIC_HOVER: dict[str, str] = {
+    "ChainOfThought": (
+        "## `dspy.ChainOfThought`\n\n"
+        "Chain of Thought — adds reasoning steps before producing the output. "
+        "Inputs and outputs same as Predict.\n\n"
+        "```python\n"
+        "cot = dspy.ChainOfThought('context, question -> answer')\n"
+        "result = cot(context='...', question='...')\n"
+        "```"
+    ),
+    "ReAct": (
+        "## `dspy.ReAct`\n\n"
+        "ReAct — iterative reasoning+acting agent. Requires `tools` argument.\n\n"
+        "```python\n"
+        "react = dspy.ReAct('question -> answer', tools=[search, calc])\n"
+        "result = react(question='...')\n"
+        "```"
+    ),
+}
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -128,10 +149,11 @@ def register_hover(server: "LanguageServer") -> None:
                 return _make_hover(md)
 
             # ------------------------------------------------------------------
-            # 2. dspy.Predict / dspy.ChainOfThought
+            # 2. dspy.Predict / dspy.ChainOfThought / dspy.ReAct / dspy.ProgramOfThought
             # ------------------------------------------------------------------
-            if word in ("Predict", "ChainOfThought") and _PREDICT_RE.search(line):
-                # Try to grab the signature string from the same line
+            if word in ("Predict", "ChainOfThought", "ReAct", "ProgramOfThought") and _PREDICT_RE.search(line):
+                # ChainOfThought and ReAct have static descriptions; show them when no
+                # signature literal is present on the line.
                 m = _SIG_LITERAL_RE.search(line)
                 sig_str = m.group(1).strip() if m else None
                 if sig_str:
@@ -140,6 +162,8 @@ def register_hover(server: "LanguageServer") -> None:
                         f"**Parsed signature:**\n\n"
                         + _format_signature(sig_str)
                     )
+                elif word in _STATIC_HOVER:
+                    md = _STATIC_HOVER[word]
                 else:
                     md = (
                         f"## `dspy.{word}`\n\n"

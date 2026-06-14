@@ -9,6 +9,7 @@ Checks:
 3. Module instantiation without init_dspy() call in the file
 4. Signature field name conflicts (input and output share same name)
 5. Non-snake_case field names in signatures
+6. dspy.ReAct( called with tools=[] (empty list) — warns that no actions can be taken
 """
 
 from __future__ import annotations
@@ -106,6 +107,31 @@ def _has_module_instantiation(tree: ast.Module) -> bool:
     return False
 
 
+def _is_react_call(node: ast.Call) -> bool:
+    """Return True when *node* is a call to dspy.ReAct(...)."""
+    func = node.func
+    if isinstance(func, ast.Attribute):
+        return func.attr == "ReAct"
+    if isinstance(func, ast.Name):
+        return func.id == "ReAct"
+    return False
+
+
+def _find_react_empty_tools_calls(tree: ast.Module) -> list[ast.Call]:
+    """Find all dspy.ReAct( calls where tools keyword argument is an empty list literal."""
+    results: list[ast.Call] = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        if not _is_react_call(node):
+            continue
+        for kw in node.keywords:
+            if kw.arg == "tools" and isinstance(kw.value, ast.List) and len(kw.value.elts) == 0:
+                results.append(node)
+                break
+    return results
+
+
 def _validate_sig_string(sig: str) -> list[str]:
     """Return error messages for a DSPy signature string."""
     from ..analysis.signature_parser import validate_signature  # noqa: PLC0415
@@ -199,6 +225,21 @@ def _compute_diagnostics(source: str) -> list[lsp_types.Diagnostic]:
                     "any module to configure the language model backend."
                 ),
                 severity=lsp_types.DiagnosticSeverity.Information,
+                source="dspygen-lsp",
+            )
+        )
+
+    # ------------------------------------------------------------------
+    # Check 6: dspy.ReAct( with tools=[] — empty tools list
+    # ------------------------------------------------------------------
+    for react_call in _find_react_empty_tools_calls(tree):
+        diagnostics.append(
+            lsp_types.Diagnostic(
+                range=_range_for_node(react_call),
+                message=(
+                    "ReAct with empty tools list will not be able to take any actions."
+                ),
+                severity=lsp_types.DiagnosticSeverity.Warning,
                 source="dspygen-lsp",
             )
         )

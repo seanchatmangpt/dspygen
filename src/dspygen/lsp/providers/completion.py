@@ -2,11 +2,13 @@
 Completion provider for the dspygen LSP server.
 
 Triggers:
-1. After ``dspy.Predict(`` or ``dspy.ChainOfThought(`` — offer known signature strings
+1. After ``dspy.Predict(``, ``dspy.ChainOfThought(``, ``dspy.ReAct(``, or
+   ``dspy.ProgramOfThought(`` — offer known signature strings
 2. After ``from dspygen.modules import`` — list all module names
 3. After ``DGModule`` subclass method calls — complete forward(, pipe(, __or__(
 4. After ``init_dspy(`` — offer model name completions
 5. After field access on a module — complete .output, .forward_args
+6. After ``from dspygen.rdddy import`` — offer RDDDY base classes
 """
 
 from __future__ import annotations
@@ -58,9 +60,86 @@ _MODULE_METHODS: list[dict[str, str]] = [
     },
 ]
 
+# RDDDY base classes available after ``from dspygen.rdddy import``
+_RDDDY_BASE_CLASSES: list[dict[str, str]] = [
+    {
+        "label": "BaseAggregate",
+        "detail": "dspygen.rdddy — DDD Aggregate root base class",
+        "doc": (
+            "**BaseAggregate**\n\n"
+            "Root aggregate base class for Reactive Domain-Driven Design (RDDDY).\n"
+            "Aggregates own a consistency boundary and handle domain commands/events."
+        ),
+    },
+    {
+        "label": "BaseCommand",
+        "detail": "dspygen.rdddy — DDD Command base class",
+        "doc": (
+            "**BaseCommand**\n\n"
+            "Base class for commands in the RDDDY pattern. "
+            "Commands express intent to change state."
+        ),
+    },
+    {
+        "label": "BaseEvent",
+        "detail": "dspygen.rdddy — DDD Domain Event base class",
+        "doc": (
+            "**BaseEvent**\n\n"
+            "Base class for domain events. Events record something that happened "
+            "in the domain and are immutable facts."
+        ),
+    },
+    {
+        "label": "BaseQuery",
+        "detail": "dspygen.rdddy — CQRS Query base class",
+        "doc": (
+            "**BaseQuery**\n\n"
+            "Base class for read-side queries in the CQRS / RDDDY pattern."
+        ),
+    },
+    {
+        "label": "BaseSaga",
+        "detail": "dspygen.rdddy — Long-running process manager base class",
+        "doc": (
+            "**BaseSaga**\n\n"
+            "Base class for sagas (process managers) that coordinate long-running "
+            "workflows across multiple aggregates."
+        ),
+    },
+    {
+        "label": "BasePolicy",
+        "detail": "dspygen.rdddy — Domain Policy base class",
+        "doc": (
+            "**BasePolicy**\n\n"
+            "Base class for domain policies — reactive rules that listen to events "
+            "and may emit new commands."
+        ),
+    },
+    {
+        "label": "BaseValueObject",
+        "detail": "dspygen.rdddy — DDD Value Object base class",
+        "doc": (
+            "**BaseValueObject**\n\n"
+            "Immutable value object base class. Equality is determined by value, "
+            "not identity."
+        ),
+    },
+    {
+        "label": "BaseReadModel",
+        "detail": "dspygen.rdddy — CQRS Read Model base class",
+        "doc": (
+            "**BaseReadModel**\n\n"
+            "Base class for read-side projections / view models in the CQRS pattern."
+        ),
+    },
+]
+
 # Patterns that trigger each completion type
-_PREDICT_OPEN = re.compile(r"dspy\.(Predict|ChainOfThought)\(\s*[\"']?$")
-_FROM_IMPORT = re.compile(r"from\s+dspygen\.modules\s+import\s+(\w*)$")
+_PREDICT_OPEN = re.compile(
+    r"dspy\.(Predict|ChainOfThought|ReAct|ProgramOfThought)\(\s*[\"']?$"
+)
+_FROM_MODULES_IMPORT = re.compile(r"from\s+dspygen\.modules\s+import\s+(\w*)$")
+_FROM_RDDDY_IMPORT = re.compile(r"from\s+dspygen\.rdddy\s+import\s+(\w*)$")
 _INIT_DSPY = re.compile(r"init_dspy\([^)]*model\s*=\s*[\"']?$")
 _FIELD_ACCESS = re.compile(r"\b(\w+)\.\s*$")
 
@@ -105,7 +184,7 @@ def _make_completion_item(
 
 
 def _completions_for_predict(line: str, module_index) -> list[lsp_types.CompletionItem]:
-    """Offer known signature strings when cursor is inside dspy.Predict( or dspy.ChainOfThought(."""
+    """Offer known signature strings inside dspy.Predict(, .ChainOfThought(, .ReAct(, or .ProgramOfThought(."""
     items: list[lsp_types.CompletionItem] = []
     sigs = module_index.get_all_signatures()
     for mod_name, sig_str in sorted(sigs.items()):
@@ -153,6 +232,23 @@ def _completions_for_import(prefix: str, module_index) -> list[lsp_types.Complet
                 kind=lsp_types.CompletionItemKind.Class,
                 detail=info.file_path.split("/")[-1],
                 documentation="\n".join(doc_lines),
+            )
+        )
+    return items
+
+
+def _completions_for_rdddy_import(prefix: str) -> list[lsp_types.CompletionItem]:
+    """Offer RDDDY base class names after ``from dspygen.rdddy import``."""
+    items: list[lsp_types.CompletionItem] = []
+    for entry in _RDDDY_BASE_CLASSES:
+        if not entry["label"].lower().startswith(prefix.lower()):
+            continue
+        items.append(
+            _make_completion_item(
+                label=entry["label"],
+                kind=lsp_types.CompletionItemKind.Class,
+                detail=entry["detail"],
+                documentation=entry["doc"],
             )
         )
     return items
@@ -221,24 +317,31 @@ def register_completion(server: "LanguageServer") -> None:
 
             items: list[lsp_types.CompletionItem] = []
 
-            # 1. dspy.Predict( / dspy.ChainOfThought(
+            # 1. dspy.Predict( / dspy.ChainOfThought( / dspy.ReAct( / dspy.ProgramOfThought(
             if _PREDICT_OPEN.search(line):
                 items.extend(_completions_for_predict(line, module_index))
                 return lsp_types.CompletionList(is_incomplete=False, items=items)
 
             # 2. from dspygen.modules import <prefix>
-            m = _FROM_IMPORT.search(line)
+            m = _FROM_MODULES_IMPORT.search(line)
             if m:
                 prefix = m.group(1)
                 items.extend(_completions_for_import(prefix, module_index))
                 return lsp_types.CompletionList(is_incomplete=False, items=items)
 
-            # 3. init_dspy(model=
+            # 3. from dspygen.rdddy import <prefix>
+            m = _FROM_RDDDY_IMPORT.search(line)
+            if m:
+                prefix = m.group(1)
+                items.extend(_completions_for_rdddy_import(prefix))
+                return lsp_types.CompletionList(is_incomplete=False, items=items)
+
+            # 4. init_dspy(model=
             if _INIT_DSPY.search(line):
                 items.extend(_completions_for_init_dspy())
                 return lsp_types.CompletionList(is_incomplete=False, items=items)
 
-            # 4. field / method access after a dot
+            # 5. field / method access after a dot
             if _FIELD_ACCESS.search(line):
                 items.extend(_completions_for_module_methods())
                 return lsp_types.CompletionList(is_incomplete=False, items=items)
