@@ -26,6 +26,23 @@ A Ruby on Rails style framework for DSPy (Demonstrate, Search, Predict) for Lang
 
 .. toctree::
    :maxdepth: 2
+   :caption: Guides
+
+   cookbook
+   faq
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Architecture Decisions
+
+   adr/0001-use-dspy-as-llm-framework
+   adr/0002-mcp-for-tool-integration
+   adr/0003-pygls-for-lsp
+   adr/0004-rdddy-for-domain-modeling
+   adr/0005-poetry-for-packaging
+
+.. toctree::
+   :maxdepth: 2
    :caption: API Reference
 
    api/modules
