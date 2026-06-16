@@ -49,9 +49,6 @@ def parse_signature(sig_str: str) -> ParsedSignature:
     Returns:
         A dict with 'inputs' and 'outputs' lists of field name strings.
     """
-    if not isinstance(sig_str, str):
-        return {"inputs": [], "outputs": []}
-
     sig_str = sig_str.strip()
     if not sig_str:
         return {"inputs": [], "outputs": []}
