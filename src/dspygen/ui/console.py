@@ -25,7 +25,7 @@ except ImportError:
     Table = None
     rprint = None
 
-console = Console(stderr=True) if RICH_AVAILABLE else None
+console = Console(stderr=True) if RICH_AVAILABLE else None  # type: ignore[misc]
 
 
 def print_success(msg: str) -> None:

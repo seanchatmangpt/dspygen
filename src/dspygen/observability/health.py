@@ -53,17 +53,17 @@ def check_all() -> list[HealthStatus]:
 # ---------------------------------------------------------------------------
 
 def _check_dspy_importable() -> bool:
-    import importlib
+    import importlib.util
     return importlib.util.find_spec("dspy") is not None
 
 
 def _check_mcp_importable() -> bool:
-    import importlib
+    import importlib.util
     return importlib.util.find_spec("mcp") is not None
 
 
 def _check_lsp_importable() -> bool:
-    import importlib
+    import importlib.util
     return importlib.util.find_spec("pygls") is not None
 
 

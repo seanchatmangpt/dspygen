@@ -242,8 +242,8 @@ async def _run_writer(args: dict) -> list[types.TextContent]:
             module_path = f"dspygen.writer.{writer_name}"
             call_fn_name = f"{writer_name}_call"
 
-        mod = importlib.import_module(module_path)
-        call_fn = getattr(mod, call_fn_name, None)
+        mod = importlib.import_module(module_path)  # type: ignore[arg-type]
+        call_fn = getattr(mod, call_fn_name, None)  # type: ignore[call-overload]
 
         if call_fn is None:
             # Try to find any *_call function

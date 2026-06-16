@@ -67,7 +67,7 @@ def _extract_module_info(path: Path) -> dict[str, Any]:
         and isinstance(tree.body[0], ast.Expr)
         and isinstance(tree.body[0].value, ast.Constant)
     ):
-        info["docstring"] = tree.body[0].value.value.strip()
+        info["docstring"] = tree.body[0].value.value.strip()  # type: ignore[union-attr]
 
     for node in ast.walk(tree):
         if isinstance(node, ast.ClassDef):

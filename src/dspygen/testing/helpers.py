@@ -127,7 +127,7 @@ def assert_pipeline_executes(yaml_str: str) -> dict:
         ''')
         assert ctx["status"] == "completed"
     """
-    import yaml
+    import yaml  # type: ignore[import-untyped]
 
     try:
         pipeline_def = yaml.safe_load(yaml_str)
@@ -210,10 +210,10 @@ def capture_lm_calls(fn: Callable) -> Callable:
             except Exception:
                 pass
 
-        wrapper.lm_calls = calls
+        wrapper.lm_calls = calls  # type: ignore[attr-defined]
         return result
 
-    wrapper.lm_calls = []
+    wrapper.lm_calls = []  # type: ignore[attr-defined]
     return wrapper
 
 

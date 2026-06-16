@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 import typer
-import yaml
+import yaml  # type: ignore[import-untyped]
 from apscheduler.schedulers.background import BackgroundScheduler
 from sungen.typetemp.functional import render
 

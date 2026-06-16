@@ -369,7 +369,7 @@ async def _list_available_models(_args: dict) -> list[types.TextContent]:
             providers[provider_name] = {
                 "models": info["models"],
                 "env_key": env_key,
-                "configured": bool(os.environ.get(env_key)),
+                "configured": bool(os.environ.get(env_key)),  # type: ignore[call-overload]
                 "model_prefix": info["prefix"],
             }
 
@@ -560,7 +560,7 @@ async def _get_lm_history(args: dict) -> list[types.TextContent]:
             if isinstance(h, dict):
                 serialized.append({k: str(v)[:500] for k, v in h.items()})
             else:
-                serialized.append(str(h)[:500])
+                serialized.append(str(h)[:500])  # type: ignore[arg-type]
 
         return _ok({
             "model": getattr(lm, "model", str(lm)),

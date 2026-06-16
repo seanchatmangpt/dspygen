@@ -68,7 +68,7 @@ def _find_class_end_for_forward(source: str) -> int | None:
                 # Insert at end of class body
                 end_line = getattr(node, "end_lineno", None)
                 if end_line is not None:
-                    return end_line - 1  # 0-based, insert before closing
+                    return end_line - 1  # type: ignore[no-any-return]
     return None
 
 
