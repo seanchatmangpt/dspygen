@@ -2,6 +2,7 @@
 
 """
 import dspy
+
 from dspygen.utils.dspy_tools import init_dspy
 
 
@@ -17,12 +18,12 @@ class TranslateToASP(dspy.Signature):
 
 class TranslateToASPModuleModule(dspy.Module):
     """TranslateToASPModuleModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args
         self.output = None
-        
+
     def __or__(self, other):
         if other.output is None and self.output is None:
             self.forward(**self.forward_args)
@@ -35,7 +36,7 @@ class TranslateToASPModuleModule(dspy.Module):
         pred = dspy.Predict(TranslateToASP)
         self.output = pred(scenario_description=scenario_description, prompt_template=prompt_template).asp_representation
         return self.output
-        
+
     def pipe(self, input_str):
         raise NotImplementedError("Please implement the pipe method for DSL support.")
         # Replace TODO with a keyword from you forward method
@@ -43,6 +44,7 @@ class TranslateToASPModuleModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -71,6 +73,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/translate_to_asp_module/")

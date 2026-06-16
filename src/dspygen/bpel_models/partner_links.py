@@ -13,6 +13,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+
 class PartnerLink(BaseModel):
     """
     Represents a partner link in a BPEL process, specifying the interaction between the process and a partner Web service.
@@ -23,8 +24,8 @@ class PartnerLink(BaseModel):
     id: str = Field(..., description="Unique identifier for the partner link.")
     name: str = Field(..., description="Name of the partner link.")
     partner_link_type: str = Field(..., description="Type of the partner link, referring to a WSDL port type.")
-    my_role: Optional[str] = Field(None, description="Role played by the process in the service interaction.")
-    partner_role: Optional[str] = Field(None, description="Role played by the partner service in the service interaction.")
+    my_role: str | None = Field(None, description="Role played by the process in the service interaction.")
+    partner_role: str | None = Field(None, description="Role played by the partner service in the service interaction.")
 
 # Note: Partner link types and roles are typically defined in the WSDL that describes the Web service interface. The 'partner_link_type'
 # refers to the WSDL element that defines the set of operations (the portType in WSDL 1.1 or the interface in WSDL 2.0) that can be

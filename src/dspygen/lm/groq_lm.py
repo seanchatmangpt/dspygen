@@ -2,10 +2,9 @@ import os
 
 import dspy
 from dsp import LM
+from groq import Groq as GroqClient
 
 from dspygen.utils.dspy_tools import init_dspy
-
-from groq import Groq as GroqClient
 
 # Updated to a current, high-performance Groq-hosted model
 default_model = "llama-3.3-70b-versatile"

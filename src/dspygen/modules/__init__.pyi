@@ -19,13 +19,13 @@ T = TypeVar("T", bound=BaseModel)
 class GenPydanticInstance(dspy.Module):
     """Generate and validate Pydantic model instances from natural-language prompts."""
 
-    model: Type[T]
+    model: type[T]
     model_sources: str
-    validation_error: Optional[Exception]
+    validation_error: Exception | None
 
     def __init__(
         self,
-        model: Type[T],
+        model: type[T],
         generate_sig: Any = ...,
         correct_generate_sig: Any = ...,
     ) -> None: ...
@@ -39,13 +39,13 @@ class GenPydanticInstance(dspy.Module):
 class GenPydanticDict(dspy.Module):
     """Generate and validate dicts for Pydantic instances from natural-language prompts."""
 
-    model: Type[T]
+    model: type[T]
     model_sources: str
-    validation_error: Optional[Exception]
+    validation_error: Exception | None
 
     def __init__(
         self,
-        model: Type[T],
+        model: type[T],
         generate_sig: Any = ...,
         correct_generate_sig: Any = ...,
     ) -> None: ...
@@ -60,10 +60,10 @@ class DGModule(dspy.Module):
     """Base DSPy module that supports the pipe operator for chaining string processing steps."""
 
     forward_args: dict[str, Any]
-    output: Optional[Any]
+    output: Any | None
 
     def __init__(self, **forward_args: Any) -> None: ...
-    def __or__(self, other: "DGModule") -> "DGModule": ...
+    def __or__(self, other: DGModule) -> DGModule: ...
     def forward(self, **kwargs: Any) -> Any: ...
     def pipe(self, dg_module: Any) -> Any: ...
 

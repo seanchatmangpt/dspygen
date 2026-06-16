@@ -1,12 +1,11 @@
 import sqlite3
-from contextlib import contextmanager
 from collections.abc import Generator
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Optional, Union
 
 import dspy
 import pandas as pd
-
 from pandasql import sqldf
 
 
@@ -29,7 +28,7 @@ def apply_sql_to_dataframe(df: pd.DataFrame, query: str) -> pd.DataFrame:
 
 
 @contextmanager
-def _sqlite_connection(filepath: Union[str, Path]) -> Generator[sqlite3.Connection, None, None]:
+def _sqlite_connection(filepath: str | Path) -> Generator[sqlite3.Connection, None, None]:
     """Context manager for a SQLite connection that ensures cleanup on exit."""
     conn = sqlite3.connect(str(filepath))
     try:
@@ -38,7 +37,7 @@ def _sqlite_connection(filepath: Union[str, Path]) -> Generator[sqlite3.Connecti
         conn.close()
 
 
-def read_any(filepath: Union[str, Path], query: str, read_options: Optional[dict[str, Any]] = None) -> pd.DataFrame:
+def read_any(filepath: str | Path, query: str, read_options: dict[str, Any] | None = None) -> pd.DataFrame:
     """Read a data file of any supported type and return a DataFrame.
 
     For .sql / .db files, ``query`` is executed via ``pd.read_sql_query``.
@@ -123,10 +122,10 @@ class DataRetriever(dspy.Retrieve):
 
     def __init__(
         self,
-        file_path: Union[str, Path],
+        file_path: str | Path,
         query: str = "",
-        return_columns: Optional[list[str]] = None,
-        read_options: Optional[dict[str, Any]] = None,
+        return_columns: list[str] | None = None,
+        read_options: dict[str, Any] | None = None,
         pipeline: Any = None,
         step: Any = None,
         **kwargs: Any,
@@ -151,7 +150,7 @@ class DataRetriever(dspy.Retrieve):
     def supports_file_type(cls, file_extension: str) -> bool:
         return file_extension.lower() in cls.supported_extensions
 
-    def forward(self, query: Optional[str] = None, k: Optional[int] = None, **kwargs: Any) -> list[dict]:
+    def forward(self, query: str | None = None, k: int | None = None, **kwargs: Any) -> list[dict]:
         # Check if a SQL query is provided
         if query:
             # Apply the SQL query to the DataFrame

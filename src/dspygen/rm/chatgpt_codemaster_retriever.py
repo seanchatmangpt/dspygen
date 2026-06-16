@@ -1,16 +1,16 @@
 import hashlib
+from pathlib import Path
+from typing import List, Optional, Tuple, Union
+
+import chromadb
 import dspy
 import ijson
-from pathlib import Path
-from typing import List, Optional, Union, Tuple
-
+from chromadb.utils import embedding_functions
 from loguru import logger
-import chromadb
-import chromadb.utils.embedding_functions as embedding_functions
 from pydantic import BaseModel, ValidationError
 
-from dspygen.utils.file_tools import data_dir
 from dspygen.rm.structured_code_desc_saver import save_code_snippet  # Import the new module
+from dspygen.utils.file_tools import data_dir
 
 # Configure loguru logger
 logger.add("chatgpt_chromadb_retriever.log", rotation="10 MB", level="ERROR")
@@ -24,12 +24,12 @@ def calculate_file_checksum(file_path: str) -> str:
 
 class Author(BaseModel):
     role: str
-    name: Optional[str] = None
+    name: str | None = None
     metadata: dict
 
 class ContentPart(BaseModel):
     content_type: str
-    parts: Optional[List[Union[str, dict]]] = None
+    parts: list[str | dict] | None = None
 
 class Message(BaseModel):
     id: str
@@ -40,9 +40,9 @@ class Message(BaseModel):
 
 class Data(BaseModel):
     id: str
-    message: Optional[Message] = None
-    parent: Optional[str] = None
-    children: List[str]
+    message: Message | None = None
+    parent: str | None = None
+    children: list[str]
 
 class Conversation(BaseModel):
     title: str
@@ -89,7 +89,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
             self._process_and_store_conversations()
             self._save_last_processed_checksum()
 
-    def _load_last_processed_checksum(self) -> Optional[str]:
+    def _load_last_processed_checksum(self) -> str | None:
         checksum_file = self.persist_directory / "last_checksum.txt"
         try:
             return checksum_file.read_text().strip()
@@ -103,7 +103,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
     def _process_and_store_conversations(self):
         temp_code_directory = Path("data/temp_code")
         temp_code_directory.mkdir(parents=True, exist_ok=True)
-        
+
         with open(self.json_file_path, "rb") as json_file:
             count = -1
             while True:
@@ -170,7 +170,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
                     logger.error(f"JSON parsing error: {e}")
                     break
 
-    def _collect_parts(self, data: Data, mapping: dict) -> List[str]:
+    def _collect_parts(self, data: Data, mapping: dict) -> list[str]:
         parts = data.message.content.parts if data.message and data.message.content.parts else []
         for child_id in data.children:
             child_data = mapping.get(child_id)
@@ -179,7 +179,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
                 parts.extend(child_parts)
         return parts
 
-    def _extract_code_and_text(self, parts: List[Union[str, dict]]) -> Tuple[List[str], List[str]]:
+    def _extract_code_and_text(self, parts: list[str | dict]) -> tuple[list[str], list[str]]:
         code_snippets = []
         non_code_text = []
         is_code_block = False
@@ -196,7 +196,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
                             non_code_text.append(" ".join(current_text))
                             current_text = []
                         continue
-                    elif line.strip().startswith("```") and is_code_block:
+                    if line.strip().startswith("```") and is_code_block:
                         is_code_block = False
                         if current_code:
                             code_snippets.append("\n".join(current_code))
@@ -247,9 +247,9 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
 
     def forward(
         self,
-        query_or_queries: Union[str, List[str]],
-        k: Optional[int] = None,
-        contains: Optional[str] = None,
+        query_or_queries: str | list[str],
+        k: int | None = None,
+        contains: str | None = None,
         role: str = "assistant",
     ) -> list[dict]:
         """Search with ChromaDB for top passages for the provided query/queries.
@@ -308,7 +308,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
         return [{"code": doc, "description": meta.get("description", ""), "id": meta.get("id", "")}
                 for doc, meta in zip(documents, metadatas)]
 
-    def generate_powershell_script(self, code_files: List[str], directory_structure: str):
+    def generate_powershell_script(self, code_files: list[str], directory_structure: str):
         script_lines = [
             "# PowerShell script to create directories and files",
             f'$baseDir = "{directory_structure}"',

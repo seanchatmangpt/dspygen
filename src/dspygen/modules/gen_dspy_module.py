@@ -1,8 +1,7 @@
 import dspy
 from pydantic import BaseModel, Field
-from typer import Typer
-
 from sungen.typetemp.functional import render
+from typer import Typer
 
 app = Typer()
 

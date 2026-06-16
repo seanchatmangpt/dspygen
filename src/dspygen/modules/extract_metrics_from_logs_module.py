@@ -2,17 +2,18 @@
 
 """
 import dspy
-from dspygen.utils.dspy_tools import init_dspy        
+
+from dspygen.utils.dspy_tools import init_dspy
 
 
 class ExtractMetricsFromLogsModule(dspy.Module):
     """ExtractMetricsFromLogsModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args
         self.output = None
-        
+
     def __or__(self, other):
         if other.output is None and self.output is None:
             self.forward(**self.forward_args)
@@ -25,7 +26,7 @@ class ExtractMetricsFromLogsModule(dspy.Module):
         pred = dspy.Predict("log_files -> key_metrics")
         self.output = pred(log_files=log_files).key_metrics
         return self.output
-        
+
     def pipe(self, input_str):
         raise NotImplementedError("Please implement the pipe method for DSL support.")
         # Replace TODO with a keyword from you forward method
@@ -33,6 +34,7 @@ class ExtractMetricsFromLogsModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -60,6 +62,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/extract_metrics_from_logs/")

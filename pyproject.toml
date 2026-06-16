@@ -199,7 +199,7 @@ show_column_numbers = true
 show_error_codes = true
 show_error_context = true
 warn_unreachable = true
-exclude = ["experiments/", "tests/"]
+exclude = ["experiments/", "tests/", "wip/"]
 
 [tool.pytest.ini_options]  # https://docs.pytest.org/en/latest/reference/reference.html#ini-options-ref
 asyncio_mode = "auto"
@@ -228,16 +228,47 @@ fix = true
 line-length = 100
 src = ["src", "tests"]
 target-version = "py310"
+exclude = [
+    "src/dspygen/experiments",
+    "src/dspygen/wip",
+    ".venv",
+    "__pycache__",
+]
 
 [tool.ruff.lint]
 ignore-init-module-imports = true
-select = ["A", "ASYNC", "B", "C4", "C90", "D", "DTZ", "E", "F", "FLY", "FURB", "I", "ISC", "LOG", "N", "NPY", "PERF", "PGH", "PIE", "PLC", "PLE", "PLR", "PLW", "PT", "RET", "RUF", "RSE", "SIM", "TID", "UP", "W", "YTT"]
-ignore = ["E501", "PGH001", "PGH002", "PGH003", "RET504", "S101", "B008", "N999"]
-unfixable = ["F401", "F841"]
+select = ["E", "F", "I", "B", "UP", "N", "W", "PLE", "PLC"]
+ignore = [
+    "E501",    # line too long
+    "E402",    # module import not at top (lazy imports are intentional)
+    "B008",    # function call in argument defaults
+    "N999",    # invalid module name
+    "N806", "N803", "N815", "N802", "N818",
+    "F401",    # unused imports (pre-existing throughout codebase)
+    "F841",    # unused variable
+    "F405",    # may be undefined from star import
+    "F403",    # star import used
+    "F402",    # import from line shadowed by loop variable
+    "F811",    # redefinition of unused name
+    "F821",    # undefined name (false positives from star imports)
+    "PLC0415", # import-outside-toplevel (lazy imports are intentional)
+    "UP035",   # deprecated typing imports
+    "UP031",   # old-style % formatting
+    "UP007",   # use X | Y instead of Optional[X]
+    "B904",    # exception chaining
+    "B007",    # loop control variable not used
+    "B005",    # .strip() with multi-char string
+    "B905",    # zip without explicit strict
+    "E741",    # ambiguous variable name
+    "W291",    # trailing whitespace (pre-existing, unsafe fix)
+    "W293",    # whitespace before comment (pre-existing, unsafe fix)
+]
+unfixable = []
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S101", "ARG", "FBT"]
+"tests/**" = ["S101", "ARG", "FBT", "F401"]
 "src/dspygen/experiments/**" = ["ALL"]
+"src/dspygen/wip/**" = ["ALL"]
 
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"

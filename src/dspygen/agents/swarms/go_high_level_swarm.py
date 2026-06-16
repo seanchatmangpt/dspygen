@@ -1,8 +1,8 @@
-from dspygen.agents.challenger_agent import ChallengerSalesAgent
-from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
-from dspygen.agents.coder_agent_v4 import CoderAgent
-
 from enum import Enum, auto
+
+from dspygen.agents.challenger_agent import ChallengerSalesAgent
+from dspygen.agents.coder_agent_v4 import CoderAgent
+from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 
 
 class MarketingAgentState(Enum):

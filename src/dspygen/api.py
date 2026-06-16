@@ -4,8 +4,10 @@ import os
 from contextlib import asynccontextmanager
 from importlib import import_module
 
-from fastapi import FastAPI, Depends
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
+
+from dspygen.llm_pipe.dsl_pipeline_executor import router as pipeline_router
 
 # from dspygen.experiments.convo_ddd.abstract_aggregate.conversation_aggregate import ConversationAggregate
 # from dspygen.experiments.convo_ddd.abstract_event.user_input_received_event import UserInputReceivedEvent
@@ -13,8 +15,6 @@ from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.utils.file_tools import dspy_modules_dir
 from dspygen.workflow.workflow_router import router as workflow_router
-
-from dspygen.llm_pipe.dsl_pipeline_executor import router as pipeline_router
 
 
 @asynccontextmanager
@@ -43,7 +43,7 @@ async def get_service_colony() -> ServiceColony:
     global service_colony
 
     try:
-        service_colony
+        _ = service_colony  # noqa: F821
     except NameError:
         mqtt_url = os.environ.get("MQTT_BROKER_URL", "localhost:1883")
         mqtt_host, mqtt_port_str = mqtt_url.rsplit(":", 1)

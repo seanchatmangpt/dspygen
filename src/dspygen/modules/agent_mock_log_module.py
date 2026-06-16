@@ -2,17 +2,18 @@
 
 """
 import dspy
-from dspygen.utils.dspy_tools import init_dspy        
+
+from dspygen.utils.dspy_tools import init_dspy
 
 
 class AgentMockLogModule(dspy.Module):
     """AgentMockLogModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args
         self.output = None
-        
+
     def __or__(self, other):
         if other.output is None and self.output is None:
             self.forward(**self.forward_args)
@@ -25,7 +26,7 @@ class AgentMockLogModule(dspy.Module):
         pred = dspy.Predict("agent_name -> mock_log_message")
         self.output = pred(agent_name=agent_name).mock_log_message
         return self.output
-        
+
     def pipe(self, input_str):
         raise NotImplementedError("Please implement the pipe method for DSL support.")
         # Replace TODO with a keyword from you forward method
@@ -33,6 +34,7 @@ class AgentMockLogModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -60,6 +62,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/agent_mock_log/")

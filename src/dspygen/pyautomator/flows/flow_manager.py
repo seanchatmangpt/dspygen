@@ -1,8 +1,11 @@
 import json
-from typing import List, Dict, Optional
-from prefect import flow, task
-from dspygen.utils.dspy_tools import init_dspy
+from typing import Dict, List, Optional
+
 import dspy
+from prefect import flow, task
+
+from dspygen.utils.dspy_tools import init_dspy
+
 
 class FlowManager:
     def __init__(self):
@@ -10,29 +13,29 @@ class FlowManager:
         init_dspy()
 
     @task
-    def create_flow(self, name: str, description: str, tasks: List[Dict]) -> str:
+    def create_flow(self, name: str, description: str, tasks: list[dict]) -> str:
         """Create a new flow using dspy."""
         flow_definition = self._generate_flow_definition(name, description, tasks)
         self.flows[name] = flow_definition
         return f"Flow '{name}' created successfully."
 
     @task
-    def read_flow(self, name: str) -> Optional[Dict]:
+    def read_flow(self, name: str) -> dict | None:
         """Retrieve a flow by name."""
         return self.flows.get(name)
 
     @task
-    def update_flow(self, name: str, description: str = None, tasks: List[Dict] = None) -> str:
+    def update_flow(self, name: str, description: str = None, tasks: list[dict] = None) -> str:
         """Update an existing flow."""
         if name not in self.flows:
             return f"Flow '{name}' not found."
-        
+
         flow_definition = self.flows[name]
         if description:
             flow_definition['description'] = description
         if tasks:
             flow_definition['tasks'] = tasks
-        
+
         self.flows[name] = flow_definition
         return f"Flow '{name}' updated successfully."
 
@@ -45,14 +48,14 @@ class FlowManager:
         return f"Flow '{name}' not found."
 
     @task
-    def list_flows(self) -> List[str]:
+    def list_flows(self) -> list[str]:
         """List all available flows."""
         return list(self.flows.keys())
 
-    def _generate_flow_definition(self, name: str, description: str, tasks: List[Dict]) -> Dict:
+    def _generate_flow_definition(self, name: str, description: str, tasks: list[dict]) -> dict:
         """Generate a flow definition using dspy."""
         class FlowGenerator(dspy.Module):
-            def forward(self, name: str, description: str, tasks: List[Dict]):
+            def forward(self, name: str, description: str, tasks: list[dict]):
                 pred = dspy.Predict("name, description, tasks -> flow_definition")
                 result = pred(name=name, description=description, tasks=json.dumps(tasks))
                 return json.loads(result.flow_definition)

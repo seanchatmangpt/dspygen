@@ -1,15 +1,15 @@
-import dspy
+import re
 
+import dspy
 import ebooklib
-from ebooklib import epub
 from bs4 import BeautifulSoup
 from docx import Document
+from ebooklib import epub
 from pypdf import PdfReader
-import re
 
 
 def clean_text(text):
-    return re.sub('<.*?>|\xa0+|\s+|\{\'.*?\.xhtml\'\}|\'.*?\.xhtml\'', ' ', text).strip()
+    return re.sub('<.*?>|\xa0+|\\s+|\\{\'.*?\\.xhtml\'\\}|\'.*?\\.xhtml\'', ' ', text).strip()
 
 
 def extract_texts_from_epub(file_name):
@@ -36,7 +36,7 @@ def read_text_from_pdf(file_path):
 
 
 def read_text_file(file_path):
-    with open(file_path, 'r', encoding='utf-8') as file:
+    with open(file_path, encoding='utf-8') as file:
         return clean_text(file.read())
 
 
@@ -51,18 +51,17 @@ def read_docx_file(file_path):
 def read_any(file_path):
     if file_path.endswith('.epub'):
         return extract_texts_from_epub(file_path)
-    elif file_path.endswith('.pdf'):
+    if file_path.endswith('.pdf'):
         return read_text_from_pdf(file_path)
-    elif file_path.endswith('.txt') or file_path.endswith('.md'):
+    if file_path.endswith('.txt') or file_path.endswith('.md'):
         return read_text_file(file_path)
-    elif file_path.endswith('.docx'):
+    if file_path.endswith('.docx'):
         return read_docx_file(file_path)
-    else:
-        # Treat unknown file types as plaintext
-        try:
-            return read_text_file(file_path)
-        except Exception as e:
-            raise ValueError(f"Failed to process {file_path}: {e}")
+    # Treat unknown file types as plaintext
+    try:
+        return read_text_file(file_path)
+    except Exception as e:
+        raise ValueError(f"Failed to process {file_path}: {e}")
 
 
 class DocRetriever(dspy.Retrieve):

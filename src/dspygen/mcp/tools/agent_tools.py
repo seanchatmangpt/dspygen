@@ -13,8 +13,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import mcp.types as types
 from loguru import logger
+from mcp import types
 
 __all__ = ["get_tool_definitions", "handle_tool"]
 

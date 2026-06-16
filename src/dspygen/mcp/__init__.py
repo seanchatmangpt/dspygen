@@ -45,7 +45,7 @@ Prompt surface (maximized — 25 prompts):
     optimize-pipeline, generate-workflow-tests
 """
 
-from dspygen.mcp.server import create_server, run_stdio, run_sse
+from dspygen.mcp.server import create_server, run_sse, run_stdio
 
 __version__ = "1.0.0"
 

@@ -14,8 +14,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import mcp.types as types
 from loguru import logger
+from mcp import types
 
 __all__ = ["get_tool_definitions", "handle_tool"]
 
@@ -347,6 +347,7 @@ async def _configure_lm(args: dict) -> list[types.TextContent]:
 async def _list_available_models(_args: dict) -> list[types.TextContent]:
     try:
         import os
+
         import dspy  # lazy
 
         # Check current configuration
@@ -478,6 +479,7 @@ async def _optimize_module(args: dict) -> list[types.TextContent]:
 
     try:
         import importlib
+
         import dspy  # lazy
 
         # Load the module

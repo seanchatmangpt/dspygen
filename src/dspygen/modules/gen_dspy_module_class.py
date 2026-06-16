@@ -1,6 +1,7 @@
 """GenDspyModule — generate DSPy module source code from a specification."""
 
 import dspy
+
 from dspygen.utils.dspy_tools import init_dspy
 
 

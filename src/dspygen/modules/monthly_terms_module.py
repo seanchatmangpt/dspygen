@@ -1,6 +1,7 @@
+from typing import List
+
 import dspy
 from pydantic import BaseModel, Field
-from typing import List
 
 
 class MonthlyDescription(BaseModel):
@@ -11,7 +12,7 @@ class MonthlyDescription(BaseModel):
 class InvoiceDescriptions(BaseModel):
     deal_terms: str = Field(..., description="The terms of the deal, including free and discounted periods")
     regular_price: float = Field(..., description="The regular monthly price")
-    monthly_descriptions: List[MonthlyDescription] = Field(...,
+    monthly_descriptions: list[MonthlyDescription] = Field(...,
                                                            description="A list of natural language descriptions for each month over a 12-month period")
 
 

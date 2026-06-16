@@ -1,9 +1,12 @@
+import io
+
 import dspy
-from dspygen.utils.dspy_tools import init_dspy, init_ol
+import pandas as pd
+
 from dspygen.rm.data_retriever import read_any
 from dspygen.rm.doc_retriever import read_any as doc_read_any
-import pandas as pd
-import io
+from dspygen.utils.dspy_tools import init_dspy, init_ol
+
 
 class AskDataSignature(dspy.Signature):
     """
@@ -39,7 +42,7 @@ class AskDataModule(dspy.Module):
                 data = str(data)
             except Exception:
                 # If both fail, read as plain text
-                with open(file_path, 'r', encoding='utf-8') as file:
+                with open(file_path, encoding='utf-8') as file:
                     data = file.read()
 
         pred = dspy.Predict(AskDataSignature)
@@ -58,7 +61,7 @@ def main():
     app = RemindersApp()
     app.export_reminders("reminders.csv")
     question = "Can you answer me a new appointment for a haircut at 1pm on 9/1"
-    
+
     result = ask_data_call(question=question, file_path="reminders.csv")
     print(result)
 

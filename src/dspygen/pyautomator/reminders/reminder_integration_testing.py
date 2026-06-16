@@ -1,10 +1,8 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-import inject
-
-
 import EventKit
+import inject
 
 from dspygen.pyautomator.event_kit.alarm import Alarm
 from dspygen.pyautomator.event_kit.reminder import Reminder, ReminderError
@@ -12,7 +10,7 @@ from dspygen.pyautomator.event_kit.reminder import Reminder, ReminderError
 
 @inject.autoparams()
 def create_reminder(event_store:EventKit.EKEventStore, title: str, calendar: EventKit.EKCalendar,
-                    due_date: Optional[datetime] = None):
+                    due_date: datetime | None = None):
     reminder = Reminder.create(event_store, title, calendar)
     if due_date:
         reminder.due_date = due_date
@@ -27,11 +25,10 @@ def read_reminder(event_store: EventKit.EKEventStore, reminder_id: str):
         reminder = Reminder(event_store)
         reminder.ek_item = ek_reminder
         return reminder
-    else:
-        raise ReminderError(f"Reminder with id '{reminder_id}' not found.")
+    raise ReminderError(f"Reminder with id '{reminder_id}' not found.")
 
-def update_reminder(reminder: Reminder, title: Optional[str] = None, due_date: Optional[datetime] = None,
-                    completed: Optional[bool] = None, priority: Optional[int] = None) -> None:
+def update_reminder(reminder: Reminder, title: str | None = None, due_date: datetime | None = None,
+                    completed: bool | None = None, priority: int | None = None) -> None:
     if title is not None:
         reminder.title = title
     if due_date is not None:

@@ -3,7 +3,6 @@ import subprocess
 
 import typer
 
-
 app = typer.Typer()
 
 
@@ -13,4 +12,3 @@ def _pub():
     typer.echo("Running pub subcommand.")
     # poetry publish --build
     subprocess.run(["poetry", "publish", "--build"], check=True)
-    

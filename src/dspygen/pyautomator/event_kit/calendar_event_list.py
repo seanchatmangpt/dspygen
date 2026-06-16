@@ -1,6 +1,7 @@
 import threading
-import EventKit
 from typing import List, Optional
+
+import EventKit
 import inject
 
 from dspygen.pyautomator.event_kit.calendar_event import CalendarEvent
@@ -26,7 +27,7 @@ class CalendarEventList:
     def get_calendar(self):
         return self.ek_calendar
 
-    def get_all_events(self) -> List[CalendarEvent]:
+    def get_all_events(self) -> list[CalendarEvent]:
         """Fetch all events in this calendar."""
         predicate = self.event_store.predicateForEventsWithStartDate_endDate_calendars_(
             EventKit.NSDate.distantPast(),

@@ -1,5 +1,6 @@
 import logging
 from enum import Enum, auto
+
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 from dspygen.rdddy.base_inhabitant import BaseInhabitant
 

@@ -4,10 +4,10 @@ import asyncio
 import typer
 
 from dspygen.async_typer import AsyncTyper
-from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.rdddy.browser.browser_domain import StartBrowserCommand
 from dspygen.rdddy.browser.browser_process_supervisor import BrowserProcessSupervisor
 from dspygen.rdddy.browser.browser_worker import BrowserWorker
+from dspygen.rdddy.service_colony import ServiceColony
 
 app = AsyncTyper()
 

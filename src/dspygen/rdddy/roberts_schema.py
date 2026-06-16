@@ -1,7 +1,7 @@
-from pydantic import BaseModel, Field
-from typing import Optional
 from datetime import datetime
+from typing import Optional
 
+from pydantic import BaseModel, Field
 
 # Pydantic Models for AsyncAPI Schemas
 

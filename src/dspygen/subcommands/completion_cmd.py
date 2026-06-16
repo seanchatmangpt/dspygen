@@ -69,7 +69,7 @@ def install_completion(
 
         ps_profile = Path(INSTALL_PATHS["powershell"]).expanduser()
         ps_profile.parent.mkdir(parents=True, exist_ok=True)
-        line = f'Register-ArgumentCompleter -Native -CommandName dspygen -ScriptBlock ${{scriptBlock}}'
+        line = 'Register-ArgumentCompleter -Native -CommandName dspygen -ScriptBlock ${scriptBlock}'
         with ps_profile.open("a") as f:
             f.write(f"\n# dspygen shell completion\n{completion_script}\n")
         typer.echo(f"PowerShell completions appended to {ps_profile}")

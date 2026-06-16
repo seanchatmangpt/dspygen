@@ -7,4 +7,3 @@ __all__ = ["BaseCommand"]
 
 class BaseCommand(BaseMessage):
     """AbstractCommand message type."""
-    ...

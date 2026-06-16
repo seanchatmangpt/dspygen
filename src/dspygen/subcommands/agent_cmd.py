@@ -1,9 +1,9 @@
 import asyncio
-
-import typer
-from subprocess import Popen, PIPE, CalledProcessError
 import os
 import signal
+from subprocess import PIPE, CalledProcessError, Popen
+
+import typer
 
 from dspygen.async_typer import AsyncTyper
 from dspygen.rdddy.base_command import BaseCommand
@@ -30,13 +30,12 @@ def process_is_running(pid: int) -> bool:
 async def start_mqtt(broker_path: str = MOSQUITTO_BINARY, config_path: str = MOSQUITTO_CONF):
     """Starts the Mosquitto MQTT broker."""
     if os.path.exists(PID_FILE):
-        with open(PID_FILE, 'r') as file:
+        with open(PID_FILE) as file:
             pid = int(file.read().strip())
             if process_is_running(pid):
                 typer.echo("MQTT Broker is already running.")
                 raise typer.Exit()
-            else:
-                os.remove(PID_FILE)  # PID file is stale, remove it
+            os.remove(PID_FILE)  # PID file is stale, remove it
 
     if not os.path.exists(broker_path):
         typer.echo(f"The specified broker path does not exist: {broker_path}")
@@ -70,7 +69,7 @@ def stop_mqtt():
         typer.echo("MQTT Broker is not running or PID file is missing.")
         raise typer.Exit()
 
-    with open(PID_FILE, 'r') as file:
+    with open(PID_FILE) as file:
         pid = int(file.read().strip())
 
     if process_is_running(pid):

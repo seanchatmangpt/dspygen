@@ -2,17 +2,18 @@
 
 """
 import dspy
-from dspygen.utils.dspy_tools import init_dspy        
+
+from dspygen.utils.dspy_tools import init_dspy
 
 
 class ExcelToSQLDatabaseModule(dspy.Module):
     """ExcelToSQLDatabaseModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args
         self.output = None
-        
+
     def __or__(self, other):
         if other.output is None and self.output is None:
             self.forward(**self.forward_args)
@@ -25,7 +26,7 @@ class ExcelToSQLDatabaseModule(dspy.Module):
         pred = dspy.Predict("excel_data -> sql_entries")
         self.output = pred(excel_data=excel_data).sql_entries
         return self.output
-        
+
     def pipe(self, input_str):
         raise NotImplementedError("Please implement the pipe method for DSL support.")
         # Replace TODO with a keyword from you forward method
@@ -33,6 +34,7 @@ class ExcelToSQLDatabaseModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -60,6 +62,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/excel_to_sql_database/")

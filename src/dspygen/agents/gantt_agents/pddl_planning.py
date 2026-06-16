@@ -1,8 +1,9 @@
 import subprocess
-from clingo import Control
-import dspy
-from dspygen.utils.dspy_tools import init_dspy
 
+import dspy
+from clingo import Control
+
+from dspygen.utils.dspy_tools import init_dspy
 
 # Configuration
 DOMAIN_FILE = 'domain.pddl'

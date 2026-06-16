@@ -1,6 +1,6 @@
 import requests
+
 # from html2text import html2text
-import requests
 # from duckduckgo_search import DDGS
 
 

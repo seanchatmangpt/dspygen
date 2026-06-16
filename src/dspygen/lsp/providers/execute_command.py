@@ -56,7 +56,7 @@ _IDENT_RE = re.compile(r"\b([A-Za-z_]\w*)\b")
 
 
 def _get_source_and_position(
-    server: "LanguageServer",
+    server: LanguageServer,
     args: list[Any] | None,
 ) -> tuple[str | None, str | None, lsp_types.Position | None]:
     """Extract (uri, source, position) from command arguments."""
@@ -141,7 +141,7 @@ if __name__ == "__main__":
 # ---------------------------------------------------------------------------
 
 
-def _handle_run_module(server: "LanguageServer", args: list[Any] | None) -> str:
+def _handle_run_module(server: LanguageServer, args: list[Any] | None) -> str:
     """Run module via dspygen CLI.  Args: [uri, line, col]."""
     uri, source, position = _get_source_and_position(server, args)
     if not source or not position:
@@ -164,7 +164,7 @@ def _handle_run_module(server: "LanguageServer", args: list[Any] | None) -> str:
         return f"Error: {exc}"
 
 
-def _handle_generate_module(server: "LanguageServer", args: list[Any] | None) -> str:
+def _handle_generate_module(server: LanguageServer, args: list[Any] | None) -> str:
     """Generate a new module template.  Args: [name_or_uri]."""
     name = (args[0] if args else None) or "NewModule"
     if name.startswith("file://"):
@@ -174,7 +174,7 @@ def _handle_generate_module(server: "LanguageServer", args: list[Any] | None) ->
     return code
 
 
-def _handle_validate_signature(server: "LanguageServer", args: list[Any] | None) -> str:
+def _handle_validate_signature(server: LanguageServer, args: list[Any] | None) -> str:
     """Validate signature under cursor.  Args: [uri, line, col]."""
     uri, source, position = _get_source_and_position(server, args)
     if not source or not position:
@@ -196,7 +196,7 @@ def _handle_validate_signature(server: "LanguageServer", args: list[Any] | None)
     return f"Signature '{sig}' is valid."
 
 
-def _handle_init_dspy(server: "LanguageServer", args: list[Any] | None) -> dict[str, Any] | str:
+def _handle_init_dspy(server: LanguageServer, args: list[Any] | None) -> dict[str, Any] | str:
     """Insert init_dspy() into the current file.  Args: [uri]."""
     uri = args[0] if args else None
     if not uri:
@@ -229,7 +229,7 @@ def _handle_init_dspy(server: "LanguageServer", args: list[Any] | None) -> dict[
     }
 
 
-def _handle_format_signature(server: "LanguageServer", args: list[Any] | None) -> dict[str, Any] | str:
+def _handle_format_signature(server: LanguageServer, args: list[Any] | None) -> dict[str, Any] | str:
     """Normalise the signature string under cursor.  Args: [uri, line, col]."""
     uri, source, position = _get_source_and_position(server, args)
     if not source or not position:
@@ -263,7 +263,7 @@ def _handle_format_signature(server: "LanguageServer", args: list[Any] | None) -
     return "No signature literal under cursor."
 
 
-def _handle_show_module_info(server: "LanguageServer", args: list[Any] | None) -> str:
+def _handle_show_module_info(server: LanguageServer, args: list[Any] | None) -> str:
     """Show hover-style module info as a string.  Args: [uri, line, col]."""
     from .._state import module_index  # noqa: PLC0415
 
@@ -296,7 +296,7 @@ def _handle_show_module_info(server: "LanguageServer", args: list[Any] | None) -
 # ---------------------------------------------------------------------------
 
 
-def register_execute_command(server: "LanguageServer") -> None:
+def register_execute_command(server: LanguageServer) -> None:
     """Register the workspace/executeCommand handler on *server*."""
 
     @server.feature(
@@ -312,19 +312,18 @@ def register_execute_command(server: "LanguageServer") -> None:
         try:
             if command == CMD_RUN_MODULE:
                 return _handle_run_module(server, args)
-            elif command == CMD_GENERATE_MODULE:
+            if command == CMD_GENERATE_MODULE:
                 return _handle_generate_module(server, args)
-            elif command == CMD_VALIDATE_SIGNATURE:
+            if command == CMD_VALIDATE_SIGNATURE:
                 return _handle_validate_signature(server, args)
-            elif command == CMD_INIT_DSPY:
+            if command == CMD_INIT_DSPY:
                 return _handle_init_dspy(server, args)
-            elif command == CMD_FORMAT_SIGNATURE:
+            if command == CMD_FORMAT_SIGNATURE:
                 return _handle_format_signature(server, args)
-            elif command == CMD_SHOW_MODULE_INFO:
+            if command == CMD_SHOW_MODULE_INFO:
                 return _handle_show_module_info(server, args)
-            else:
-                logger.warning(f"executeCommand: unknown command '{command}'")
-                return f"Unknown command: {command}"
+            logger.warning(f"executeCommand: unknown command '{command}'")
+            return f"Unknown command: {command}"
         except Exception as exc:  # noqa: BLE001
             logger.exception(f"executeCommand({command}) error: {exc}")
             return f"Error executing {command}: {exc}"

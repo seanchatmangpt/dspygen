@@ -6,8 +6,8 @@ from textwrap import dedent
 from typing import Optional
 
 import loguru
-
 from sungen.typetemp.template.typed_template import TypedTemplate
+
 from dspygen.utils.complete import achat, create
 from dspygen.utils.file_tools import write
 from dspygen.utils.models import get_model
@@ -439,7 +439,7 @@ def create_tailwind_landing(
 
 
 def create_data(
-    prompt: str, cls: type, model: Optional[str] = None, max_tokens: int = 2000
+    prompt: str, cls: type, model: str | None = None, max_tokens: int = 2000
 ) -> dict:
     """Create a dict of data from a prompt that can be passed to the given class as kwargs"""
     instructions = dedent(
@@ -554,7 +554,7 @@ def create_kwargs(prompt: str, cabal: Callable) -> dict:
 
 def create_pydantic_class(
     prompt: str,
-    class_name: Optional[str] = None,
+    class_name: str | None = None,
     min_fields=2,
     max_fields=5,
     file_path=None,

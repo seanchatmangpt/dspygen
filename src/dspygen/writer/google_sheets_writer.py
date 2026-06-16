@@ -1,7 +1,7 @@
 import gspread
-from google.oauth2.service_account import Credentials
 import inject
 import pandas as pd
+from google.oauth2.service_account import Credentials
 
 from dspygen.rm.google_sheets_retriever import GoogleSheetRetriever
 from dspygen.utils.file_tools import project_dir

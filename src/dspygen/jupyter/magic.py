@@ -58,7 +58,6 @@ from dspygen.jupyter.display import (
     display_pipeline_result,
 )
 
-
 # ---------------------------------------------------------------------------
 # Helper utilities
 # ---------------------------------------------------------------------------
@@ -430,7 +429,8 @@ class DSPyGenMagics(Magics):
             return
 
         try:
-            from IPython.display import HTML, display as ip_display
+            from IPython.display import HTML
+            from IPython.display import display as ip_display
 
             rows = "".join(
                 f"<tr><td style='padding:4px 12px'>{i}</td>"
@@ -472,7 +472,8 @@ class DSPyGenMagics(Magics):
             return
 
         try:
-            from IPython.display import HTML, display as ip_display
+            from IPython.display import HTML
+            from IPython.display import display as ip_display
 
             rows = "".join(
                 f"<tr><td style='padding:4px 12px'>{i}</td>"

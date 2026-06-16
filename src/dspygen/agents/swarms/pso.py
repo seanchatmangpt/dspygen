@@ -1,7 +1,8 @@
-from enum import Enum, auto
-from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
-import random
 import math
+import random
+from enum import Enum, auto
+
+from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 
 
 class ParticleState(Enum):
@@ -50,9 +51,8 @@ class Particle(FSMMixin):
         if iteration >= max_iterations:
             print("Termination condition met.")
             return ParticleState.TERMINATED
-        else:
-            print("Continuing to next iteration.")
-            return ParticleState.EVALUATING
+        print("Continuing to next iteration.")
+        return ParticleState.EVALUATING
 
 
 def fitness_function(position):
@@ -79,8 +79,7 @@ def main():
             next_state = particle.check_termination(iteration, max_iterations)
             if next_state == ParticleState.TERMINATED:
                 break
-            else:
-                particle.to_state(next_state)
+            particle.to_state(next_state)
 
     print("Optimization completed.")
     print(f"Best position: {global_best_position}")

@@ -8,15 +8,16 @@ from __future__ import annotations
 
 import os
 import tempfile
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 import pytest
 
 from dspygen.testing.factories import MockLM, MockPredict, mock_lm_context
 
 
-@pytest.fixture()
+@pytest.fixture
 def dspy_lm():
     """Configure dspy with a MockLM for the duration of the test, then restore.
 
@@ -50,7 +51,7 @@ def dspy_lm():
         pass
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_predict(monkeypatch):
     """Patch dspy.Predict globally for the test duration.
 
@@ -77,7 +78,7 @@ def mock_predict(monkeypatch):
     MockPredict.reset()
 
 
-@pytest.fixture()
+@pytest.fixture
 def pipeline_executor():
     """Return a function that runs a pipeline defined as a YAML string.
 
@@ -101,7 +102,7 @@ def pipeline_executor():
     return _run
 
 
-@pytest.fixture()
+@pytest.fixture
 def module_runner():
     """Return a function that runs any dspygen module with a mock LM.
 
@@ -119,7 +120,7 @@ def module_runner():
     return _make
 
 
-@pytest.fixture()
+@pytest.fixture
 def tmp_dspygen_config(tmp_path: Path):
     """Provide a temporary directory containing a minimal ``.dspygen.env`` file.
 
@@ -138,4 +139,4 @@ def tmp_dspygen_config(tmp_path: Path):
         "DSPYGEN_ENV=test\n"
         "DSPYGEN_LM=mock\n"
     )
-    yield tmp_path
+    return tmp_path

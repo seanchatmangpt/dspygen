@@ -12,8 +12,9 @@ The models defined in this module include:
 
 """
 
-from pydantic import BaseModel, Field
 from typing import Optional
+
+from pydantic import BaseModel, Field
 
 
 class Link(BaseModel):
@@ -24,7 +25,7 @@ class Link(BaseModel):
     id: str = Field(..., description="Unique identifier for the link.")
     source_activity: str = Field(..., description="Identifier of the source activity for the link.")
     target_activity: str = Field(..., description="Identifier of the target activity for the link.")
-    transition_condition: Optional[str] = Field(None,
+    transition_condition: str | None = Field(None,
                                                 description="Optional condition that determines whether the link is followed.")
 
 

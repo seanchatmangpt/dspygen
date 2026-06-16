@@ -1,5 +1,6 @@
 """MCP server subcommand for dspygen CLI."""
 import typer
+
 app = typer.Typer(help="Run dspygen MCP server")
 
 @app.command("serve")
@@ -14,5 +15,6 @@ def serve_mcp(
         run_stdio()
     else:
         import uvicorn
+
         from dspygen.mcp.server import create_sse_app
         uvicorn.run(create_sse_app(), host=host, port=port)

@@ -6,7 +6,6 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from loguru import logger
 from reactivex import operators as ops
 from reactivex.subject import Subject
-
 from realtime import RealtimeSubscribeStates
 
 from dspygen.rdddy.async_realtime_client import AsyncRealtimeClient
@@ -25,15 +24,15 @@ class ServiceColony:
 
     def __init__(
         self,
-        loop: Optional[asyncio.AbstractEventLoop] = None,
-        realtime_client: Optional[AsyncRealtimeClient] = None,
+        loop: asyncio.AbstractEventLoop | None = None,
+        realtime_client: AsyncRealtimeClient | None = None,
     ) -> None:
         """Initializes the ServiceColony with a real-time client connection."""
         self.realtime_client: AsyncRealtimeClient = (
             inject.instance(AsyncRealtimeClient) if realtime_client is None else realtime_client
         )
         self.channel = None
-        self.inhabitants: dict[int, "BaseInhabitant"] = {}
+        self.inhabitants: dict[int, BaseInhabitant] = {}
         self.loop: asyncio.AbstractEventLoop = loop if loop is not None else asyncio.get_event_loop()
         self.scheduler: AsyncIOScheduler = AsyncIOScheduler(event_loop=self.loop)
         self.event_stream: Subject[BaseMessage] = Subject()
@@ -51,7 +50,7 @@ class ServiceColony:
         # Listen for incoming messages
         self.channel.on_broadcast("message", self._on_message_received)
 
-    def _on_channel_subscribe(self, status: RealtimeSubscribeStates, err: Optional[Exception]) -> None:
+    def _on_channel_subscribe(self, status: RealtimeSubscribeStates, err: Exception | None) -> None:
         """Handle subscription status."""
         if status == RealtimeSubscribeStates.SUBSCRIBED:
             logger.info("Successfully subscribed to the channel.")

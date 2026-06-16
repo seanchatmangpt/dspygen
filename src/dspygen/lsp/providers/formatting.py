@@ -128,7 +128,7 @@ def _format_source(source: str) -> str:
 # ---------------------------------------------------------------------------
 
 
-def register_formatting(server: "LanguageServer") -> None:
+def register_formatting(server: LanguageServer) -> None:
     """Register the textDocument/formatting handler on *server*."""
 
     @server.feature(lsp_types.TEXT_DOCUMENT_FORMATTING)

@@ -3,10 +3,10 @@ This code imports the necessary libraries and defines a class called `ToElixirMo
 """
 import dspy
 from typer import Typer
+
 from dspygen.utils.dspy_tools import init_dspy
 
-
-app = Typer()        
+app = Typer()
 
 
 class ToElixirModule(dspy.Module):
@@ -28,7 +28,7 @@ def to_elixir_call(code):
 def call(code):
     """ToElixirModule"""
     init_dspy()
-    
+
     print(to_elixir_call(code=code))
 
 
@@ -36,7 +36,7 @@ def main():
     init_dspy()
     code = ""
     print(to_elixir_call(code=code))
-    
+
 
 if __name__ == "__main__":
     main()

@@ -1,10 +1,12 @@
-import inject
 from datetime import datetime, timedelta
-from typing import Optional, List
-import EventKit
-from .calendar_item import CalendarItem
-from .alarm import Alarm
+from typing import List, Optional
 from uuid import uuid4
+
+import EventKit
+import inject
+
+from .alarm import Alarm
+from .calendar_item import CalendarItem
 from .recurrence_rule import RecurrenceRule
 
 
@@ -20,7 +22,7 @@ class CalendarEvent(CalendarItem):
 
     @classmethod
     @inject.autoparams()
-    def create(cls, event_store: EventKit.EKEventStore, title: str, calendar: Optional[EventKit.EKCalendar] = None):
+    def create(cls, event_store: EventKit.EKEventStore, title: str, calendar: EventKit.EKCalendar | None = None):
         event = cls(event_store)
         event.title = title
         if calendar is None:
@@ -49,7 +51,7 @@ class CalendarEvent(CalendarItem):
         self.ek_item.setEndDate_(ns_date)
 
     @property
-    def organizer(self) -> Optional[EventKit.EKParticipant]:
+    def organizer(self) -> EventKit.EKParticipant | None:
         return self.ek_item.organizer()
 
     @property
@@ -67,7 +69,7 @@ class CalendarEvent(CalendarItem):
         return self.event_store.removeEvent_span_commit_error_(self.ek_item, span, True, None)
 
     @property
-    def attendees(self) -> List[EventKit.EKParticipant]:
+    def attendees(self) -> list[EventKit.EKParticipant]:
         attendees = self.ek_item.attendees()
         return attendees if attendees is not None else []
 
@@ -125,18 +127,18 @@ class CalendarEvent(CalendarItem):
         return "\r\n".join(lines)
 
     @property
-    def recurrence_rule(self) -> Optional[RecurrenceRule]:
+    def recurrence_rule(self) -> RecurrenceRule | None:
         ek_rule = self.ek_item.recurrenceRule()
         return RecurrenceRule(ek_rule) if ek_rule else None
 
     def set_recurrence(self, frequency: EventKit.EKRecurrenceFrequency, interval: int = 1,
-                       end_date: Optional[datetime] = None, occurrences: Optional[int] = None,
-                       days_of_week: Optional[List[int]] = None,
-                       days_of_month: Optional[List[int]] = None,
-                       months_of_year: Optional[List[int]] = None,
-                       weeks_of_year: Optional[List[int]] = None,
-                       days_of_year: Optional[List[int]] = None,
-                       set_positions: Optional[List[int]] = None) -> None:
+                       end_date: datetime | None = None, occurrences: int | None = None,
+                       days_of_week: list[int] | None = None,
+                       days_of_month: list[int] | None = None,
+                       months_of_year: list[int] | None = None,
+                       weeks_of_year: list[int] | None = None,
+                       days_of_year: list[int] | None = None,
+                       set_positions: list[int] | None = None) -> None:
         recurrence_rule = RecurrenceRule.create(
             frequency, interval, end_date, occurrences, days_of_week, days_of_month,
             months_of_year, weeks_of_year, days_of_year, set_positions

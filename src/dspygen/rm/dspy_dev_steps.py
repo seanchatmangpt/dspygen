@@ -1,10 +1,13 @@
 # dspygen_py\src\dspygen\rm\dspy_dev_steps.py
+import sys
+
 import dspy
 import pygame
-import sys
+
 from dspygen.lm.groq_lm import Groq
-from dspygen.utils.dspy_tools import init_dspy, init_ol
 from dspygen.rm.dynamical_signature_util import create_dynamic_signature_class
+from dspygen.utils.dspy_tools import init_dspy, init_ol
+
 
 class SetupPygameEnv(dspy.Signature):
     """Sets up the Pygame environments."""
@@ -50,9 +53,8 @@ def get_user_rfc(error_message):
     action = input(f"An error occurred: {error_message}\n(1) use the default error message to fix or (2) provide your own RFC: (1/2): ")
     if action == "1":
         return f"fix {error_message.lower()}"
-    else:
-        suggestions = input("Please provide your RFC: ")
-        return suggestions
+    suggestions = input("Please provide your RFC: ")
+    return suggestions
 
 def extract_code_snippet(full_response):
     start = max(full_response.find("```") + 3, full_response.find("```python\n") + 5)
@@ -64,7 +66,7 @@ def extract_code_snippet(full_response):
         if start < 10:
             end = len(full_response)
             if full_response[4:7] == "hon":
-                print(full_response[0:8] + f" funny start still in - skip " + str(start))
+                print(full_response[0:8] + " funny start still in - skip " + str(start))
                 return full_response[7:end].strip()
             if start == 1:
                 return full_response[4:end].strip()

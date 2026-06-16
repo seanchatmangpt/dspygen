@@ -16,8 +16,9 @@ The models defined in this module include:
 
 """
 
+from typing import Any, Dict, Optional
+
 from pydantic import BaseModel, Field
-from typing import Optional, Dict, Any
 
 
 class Variable(BaseModel):
@@ -31,7 +32,7 @@ class SimpleVariable(Variable):
     """
     id: str = Field(..., description="Unique identifier for the simple variable.")
     data_type: str = Field(..., description="Data type of the variable (e.g., 'string', 'integer').")
-    initial_value: Optional[str] = Field(None, description="Initial value of the variable, if any.")
+    initial_value: str | None = Field(None, description="Initial value of the variable, if any.")
 
 
 class MessageVariable(Variable):
@@ -50,7 +51,7 @@ class ComplexVariable(Variable):
     """
     id: str = Field(..., description="Unique identifier for the complex variable.")
     data_type: str = Field(..., description="Complex data type of the variable.")
-    structure: Dict[str, Any] = Field(..., description="Data structure of the variable, represented as a dictionary.")
+    structure: dict[str, Any] = Field(..., description="Data structure of the variable, represented as a dictionary.")
 
 
 class XMLSchemaVariable(Variable):
@@ -77,7 +78,7 @@ class RecordVariable(Variable):
     Calculus notation: V ::= recordVariable(fields) where fields is a dictionary defining the structure of the record.
     """
     id: str = Field(..., description="Unique identifier for the record variable.")
-    fields: Dict[str, str] = Field(...,
+    fields: dict[str, str] = Field(...,
                                    description="Dictionary defining the fields and their data types in the record.")
 
 

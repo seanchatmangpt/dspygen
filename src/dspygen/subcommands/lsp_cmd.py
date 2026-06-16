@@ -1,5 +1,6 @@
 """LSP server subcommand for dspygen CLI."""
 import typer
+
 app = typer.Typer(help="Run dspygen Language Server")
 
 @app.command("serve")

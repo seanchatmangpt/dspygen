@@ -1,14 +1,16 @@
-import typer
 import os
-from pathlib import Path
-import yaml
 from datetime import datetime, timedelta
+from pathlib import Path
+
+import typer
+import yaml
 from apscheduler.schedulers.background import BackgroundScheduler
-from dspygen.utils.cli_tools import chatbot
-from dspygen.workflow.workflow_executor import execute_workflow, schedule_workflow
-from dspygen.workflow.workflow_models import Workflow, Job
 from sungen.typetemp.functional import render
+
+from dspygen.utils.cli_tools import chatbot
 from dspygen.utils.file_tools import rm_dir
+from dspygen.workflow.workflow_executor import execute_workflow, schedule_workflow
+from dspygen.workflow.workflow_models import Job, Workflow
 
 app = typer.Typer(help="Language Workflow Domain Specific Language commands for DSPyGen.")
 
@@ -38,12 +40,12 @@ def new_workflow(name: str = typer.Argument(...)):
     to = wf_dir()
     os.makedirs(to, exist_ok=True)
     file_path = os.path.join(to, f"{name.lower()}_workflow.yaml")
-    
+
     content = render(workflow_template, name=name)
-    
+
     with open(file_path, 'w') as f:
         f.write(content)
-    
+
     typer.echo(f"New workflow created at: {file_path}")
     typer.echo("Workflow content:")
     typer.echo(content)
@@ -296,7 +298,7 @@ def list_workflows(directory: str = typer.Argument(wf_dir(), help="Directory con
     for file in os.listdir(directory):
         if file.endswith(('.yaml', '.yml')):
             workflows.append(file)
-    
+
     if workflows:
         typer.echo("Available workflows:")
         for wf in workflows:
@@ -311,10 +313,10 @@ def show_workflow(workflow_name: str):
     if not os.path.exists(file_path):
         typer.echo(f"Workflow {workflow_name} not found.")
         return
-    
-    with open(file_path, 'r') as f:
+
+    with open(file_path) as f:
         content = f.read()
-    
+
     typer.echo(f"Content of workflow {workflow_name}:")
     typer.echo(content)
 
@@ -325,7 +327,7 @@ def delete_workflow(workflow_name: str):
     if not os.path.exists(file_path):
         typer.echo(f"Workflow {workflow_name} not found.")
         return
-    
+
     os.remove(file_path)
     typer.echo(f"Workflow {workflow_name} has been deleted.")
 
@@ -336,7 +338,7 @@ def trigger_workflow(workflow_name: str):
     if not os.path.exists(file_path):
         typer.echo(f"Workflow {workflow_name} not found.")
         return
-    
+
     wf = Workflow.from_yaml(file_path)
     result = execute_workflow(wf)
     typer.echo(f"Workflow {workflow_name} triggered. Execution result: {result}")
@@ -348,7 +350,7 @@ def pause_workflow(workflow_name: str):
     if not os.path.exists(file_path):
         typer.echo(f"Workflow {workflow_name} not found.")
         return
-    
+
     wf = Workflow.from_yaml(file_path)
     wf.paused = True
     wf.to_yaml(file_path)
@@ -361,7 +363,7 @@ def unpause_workflow(workflow_name: str):
     if not os.path.exists(file_path):
         typer.echo(f"Workflow {workflow_name} not found.")
         return
-    
+
     wf = Workflow.from_yaml(file_path)
     wf.paused = False
     wf.to_yaml(file_path)
@@ -374,7 +376,7 @@ def test_workflow(workflow_name: str):
     if not os.path.exists(file_path):
         typer.echo(f"Workflow {workflow_name} not found.")
         return
-    
+
     wf = Workflow.from_yaml(file_path)
     typer.echo(f"Testing workflow: {workflow_name}")
     typer.echo(f"Number of jobs: {len(wf.jobs)}")
@@ -390,7 +392,7 @@ def list_jobs(workflow_name: str):
     if not os.path.exists(file_path):
         typer.echo(f"Workflow {workflow_name} not found.")
         return
-    
+
     wf = Workflow.from_yaml(file_path)
     typer.echo(f"Jobs in workflow {workflow_name}:")
     for job in wf.jobs:
@@ -403,13 +405,13 @@ def test_job(workflow_name: str, job_name: str):
     if not os.path.exists(file_path):
         typer.echo(f"Workflow {workflow_name} not found.")
         return
-    
+
     wf = Workflow.from_yaml(file_path)
     job = next((job for job in wf.jobs if job.name == job_name), None)
     if not job:
         typer.echo(f"Job {job_name} not found in workflow {workflow_name}.")
         return
-    
+
     typer.echo(f"Testing job: {job_name}")
     typer.echo(f"Number of steps: {len(job.steps)}")
     for step in job.steps:
@@ -424,13 +426,13 @@ def clear_job(workflow_name: str, job_name: str):
     if not os.path.exists(file_path):
         typer.echo(f"Workflow {workflow_name} not found.")
         return
-    
+
     wf = Workflow.from_yaml(file_path)
     job = next((job for job in wf.jobs if job.name == job_name), None)
     if not job:
         typer.echo(f"Job {job_name} not found in workflow {workflow_name}.")
         return
-    
+
     # Implement job state clearing logic here
     typer.echo(f"Clearing state for job {job_name} in workflow {workflow_name}... (Not implemented)")
 

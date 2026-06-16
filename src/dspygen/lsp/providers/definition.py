@@ -65,7 +65,7 @@ def _zero_range() -> lsp_types.Range:
 # ---------------------------------------------------------------------------
 
 
-def register_definition(server: "LanguageServer") -> None:
+def register_definition(server: LanguageServer) -> None:
     """Register the textDocument/definition handler on *server*."""
 
     @server.feature(lsp_types.TEXT_DOCUMENT_DEFINITION)

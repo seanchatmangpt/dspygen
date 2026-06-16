@@ -15,8 +15,8 @@ import textwrap
 from pathlib import Path
 from typing import Any
 
-import mcp.types as types
 from loguru import logger
+from mcp import types
 
 __all__ = ["get_tool_definitions", "handle_tool"]
 
@@ -124,7 +124,7 @@ def _generate_class_code(
     """Generate Python class code for a RDDDY pattern."""
     info = _RDDDY_PATTERNS.get(pattern, {})
     base_class = info.get("base_class", "BaseMessage")
-    import_stmt = info.get("import", f"from dspygen.rdddy.base_message import BaseMessage")
+    import_stmt = info.get("import", "from dspygen.rdddy.base_message import BaseMessage")
     pascal_name = _to_pascal(name)
 
     field_lines = ""
@@ -446,8 +446,9 @@ async def _event_storm(args: dict) -> list[types.TextContent]:
         # Try to use the actual EventStormingDomainSpecificationModel if dspy is available
         try:
             import dspy
-            from dspygen.rdddy.event_storm_model import EventStormingDomainSpecificationModel
+
             from dspygen.modules.gen_pydantic_instance import instance
+            from dspygen.rdddy.event_storm_model import EventStormingDomainSpecificationModel
             if dspy.settings.lm is not None:
                 inst = instance(EventStormingDomainSpecificationModel, domain_description)
                 result["ai_generated_events"] = [
@@ -478,7 +479,7 @@ async def _create_inhabitant(args: dict) -> list[types.TextContent]:
             for h in handles:
                 handles_lines += f"        # Handle {h}\n"
                 handles_lines += f"        if isinstance(message, {h}):\n"
-                handles_lines += f"            pass  # TODO: implement handler\n"
+                handles_lines += "            pass  # TODO: implement handler\n"
 
         code = textwrap.dedent(f"""\
             from dspygen.rdddy.base_inhabitant import BaseInhabitant

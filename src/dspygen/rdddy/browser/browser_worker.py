@@ -5,17 +5,17 @@ from loguru import logger
 from playwright.async_api import async_playwright
 
 from dspygen.rdddy.base_inhabitant import BaseInhabitant
-from dspygen.rdddy.service_colony import ServiceColony
-from dspygen.rdddy.browser.browser_domain import *
 from dspygen.rdddy.base_message import *
+from dspygen.rdddy.browser.browser_domain import *
+from dspygen.rdddy.service_colony import ServiceColony
 
 
 class BrowserWorker(BaseInhabitant):
     def __init__(
         self,
         service_colony: ServiceColony,
-        inhabitant_id: Optional[int] = None,
-        page: Optional[Page] = None,
+        inhabitant_id: int | None = None,
+        page: Page | None = None,
         browser=None
     ):
         super().__init__(service_colony, inhabitant_id)
@@ -40,7 +40,6 @@ class BrowserWorker(BaseInhabitant):
 
     async def handle_send_chatgpt(self, send_cmd: SendChatGPT) -> None:
         SLEEP = 2
-        #
         await asyncio.sleep(SLEEP)
         await self.publish(Click(selector="#prompt-textarea"))
         # # pyperclip.copy(publish_cmd.prompt)

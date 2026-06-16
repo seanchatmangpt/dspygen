@@ -6,7 +6,7 @@ MCP Prompt library — DSPy module generation and optimization prompts.
 
 from __future__ import annotations
 
-import mcp.types as types
+from mcp import types
 
 __all__ = ["MODULE_PROMPTS", "MODULE_RENDERERS"]
 

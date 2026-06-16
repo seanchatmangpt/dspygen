@@ -7,4 +7,3 @@ __all__ = ["BaseEvent"]
 
 class BaseEvent(BaseMessage):
     """Event message type."""
-    ...

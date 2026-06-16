@@ -6,12 +6,12 @@ from contextlib import contextmanager
 import typer
 
 try:
+    from rich import print as rprint
     from rich.console import Console
     from rich.panel import Panel
     from rich.progress import Progress, SpinnerColumn, TextColumn
     from rich.syntax import Syntax
     from rich.table import Table
-    from rich import print as rprint
 
     RICH_AVAILABLE = True
 except ImportError:

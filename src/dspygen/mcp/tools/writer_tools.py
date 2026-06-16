@@ -14,8 +14,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import mcp.types as types
 from loguru import logger
+from mcp import types
 
 __all__ = ["get_tool_definitions", "handle_tool"]
 
@@ -277,7 +277,7 @@ async def _generate_from_template(args: dict) -> list[types.TextContent]:
     try:
         # Try Jinja2 first
         try:
-            from jinja2 import Environment, BaseLoader, StrictUndefined  # lazy
+            from jinja2 import BaseLoader, Environment, StrictUndefined  # lazy
 
             env = Environment(
                 loader=BaseLoader(),

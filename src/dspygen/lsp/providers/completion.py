@@ -298,7 +298,7 @@ def _completions_for_module_methods() -> list[lsp_types.CompletionItem]:
 # ---------------------------------------------------------------------------
 
 
-def register_completion(server: "LanguageServer") -> None:
+def register_completion(server: LanguageServer) -> None:
     """Register the textDocument/completion handler on *server*."""
 
     @server.feature(

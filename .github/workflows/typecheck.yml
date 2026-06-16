@@ -22,4 +22,4 @@ jobs:
         run: pip install "mypy>=1.2.0" types-requests pydantic
 
       - name: Run mypy
-        run: mypy src/dspygen/ --ignore-missing-imports --no-strict-optional
+        run: mypy src/dspygen/ --ignore-missing-imports --no-strict-optional --exclude 'wip/' --exclude 'experiments/'

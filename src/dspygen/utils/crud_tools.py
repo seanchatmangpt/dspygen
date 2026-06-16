@@ -1,8 +1,7 @@
 import hashlib
 import json
-from datetime import datetime, timedelta
-
 from contextlib import contextmanager
+from datetime import datetime, timedelta
 
 from dspygen.experiments.rfc5545.ical_db_session import get_session
 

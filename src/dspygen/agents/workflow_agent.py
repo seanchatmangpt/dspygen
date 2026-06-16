@@ -1,8 +1,9 @@
+import logging
+from enum import Enum, auto
+
 from dspygen.agents.business_logic import *
 from dspygen.agents.order_payload import OrderPayload
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
-from enum import Enum, auto
-import logging
 
 # Setup basic configuration for logging
 logging.basicConfig(level=logging.INFO, format='== APP == %(asctime)s %(levelname)s: %(message)s',
@@ -98,8 +99,9 @@ class WorkflowFSMAgent(FSMMixin):
 
 
 def main():
-    from dspygen.utils.dspy_tools import init_ol
     from unittest.mock import MagicMock
+
+    from dspygen.utils.dspy_tools import init_ol
 
     init_ol(max_tokens=3000)
     from dspygen.agents.mock_dapr_adapter import MockDaprClientAdapter

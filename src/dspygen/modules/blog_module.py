@@ -1,15 +1,14 @@
 """
-Source Code: """ """ 
+Source Code:  
 Simple Documentation: This is a source code for a Python module that generates blog articles based on a given subject. It uses the dspy library and the Typer framework. The main function is the `blog_call` function, which takes in a subject and returns a markdown blog article. There is also a `blog_route` function that can be used as an API endpoint to generate blog articles.
 """
 import dspy
 from typer import Typer
+
 from dspygen.lm.groq_lm import Groq
 from dspygen.lm.ollama_lm import Ollama
-
-from dspygen.utils.dspy_tools import init_ol, init_dspy
+from dspygen.utils.dspy_tools import init_dspy, init_ol
 from dspygen.writer import data_writer
-
 
 app = Typer()
 
@@ -44,7 +43,7 @@ def blog_call(subject):
 def call(subject):
     """BlogModule"""
     init_dspy()
-    
+
     print(blog_call(subject=subject))
 
 
@@ -52,13 +51,14 @@ def call(subject):
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/blog/")
 async def blog_route(data: dict):
     # Your code generation logic here
     init_dspy()
-    
+
     print(data)
     return blog_call(**data)
 
@@ -75,7 +75,7 @@ def main():
     print(data)
     # manually created the output to src\dspygen\experiments\blog\Tetris_1.md
     data_writer.DataWriter(data=data, file_path="./data/Qix_Atari_Blog_qwen2_7b-instruct.md",).forward()
-    
+
 
 if __name__ == "__main__":
     main()

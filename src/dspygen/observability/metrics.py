@@ -1,6 +1,6 @@
 """Simple in-memory metrics — no external dependency required."""
-import time
 import functools
+import time
 from threading import Lock
 
 METRICS_REGISTRY: dict[str, object] = {}

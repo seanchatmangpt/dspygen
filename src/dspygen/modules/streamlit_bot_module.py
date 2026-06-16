@@ -2,10 +2,9 @@
 
 """
 import dspy
+
 from dspygen.utils.dspy_tools import init_dspy
 
-
-import dspy
 
 class GenerateStreamlitComponents(dspy.Signature):
     """
@@ -31,6 +30,7 @@ class StreamlitBotModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -58,6 +58,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/streamlit_bot/")

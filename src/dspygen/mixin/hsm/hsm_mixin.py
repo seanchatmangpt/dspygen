@@ -1,5 +1,7 @@
-from transitions.extensions import HierarchicalMachine
 import logging
+
+from transitions.extensions import HierarchicalMachine
+
 
 class HierarchicalFSMMixin:
     def setup_hsm(self, states, transitions, initial=None, ignore_invalid_triggers=True):

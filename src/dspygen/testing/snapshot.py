@@ -100,7 +100,7 @@ def _indent(text: str, prefix: str = "    ") -> str:
 # Pytest fixture
 # ---------------------------------------------------------------------------
 
-@pytest.fixture()
+@pytest.fixture
 def snapshot(tmp_path: Path) -> SnapshotStore:
     """Provide a :class:`SnapshotStore` instance for the current test.
 

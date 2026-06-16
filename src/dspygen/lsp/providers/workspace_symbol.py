@@ -134,7 +134,7 @@ def _index_file(path: Path, source: str) -> list[_SymbolEntry]:
     return entries
 
 
-def _ensure_index(server: "LanguageServer") -> None:
+def _ensure_index(server: LanguageServer) -> None:
     """Build the index if it hasn't been built yet."""
     with _INDEX_LOCK:
         if _INDEX._built:
@@ -175,7 +175,7 @@ def _to_workspace_symbol(entry: _SymbolEntry) -> lsp_types.WorkspaceSymbol:
 # ---------------------------------------------------------------------------
 
 
-def register_workspace_symbol(server: "LanguageServer") -> None:
+def register_workspace_symbol(server: LanguageServer) -> None:
     """Register the workspace/symbol handler on *server*."""
 
     @server.feature(

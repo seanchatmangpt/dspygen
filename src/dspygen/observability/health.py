@@ -1,8 +1,8 @@
 """Health check system for dspygen."""
-from dataclasses import dataclass, field
-from typing import Callable
 import os
 import time
+from collections.abc import Callable
+from dataclasses import dataclass, field
 
 
 @dataclass

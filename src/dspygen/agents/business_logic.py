@@ -1,6 +1,5 @@
 import logging
 
-
 # Setup basic configuration for logging
 logging.basicConfig(level=logging.INFO, format='== APP == %(asctime)s %(levelname)s: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
@@ -25,9 +24,8 @@ def verify_inventory_activity(item_name, quantity, inventory):
     if available >= quantity:
         logging.info(f"VerifyInventoryActivity: There are {available} {item_name}s available for purchase")
         return True
-    else:
-        logging.info("VerifyInventoryActivity: Insufficient inventory!")
-        return False
+    logging.info("VerifyInventoryActivity: Insufficient inventory!")
+    return False
 
 
 def update_inventory_activity(item_name, quantity, inventory):
@@ -36,9 +34,8 @@ def update_inventory_activity(item_name, quantity, inventory):
         inventory[item_name] -= quantity
         logging.info(f"UpdateInventoryActivity: There are now {inventory[item_name]} {item_name}s left in stock")
         return True
-    else:
-        logging.error(f"UpdateInventoryActivity: Failed to update inventory for {item_name}")
-        return False
+    logging.error(f"UpdateInventoryActivity: Failed to update inventory for {item_name}")
+    return False
 
 
 def request_approval_activity(order_id, amount):

@@ -7,7 +7,6 @@ from typer import Typer
 from dspygen.modules.signature_renderer import generate_signature_from_prompt
 from dspygen.utils.dspy_tools import init_dspy
 
-
 app = Typer()
 
 

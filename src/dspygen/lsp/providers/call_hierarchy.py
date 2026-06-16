@@ -188,7 +188,7 @@ def _calls_in_forward(
 # ---------------------------------------------------------------------------
 
 
-def register_call_hierarchy(server: "LanguageServer") -> None:
+def register_call_hierarchy(server: LanguageServer) -> None:
     """Register call hierarchy handlers on *server*."""
 
     @server.feature(lsp_types.TEXT_DOCUMENT_PREPARE_CALL_HIERARCHY)

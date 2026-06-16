@@ -113,7 +113,7 @@ def _extract_symbols(source: str) -> list[lsp_types.DocumentSymbol]:
 # ---------------------------------------------------------------------------
 
 
-def register_document_symbol(server: "LanguageServer") -> None:
+def register_document_symbol(server: LanguageServer) -> None:
     """Register the textDocument/documentSymbol handler on *server*."""
 
     @server.feature(

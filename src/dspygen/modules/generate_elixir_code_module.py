@@ -1,6 +1,7 @@
+from typing import Dict, List, Optional
+
 import dspy
 from pydantic import BaseModel, Field
-from typing import List, Optional, Dict
 
 from dspygen.models.code_blueprint import CodeBlueprint
 
@@ -15,11 +16,11 @@ class GenerateElixirCode(dspy.Signature):
     # Using relevant fields from CodeBlueprint as input fields
     module_name: str = dspy.InputField(desc="Name of the Elixir module to generate or improve.")
     description: str = dspy.InputField(desc="Description of the module's purpose and functionality.")
-    files_to_edit: List[str] = dspy.InputField(desc="List of Elixir files that need modification or enhancement.")
-    context_files: List[str] = dspy.InputField(desc="Additional context files to provide relevant information.")
-    compliance_checks: Optional[Dict[str, bool]] = dspy.InputField(
+    files_to_edit: list[str] = dspy.InputField(desc="List of Elixir files that need modification or enhancement.")
+    context_files: list[str] = dspy.InputField(desc="Additional context files to provide relevant information.")
+    compliance_checks: dict[str, bool] | None = dspy.InputField(
         desc="Compliance checks to adhere to during code generation.")
-    integration_points: List[str] = dspy.InputField(
+    integration_points: list[str] = dspy.InputField(
         desc="Services, APIs, or modules that this code needs to interact with.")
     output: str = dspy.OutputField(desc="Generated or improved Elixir code output.", prefix="```elixir\n")
 
@@ -58,7 +59,7 @@ class ElixirCodeGenerationModule(dspy.Module):
 def read_blueprint_from_file(file_path: str) -> CodeBlueprint:
     """Reads a CodeBlueprint from a YAML file."""
     import yaml
-    with open(file_path, 'r') as file:
+    with open(file_path) as file:
         blueprint_data = yaml.safe_load(file)
     return CodeBlueprint(**blueprint_data)
 
@@ -85,14 +86,14 @@ def generate_elixir_code_from_blueprint(blueprint_path: str, output_path: str):
 
 import os
 import subprocess
-import yaml
 
+import yaml
 from dspy import Predict
 
 
 def read_blueprint(blueprint_path: str) -> dict:
     """Reads the blueprint YAML file and returns its content as a dictionary."""
-    with open(blueprint_path, "r") as file:
+    with open(blueprint_path) as file:
         blueprint = yaml.safe_load(file)
     return blueprint
 
@@ -143,7 +144,7 @@ def read_context_files(context_files):
     """Reads and returns content of all context files as a combined string."""
     combined_context = ""
     for context_file in context_files:
-        with open(context_file, "r") as file:
+        with open(context_file) as file:
             combined_context += file.read() + "\n"
     return combined_context
 

@@ -1,5 +1,6 @@
-import openai
 import os
+
+import openai
 from dotenv import load_dotenv
 
 # Load environments variables from .env file

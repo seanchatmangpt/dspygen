@@ -7,10 +7,10 @@ __all__ = ["init_dspy", "init_ol", "get_model"]
 
 def init_dspy(
     model: str = ...,
-    lm_class: Optional[Type[Any]] = ...,
+    lm_class: type[Any] | None = ...,
     max_tokens: int = ...,
-    lm_instance: Optional[Any] = ...,
-    api_key: Optional[str] = ...,
+    lm_instance: Any | None = ...,
+    api_key: str | None = ...,
     temperature: float = ...,
     experimental: bool = ...,
 ) -> Any: ...
@@ -20,8 +20,8 @@ def init_ol(
     model: str = ...,
     base_url: str = ...,
     max_tokens: int = ...,
-    lm_instance: Optional[Any] = ...,
-    lm_class: Optional[Type[Any]] = ...,
+    lm_instance: Any | None = ...,
+    lm_class: type[Any] | None = ...,
     timeout: int = ...,
     temperature: float = ...,
     experimental: bool = ...,

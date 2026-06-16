@@ -5,7 +5,14 @@ import sys
 
 import typer
 
-from dspygen.ui.console import print_error, print_info, print_success, print_table, print_warning, spinner
+from dspygen.ui.console import (
+    print_error,
+    print_info,
+    print_success,
+    print_table,
+    print_warning,
+    spinner,
+)
 
 app = typer.Typer(help="Check your dspygen environment for common issues.")
 
@@ -74,5 +81,4 @@ def doctor(ctx: typer.Context) -> None:
     if failures:
         print_error(f"{failures} required check(s) failed. See above for details.")
         raise typer.Exit(code=1)
-    else:
-        print_success("All required checks passed.")
+    print_success("All required checks passed.")

@@ -1,15 +1,14 @@
 import asyncio
 import os
-import psutil
 from asyncio.subprocess import Process
 
+import psutil
 from loguru import logger
 
 from dspygen.rdddy.base_inhabitant import BaseInhabitant
-from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.rdddy.browser.browser_domain import *
 from dspygen.rdddy.browser.browser_worker import BrowserWorker
-
+from dspygen.rdddy.service_colony import ServiceColony
 
 os.environ["PLAYWRIGHT_BROWSER"] = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 

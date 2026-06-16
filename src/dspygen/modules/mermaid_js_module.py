@@ -1,10 +1,11 @@
 """
 
 """
-import dspy
-from dspygen.utils.dspy_tools import init_dspy
-
 from enum import Enum
+
+import dspy
+
+from dspygen.utils.dspy_tools import init_dspy
 
 
 class MermaidDiagramType(Enum):

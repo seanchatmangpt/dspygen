@@ -2,7 +2,9 @@
 
 """
 import dspy
-from dspygen.utils.dspy_tools import init_dspy        
+
+from dspygen.utils.dspy_tools import init_dspy
+
 
 class GenerateSearchQueriesForLearningObjective(dspy.Signature):
     """
@@ -18,12 +20,12 @@ class GenerateSearchQueriesForLearningObjective(dspy.Signature):
 
 class QueryGeneratorModule(dspy.Module):
     """QueryGeneratorModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args
         self.output = None
-        
+
     def __or__(self, other):
         if other.output is None and self.output is None:
             self.forward(**self.forward_args)
@@ -36,7 +38,7 @@ class QueryGeneratorModule(dspy.Module):
         pred = dspy.Predict(GenerateSearchQueriesForLearningObjective)
         self.output = pred(learning_objectives=learning_objectives).search_queries
         return self.output
-        
+
     def pipe(self, input_str):
         raise NotImplementedError("Please implement the pipe method for DSL support.")
         # Replace TODO with a keyword from you forward method
@@ -44,6 +46,7 @@ class QueryGeneratorModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -71,6 +74,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/query_generator/")

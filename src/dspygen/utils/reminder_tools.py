@@ -1,13 +1,12 @@
 import csv
+import json
 import os
+import subprocess
 from pathlib import Path
 from re import I
-import subprocess
-from typing import List, Dict, Any
-import json
+from typing import Any, Dict, List
 
 from pydantic import BaseModel, Field
-
 
 current_lists = "id:E4A69F9A-BA15-4296-B217-9F735652A0FA, name:Self-care, id:B4B66208-A23D-4E10-B49A-36FF4DA3965A, name:Today, id:15DE35D7-37EF-4E2F-B271-57ADB4B71E18, name:Six Item List, id:378C4398-75DC-418F-B77C-558137394A66, name:Social Groups, id:93280B69-3D37-4FD4-91D0-83CFFD7D74E1, name:To Read List, id:129F5F6F-2749-4ECD-8983-C4A64400C6AE, name:New List 3, id:8CD4A536-5615-4C38-A3C3-FFA8F4BDAC8B, name:Test Reminders List"
 
@@ -15,14 +14,14 @@ current_lists = "id:E4A69F9A-BA15-4296-B217-9F735652A0FA, name:Self-care, id:B4B
 def run_applescript(script: str) -> str:
     process = subprocess.Popen(['osascript', '-e', script], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = process.communicate()
-    
+
     if error:
         raise RuntimeError(f"AppleScript Error: {error.decode('utf-8')}")
-    
+
     return output.decode('utf-8').strip()
 
 
-def get_all_lists() -> List[str]:
+def get_all_lists() -> list[str]:
     script = '''
     tell application "Reminders"
         set allLists to lists
@@ -52,7 +51,7 @@ def get_all_list_names() -> str:
     raw_output = run_applescript(script)
     return raw_output
 
-def get_reminders_for_list_by_id(list_id: str) -> List[str]:
+def get_reminders_for_list_by_id(list_id: str) -> list[str]:
     script = f'''set listID to "{list_id}"
 
       tell application "Reminders"
@@ -70,7 +69,7 @@ def get_reminders_for_list_by_id(list_id: str) -> List[str]:
     return ids
 
 
-def get_reminders_for_list_by_name(list_name: str) -> List[str]:
+def get_reminders_for_list_by_name(list_name: str) -> list[str]:
     script = f'''set listID to "{list_name}"
 
       tell application "Reminders"
@@ -119,7 +118,7 @@ set csvOutput to reminderID & ", " & ¬
 
 -- Output the comma-separated list
 return csvOutput
-''' 
+'''
     raw_output = run_applescript(script)
     reminder_data = raw_output.split(", ")
     instance = Reminder(id=reminder_data[0], name=reminder_data[1], body=reminder_data[2], due_date=reminder_data[3], completed=reminder_data[4])
@@ -127,7 +126,7 @@ return csvOutput
 
 
 def create_reminders_tsv():
-    script = f'''-- Get the current date and time for versioning
+    script = '''-- Get the current date and time for versioning
 set currentDate to current date
 set formattedDate to (year of currentDate) & "-" & text -2 through -1 of ("0" & (month of currentDate as integer)) & "-" & text -2 through -1 of ("0" & day of currentDate) & "_" & text -2 through -1 of ("0" & hours of currentDate) & "-" & text -2 through -1 of ("0" & minutes of currentDate) & "-" & text -2 through -1 of ("0" & seconds of currentDate)
 
@@ -194,7 +193,7 @@ def tsv_to_csv(tsv_filepath):
     """Converts a TSV file to a CSV file."""
     csv_filepath = tsv_filepath.with_suffix('.csv')
 
-    with open(tsv_filepath, 'r') as tsvfile, open(csv_filepath, 'w', newline='') as csvfile:
+    with open(tsv_filepath) as tsvfile, open(csv_filepath, 'w', newline='') as csvfile:
         tsv_reader = csv.reader(tsvfile, delimiter='\t')
         csv_writer = csv.writer(csvfile)
 
@@ -222,11 +221,11 @@ store = EventKit.EKEventStore.new()
 # Request access to Reminders
 def request_access():
     granted, error = objc.var(True), objc.var(None)
-    
+
     def handler(granted_local, error_local):
         granted.assign(granted_local)
         error.assign(error_local)
-    
+
     store.requestAccessToEntityType_completion(EventKit.EKEntityTypeReminder, handler)
     if not granted.value:
         raise PermissionError("Access to reminders was not granted")
@@ -249,7 +248,7 @@ def fetch_reminders():
         try:
             print(f"Due Date: {reminder.dueDateComponents().date()}")
         except Exception as e:
-            print(f"Error: {e}")  
+            print(f"Error: {e}")
 
     list_reminder_lists()
 

@@ -1,14 +1,15 @@
 import os
 import subprocess
 import tempfile
-import pytest
 from unittest.mock import MagicMock
-from dspygen.utils.dspy_tools import init_dspy
+
+import pytest
 
 # Assuming FSM mixin and state definitions are as discussed earlier
 from dspygen.agents.coder_agent import CoderAgentState
 from dspygen.agents.coder_agent_v4 import CoderAgent
-from dspygen.mixin.fsm.fsm_mixin import trigger, FSMMixin
+from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
+from dspygen.utils.dspy_tools import init_dspy
 
 
 class PytestAgent(FSMMixin):
@@ -43,6 +44,7 @@ class PytestAgent(FSMMixin):
 
         # Generate with dspygen
         from sungen.typetemp.functional import render
+
         from dspygen.utils.dspy_tools import init_ol
         lm = init_ol()
         # source_code = bad_code

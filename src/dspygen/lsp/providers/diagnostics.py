@@ -170,13 +170,9 @@ def _compute_diagnostics(source: str) -> list[lsp_types.Diagnostic]:
             errors = _validate_sig_string(sig)
             for err in errors:
                 # Decide severity
-                if "no output" in err.lower() or "no input" in err.lower():
+                if "no output" in err.lower() or "no input" in err.lower() or "conflict" in err.lower() or "both inputs and outputs" in err.lower():
                     severity = lsp_types.DiagnosticSeverity.Error
-                elif "conflict" in err.lower() or "both inputs and outputs" in err.lower():
-                    severity = lsp_types.DiagnosticSeverity.Error
-                elif "snake_case" in err.lower() or "not snake_case" in err.lower():
-                    severity = lsp_types.DiagnosticSeverity.Warning
-                elif "duplicate" in err.lower():
+                elif "snake_case" in err.lower() or "not snake_case" in err.lower() or "duplicate" in err.lower():
                     severity = lsp_types.DiagnosticSeverity.Warning
                 else:
                     severity = lsp_types.DiagnosticSeverity.Error
@@ -252,7 +248,7 @@ def _compute_diagnostics(source: str) -> list[lsp_types.Diagnostic]:
 # ---------------------------------------------------------------------------
 
 
-def register_diagnostics(server: "LanguageServer") -> None:
+def register_diagnostics(server: LanguageServer) -> None:
     """Register didOpen and didChange handlers that publish diagnostics."""
 
     def _publish(uri: str, source: str) -> None:

@@ -9,7 +9,7 @@ def init_dspy(
     lm_class=None,
     max_tokens: int = 800,
     lm_instance=None,
-    api_key: Optional[str] = None,
+    api_key: str | None = None,
     temperature: float = 0.6,
     experimental: bool = True,
 ):

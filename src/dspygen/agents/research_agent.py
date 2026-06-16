@@ -3,14 +3,18 @@ from enum import Enum, auto
 
 import dspy
 
-from dspygen.utils.dspy_tools import init_dspy
-
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 from dspygen.modules.condition_sufficient_info_module import condition_sufficient_info_call
 from dspygen.modules.query_generator_module import query_generator_call
+
 #from dspygen.dspy_modules.refine_results_module import refine_results_module_call
 from dspygen.modules.source_selector_module import source_selector_call
-from dspygen.utils.scraping_tools import execute_brave_search_queries, scrape_urls, execute_duckduckgo_queries
+from dspygen.utils.dspy_tools import init_dspy
+from dspygen.utils.scraping_tools import (
+    execute_brave_search_queries,
+    execute_duckduckgo_queries,
+    scrape_urls,
+)
 
 
 class LearningAgentState(Enum):
@@ -73,15 +77,15 @@ class LearningAgent(FSMMixin):
             # Extract only the URLs to pass to the scrape_urls function
             url_list = [url['url'] for url in urls]
             self.scraped_content[objective] = scrape_urls(url_list)
-        print(f"Scraped and converted content.")
+        print("Scraped and converted content.")
 
     @trigger(source=LearningAgentState.DISCARD_IRRELEVANT, dest=LearningAgentState.DECIDE_SUFFICIENCY)
     def discard_irrelevant(self):
         """Directly relay the scraped content without refining."""
         self.refined_content = self.scraped_content
         print(f"Refined content: {self.refined_content}")
-        
-        
+
+
         #self.refined_content = {objective: refine_results_module_call(self.scraped_content[objective]) for objective in self.objectives}
         #print(f"Refined content: {self.refined_content}")
 

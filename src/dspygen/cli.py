@@ -1,11 +1,10 @@
 """dspygen CLI."""
 import asyncio
 import json
+import os
+import subprocess
 import sys
 from importlib import import_module, metadata
-import subprocess
-import os
-
 from pathlib import Path
 
 import typer
@@ -39,7 +38,6 @@ def main_callback(
     ),
 ):
     """DSPyGen — AI development CLI powered by DSPy."""
-    pass
 
 
 # Load existing subcommands

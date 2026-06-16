@@ -1,7 +1,7 @@
 import os
 import uuid
-from contextlib import contextmanager, asynccontextmanager
-from typing import Any, Optional, TypeVar, Union, Type
+from contextlib import asynccontextmanager, contextmanager
+from typing import Any, Optional, Type, TypeVar, Union
 
 import aiofiles
 import yaml
@@ -17,7 +17,7 @@ class YAMLMixin:
     Includes support for asynchronous file operations.
     """
 
-    def to_yaml(self: BaseModel, file_path: Optional[str] = None) -> str:
+    def to_yaml(self: BaseModel, file_path: str | None = None) -> str:
         """
         Serializes the Pydantic model instance into a YAML string and optionally writes it to a file.
 
@@ -34,7 +34,7 @@ class YAMLMixin:
                 yaml_file.write(yaml_content)
                 print(f"Wrote {file_path} to {yaml_content}")
         return yaml_content
-    
+
     @classmethod
     def from_yaml(cls: type["T"], file_path: str) -> "T":
         """
@@ -50,7 +50,7 @@ class YAMLMixin:
             data = yaml.safe_load(yaml_file)
         return cls.model_validate(data)
 
-    async def ato_yaml(self: BaseModel, file_path: Optional[str] = None) -> str:
+    async def ato_yaml(self: BaseModel, file_path: str | None = None) -> str:
         """
         Asynchronously serializes the Pydantic model to YAML and writes to a file.
 
@@ -67,7 +67,7 @@ class YAMLMixin:
         return yaml_content
 
     @classmethod
-    async def afrom_yaml(cls: Type[T], file_path: str) -> T:
+    async def afrom_yaml(cls: type[T], file_path: str) -> T:
         """
         Asynchronously reads YAML content from a file and constructs an instance of the Pydantic model.
 
@@ -77,13 +77,13 @@ class YAMLMixin:
         Returns:
             T: An instance of the Pydantic model.
         """
-        async with aiofiles.open(file_path, "r") as yaml_file:
+        async with aiofiles.open(file_path) as yaml_file:
             data = yaml.safe_load(await yaml_file.read())
         return cls(**data)
 
     @classmethod
     @contextmanager
-    def io_context(cls: type[T], model_defaults=None, file_path: Optional[str] = None):
+    def io_context(cls: type[T], model_defaults=None, file_path: str | None = None):
         """
         Context manager for convenient loading and saving of Pydantic models to/from YAML files.
 
@@ -104,7 +104,7 @@ class YAMLMixin:
         # Load from YAML if file exists
         if os.path.exists(absolute_path):
             instance = cls.from_yaml(absolute_path)
-        elif model_defaults is {}:
+        elif model_defaults == {}:
             instance = cls()
         else:
             instance = cls.model_validate(model_defaults)
@@ -116,7 +116,7 @@ class YAMLMixin:
 
     @classmethod
     @asynccontextmanager
-    async def aio_context(cls: Type[T], model_defaults=None, file_path: Optional[str] = None):
+    async def aio_context(cls: type[T], model_defaults=None, file_path: str | None = None):
         """
         Asynchronous context manager for convenient loading and saving of Pydantic models to/from YAML files.
 
@@ -161,7 +161,7 @@ def find_all_keys_in_file(filepath: str, target_key: str) -> list[Any]:
     return find_all_keys(target_key, parsed_yaml_data)
 
 
-def find_all_keys(target_key: str, data: Union[dict, list]) -> list[Any]:
+def find_all_keys(target_key: str, data: dict | list) -> list[Any]:
     """Helper function to find all occurrences of a key in a nested YAML-like dictionary or list and return the associated values.
 
     Parameters:
@@ -224,6 +224,7 @@ def main():
 
 
 import asyncio
+
 
 async def async_main():
     class MyData(BaseModel, YAMLMixin):

@@ -1,5 +1,6 @@
-from transitions import Machine
 from enum import Enum
+
+from transitions import Machine
 
 
 class MatterState(Enum):

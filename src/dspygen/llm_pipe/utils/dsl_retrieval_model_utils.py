@@ -1,6 +1,6 @@
 import dspy
 
-from dspygen.llm_pipe.dsl_pydantic_models import StepDSLModel, PipelineDSLModel
+from dspygen.llm_pipe.dsl_pydantic_models import PipelineDSLModel, StepDSLModel
 from dspygen.rm.data_retriever import DataRetriever
 
 

@@ -103,17 +103,17 @@ register_definition(server)
 # Register feature providers — 10 new capabilities
 # ---------------------------------------------------------------------------
 
-from .providers.document_symbol import register_document_symbol  # noqa: E402
-from .providers.workspace_symbol import register_workspace_symbol  # noqa: E402
-from .providers.rename import register_rename  # noqa: E402
-from .providers.code_action import register_code_action  # noqa: E402
-from .providers.semantic_tokens import register_semantic_tokens  # noqa: E402
-from .providers.formatting import register_formatting  # noqa: E402
-from .providers.references import register_references  # noqa: E402
-from .providers.inlay_hint import register_inlay_hint  # noqa: E402
-from .providers.folding_range import register_folding_range  # noqa: E402
 from .providers.call_hierarchy import register_call_hierarchy  # noqa: E402
+from .providers.code_action import register_code_action  # noqa: E402
+from .providers.document_symbol import register_document_symbol  # noqa: E402
 from .providers.execute_command import register_execute_command  # noqa: E402
+from .providers.folding_range import register_folding_range  # noqa: E402
+from .providers.formatting import register_formatting  # noqa: E402
+from .providers.inlay_hint import register_inlay_hint  # noqa: E402
+from .providers.references import register_references  # noqa: E402
+from .providers.rename import register_rename  # noqa: E402
+from .providers.semantic_tokens import register_semantic_tokens  # noqa: E402
+from .providers.workspace_symbol import register_workspace_symbol  # noqa: E402
 
 register_document_symbol(server)
 register_workspace_symbol(server)

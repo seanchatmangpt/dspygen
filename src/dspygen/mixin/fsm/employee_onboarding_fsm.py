@@ -1,5 +1,6 @@
 
 from enum import Enum, auto
+
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 
 
@@ -25,7 +26,7 @@ class EmployeeOnboardingFSM(FSMMixin):
     )
     def start_onboarding(self):
         print("Transitioning from START to IN_PROGRESS")
-        
+
     @trigger(
         source=EmployeeOnboardingFSMState.IN_PROGRESS,
         dest=EmployeeOnboardingFSMState.COMPLETED,
@@ -37,7 +38,7 @@ class EmployeeOnboardingFSM(FSMMixin):
     )
     def complete_onboarding(self):
         print("Transitioning from IN_PROGRESS to COMPLETED")
-        
+
     @trigger(
         source=EmployeeOnboardingFSMState.COMPLETED,
         dest=EmployeeOnboardingFSMState.START,
@@ -49,7 +50,7 @@ class EmployeeOnboardingFSM(FSMMixin):
     )
     def cancel_onboarding(self):
         print("Transitioning from COMPLETED to START")
-        
+
 
 
 def main():
@@ -62,4 +63,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()    
+    main()

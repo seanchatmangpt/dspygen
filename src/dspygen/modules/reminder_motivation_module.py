@@ -2,6 +2,7 @@
 Module for generating motivational advice for completing daily reminders.
 """
 import dspy
+
 from dspygen.utils.dspy_tools import init_dspy
 
 
@@ -29,7 +30,7 @@ class GenerateReminderMotivation(dspy.Signature):
 
 class ReminderMotivationModule(dspy.Module):
     """ReminderMotivationModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args

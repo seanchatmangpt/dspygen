@@ -8,10 +8,10 @@ module's purpose, inputs, and outputs. The module exposes both a programmatic AP
 """
 import dspy
 from typer import Typer
+
 from dspygen.utils.dspy_tools import init_dspy
 
-
-app = Typer()        
+app = Typer()
 
 
 class ModuleDocstringModule(dspy.Module):
@@ -32,7 +32,7 @@ def module_docstring_call(module_dict, context):
 def call(module_dict, context):
     """ModuleDocstringModule"""
     init_dspy()
-    
+
     print(module_docstring_call(module_dict=module_dict, context=context))
 
 
@@ -41,13 +41,14 @@ def call(module_dict, context):
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/module_docstring/")
 async def module_docstring_route(data: dict):
     # Your code generation logic here
     init_dspy()
-    
+
     print(data)
     return module_docstring_call(**data)
 

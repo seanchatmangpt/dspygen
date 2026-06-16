@@ -1,5 +1,6 @@
 
 from enum import Enum, auto
+
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 
 
@@ -25,7 +26,7 @@ class TrafficLight(FSMMixin):
     )
     def slow_down(self):
         print("Transitioning from green to yellow")
-        
+
     @trigger(
         source=TrafficLightState.YELLOW,
         dest=TrafficLightState.RED,
@@ -37,7 +38,7 @@ class TrafficLight(FSMMixin):
     )
     def stop(self):
         print("Transitioning from yellow to red")
-        
+
     @trigger(
         source=TrafficLightState.RED,
         dest=TrafficLightState.GREEN,
@@ -49,7 +50,7 @@ class TrafficLight(FSMMixin):
     )
     def go(self):
         print("Transitioning from red to green")
-        
+
     def log_transition(self):
         print("Logging transition.")
 
@@ -69,4 +70,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()    
+    main()

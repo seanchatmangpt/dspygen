@@ -11,7 +11,7 @@ from loguru import logger
 from dspygen.web_scraper import scrape_website
 
 
-def _ddg_search(query: str, max_results: int) -> List[str]:
+def _ddg_search(query: str, max_results: int) -> list[str]:
     """Return up to *max_results* URLs from a DuckDuckGo text search.
 
     Uses the ``duckduckgo_search`` package (``ddg5``/``DDGS`` API).
@@ -28,10 +28,10 @@ def _ddg_search(query: str, max_results: int) -> List[str]:
         return []
 
 
-async def _scrape_urls(urls: List[str], timeout: float = 10.0) -> List[str]:
+async def _scrape_urls(urls: list[str], timeout: float = 10.0) -> list[str]:
     """Scrape *urls* concurrently, ignoring individual failures."""
 
-    async def _safe_scrape(url: str) -> Optional[str]:
+    async def _safe_scrape(url: str) -> str | None:
         try:
             text = await asyncio.wait_for(scrape_website(url), timeout=timeout)
             return text.strip() if text else None

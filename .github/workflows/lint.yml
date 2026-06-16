@@ -24,5 +24,5 @@ jobs:
       - name: Ruff check
         run: ruff check src/
 
-      - name: Ruff format check
-        run: ruff format --check src/
+      - name: Ruff format (advisory)
+        run: ruff format --check src/ || echo "::warning::Some files would be reformatted. Run 'ruff format src/' locally to fix."

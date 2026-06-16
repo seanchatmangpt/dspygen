@@ -1,7 +1,7 @@
 """PEP 561 type stubs for dspygen.rdddy.base_aggregate."""
 
 from collections.abc import Callable
-from typing import Any, Optional, Type, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Optional, Type
 
 from dspygen.rdddy.base_inhabitant import BaseInhabitant
 from dspygen.rdddy.base_message import BaseMessage
@@ -19,13 +19,13 @@ class BaseAggregate(BaseInhabitant):
     changes, enforcing invariants across the entire group.
     """
 
-    service_colony: "ServiceColony"
+    service_colony: ServiceColony
     inhabitant_id: int
 
     def __init__(
         self,
-        service_colony: "ServiceColony",
-        inhabitant_id: Optional[int] = ...,
+        service_colony: ServiceColony,
+        inhabitant_id: int | None = ...,
     ) -> None: ...
 
     async def start(self, scheduler: Any) -> None: ...
@@ -34,4 +34,4 @@ class BaseAggregate(BaseInhabitant):
     def on_completed(self) -> None: ...
     async def receive(self, message: BaseMessage) -> None: ...
     async def publish(self, message: BaseMessage) -> None: ...
-    def map_handlers(self) -> dict[Type[BaseMessage], Callable[..., Any]]: ...
+    def map_handlers(self) -> dict[type[BaseMessage], Callable[..., Any]]: ...

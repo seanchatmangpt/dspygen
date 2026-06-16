@@ -1,13 +1,12 @@
-import inflection
-from pydantic import BaseModel, Field
-
 import dspy
+import inflection
 from dspy import InputField, OutputField, Signature
+from pydantic import BaseModel, Field
+from sungen.typetemp.functional import render
 
 from dspygen.lm.groq_lm import Groq
 from dspygen.modules.gen_pydantic_instance import GenPydanticInstance
 from dspygen.utils.dspy_tools import init_dspy
-from sungen.typetemp.functional import render
 
 
 class FieldTemplateSpecificationModel(BaseModel):
@@ -179,7 +178,7 @@ def main():
     init_dspy(lm_class=Groq, model="llama-3.2-1b-preview")
 
     from sungen.utils.dspy_tools import predict_type
-    model_inst = predict_type({"instruction": "I need a verbose contact model named ContactField from the friend of a friend ontology"}, 
+    model_inst = predict_type({"instruction": "I need a verbose contact model named ContactField from the friend of a friend ontology"},
                               FieldTemplateSpecificationModel)
 
     # Render the Pydantic class from the specification

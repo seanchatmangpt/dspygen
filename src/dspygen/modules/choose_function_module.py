@@ -5,12 +5,15 @@ name. The app.command() decorator is used to create a command line interface for
 The main function initializes dspy and then calls the choose_function_call function with empty prompt and
 function_list parameters. The TODO comments indicate future plans for the code, including adding a streamlit
 component and a FastAPI route."""
-from typing import Callable
+from collections.abc import Callable
 
 import dspy
 from typer import Typer
 
-from dspygen.experiments.function_calling.function_call import get_current_weather, get_n_day_weather_forecast
+from dspygen.experiments.function_calling.function_call import (
+    get_current_weather,
+    get_n_day_weather_forecast,
+)
 from dspygen.utils.dspy_tools import init_dspy
 
 app = Typer()
@@ -75,8 +78,7 @@ class ChooseFunctionModule(dspy.Module):
 
             if self.validate_output(matching_function__name__):
                 return next(filter(lambda f: f.__name__ == matching_function__name__, self._functions_list))
-            else:
-                raise ValueError(f"Invalid function name chosen: {matching_function__name__}")
+            raise ValueError(f"Invalid function name chosen: {matching_function__name__}")
 
 
 def choose_function_call(prompt, function_list):

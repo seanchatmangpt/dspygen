@@ -30,7 +30,7 @@ import time
 import typing
 
 import py_trees
-import py_trees.console as console
+from py_trees import console
 
 ##############################################################################
 # Classes
@@ -79,7 +79,7 @@ def description() -> str:
     return s
 
 
-def epilog() -> typing.Optional[str]:
+def epilog() -> str | None:
     """
     Print a noodly epilog for --help.
 
@@ -92,8 +92,7 @@ def epilog() -> typing.Optional[str]:
             + "And his noodly appendage reached forth to tickle the blessed...\n"
             + console.reset
         )
-    else:
-        return None
+    return None
 
 
 def command_line_argument_parser() -> argparse.ArgumentParser:
@@ -130,7 +129,7 @@ class ContextSwitch(py_trees.behaviour.Behaviour):
 
     def __init__(self, name: str = "ContextSwitch"):
         """Initialise with a behaviour name."""
-        super(ContextSwitch, self).__init__(name)
+        super().__init__(name)
         self.feedback_message = "no context"
 
     def initialise(self) -> None:
@@ -211,10 +210,10 @@ def main() -> None:
     root.setup_with_descendants()
     for i in range(1, 6):
         try:
-            print("\n--------- Tick {0} ---------\n".format(i))
+            print(f"\n--------- Tick {i} ---------\n")
             root.tick_once()
             print("\n")
-            print("{}".format(py_trees.display.unicode_tree(root, show_status=True)))
+            print(f"{py_trees.display.unicode_tree(root, show_status=True)}")
             time.sleep(1.0)
         except KeyboardInterrupt:
             break

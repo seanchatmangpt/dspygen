@@ -28,9 +28,9 @@ class GoogleSheetRetriever(dspy.Retrieve):
         self,
         spreadsheet_id: str,
         sheet_name: str,
-        client: Optional[gspread.Client] = None,
+        client: gspread.Client | None = None,
         query: str = "",
-        return_columns: Optional[list[str]] = None,
+        return_columns: list[str] | None = None,
         pipeline: Any = None,
         step: Any = None,
         **kwargs: Any,
@@ -92,7 +92,7 @@ class GoogleSheetRetriever(dspy.Retrieve):
 
         self.df = pd.DataFrame(records)
 
-    def forward(self, query: Optional[str] = None, k: Optional[int] = None, **kwargs: Any) -> list[dict]:
+    def forward(self, query: str | None = None, k: int | None = None, **kwargs: Any) -> list[dict]:
         # Check if a SQL query is provided
         if query:
             # Apply the SQL query to the DataFrame

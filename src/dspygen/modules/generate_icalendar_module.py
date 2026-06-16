@@ -1,8 +1,16 @@
+import datetime
 from textwrap import dedent
 
 import dspy
-from dspygen.utils.date_tools import TODAY, TOMORROW_MORNING_8AM, SATURDAY, SUNDAY, SATURDAY_STR, SUNDAY_STR
-import datetime
+
+from dspygen.utils.date_tools import (
+    SATURDAY,
+    SATURDAY_STR,
+    SUNDAY,
+    SUNDAY_STR,
+    TODAY,
+    TOMORROW_MORNING_8AM,
+)
 
 
 # Import or define the GenerateICalendarEvent class

@@ -3,8 +3,8 @@ The `documentation` field is not provided.
 """
 import dspy
 from typer import Typer
-from dspygen.utils.dspy_tools import init_dspy
 
+from dspygen.utils.dspy_tools import init_dspy
 
 app = Typer()
 

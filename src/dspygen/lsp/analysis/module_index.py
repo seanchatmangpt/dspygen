@@ -13,7 +13,6 @@ from typing import Optional
 
 from loguru import logger
 
-
 # ---------------------------------------------------------------------------
 # Data model
 # ---------------------------------------------------------------------------
@@ -181,7 +180,7 @@ class ModuleIndex:
     # Build
     # ------------------------------------------------------------------
 
-    def build(self, modules_dir: Optional[str] = None) -> None:
+    def build(self, modules_dir: str | None = None) -> None:
         """
         Scan *modules_dir* (defaults to ``src/dspygen/modules/`` relative to
         the package root) and populate the index.
@@ -244,7 +243,7 @@ class ModuleIndex:
                 key=lambda m: m.name,
             )
 
-    def get_by_name(self, name: str) -> Optional[ModuleInfo]:
+    def get_by_name(self, name: str) -> ModuleInfo | None:
         """
         Look up a module by its exact class name.
 
@@ -291,7 +290,7 @@ class ModuleIndex:
 # Module-level singleton built lazily at first import
 # ---------------------------------------------------------------------------
 
-_DEFAULT_INDEX: Optional[ModuleIndex] = None
+_DEFAULT_INDEX: ModuleIndex | None = None
 _INDEX_LOCK = threading.Lock()
 
 

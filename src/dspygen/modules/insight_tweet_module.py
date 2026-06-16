@@ -5,11 +5,10 @@ import dspy
 import pyperclip
 from typer import Typer
 
-from dspygen.rdddy.base_inhabitant import BaseInhabitant
 from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.base_event import BaseEvent
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
 from dspygen.utils.dspy_tools import init_dspy
-
 
 app = Typer()
 

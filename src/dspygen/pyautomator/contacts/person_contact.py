@@ -1,5 +1,7 @@
-from .contact import Contact, ContactError
 from Contacts import CNContactType, CNLabelHome, CNLabelWork
+
+from .contact import Contact, ContactError
+
 
 class PersonContact(Contact):
     @classmethod
@@ -8,7 +10,7 @@ class PersonContact(Contact):
         contact.cn_contact.setContactType_(CNContactType.CNContactTypePerson)
         contact.given_name = given_name
         contact.family_name = family_name
-        
+
         if 'email_addresses' in kwargs:
             contact.email_addresses = kwargs['email_addresses']
         if 'phone_numbers' in kwargs:
@@ -23,7 +25,7 @@ class PersonContact(Contact):
             contact.job_title = kwargs['job_title']
         if 'department_name' in kwargs:
             contact.department_name = kwargs['department_name']
-        
+
         return contact
 
     @property

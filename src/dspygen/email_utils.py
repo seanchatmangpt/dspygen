@@ -1,6 +1,7 @@
 import os
 import smtplib
 from email.mime.text import MIMEText
+
 from dotenv import load_dotenv
 
 # Load environments variables from .env file

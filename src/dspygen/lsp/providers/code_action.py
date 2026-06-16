@@ -244,7 +244,7 @@ def _actions_for_range(
 # ---------------------------------------------------------------------------
 
 
-def register_code_action(server: "LanguageServer") -> None:
+def register_code_action(server: LanguageServer) -> None:
     """Register the textDocument/codeAction handler on *server*."""
 
     @server.feature(

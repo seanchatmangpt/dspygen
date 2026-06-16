@@ -2,17 +2,18 @@
 
 """
 import dspy
-from dspygen.utils.dspy_tools import init_dspy        
+
+from dspygen.utils.dspy_tools import init_dspy
 
 
 class DataVisualizationGeneratorModule(dspy.Module):
     """DataVisualizationGeneratorModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args
         self.output = None
-        
+
     def __or__(self, other):
         if other.output is None and self.output is None:
             self.forward(**self.forward_args)
@@ -25,7 +26,7 @@ class DataVisualizationGeneratorModule(dspy.Module):
         pred = dspy.Predict("raw_data -> visualizations")
         self.output = pred(raw_data=raw_data).visualizations
         return self.output
-        
+
     def pipe(self, input_str):
         raise NotImplementedError("Please implement the pipe method for DSL support.")
         # Replace TODO with a keyword from you forward method
@@ -33,6 +34,7 @@ class DataVisualizationGeneratorModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -60,6 +62,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/data_visualization_generator/")

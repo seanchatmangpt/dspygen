@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field
 from typing import List, Optional
+
+from pydantic import BaseModel, Field
 
 
 class Transition(BaseModel):
@@ -7,11 +8,11 @@ class Transition(BaseModel):
     trigger: str = Field(..., description="The trigger method name for the transition")
     source: str = Field(..., description="The source state")
     dest: str = Field(..., description="The destination state")
-    conditions: Optional[List[str]] = Field(None, description="List of conditions to check before transition")
-    unless: Optional[List[str]] = Field(None, description="List of conditions to prevent transition")
-    before: Optional[List[str]] = Field(None, description="List of methods to execute before transition")
-    after: Optional[List[str]] = Field(None, description="List of methods to execute after transition")
-    prepare: Optional[List[str]] = Field(None, description="List of methods to prepare for transition")
+    conditions: list[str] | None = Field(None, description="List of conditions to check before transition")
+    unless: list[str] | None = Field(None, description="List of conditions to prevent transition")
+    before: list[str] | None = Field(None, description="List of methods to execute before transition")
+    after: list[str] | None = Field(None, description="List of methods to execute after transition")
+    prepare: list[str] | None = Field(None, description="List of methods to prepare for transition")
 
 
 class StateMethod(BaseModel):
@@ -22,9 +23,9 @@ class StateMethod(BaseModel):
 class FSMClassModel(BaseModel):
     """Class model for Finite State Machine (FSM) class. This model is used to generate FSM classes."""
     class_name: str = Field(..., description="The name of the FSM class")
-    states: List[str] = Field(..., description="List of states")
-    transitions: List[Transition] = Field(..., description="List of transitions", min_items=3)
-    methods: List[StateMethod] = Field([], description="List of additional methods for the FSM class")
+    states: list[str] = Field(..., description="List of states")
+    transitions: list[Transition] = Field(..., description="List of transitions", min_items=3)
+    methods: list[StateMethod] = Field([], description="List of additional methods for the FSM class")
 
 
 tmpl = """{% macro method_signature(method) %}

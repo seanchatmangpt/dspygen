@@ -2,6 +2,7 @@
 
 """
 import dspy
+
 from dspygen.utils.dspy_tools import init_dspy
 
 
@@ -24,7 +25,7 @@ def main():
     prompt = "The earth is flat"
     assertion = "True"
     print(checker_call(prompt=prompt, assertion=assertion))
-    
+
 
 if __name__ == "__main__":
     main()

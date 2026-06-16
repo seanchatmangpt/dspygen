@@ -1,6 +1,6 @@
-import subprocess
 import logging
 import os
+import subprocess
 import tempfile
 
 logging.basicConfig(level=logging.DEBUG)

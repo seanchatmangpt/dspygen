@@ -1,17 +1,17 @@
 import hashlib
+from pathlib import Path
+from typing import Any, List, Optional, Union
+
+import chromadb
 import dspy
 import ijson
-from pathlib import Path
-from typing import List, Optional, Union, Any
-
+from chromadb.utils import embedding_functions
 from loguru import logger
-import chromadb
-import chromadb.utils.embedding_functions as embedding_functions
 from munch import Munch
-from pydantic import BaseModel, ValidationError, Field
+from pydantic import BaseModel, Field, ValidationError
 
 from dspygen.modules.python_source_code_module import python_source_code_call
-from dspygen.utils.file_tools import data_dir, count_tokens
+from dspygen.utils.file_tools import count_tokens, data_dir
 
 #from llama_index.embeddings.huggingface import HuggingFaceEmbedding ## pip install llama-index-embeddings-huggingface
 
@@ -33,13 +33,13 @@ def calculate_file_checksum(file_path: str) -> str:
 # Pydantic models
 class Author(BaseModel):
     role: str
-    name: Optional[str] = None
+    name: str | None = None
     metadata: dict
 
 
 class ContentPart(BaseModel):
     content_type: str
-    parts: Optional[List[Union[str, dict]]] = None  # Allow parts to be either strings or dicts
+    parts: list[str | dict] | None = None  # Allow parts to be either strings or dicts
 
 
 class Message(BaseModel):
@@ -52,9 +52,9 @@ class Message(BaseModel):
 
 class Data(BaseModel):
     id: str
-    message: Optional[Message] = None  # Allow message to be None
-    parent: Optional[str] = None
-    children: List[str]
+    message: Message | None = None  # Allow message to be None
+    parent: str | None = None
+    children: list[str]
 
 
 class Conversation(BaseModel):
@@ -109,7 +109,7 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
             self._process_and_store_conversations()
             self._save_last_processed_checksum()
 
-    def _load_last_processed_checksum(self) -> Optional[str]:
+    def _load_last_processed_checksum(self) -> str | None:
         checksum_file = self.persist_directory / "last_checksum.txt"
         try:
             return checksum_file.read_text().strip()
@@ -195,9 +195,9 @@ class ChatGPTChromaDBRetriever(dspy.Retrieve):
 
     def forward(
         self,
-        query_or_queries: Union[str, List[str]],
-        k: Optional[int] = None,
-        contains: Optional[str] = None,
+        query_or_queries: str | list[str],
+        k: int | None = None,
+        contains: str | None = None,
         role: str = "assistant",
     ) -> list[str]:
         """Search with ChromaDB for top passages for the provided query/queries.

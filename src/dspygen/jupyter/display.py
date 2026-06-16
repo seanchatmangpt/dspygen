@@ -12,7 +12,8 @@ from typing import Any, Dict, List, Optional
 # ---------------------------------------------------------------------------
 
 try:
-    from IPython.display import HTML, JSON, display as _ip_display
+    from IPython.display import HTML, JSON
+    from IPython.display import display as _ip_display
     _IPYTHON_AVAILABLE = True
 except ImportError:
     _IPYTHON_AVAILABLE = False
@@ -35,7 +36,7 @@ def _is_jsonable(obj: Any) -> bool:
         return False
 
 
-def _obj_to_dict(obj: Any) -> Optional[Dict]:
+def _obj_to_dict(obj: Any) -> dict | None:
     """Convert common result types to a plain dict for display."""
     if isinstance(obj, dict):
         return obj
@@ -88,7 +89,7 @@ def display_module_output(output: Any) -> None:
     _ip_display(HTML(f"<pre style='white-space:pre-wrap'>{_escape_html(str(output))}</pre>"))
 
 
-def display_pipeline_result(results: List[Dict[str, Any]]) -> None:
+def display_pipeline_result(results: list[dict[str, Any]]) -> None:
     """
     Render a list of pipeline step results as a formatted table.
 
@@ -188,7 +189,7 @@ def display_agent_state(state: Any) -> None:
 # Private plain-text fallbacks
 # ---------------------------------------------------------------------------
 
-def _print_pipeline_table(results: List[Dict[str, Any]]) -> None:
+def _print_pipeline_table(results: list[dict[str, Any]]) -> None:
     col_w = 20
     print(f"\n{'Step':<{col_w}} {'Module':<{col_w}} Output preview")
     print("-" * 80)

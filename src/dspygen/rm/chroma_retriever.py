@@ -1,6 +1,6 @@
 # Import necessary dspy_modules and functions
 from pathlib import Path
-from typing import Union, List, Optional, Any
+from typing import Any, List, Optional, Union
 
 import chromadb
 import dspy
@@ -37,23 +37,23 @@ def get_collection(persist_directory: Path, collection_name: str, embed_fn: Any 
         raise
 
 
-def prepare_queries(query_or_queries: Union[str, List[str]]) -> List[str]:
+def prepare_queries(query_or_queries: str | list[str]) -> list[str]:
     """Prepare and validate the queries."""
     return [query_or_queries] if isinstance(query_or_queries, str) else [q for q in query_or_queries if q]
 
 
-def generate_embeddings(queries: List[str], embedding_function: Any) -> List:
+def generate_embeddings(queries: list[str], embedding_function: Any) -> list:
     """Generate embeddings for the queries."""
     return embedding_function(queries)
 
 
 def query_collection(
     collection: Collection,
-    embeddings: List,
+    embeddings: list,
     k: int,
-    contains: Optional[str],
+    contains: str | None,
     role: str,
-    include: Optional[List[str]] = None,
+    include: list[str] | None = None,
 ) -> list[str]:
     """Query the collection with the generated embeddings.
 
@@ -88,7 +88,7 @@ class ChromaRetriever(dspy.Retrieve):
     def __init__(
         self,
         collection_name: str,
-        persist_directory: Union[str, Path] = data_dir(),
+        persist_directory: str | Path = data_dir(),
         embed_fn: Any = default_embed_fn,
         k: int = 5,
     ) -> None:
@@ -108,9 +108,9 @@ class ChromaRetriever(dspy.Retrieve):
 
     def forward(
         self,
-        query_or_queries: Union[str, List[str]],
-        k: Optional[int] = None,
-        contains: Optional[str] = None,
+        query_or_queries: str | list[str],
+        k: int | None = None,
+        contains: str | None = None,
         role: str = "assistant",
     ) -> list[str]:
         """Search for top passages based on the provided query or queries.

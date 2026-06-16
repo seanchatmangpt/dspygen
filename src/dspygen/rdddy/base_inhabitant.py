@@ -1,4 +1,4 @@
-"""The BaseInhabitant Module for Reactive Domain-Driven Design (RDDDY) Framework
+r"""The BaseInhabitant Module for Reactive Domain-Driven Design (RDDDY) Framework
 ---------------------------------------------------------------------
 
 This module implements the core Inhabitant abstraction within the RDDDY framework, providing a robust foundation for building reactive, domain-driven systems that are scalable, maintainable, and capable of handling complex, concurrent interactions. The Inhabitant model encapsulates both state and behavior, allowing for asynchronous message passing as the primary means of communication between inhabitants, thus fostering loose coupling and enhanced system resilience.
@@ -92,7 +92,7 @@ class BaseInhabitant:
         map_handlers(): Maps message types to corresponding handler methods.
     """
 
-    def __init__(self, service_colony: "ServiceColony", inhabitant_id: Optional[int] = None):
+    def __init__(self, service_colony: "ServiceColony", inhabitant_id: int | None = None):
         self.service_colony = service_colony
         self.inhabitant_id = inhabitant_id or id(self)
         self.mailbox = rx.subject.Subject()
@@ -220,7 +220,7 @@ class BaseInhabitant:
 
         await self.service_colony.publish(message)
 
-    def map_handlers(self) -> dict[Type[BaseMessage], Callable]:
+    def map_handlers(self) -> dict[type[BaseMessage], Callable]:
         """Maps message types to corresponding handler methods.
 
         Preconditions (Pre):

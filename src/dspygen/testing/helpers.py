@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 import functools
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 
 def assert_signature_valid(sig_str: str) -> None:
@@ -168,7 +169,7 @@ def capture_lm_calls(fn: Callable) -> Callable:
         result = run_prediction()
         calls = run_prediction.lm_calls
     """
-    from unittest.mock import patch, MagicMock
+    from unittest.mock import MagicMock, patch
 
     @functools.wraps(fn)
     def wrapper(*args, **kwargs):

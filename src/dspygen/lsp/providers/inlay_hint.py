@@ -142,7 +142,7 @@ def _hints_for_output_access(source: str, module_index) -> list[lsp_types.InlayH
 # ---------------------------------------------------------------------------
 
 
-def register_inlay_hint(server: "LanguageServer") -> None:
+def register_inlay_hint(server: LanguageServer) -> None:
     """Register the textDocument/inlayHint handler on *server*."""
 
     @server.feature(

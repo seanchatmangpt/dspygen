@@ -174,7 +174,7 @@ def _uri_to_path(uri: str) -> Path:
 # ---------------------------------------------------------------------------
 
 
-def register_rename(server: "LanguageServer") -> None:
+def register_rename(server: LanguageServer) -> None:
     """Register textDocument/rename and textDocument/prepareRename handlers."""
 
     @server.feature(lsp_types.TEXT_DOCUMENT_PREPARE_RENAME)

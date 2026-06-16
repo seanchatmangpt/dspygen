@@ -1,9 +1,10 @@
 """Structured logging setup using loguru."""
-from loguru import logger
-import sys
-import os
-import time
 import functools
+import os
+import sys
+import time
+
+from loguru import logger
 
 
 def configure_logging(level: str = "INFO", json: bool = False, file: str | None = None) -> None:

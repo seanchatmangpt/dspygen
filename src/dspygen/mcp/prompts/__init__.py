@@ -9,7 +9,7 @@ Provides an expanded set of MCP Prompts covering:
 
 from __future__ import annotations
 
-import mcp.types as types
+from mcp import types
 
 from dspygen.mcp.prompts.domain_prompts import (
     DOMAIN_PROMPTS,

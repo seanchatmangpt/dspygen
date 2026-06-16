@@ -1,7 +1,8 @@
 import json
-import pyperclip
 import time
-from typing import List, Dict
+from typing import Dict, List
+
+import pyperclip
 
 from dspygen.pyautomator.safari.safari_app import SafariApp
 
@@ -47,18 +48,18 @@ class LinkedInApp(SafariApp):
         })()
         """
         self.execute_jxa(script)
-        
+
         # Give some time for the clipboard to be updated
         time.sleep(0.5)
-        
+
         # Get the result from the clipboard
         markdown_content = pyperclip.paste()
-        
+
         if output_file:
             with open(output_file, 'w', encoding='utf-8') as f:
                 f.write(markdown_content)
             print(f"LinkedIn profile content saved to: {output_file}")
-        
+
         return markdown_content
 
     def send_message(self, recipient_url: str, message: str) -> bool:
@@ -135,7 +136,7 @@ class LinkedInApp(SafariApp):
         """
         return self.execute_jxa(script)
 
-    def get_conversations(self, limit: int = 10) -> List[Dict]:
+    def get_conversations(self, limit: int = 10) -> list[dict]:
         """Retrieve recent conversations."""
         script = f"""
         (() => {{
@@ -161,7 +162,7 @@ class LinkedInApp(SafariApp):
         result = self.execute_jxa(script)
         return json.loads(result)
 
-    def get_conversation_history(self, conversation_url: str) -> List[Dict]:
+    def get_conversation_history(self, conversation_url: str) -> list[dict]:
         """Retrieve message history for a specific conversation."""
         script = f"""
         (() => {{
@@ -190,11 +191,11 @@ class LinkedInApp(SafariApp):
 def main():
     linkedin = LinkedInApp()
     linkedin.activate_app()
-    
+
     # Example usage
     profile_url = "https://www.linkedin.com/in/seanchatman/"
     output_file = "linkedin_profile.md"
-    
+
     markdown = linkedin.get_profile_markdown(profile_url, output_file=output_file)
     print(f"Converted LinkedIn profile length: {len(markdown)}")
     print(f"LinkedIn profile content saved to: {output_file}")
@@ -202,18 +203,18 @@ def main():
     # Example usage of new methods
     recipient_url = "https://www.linkedin.com/in/example-user/"
     message = "Hello! I hope this message finds you well."
-    
+
     if linkedin.add_message(recipient_url, message):
         print("Message prepared successfully!")
         input("Press Enter to send the message or Ctrl+C to cancel...")
         if linkedin.send_prepared_message():
             print("Message sent successfully!")
-    
+
     conversations = linkedin.get_conversations(limit=5)
     print("Recent conversations:")
     for conv in conversations:
         print(f"- {conv['name']}: {conv['preview']} ({conv['time']})")
-    
+
     conversation_url = "https://www.linkedin.com/messaging/thread/123456789/"
     history = linkedin.get_conversation_history(conversation_url)
     print("\nConversation history:")

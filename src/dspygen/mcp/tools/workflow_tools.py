@@ -14,8 +14,8 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-import mcp.types as types
 from loguru import logger
+from mcp import types
 
 __all__ = ["get_tool_definitions", "handle_tool"]
 
@@ -232,8 +232,8 @@ async def _execute_workflow(args: dict) -> list[types.TextContent]:
         if src_dir not in sys.path:
             sys.path.insert(0, src_dir)
 
-        from dspygen.workflow.workflow_models import Workflow  # lazy
         from dspygen.workflow.workflow_executor import execute_workflow as _exec  # lazy
+        from dspygen.workflow.workflow_models import Workflow  # lazy
 
         with tempfile.NamedTemporaryFile(delete=False, mode="w", suffix=".yaml") as tmp:
             tmp.write(workflow_yaml)

@@ -10,7 +10,7 @@ logger.setLevel(
 
 
 class GenModule(Module):
-    def __init__(self, output_key, input_keys: Optional[list[str]] = None, lm=None):
+    def __init__(self, output_key, input_keys: list[str] | None = None, lm=None):
         if input_keys is None:
             self.input_keys = ["prompt"]
         else:

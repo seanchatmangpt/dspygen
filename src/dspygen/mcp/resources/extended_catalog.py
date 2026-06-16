@@ -19,8 +19,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-import mcp.types as types
 from loguru import logger
+from mcp import types
 
 __all__ = [
     "get_extended_resources",

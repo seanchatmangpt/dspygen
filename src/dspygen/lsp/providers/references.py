@@ -151,7 +151,7 @@ def _cross_file_references(class_name: str, module_index) -> list[lsp_types.Loca
 # ---------------------------------------------------------------------------
 
 
-def register_references(server: "LanguageServer") -> None:
+def register_references(server: LanguageServer) -> None:
     """Register the textDocument/references handler on *server*."""
 
     @server.feature(lsp_types.TEXT_DOCUMENT_REFERENCES)
@@ -189,7 +189,7 @@ def register_references(server: "LanguageServer") -> None:
                 # Cross-file references via module index
                 cross = _cross_file_references(word, module_index)
                 # Deduplicate with current file results
-                current_uri_locs = {(l.range.start.line, l.range.start.character) for l in locations}
+                current_uri_locs = {(loc.range.start.line, loc.range.start.character) for loc in locations}
                 for loc in cross:
                     if loc.uri == uri:
                         key = (loc.range.start.line, loc.range.start.character)

@@ -3,10 +3,10 @@ The source code is used to import necessary libraries and dspy_modules, define a
 """
 import dspy
 from typer import Typer
+
 from dspygen.utils.dspy_tools import init_dspy
 
-
-app = Typer()        
+app = Typer()
 
 
 class BookAppointmentModule(dspy.Module):
@@ -28,7 +28,7 @@ def book_appointment_call(requested_date, availability):
 def call(requested_date, availability):
     """BookAppointmentModule"""
     init_dspy()
-    
+
     print(book_appointment_call(requested_date=requested_date, availability=availability))
 
 
@@ -43,6 +43,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 
@@ -50,7 +51,7 @@ router = APIRouter()
 async def book_appointment_route(data: dict):
     # Your code generation logic here
     init_dspy()
-    
+
     print(data)
     return book_appointment_call(**data)
 

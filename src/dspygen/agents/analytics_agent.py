@@ -1,7 +1,8 @@
 from enum import Enum, auto
+
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
-from dspygen.utils.dspy_tools import init_ol
 from dspygen.modules.fsm_trigger_module import fsm_trigger_call
+from dspygen.utils.dspy_tools import init_ol
 
 
 class AnalyticsAgentState(Enum):

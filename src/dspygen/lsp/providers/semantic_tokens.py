@@ -151,7 +151,7 @@ def get_legend() -> lsp_types.SemanticTokensLegend:
     )
 
 
-def register_semantic_tokens(server: "LanguageServer") -> None:
+def register_semantic_tokens(server: LanguageServer) -> None:
     """Register the textDocument/semanticTokens/full handler on *server*."""
 
     @server.feature(

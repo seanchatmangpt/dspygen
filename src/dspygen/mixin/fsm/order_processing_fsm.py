@@ -173,9 +173,10 @@ def message_to_trigger(fsm, message):
     getattr(fsm, choice)()
 
 
-from faker import Faker
-import json
 import datetime
+import json
+
+from faker import Faker
 
 fake = Faker()
 

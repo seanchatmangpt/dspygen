@@ -26,8 +26,9 @@ Included models:
 - ForLoopActivity: Represents a loop activity with a defined start, end, and increment, iterating over a block of activities.
 """
 
+from typing import List, Optional
+
 from pydantic import BaseModel, Field
-from typing import Optional, List
 
 
 class Activity(BaseModel):
@@ -43,8 +44,8 @@ class InvokeActivity(Activity):
     id: str = Field(..., description="Unique identifier for the invoke activity.")
     partner_link: str = Field(..., description="Partner link used for the invocation.")
     operation: str = Field(..., description="Operation to invoke on the partner service.")
-    input_variable: Optional[str] = Field(None, description="Variable containing data to send.")
-    output_variable: Optional[str] = Field(None, description="Variable to store the response from the invocation.")
+    input_variable: str | None = Field(None, description="Variable containing data to send.")
+    output_variable: str | None = Field(None, description="Variable to store the response from the invocation.")
 
 
 class ReceiveActivity(Activity):
@@ -58,7 +59,7 @@ class ReceiveActivity(Activity):
     partner_link: str = Field(..., description="Partner link expecting a message.")
     operation: str = Field(..., description="Operation associated with the expected message.")
     variable: str = Field(..., description="Variable to store the received message.")
-    create_instance: Optional[bool] = Field(None,
+    create_instance: bool | None = Field(None,
                                             description="Whether this activity should initiate a new process instance.")
 
 
@@ -79,8 +80,8 @@ class WaitActivity(Activity):
     Calculus notation: A ::= wait(for|until) where 'for' is a duration and 'until' is a deadline expression.
     """
     id: str = Field(..., description="Unique identifier for the wait activity.")
-    for_: Optional[str] = Field(None, description="Duration to wait for.")
-    until: Optional[str] = Field(None, description="Deadline expression to wait until.")
+    for_: str | None = Field(None, description="Duration to wait for.")
+    until: str | None = Field(None, description="Deadline expression to wait until.")
 
 
 class SequenceActivity(Activity):
@@ -89,7 +90,7 @@ class SequenceActivity(Activity):
     Calculus notation: A ::= sequence(Activities) where Activities is a list of activities to be executed in order.
     """
     id: str = Field(..., description="Unique identifier for the sequence activity.")
-    activities: List[str] = Field(..., description="List of activity identifiers to be executed in sequence.")
+    activities: list[str] = Field(..., description="List of activity identifiers to be executed in sequence.")
 
 
 class FlowActivity(Activity):
@@ -98,7 +99,7 @@ class FlowActivity(Activity):
     Calculus notation: A ::= flow(Activities) where Activities is a list of activities that may execute concurrently.
     """
     id: str = Field(..., description="Unique identifier for the flow activity.")
-    activities: List[str] = Field(..., description="List of activity identifiers to be executed concurrently.")
+    activities: list[str] = Field(..., description="List of activity identifiers to be executed concurrently.")
 
 
 class PickActivity(Activity):
@@ -108,8 +109,8 @@ class PickActivity(Activity):
     OnAlarm is a list of time-based branches.
     """
     id: str = Field(..., description="Unique identifier for the pick activity.")
-    on_message: Optional[List[str]] = Field(None, description="List of message-based branches.")
-    on_alarm: Optional[List[str]] = Field(None, description="List of time-based branches.")
+    on_message: list[str] | None = Field(None, description="List of message-based branches.")
+    on_alarm: list[str] | None = Field(None, description="List of time-based branches.")
 
 
 class IfActivity(Activity):
@@ -119,8 +120,8 @@ class IfActivity(Activity):
     """
     id: str = Field(..., description="Unique identifier for the if activity.")
     condition: str = Field(..., description="Condition to evaluate.")
-    activities_true: List[str] = Field(..., description="List of activities to execute if the condition is true.")
-    activities_false: List[str] = Field(..., description="List of activities to execute if the condition is false.")
+    activities_true: list[str] = Field(..., description="List of activities to execute if the condition is true.")
+    activities_false: list[str] = Field(..., description="List of activities to execute if the condition is false.")
 
 
 class WhileActivity(Activity):
@@ -130,7 +131,7 @@ class WhileActivity(Activity):
     """
     id: str = Field(..., description="Unique identifier for the while activity.")
     condition: str = Field(..., description="Condition to evaluate for each iteration.")
-    activities: List[str] = Field(..., description="List of activities to execute in each iteration.")
+    activities: list[str] = Field(..., description="List of activities to execute in each iteration.")
 
 
 class RepeatUntilActivity(Activity):
@@ -139,7 +140,7 @@ class RepeatUntilActivity(Activity):
     Calculus notation: A ::= repeat {Activities} until (condition)
     """
     id: str = Field(..., description="Unique identifier for the repeat-until activity.")
-    activities: List[str] = Field(..., description="List of activities to execute in each iteration.")
+    activities: list[str] = Field(..., description="List of activities to execute in each iteration.")
     condition: str = Field(..., description="Condition to evaluate after each iteration.")
 
 
@@ -207,11 +208,11 @@ class ScopeActivity(Activity):
     Calculus notation: A ::= scope {Activities, Variables, FaultHandlers, CompensationHandlers, EventHandlers}
     """
     id: str = Field(..., description="Unique identifier for the scope activity.")
-    activities: List[str] = Field(..., description="List of activity identifiers contained within the scope.")
-    variables: List[str] = Field([], description="List of local variable identifiers declared in the scope.")
-    fault_handlers: List[str] = Field([], description="List of fault handler identifiers associated with the scope.")
-    compensation_handlers: List[str] = Field([], description="List of compensation handler identifiers for the scope.")
-    event_handlers: List[str] = Field([], description="List of event handler identifiers for the scope.")
+    activities: list[str] = Field(..., description="List of activity identifiers contained within the scope.")
+    variables: list[str] = Field([], description="List of local variable identifiers declared in the scope.")
+    fault_handlers: list[str] = Field([], description="List of fault handler identifiers associated with the scope.")
+    compensation_handlers: list[str] = Field([], description="List of compensation handler identifiers for the scope.")
+    event_handlers: list[str] = Field([], description="List of event handler identifiers for the scope.")
 
 
 class ForLoopActivity(Activity):
@@ -223,5 +224,5 @@ class ForLoopActivity(Activity):
     start_expression: str = Field(..., description="Expression defining the loop's start value.")
     end_expression: str = Field(..., description="Expression defining the loop's end value.")
     increment_expression: str = Field(..., description="Expression defining the loop's increment.")
-    activities: List[str] = Field(...,
+    activities: list[str] = Field(...,
                                   description="List of activity identifiers to be executed in each loop iteration.")

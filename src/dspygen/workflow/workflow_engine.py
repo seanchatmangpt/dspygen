@@ -1,15 +1,15 @@
+from loguru import logger
 from pydantic import Field
 
-from dspygen.rdddy.base_inhabitant import BaseInhabitant
 from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.base_event import BaseEvent
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
 from dspygen.rdddy.base_query import BaseQuery
 from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.workflow.workflow_executor import execute_workflow
 from dspygen.workflow.workflow_models import Workflow
 
-from loguru import logger
 
 class StatusQuery(BaseQuery):
     """Find out the status of the workflow engine."""

@@ -172,22 +172,21 @@ def round_robin_turbo_models():
 def get_model(model):
     if model == "best":
         return next(round_robin_best_models())
-    elif model == "ok":
+    if model == "ok":
         return next(round_robin_ok_models())
-    elif model == "gpt4":
+    if model == "gpt4":
         return next(round_robin_gpt_4_models())
-    elif model == "3":
+    if model == "3":
         return "gpt-3.5-turbo-0613"
-    elif model == "3i":
+    if model == "3i":
         return "gpt-3.5-turbo-instruct"
-    elif model == "4":
+    if model == "4":
         return "gpt-4-0613"
-    elif model == "turbo":
+    if model == "turbo":
         return next(round_robin_turbo_models())
-    elif not model:
+    if not model:
         return next(round_robin_instruct_models())
-    else:
-        return model
+    return model
 
 
 async def main():

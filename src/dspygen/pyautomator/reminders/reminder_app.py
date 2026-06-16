@@ -1,19 +1,20 @@
-import inject
-import EventKit
-from typing import List, Optional
-import tempfile
-import os
 import csv
+import os
+import tempfile
+from datetime import datetime, timedelta
+from typing import List, Optional
+
+import EventKit
+import inject
 import pandas as pd
 
+from dspygen.modules.df_sql_module import dfsql_call
+from dspygen.modules.generate_icalendar_module import generate_i_calendar_call
 from dspygen.pyautomator.base_app import BaseApp
 from dspygen.pyautomator.event_kit.event_store import EventStore
 from dspygen.pyautomator.event_kit.reminder import Reminder
 from dspygen.pyautomator.event_kit.reminder_list import ReminderList
 from dspygen.rm.data_retriever import DataRetriever
-from datetime import datetime, timedelta
-from dspygen.modules.df_sql_module import dfsql_call
-from dspygen.modules.generate_icalendar_module import generate_i_calendar_call
 
 
 class RemindersApp(BaseApp):
@@ -21,7 +22,7 @@ class RemindersApp(BaseApp):
     def __init__(self, event_store: EventKit.EKEventStore):
         super().__init__("Reminders")
         self.event_store = event_store
-        self.lists: List[ReminderList] = []
+        self.lists: list[ReminderList] = []
         self._load_existing_lists()
 
     def _load_existing_lists(self):
@@ -38,18 +39,18 @@ class RemindersApp(BaseApp):
 
         self.event_store.requestAccessToEntityType_completion_(EventKit.EKEntityTypeReminder, callback)
 
-    def get_list(self, name: str) -> Optional[ReminderList]:
+    def get_list(self, name: str) -> ReminderList | None:
         """Get a reminder list by name."""
         for lst in self.lists:
             if lst.name == name:
                 return lst
         return None
 
-    def get_all_lists(self) -> List[str]:
+    def get_all_lists(self) -> list[str]:
         """Get names of all reminder lists."""
         return [lst.name for lst in self.lists]
 
-    def query(self, query: str) -> List[Reminder]:
+    def query(self, query: str) -> list[Reminder]:
         """Perform an advanced search using SQL query and return a list of Reminder objects."""
         data_retriever = DataRetriever(file_path=self.export_reminders())
 
@@ -63,7 +64,7 @@ class RemindersApp(BaseApp):
 
         return reminders
 
-    def text_query(self, text: str) -> List[Reminder]:
+    def text_query(self, text: str) -> list[Reminder]:
         """Perform a natural language query and return a list of Reminder objects."""
         # Export reminders to a temporary CSV file
         csv_file = self.export_reminders()
@@ -154,7 +155,7 @@ def main():
         print(f"Reminders exported to: {export_file}")
 
         # Optionally, you can read and print the contents of the exported file
-        with open(export_file, 'r') as f:
+        with open(export_file) as f:
             print("Exported data:")
             print(f.read())
 

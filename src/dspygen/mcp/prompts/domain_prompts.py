@@ -6,7 +6,7 @@ MCP Prompt library — Domain-Driven Design / RDDDY prompts.
 
 from __future__ import annotations
 
-import mcp.types as types
+from mcp import types
 
 __all__ = ["DOMAIN_PROMPTS", "DOMAIN_RENDERERS"]
 

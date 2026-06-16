@@ -1,6 +1,5 @@
 import dspy
 from pydantic import BaseModel
-
 from sungen.typetemp.functional import render
 
 

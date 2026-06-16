@@ -58,8 +58,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import mcp.types as types
 from loguru import logger
+from mcp import types
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 
@@ -226,10 +226,10 @@ def create_server() -> Server:
 
             # Fall back to base catalog
             from dspygen.mcp.resources.catalog import (  # lazy
-                _build_module_catalog,
                 _build_agent_catalog,
-                _build_workflow_catalog,
+                _build_module_catalog,
                 _build_signatures_catalog,
+                _build_workflow_catalog,
             )
 
             if uri == "dspygen://modules":
@@ -374,7 +374,7 @@ def run_sse(app: Any = None) -> Any:
     try:
         from fastapi import FastAPI  # lazy
         from mcp.server.sse import SseServerTransport  # lazy
-        from starlette.routing import Route, Mount  # lazy
+        from starlette.routing import Mount, Route  # lazy
     except ImportError as exc:
         raise ImportError(
             "fastapi and mcp[sse] are required for SSE transport. "

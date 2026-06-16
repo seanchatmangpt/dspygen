@@ -1,5 +1,7 @@
-from .contact import Contact, ContactError
 from Contacts import CNContactType, CNLabelWork
+
+from .contact import Contact, ContactError
+
 
 class OrganizationContact(Contact):
     @classmethod
@@ -7,7 +9,7 @@ class OrganizationContact(Contact):
         contact = cls()
         contact.cn_contact.setContactType_(CNContactType.CNContactTypeOrganization)
         contact.organization_name = organization_name
-        
+
         if 'email_addresses' in kwargs:
             contact.email_addresses = kwargs['email_addresses']
         if 'phone_numbers' in kwargs:
@@ -16,7 +18,7 @@ class OrganizationContact(Contact):
             contact.set_postal_address(**kwargs['postal_address'])
         if 'image_data' in kwargs:
             contact.image_data = kwargs['image_data']
-        
+
         return contact
 
     @property

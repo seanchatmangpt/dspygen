@@ -1,8 +1,9 @@
-import httpx
 import os
 
 import dspy
+import httpx
 from dsp import LM
+
 from dspygen.utils.dspy_tools import init_dspy
 
 default_model = "llama3.1-70b"
@@ -96,7 +97,7 @@ def main():
     init_dspy(lm_class=Cerebras, model=default_model, max_tokens=2000)
     # prompt="Elixir FAANG Solution Architect level Ash Resource: FoaF Person"
     pred = dspy.Predict(ElixirSolutionArchitect)
-    output = pred(prompt="Elixir FAANG Solution Architect level Ash Resource: FoaF Person", 
+    output = pred(prompt="Elixir FAANG Solution Architect level Ash Resource: FoaF Person",
                   domain_knowledge="Ash Framework in Elixir of Friend of a Friend Ontology in LinkML",
                   experience_level="Solution Architect")
     print(output.explanation)

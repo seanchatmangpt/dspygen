@@ -2,7 +2,7 @@
 
 """
 import dspy
-from dspy import Signature, InputField, OutputField
+from dspy import InputField, OutputField, Signature
 
 
 class TextSummarization(Signature):

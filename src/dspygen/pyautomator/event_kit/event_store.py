@@ -9,9 +9,9 @@ Usage:
 import csv
 from datetime import datetime, timedelta
 
+import EventKit
 import inject
 import objc
-import EventKit
 
 
 class EventStore:
@@ -60,16 +60,16 @@ class EventStore:
         # Fetch all reminders, including completed ones
         predicate = self.instance.predicateForRemindersInCalendars_(calendars or objc.nil)
         reminders = self.instance.remindersMatchingPredicate_(predicate)
-        
+
         # Filter reminders based on due date or include if no due date
         filtered_reminders = [
             reminder for reminder in reminders
             if not reminder.dueDate() or start_date <= reminder.dueDate() <= end_date
         ]
-        
+
         print(f"Total reminders: {len(reminders)}")
         print(f"Filtered reminders: {len(filtered_reminders)}")
-        
+
         return filtered_reminders
 
     def export_items_to_csv_event(self, filename, days=14):

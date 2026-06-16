@@ -116,7 +116,7 @@ def _extract_folding_ranges(source: str) -> list[lsp_types.FoldingRange]:
 # ---------------------------------------------------------------------------
 
 
-def register_folding_range(server: "LanguageServer") -> None:
+def register_folding_range(server: LanguageServer) -> None:
     """Register the textDocument/foldingRange handler on *server*."""
 
     @server.feature(lsp_types.TEXT_DOCUMENT_FOLDING_RANGE)

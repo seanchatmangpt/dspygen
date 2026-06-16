@@ -1,10 +1,13 @@
-import objc
-import EventKit
-from Foundation import NSDateComponents, NSURL, NSDate
 from datetime import datetime
-from typing import Optional, List, Union
+from typing import List, Optional, Union
+
+import EventKit
 import inject
+import objc
+from Foundation import NSURL, NSDate, NSDateComponents
+
 from .alarm import Alarm
+
 
 class CalendarItemError(Exception):
     pass
@@ -40,11 +43,11 @@ class CalendarItem:
         self.ek_item.setCalendar_(value)
 
     @property
-    def location(self) -> Optional[str]:
+    def location(self) -> str | None:
         return self.ek_item.location()
 
     @location.setter
-    def location(self, value: Optional[str]):
+    def location(self, value: str | None):
         self.ek_item.setLocation_(value)
 
     @property
@@ -66,19 +69,19 @@ class CalendarItem:
         self.ek_item.setTimeZone_(EventKit.NSTimeZone.timeZoneWithName_(value))
 
     @property
-    def url(self) -> Optional[str]:
+    def url(self) -> str | None:
         url = self.ek_item.URL()
         return str(url) if url else None
 
     @url.setter
-    def url(self, value: Optional[str]):
+    def url(self, value: str | None):
         if value:
             self.ek_item.setURL_(NSURL.URLWithString_(value))
         else:
             self.ek_item.setURL_(None)
 
     @property
-    def notes(self) -> Optional[str]:
+    def notes(self) -> str | None:
         return self.ek_item.notes()
 
     @notes.setter
@@ -90,7 +93,7 @@ class CalendarItem:
         return self.ek_item.hasAttendees()
 
     @property
-    def attendees(self) -> List[EventKit.EKParticipant]:
+    def attendees(self) -> list[EventKit.EKParticipant]:
         return self.ek_item.attendees()
 
     def add_recurrence_rule(self, rule: EventKit.EKRecurrenceRule):
@@ -100,7 +103,7 @@ class CalendarItem:
         self.ek_item.removeRecurrenceRule_(rule)
 
     @property
-    def recurrence_rules(self) -> List[EventKit.EKRecurrenceRule]:
+    def recurrence_rules(self) -> list[EventKit.EKRecurrenceRule]:
         return self.ek_item.recurrenceRules()
 
     def add_alarm(self, alarm: Alarm):
@@ -111,7 +114,7 @@ class CalendarItem:
         self.ek_item.removeAlarm_(alarm.ek_alarm)
 
     @property
-    def alarms(self) -> List[Alarm]:
+    def alarms(self) -> list[Alarm]:
         ek_alarms = self.ek_item.alarms()
         return [Alarm(ek_alarm) for ek_alarm in (ek_alarms or [])]
 
@@ -126,18 +129,18 @@ class CalendarItem:
         return self.ek_item.hasRecurrenceRules()
 
     @property
-    def recurrence_rule(self) -> Optional[EventKit.EKRecurrenceRule]:
+    def recurrence_rule(self) -> EventKit.EKRecurrenceRule | None:
         rules = self.ek_item.recurrenceRules()
         return rules[0] if rules else None
 
-    def set_recurrence(self, frequency: EventKit.EKRecurrenceFrequency, interval: int = 1, 
-                       end_date: Optional[datetime] = None, occurrences: Optional[int] = None,
-                       days_of_week: Optional[List[int]] = None, 
-                       days_of_month: Optional[List[int]] = None,
-                       months_of_year: Optional[List[int]] = None,
-                       weeks_of_year: Optional[List[int]] = None,
-                       days_of_year: Optional[List[int]] = None,
-                       set_positions: Optional[List[int]] = None) -> None:
+    def set_recurrence(self, frequency: EventKit.EKRecurrenceFrequency, interval: int = 1,
+                       end_date: datetime | None = None, occurrences: int | None = None,
+                       days_of_week: list[int] | None = None,
+                       days_of_month: list[int] | None = None,
+                       months_of_year: list[int] | None = None,
+                       weeks_of_year: list[int] | None = None,
+                       days_of_year: list[int] | None = None,
+                       set_positions: list[int] | None = None) -> None:
         """
         Set a nuanced recurrence rule for the calendar item.
 
@@ -180,7 +183,7 @@ class CalendarItem:
         # Set the recurrence rule
         self._set_recurrence_rule(recurrence_rule)
 
-    def _set_recurrence_rule(self, rule: Optional[EventKit.EKRecurrenceRule]):
+    def _set_recurrence_rule(self, rule: EventKit.EKRecurrenceRule | None):
         if rule:
             self.ek_item.addRecurrenceRule_(rule)
         else:

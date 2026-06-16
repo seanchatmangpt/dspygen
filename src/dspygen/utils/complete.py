@@ -34,7 +34,7 @@ class LLMConfig:
     top_p: float = 1.0
     frequency_penalty: float = 0.0
     presence_penalty: float = 0.0
-    stop: Optional[list[str]] = field(default=None)
+    stop: list[str] | None = field(default=None)
 
     def update(self, **kwargs):
         for key, value in kwargs.items():
@@ -44,7 +44,7 @@ class LLMConfig:
                 raise ValueError(f"Invalid config key: {key}")
 
 
-def create(config: Optional[LLMConfig] = None, **kwargs):
+def create(config: LLMConfig | None = None, **kwargs):
     if config:
         config.update(**kwargs)
         prompt = config.prompt
@@ -63,7 +63,7 @@ def create(config: Optional[LLMConfig] = None, **kwargs):
         top_p = kwargs.get("top_p", 1)
         frequency_penalty = kwargs.get("frequency_penalty", 0)
         presence_penalty = kwargs.get("presence_penalty", 0)
-        stop = kwargs.get("stop", None)
+        stop = kwargs.get("stop")
 
     # Use the v1 client (openai >= 1.0) instead of the deprecated class-method API
     response = _openai_client.completions.create(
@@ -79,7 +79,7 @@ def create(config: Optional[LLMConfig] = None, **kwargs):
     return response.choices[0].text.strip()
 
 
-async def acreate(*, config: Optional[LLMConfig] = None, **kwargs):
+async def acreate(*, config: LLMConfig | None = None, **kwargs):
     if config:
         config.update(**kwargs)
         prompt = config.prompt
@@ -98,7 +98,7 @@ async def acreate(*, config: Optional[LLMConfig] = None, **kwargs):
         top_p = kwargs.get("top_p", 1)
         frequency_penalty = kwargs.get("frequency_penalty", 0)
         presence_penalty = kwargs.get("presence_penalty", 0)
-        stop = kwargs.get("stop", None)
+        stop = kwargs.get("stop")
 
     model = get_model(model)
 
@@ -134,20 +134,19 @@ async def acreate(*, config: Optional[LLMConfig] = None, **kwargs):
         )
         return chat_response.choices[0].message.content.strip()
 
-    else:
-        async_client = openai.AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-        response = await async_client.completions.create(
-            model=model,
-            prompt=prompt,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            top_p=top_p,
-            frequency_penalty=frequency_penalty,
-            presence_penalty=presence_penalty,
-            stop=stop,
-        )
+    async_client = openai.AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    response = await async_client.completions.create(
+        model=model,
+        prompt=prompt,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        top_p=top_p,
+        frequency_penalty=frequency_penalty,
+        presence_penalty=presence_penalty,
+        stop=stop,
+    )
 
-        return response.choices[0].text.strip()
+    return response.choices[0].text.strip()
 
 
 import asyncio
@@ -182,7 +181,7 @@ def chat(
     raw_msg=False,
     write_path=None,
     mode="a+",
-) -> Union[str, dict]:
+) -> str | dict:
     """Customized completion function that interacts with the OpenAI API, capable of handling prompts, system messages,
     and specific functions. If the content length is too long, it will shorten the content and retry.
 
@@ -287,7 +286,7 @@ async def achat(
     raw_msg=False,
     write_path=None,
     mode="a+",
-) -> Union[str, dict]:
+) -> str | dict:
     """Customized completion function that interacts with the OpenAI API, capable of handling prompts, system messages,
     and specific functions. If the content length is too long, it will shorten the content and retry.
     """
@@ -387,14 +386,12 @@ def get_response(res, raw_msg, funcs):
             error_msg = f"Invalid function response from OpenAI API {msg}"
             logger.exception(error_msg)
             raise ValueError(error_msg)
-        else:
-            return func
-    elif funcs and len(funcs) > 0:
+        return func
+    if funcs and len(funcs) > 0:
         error_msg = f"Invalid function response from OpenAI API {msg}"
         logger.exception(error_msg)
         raise ValueError(error_msg)
-    else:
-        return msg.get("content", "").strip()
+    return msg.get("content", "").strip()
 
 
 def _create_params(model, messages, funcs=None):

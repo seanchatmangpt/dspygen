@@ -3,9 +3,9 @@ LSP feature providers for the dspygen language server.
 """
 
 from .completion import register_completion
-from .hover import register_hover
-from .diagnostics import register_diagnostics
 from .definition import register_definition
+from .diagnostics import register_diagnostics
+from .hover import register_hover
 
 __all__ = [
     "register_completion",

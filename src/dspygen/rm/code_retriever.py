@@ -1,8 +1,9 @@
-import dspy
-from pathlib import Path
 from fnmatch import fnmatch
+from pathlib import Path
 
-from dspygen.utils.dspy_tools import init_ol, init_dspy
+import dspy
+
+from dspygen.utils.dspy_tools import init_dspy, init_ol
 
 
 class CodeRetriever(dspy.Retrieve):
@@ -60,7 +61,7 @@ class CodeRetriever(dspy.Retrieve):
         try:
             with open(file_path, "rb") as file:
                 return b"\x00" in file.read(1024)
-        except IOError:
+        except OSError:
             return False
 
     def extract_file_info(self, file_path):
@@ -72,9 +73,8 @@ class CodeRetriever(dspy.Retrieve):
         if pattern.startswith("/"):
             if fnmatch(str(relative_path), pattern[1:]) or fnmatch(str(relative_path.parent), pattern[1:]):
                 return True
-        else:
-            if any(fnmatch(str(path), pattern) for path in [relative_path, *relative_path.parents]):
-                return True
+        elif any(fnmatch(str(path), pattern) for path in [relative_path, *relative_path.parents]):
+            return True
         return False
 
 

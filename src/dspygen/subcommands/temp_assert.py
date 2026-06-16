@@ -1,4 +1,5 @@
 import dspy
+
 from dspygen.utils.dspy_tools import init_dspy
 
 MIN_SUMMARY_LENGTH = 20
@@ -7,28 +8,28 @@ MIN_SUMMARY_LENGTH = 20
 class TempModule(dspy.Module):
     def __init__(self, min_summary_len=MIN_SUMMARY_LENGTH):
         super().__init__()
-        
+
         self.min_summary_len = min_summary_len
-        
+
     def validate_output(self, summary) -> bool:
         """Summary should be over a certain amount of characters"""
-        
+
         dspy.Assert(len(summary) > self.min_summary_len,
                     f"len({summary}) > min_summary_len={self.min_summary_len} is the incorrect length")
-        
+
         return True
-        
+
     def forward(self, prompt):
         pred = dspy.Predict("prompt, min_summary_len -> summary")
         summary = pred(prompt=prompt, min_summary_len=str(self.min_summary_len)).summary
-        
+
         try:
             if self.validate_output(summary):
                 return summary
         except AssertionError as e:
             pred = dspy.ChainOfThought("prompt, error -> summary")
             summary = pred(prompt=prompt, error=str(e)).summary
-            
+
             if self.validate_output(summary):
                 return summary
 
@@ -48,14 +49,13 @@ Assertions is integrated into DSPy at dspy.ai."""
 
 
 def main():
-    init_dspy()    
-    
+    init_dspy()
+
     temp_module = TempModule(min_summary_len=int(len(story)/4))
     summary = temp_module.forward(story)
-    
+
     print(summary)
-    
+
 
 if __name__ == "__main__":
     main()
-    

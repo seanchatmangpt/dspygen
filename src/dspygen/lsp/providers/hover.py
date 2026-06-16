@@ -118,7 +118,7 @@ def _format_signature(sig_str: str) -> str:
 # ---------------------------------------------------------------------------
 
 
-def register_hover(server: "LanguageServer") -> None:
+def register_hover(server: LanguageServer) -> None:
     """Register the textDocument/hover handler on *server*."""
 
     @server.feature(lsp_types.TEXT_DOCUMENT_HOVER)

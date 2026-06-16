@@ -3,13 +3,12 @@
 """
 import dspy
 from typer import Typer
-from dspygen.utils.dspy_tools import init_dspy
 
+from dspygen.utils.dspy_tools import init_dspy
 
 app = Typer()
 
 
-import dspy
 
 class SelectSingleElement(dspy.Signature):
     """
@@ -41,18 +40,19 @@ def get_selector_call(elements, prompt):
 def call(elements, prompt):
     """GetSelectorModule"""
     init_dspy()
-    
+
     print(get_selector_call(elements=elements, prompt=prompt))
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/get_selector/")
 async def get_selector_route(data: dict):
     # Your code generation logic here
     init_dspy()
-    
+
     print(data)
     return get_selector_call(**data)
 
@@ -76,7 +76,7 @@ def main():
 """
     prompt = "search box"
     print(get_selector_call(elements=element_dicts, prompt=prompt))
-    
+
 
 if __name__ == "__main__":
     main()

@@ -7,7 +7,7 @@ optimization, and test generation.
 
 from __future__ import annotations
 
-import mcp.types as types
+from mcp import types
 
 __all__ = ["WORKFLOW_PROMPTS", "WORKFLOW_RENDERERS"]
 

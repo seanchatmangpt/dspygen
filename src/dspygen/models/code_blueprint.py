@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -32,17 +32,17 @@ class CodeBlueprint(BaseModel, YAMLMixin):
         description="Description of the blueprint, explaining its purpose, functionality, "
                     "and how it is intended to be used."
     )
-    files_to_create: List[str] = Field(
+    files_to_create: list[str] = Field(
         ...,
         description="List of files that should be created as part of this blueprint. "
                     "The tool will ensure these files exist before proceeding with any operations."
     )
-    files_to_edit: List[str] = Field(
+    files_to_edit: list[str] = Field(
         ...,
         description="List of files that the code generation tool will edit. "
                     "These files are the focus of the tool's modifications or enhancements."
     )
-    read_only_files: List[str] = Field(
+    read_only_files: list[str] = Field(
         default_factory=list,
         description="List of files to be marked as read-only. The tool will consider these files for context "
                     "but will not modify them. Useful for providing additional information without risking unwanted changes."
@@ -52,7 +52,7 @@ class CodeBlueprint(BaseModel, YAMLMixin):
         description="AI model or engine to use. Determines the language model the tool will interact with. "
                     "Defaults to 'gpt-4o-mini', but can be set to any other supported model."
     )
-    test_cmd: Optional[str] = Field(
+    test_cmd: str | None = Field(
         None,
         description="Command to run tests after edits. If provided, the tool will automatically run this command "
                     "after making changes to ensure they do not introduce errors."
@@ -67,7 +67,7 @@ class CodeBlueprint(BaseModel, YAMLMixin):
         description="Enable or disable automatic commits of changes made by the tool. "
                     "When enabled, the tool will automatically commit changes to the version control system."
     )
-    additional_args: Optional[List[str]] = Field(
+    additional_args: list[str] | None = Field(
         default_factory=list,
         description="Additional command-line arguments for the tool. These can be any extra options or flags "
                     "that are not explicitly covered by the other attributes of the blueprint."
@@ -77,45 +77,45 @@ class CodeBlueprint(BaseModel, YAMLMixin):
         description="Custom message to use for the tool's operations. Useful for providing a specific instruction "
                     "or context for the tool to consider when making changes."
     )
-    context_files: List[str] = Field(
+    context_files: list[str] = Field(
         default_factory=list,
         description="List of relevant context files. These files are included as additional context for the tool, "
                     "helping it understand the broader codebase or environments without being modified."
     )
-    security_requirements: Optional[Dict[str, str]] = Field(
+    security_requirements: dict[str, str] | None = Field(
         None,
         description="Specifies security requirements that the blueprint must adhere to, including encryption standards, "
                     "access controls, and data handling policies."
     )
-    compliance_checks: Optional[Dict[str, bool]] = Field(
+    compliance_checks: dict[str, bool] | None = Field(
         None,
         description="A set of compliance checks that must be run post-execution to ensure adherence to organizational, "
                     "legal, and industry standards."
     )
-    integration_points: List[str] = Field(
+    integration_points: list[str] = Field(
         default_factory=list,
         description="Lists services, APIs, or modules that this blueprint needs to interact with. Important for ensuring "
                     "seamless integration within a Service Colony architecture."
     )
-    dependency_graph: Optional[Dict[str, List[str]]] = Field(
+    dependency_graph: dict[str, list[str]] | None = Field(
         None,
         description="Details dependencies between this blueprint and other modules or services. Critical for orchestrating "
                     "workflows and managing cross-service dependencies."
     )
-    scaling_strategy: Optional[str] = Field(
+    scaling_strategy: str | None = Field(
         None,
         description="Defines the strategy for scaling this blueprint's functionality across multiple instances or clusters. "
                     "Aligns with enterprise scaling policies and SLAs."
     )
-    deployment_strategy: Optional[str] = Field(
+    deployment_strategy: str | None = Field(
         None,
         description="Strategy for deploying the generated code, including CI/CD pipeline specifications."
     )
-    monitoring_requirements: Optional[Dict[str, str]] = Field(
+    monitoring_requirements: dict[str, str] | None = Field(
         None,
         description="Specifications for monitoring tools and frameworks, such as logging and alerting configurations."
     )
-    rollback_plan: Optional[str] = Field(
+    rollback_plan: str | None = Field(
         None,
         description="Details the plan to roll back changes in case of deployment failure or errors."
     )
@@ -123,7 +123,7 @@ class CodeBlueprint(BaseModel, YAMLMixin):
         default=True,
         description="Flag to enable or disable logging of all operations for auditing purposes."
     )
-    notification_channels: List[str] = Field(
+    notification_channels: list[str] = Field(
         default_factory=list,
         description="Channels (e.g., email, Slack) to notify stakeholders of significant events."
     )

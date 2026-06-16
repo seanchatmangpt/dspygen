@@ -16,8 +16,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-import mcp.types as types
 from loguru import logger
+from mcp import types
 from mcp.server import Server
 
 __all__ = ["register_resources"]
@@ -406,19 +406,18 @@ def register_resources(server: Server) -> None:
             if uri == "dspygen://modules":
                 data = _build_module_catalog()
                 return json.dumps(data, indent=2)
-            elif uri == "dspygen://agents":
+            if uri == "dspygen://agents":
                 data = _build_agent_catalog()
                 return json.dumps(data, indent=2)
-            elif uri == "dspygen://workflows":
+            if uri == "dspygen://workflows":
                 data = _build_workflow_catalog()
                 return json.dumps(data, indent=2)
-            elif uri == "dspygen://signatures":
+            if uri == "dspygen://signatures":
                 data = _build_signatures_catalog()
                 return json.dumps(data, indent=2)
-            elif uri == "dspygen://help":
+            if uri == "dspygen://help":
                 return _build_help_resource()
-            else:
-                return json.dumps({"error": f"Unknown resource URI: {uri}"})
+            return json.dumps({"error": f"Unknown resource URI: {uri}"})
         except Exception as exc:
             logger.exception(f"read_resource error for {uri}")
             return json.dumps({"error": str(exc)})

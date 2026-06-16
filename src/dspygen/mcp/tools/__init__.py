@@ -58,7 +58,8 @@ async def dispatch_tool(name: str, arguments: dict):
     """
     import importlib
     import json
-    import mcp.types as types
+
+    from mcp import types
 
     for module_path in _TOOL_MODULE_PATHS:
         try:

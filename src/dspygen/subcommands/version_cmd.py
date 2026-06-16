@@ -1,7 +1,8 @@
 """version — show dspygen and dependency version information."""
 import json
 import sys
-from importlib.metadata import version as pkg_version, PackageNotFoundError
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as pkg_version
 
 import typer
 
