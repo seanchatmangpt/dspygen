@@ -36,9 +36,8 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          coverage run --module pytest tests/ \
-            -m "mcp or lsp" \
-            --continue-on-collection-errors \
+          coverage run --module pytest \
+            tests/test_mcp.py tests/test_lsp.py \
             --tb=short
         env:
           PYTHONPATH: src

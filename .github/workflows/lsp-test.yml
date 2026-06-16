@@ -29,6 +29,6 @@ jobs:
         run: pip install -e . --no-deps
 
       - name: Run LSP tests
-        run: pytest tests/ -v -m lsp --tb=short --continue-on-collection-errors
+        run: pytest tests/test_lsp.py -v --tb=short
         env:
           PYTHONPATH: src

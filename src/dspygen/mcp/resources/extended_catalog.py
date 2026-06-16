@@ -176,7 +176,7 @@ def _extract_ast_meta(path: Path) -> dict[str, Any]:
         and isinstance(tree.body[0], ast.Expr)
         and isinstance(tree.body[0].value, ast.Constant)
     ):
-        meta["docstring"] = tree.body[0].value.value.strip()[:600]
+        meta["docstring"] = tree.body[0].value.value.strip()[:600]  # type: ignore[union-attr]
 
     for node in ast.walk(tree):
         if not isinstance(node, ast.ClassDef):
@@ -276,7 +276,7 @@ def _build_rdddy_catalog() -> dict:
     rdddy_dir = _dspygen_root() / "rdddy"
     for pattern_name, info in patterns.items():
         file_path = rdddy_dir / info["file"]
-        info["exists"] = file_path.is_file()
+        info["exists"] = file_path.is_file()  # type: ignore[assignment]
         info["mcp_tool"] = f"create_{pattern_name}" if pattern_name not in ("message",) else None
 
     return {
@@ -436,7 +436,7 @@ def _build_rm_catalog() -> dict:
     # Check which RM files exist
     rm_dir = _dspygen_root() / "rm"
     for rm in rm_modules:
-        rm["exists"] = (rm_dir / rm["file"]).is_file()
+        rm["exists"] = (rm_dir / rm["file"]).is_file()  # type: ignore[assignment, operator]
 
     return {
         "retrieval_modules": rm_modules,
@@ -474,7 +474,7 @@ def _build_writers_catalog() -> dict:
     writer_dir = _dspygen_root() / "writer"
     for w in writers:
         module_file = writer_dir / f"{w['name']}.py"
-        w["exists"] = module_file.is_file()
+        w["exists"] = module_file.is_file()  # type: ignore[assignment]
 
     return {
         "writers": writers,
@@ -540,7 +540,7 @@ def _build_agent_detail(agent_name: str) -> dict:
         # Extract FSM states
         try:
             tree = ast.parse(path.read_text(encoding="utf-8"))
-            transitions = []
+            transitions: list[Any] = []
             states = []
             for node in ast.walk(tree):
                 if isinstance(node, ast.ClassDef):
@@ -625,7 +625,7 @@ def read_extended_resource(uri: str) -> str | None:
             data = _build_workflow_detail(workflow_name)
             # Return raw YAML content for workflow files
             if "content" in data:
-                return data["content"]
+                return data["content"]  # type: ignore[no-any-return]
             return json.dumps(data, indent=2)
 
         return None  # Unknown URI — not handled here

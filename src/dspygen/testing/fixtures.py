@@ -115,7 +115,7 @@ def module_runner():
     from dspygen.testing.factories import make_module_runner
 
     def _make(module_class: type, responses: dict | None = None) -> Callable:
-        return make_module_runner(module_class, responses=responses)  # type: ignore[return-value]
+        return make_module_runner(module_class, responses=responses)  # type: ignore[no-any-return]
 
     return _make
 

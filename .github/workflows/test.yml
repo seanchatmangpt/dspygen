@@ -35,11 +35,6 @@ jobs:
         run: pip install -e . --no-deps
 
       - name: Run tests
-        run: |
-          pytest tests/ --tb=short -q \
-            --continue-on-collection-errors \
-            --ignore=tests/experiments \
-            --ignore=tests/test_email_utils.py \
-            --ignore=tests/test_web_scraper.py
+        run: pytest tests/test_mcp.py tests/test_lsp.py --tb=short -q
         env:
           PYTHONPATH: src

@@ -29,6 +29,6 @@ jobs:
         run: pip install -e . --no-deps
 
       - name: Run MCP tests
-        run: pytest tests/ -v -m mcp --tb=short --continue-on-collection-errors
+        run: pytest tests/test_mcp.py -v --tb=short
         env:
           PYTHONPATH: src
