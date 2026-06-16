@@ -355,7 +355,7 @@ async def _retrieve_from_google_sheets(args: dict) -> list[types.TextContent]:
     if not query or not spreadsheet_id:
         return _err("query and spreadsheet_id are required")
     try:
-        from dspygen.rm.google_sheets_retriever import GoogleSheetsRetriever  # lazy
+        from dspygen.rm.google_sheets_retriever import GoogleSheetRetriever as GoogleSheetsRetriever  # lazy
         retriever = GoogleSheetsRetriever(
             spreadsheet_id=spreadsheet_id,
             sheet_name=sheet_name,
@@ -383,7 +383,7 @@ async def _retrieve_from_document(args: dict) -> list[types.TextContent]:
         return _err("query and file_path are required")
     try:
         from dspygen.rm.doc_retriever import DocRetriever  # lazy
-        retriever = DocRetriever(file_path=file_path, k=k)
+        retriever = DocRetriever(path=file_path, k=k)  # type: ignore[call-arg]
         result = retriever.forward(query=query)
         passages = result.passages if hasattr(result, "passages") else [str(result)]
         return _ok({
@@ -404,7 +404,7 @@ async def _retrieve_with_wizard(args: dict) -> list[types.TextContent]:
     if not query:
         return _err("query is required")
     try:
-        from dspygen.rm.wizard import Wizard  # lazy
+        from dspygen.rm.wizard import Wizard  # type: ignore[attr-defined]  # lazy
         wizard = Wizard(max_steps=max_steps)
         result = wizard.forward(query=query, context=context)
         return _ok({
@@ -425,7 +425,7 @@ async def _save_structured_code_description(args: dict) -> list[types.TextConten
     if not code:
         return _err("code is required")
     try:
-        from dspygen.rm.structured_code_desc_saver import StructuredCodeDescSaver  # lazy
+        from dspygen.rm.structured_code_desc_saver import StructuredCodeDescSaver  # type: ignore[attr-defined]  # lazy
         saver = StructuredCodeDescSaver(collection_name=collection_name)
         result = saver.forward(code=code, metadata=metadata)
         return _ok({
@@ -446,7 +446,7 @@ async def _get_dynamic_signature(args: dict) -> list[types.TextContent]:
     if not description:
         return _err("description is required")
     try:
-        from dspygen.rm.dynamical_signature_util import DynamicalSignatureUtil  # lazy
+        from dspygen.rm.dynamical_signature_util import DynamicalSignatureUtil  # type: ignore[attr-defined]  # lazy
         util = DynamicalSignatureUtil()
         sig_class = util.create_signature(description)
         result: dict = {

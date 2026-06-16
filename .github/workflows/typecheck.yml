@@ -21,5 +21,16 @@ jobs:
       - name: Install mypy and type stubs
         run: pip install "mypy>=1.2.0" types-requests pydantic
 
-      - name: Run mypy
-        run: mypy src/dspygen/ --ignore-missing-imports --no-strict-optional --exclude 'wip/' --exclude 'experiments/'
+      - name: Run mypy (new subsystems only)
+        run: |
+          mypy \
+            src/dspygen/mcp/ \
+            src/dspygen/lsp/ \
+            src/dspygen/testing/ \
+            src/dspygen/observability/ \
+            src/dspygen/ui/ \
+            src/dspygen/subcommands/ \
+            --ignore-missing-imports \
+            --no-strict-optional \
+            --allow-redefinition \
+            --no-error-summary

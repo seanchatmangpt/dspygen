@@ -315,7 +315,7 @@ async def _validate_pipeline(args: dict) -> list[types.TextContent]:
                 "valid": True,
                 "steps": len(pipeline.steps),
                 "signatures": [s.name for s in pipeline.signatures],
-                "lm_models": [m.label for m in (pipeline.config.lm_models or [])],
+                "lm_models": [m.label for m in (pipeline.lm_models or [])],
             }
         )
     except Exception as exc:

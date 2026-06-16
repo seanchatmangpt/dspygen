@@ -18,22 +18,17 @@ jobs:
           python-version: "3.11"
           cache: pip
 
-      - name: Install Poetry
-        run: pip install "poetry>=1.8.0"
+      - name: Install minimal test dependencies
+        run: |
+          pip install \
+            pytest pytest-asyncio \
+            "mcp>=1.0.0" \
+            pydantic pyyaml loguru hypothesis
 
-      - name: Configure Poetry
-        run: poetry config virtualenvs.in-project true
-
-      - name: Cache Poetry virtualenv
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
-
-      - name: Install dependencies
-        run: poetry install --with test --no-interaction
+      - name: Install dspygen (no deps)
+        run: pip install -e . --no-deps
 
       - name: Run MCP tests
-        run: poetry run pytest tests/ -v -m mcp --tb=short
+        run: pytest tests/ -v -m mcp --tb=short
         env:
           PYTHONPATH: src

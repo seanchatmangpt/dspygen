@@ -16,6 +16,8 @@ from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.utils.file_tools import dspy_modules_dir
 from dspygen.workflow.workflow_router import router as workflow_router
 
+_service_colony: ServiceColony | None = None
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -40,17 +42,15 @@ def load_module_routers(app: FastAPI) -> None:
 
 
 async def get_service_colony() -> ServiceColony:
-    global service_colony
+    global _service_colony
 
-    try:
-        _ = service_colony  # noqa: F821
-    except NameError:
+    if _service_colony is None:
         mqtt_url = os.environ.get("MQTT_BROKER_URL", "localhost:1883")
         mqtt_host, mqtt_port_str = mqtt_url.rsplit(":", 1)
         mqtt_port = int(mqtt_port_str)
-        service_colony = ServiceColony(mqtt_broker=mqtt_host, mqtt_port=mqtt_port)
+        _service_colony = ServiceColony()
 
-    return service_colony  # Assume service_colony is globally available
+    return _service_colony
 
 
 @app.get("/")
