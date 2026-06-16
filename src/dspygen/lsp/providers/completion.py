@@ -154,7 +154,7 @@ def _get_line_up_to_cursor(document_text: str, position: lsp_types.Position) -> 
     lines = document_text.splitlines()
     if position.line >= len(lines):
         return ""
-    return lines[position.line][: position.character]
+    return lines[position.line][: position.character]  # type: ignore[return-value]
 
 
 def _make_completion_item(

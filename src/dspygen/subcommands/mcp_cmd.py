@@ -16,5 +16,5 @@ def serve_mcp(
     else:
         import uvicorn
 
-        from dspygen.mcp.server import create_sse_app
+        from dspygen.mcp.server import create_sse_app  # type: ignore[attr-defined]
         uvicorn.run(create_sse_app(), host=host, port=port)

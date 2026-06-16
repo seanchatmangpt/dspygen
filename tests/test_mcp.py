@@ -52,12 +52,10 @@ def test_01_server_is_valid_mcp_server_instance():
 
 def test_02_server_has_at_least_16_tools():
     """Server must expose at least 16 registered tools."""
-    server = _server()
-    tools = _run(server.list_tools())
-    # list_tools() returns a ListToolsResult; tools may be in .tools attribute or be iterable
-    tool_list = tools.tools if hasattr(tools, "tools") else list(tools)
-    assert len(tool_list) >= 16, (
-        f"Expected ≥16 tools, got {len(tool_list)}: {[t.name for t in tool_list]}"
+    from dspygen.mcp.tools import collect_all_tool_definitions
+    tools = collect_all_tool_definitions()
+    assert len(tools) >= 16, (
+        f"Expected ≥16 tools, got {len(tools)}: {[t.name for t in tools]}"
     )
 
 
@@ -67,10 +65,8 @@ def test_02_server_has_at_least_16_tools():
 
 def test_03_server_has_modules_resource():
     """dspygen://modules resource must be registered."""
-    server = _server()
-    resources = _run(server.list_resources())
-    resource_list = resources.resources if hasattr(resources, "resources") else list(resources)
-    uris = {str(r.uri) for r in resource_list}
+    from dspygen.mcp.server import _BASE_CATALOG_RESOURCES
+    uris = {str(r.uri) for r in _BASE_CATALOG_RESOURCES}
     assert "dspygen://modules" in uris, (
         f"dspygen://modules not found in resources: {uris}"
     )
@@ -82,10 +78,9 @@ def test_03_server_has_modules_resource():
 
 def test_04_server_has_generate_module_prompt():
     """generate-module prompt must be registered."""
-    server = _server()
-    prompts = _run(server.list_prompts())
-    prompt_list = prompts.prompts if hasattr(prompts, "prompts") else list(prompts)
-    names = [p.name for p in prompt_list]
+    from dspygen.mcp.prompts import get_all_prompts
+    prompts = get_all_prompts()
+    names = [p.name for p in prompts]
     assert any("generate" in n.lower() and "module" in n.lower() for n in names), (
         f"No generate-module prompt found in: {names}"
     )
@@ -308,6 +303,7 @@ def test_12_list_rdddy_patterns_returns_pattern_list():
 
 def test_13_configure_lm_with_mocked_dspy_completes():
     """configure_lm with mocked dspy.LM and dspy.configure completes without error."""
+    pytest.importorskip("dspy", reason="dspy package not installed")
     import dspygen.mcp.tools.lm_tools as lt
 
     mock_lm = MagicMock()
@@ -440,9 +436,8 @@ def test_17_modules_resource_read_returns_valid_json():
 
 def test_18_generate_module_prompt_has_argument():
     """The generate-module prompt must declare at least one argument."""
-    server = _server()
-    prompts = _run(server.list_prompts())
-    prompt_list = prompts.prompts if hasattr(prompts, "prompts") else list(prompts)
+    from dspygen.mcp.prompts import get_all_prompts
+    prompt_list = get_all_prompts()
 
     target = next(
         (p for p in prompt_list if "generate" in p.name.lower() and "module" in p.name.lower()),

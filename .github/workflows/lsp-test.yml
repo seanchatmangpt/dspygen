@@ -23,7 +23,7 @@ jobs:
           pip install \
             pytest pytest-asyncio \
             "pygls>=2.0.0" "lsprotocol>=2024.0" \
-            pydantic hypothesis
+            pydantic hypothesis loguru
 
       - name: Install dspygen (no deps)
         run: pip install -e . --no-deps

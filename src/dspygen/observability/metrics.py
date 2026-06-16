@@ -96,4 +96,4 @@ def track_call(fn):
 def get_all_metrics() -> dict:
     """Return all registered metrics as a JSON-serializable dict."""
     with _registry_lock:
-        return {name: obj.to_dict() for name, obj in METRICS_REGISTRY.items()}
+        return {name: obj.to_dict() for name, obj in METRICS_REGISTRY.items()}  # type: ignore[attr-defined]

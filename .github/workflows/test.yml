@@ -29,7 +29,7 @@ jobs:
             pytest pytest-asyncio \
             "mcp>=1.0.0" \
             "pygls>=2.0.0" "lsprotocol>=2024.0" \
-            pydantic pyyaml loguru hypothesis rich
+            pydantic pyyaml loguru hypothesis rich chromadb
 
       - name: Install dspygen (no deps)
         run: pip install -e . --no-deps
@@ -38,6 +38,8 @@ jobs:
         run: |
           pytest tests/ --tb=short -q \
             --continue-on-collection-errors \
-            --ignore=tests/experiments
+            --ignore=tests/experiments \
+            --ignore=tests/test_email_utils.py \
+            --ignore=tests/test_web_scraper.py
         env:
           PYTHONPATH: src

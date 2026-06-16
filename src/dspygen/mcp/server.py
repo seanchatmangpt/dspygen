@@ -164,7 +164,7 @@ def create_server() -> Server:
     async def _list_tools() -> list[types.Tool]:
         try:
             from dspygen.mcp.tools import collect_all_tool_definitions  # lazy
-            return collect_all_tool_definitions()
+            return collect_all_tool_definitions()  # type: ignore[return-value]
         except Exception as exc:
             logger.error(f"list_tools error: {exc}")
             return []
@@ -175,7 +175,7 @@ def create_server() -> Server:
     ) -> list[types.TextContent]:
         try:
             from dspygen.mcp.tools import dispatch_tool  # lazy
-            return await dispatch_tool(name, arguments or {})
+            return await dispatch_tool(name, arguments or {})  # type: ignore[return-value]
         except ValueError:
             return [
                 types.TextContent(

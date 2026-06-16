@@ -78,7 +78,7 @@ def _extract_ast_meta(path: Path) -> dict[str, Any]:
         and isinstance(tree.body[0], ast.Expr)
         and isinstance(tree.body[0].value, ast.Constant)
     ):
-        meta["docstring"] = tree.body[0].value.value.strip()[:400]
+        meta["docstring"] = tree.body[0].value.value.strip()[:400]  # type: ignore[union-attr]
 
     for node in ast.walk(tree):
         if not isinstance(node, ast.ClassDef):
