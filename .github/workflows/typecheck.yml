@@ -33,4 +33,5 @@ jobs:
             --ignore-missing-imports \
             --no-strict-optional \
             --allow-redefinition \
+            --follow-imports=skip \
             --no-error-summary

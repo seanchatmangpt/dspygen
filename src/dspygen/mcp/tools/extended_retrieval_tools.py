@@ -310,12 +310,11 @@ async def _retrieve_from_python_code(args: dict) -> list[types.TextContent]:
         return _err("query is required")
     try:
         from dspygen.rm.python_code_retriever import PythonCodeRetriever  # lazy
-        kwargs: dict = {"k": k}
-        if directory:
-            kwargs["path"] = directory
-        retriever = PythonCodeRetriever(**kwargs)
-        result = retriever.forward(query=query)
-        passages = result.passages if hasattr(result, "passages") else [str(result)]
+        retriever = PythonCodeRetriever()
+        search_path = directory if directory else str(Path(__file__).resolve().parents[3])
+        passages = retriever.forward(search_path)
+        if not isinstance(passages, list):
+            passages = [str(passages)]
         return _ok({
             "query": query,
             "directory": directory,

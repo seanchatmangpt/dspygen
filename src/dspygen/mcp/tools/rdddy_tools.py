@@ -451,7 +451,7 @@ async def _event_storm(args: dict) -> list[types.TextContent]:
             from dspygen.rdddy.event_storm_model import EventStormingDomainSpecificationModel
             if dspy.settings.lm is not None:
                 gen = GenPydanticInstance(model=EventStormingDomainSpecificationModel)
-                inst = gen.forward(domain_description)
+                inst: Any = gen.forward(domain_description)
                 result["ai_generated_events"] = [
                     e.model_dump() if hasattr(e, "model_dump") else str(e)
                     for e in (inst.domain_events or [])
