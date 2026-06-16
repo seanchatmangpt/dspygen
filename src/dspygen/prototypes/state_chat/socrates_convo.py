@@ -1,11 +1,12 @@
 import asyncio
-from transitions import Machine
-from transitions.extensions.states import add_state_features, Tags
 from enum import Enum, auto
 
-from dspygen.rdddy.base_inhabitant import BaseInhabitant
+from transitions import Machine
+from transitions.extensions.states import Tags, add_state_features
+
 from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.base_event import BaseEvent
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
 from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.utils.dspy_tools import init_dspy
 

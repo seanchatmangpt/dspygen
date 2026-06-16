@@ -3,10 +3,10 @@
 """
 import dspy
 from typer import Typer
+
 from dspygen.utils.dspy_tools import init_dspy
 
-
-app = Typer()        
+app = Typer()
 
 
 class TaxReturnAgentModule(dspy.Module):
@@ -27,18 +27,19 @@ def tax_return_agent_call(income):
 def call(income):
     """TaxReturnAgentModule"""
     init_dspy()
-    
+
     print(tax_return_agent_call(income=income))
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/tax_return_agent/")
 async def tax_return_agent_route(data: dict):
     # Your code generation logic here
     init_dspy()
-    
+
     print(data)
     return tax_return_agent_call(**data)
 
@@ -47,7 +48,7 @@ def main():
     init_dspy()
     income = "$150,000 chennai india to USA"
     print(tax_return_agent_call(income=income))
-    
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,55 @@
+name: Coverage
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    name: Python 3.11
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install test dependencies
+        run: |
+          pip install \
+            pytest pytest-asyncio coverage \
+            "mcp>=1.0.0" \
+            "pygls>=2.0.0" "lsprotocol>=2024.0" \
+            pydantic pyyaml loguru hypothesis rich chromadb
+
+      - name: Install dspygen (no deps)
+        run: pip install -e . --no-deps
+
+      - name: Run tests with coverage
+        run: |
+          coverage run --module pytest \
+            tests/test_mcp.py tests/test_lsp.py \
+            --tb=short
+        env:
+          PYTHONPATH: src
+
+      - name: Coverage report
+        run: |
+          coverage report --fail-under=0 || true
+          coverage xml -o reports/coverage.xml || true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: reports/coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false

@@ -15,8 +15,9 @@ Included models:
 Correlations ensure that inbound and outbound messages are correctly associated with the process instances that should handle them, based on the values of specified properties.
 """
 
+from typing import Dict, List
+
 from pydantic import BaseModel, Field
-from typing import List, Dict
 
 
 class CorrelationProperty(BaseModel):
@@ -35,7 +36,7 @@ class CorrelationSet(BaseModel):
     Each set defines how messages are correlated to a particular process instance based on the values of the properties contained within the set.
     """
     id: str = Field(..., description="Unique identifier for the correlation set.")
-    properties: Dict[str, CorrelationProperty] = Field(...,
+    properties: dict[str, CorrelationProperty] = Field(...,
                                                        description="A dictionary of correlation properties that form this set.")
 
 
@@ -45,7 +46,7 @@ class CorrelationKey(BaseModel):
     Calculus notation: CK ::= correlationKey(propertyValues) where propertyValues is a dictionary mapping property names to their values.
     """
     id: str = Field(..., description="Unique identifier for the correlation key.")
-    property_values: Dict[str, str] = Field(..., description="A dictionary mapping property names to their values.")
+    property_values: dict[str, str] = Field(..., description="A dictionary mapping property names to their values.")
 
 
 class Subscription(BaseModel):

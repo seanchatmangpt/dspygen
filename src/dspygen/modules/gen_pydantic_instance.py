@@ -1,13 +1,11 @@
 import ast
-import dspy
-import logging
-from typing import TypeVar
-from typing import Type, Set
 import inspect
+import logging
+from typing import Set, Type, TypeVar
 
-from pydantic import BaseModel, ValidationError
-
+import dspy
 from dspy import Assert, ChainOfThought, InputField, OutputField, Signature
+from pydantic import BaseModel, ValidationError
 
 from dspygen.models.bpm_plus_domain_models import DMN
 
@@ -72,7 +70,7 @@ class GenPydanticInstance(dspy.Module):
 
     def __init__(
         self,
-        model: Type[T],
+        model: type[T],
         generate_sig=PromptToPydanticInstanceSignature,
         correct_generate_sig=PromptToPydanticInstanceErrorSignature,
     ):
@@ -151,7 +149,7 @@ class GenPydanticDict(dspy.Module):
 
     def __init__(
         self,
-        model: Type[T],
+        model: type[T],
         generate_sig=PromptToPydanticInstanceSignature,
         correct_generate_sig=PromptToPydanticInstanceErrorSignature,
     ):
@@ -223,7 +221,7 @@ class GenPydanticDict(dspy.Module):
         return self.forward(prompt=prompt)
 
 
-def get_model_source(model: Type[BaseModel], already_seen: Set[Type[BaseModel]] = None) -> str:
+def get_model_source(model: type[BaseModel], already_seen: set[type[BaseModel]] = None) -> str:
     """
     Recursively grab the source code of a given Pydantic model and all related models, including the inheritance chain.
 
@@ -274,7 +272,9 @@ def get_model_source(model: Type[BaseModel], already_seen: Set[Type[BaseModel]] 
 def main2():
     import dspy
 
-    from dspygen.rdddy.event_storm_domain_specification_model import EventStormingDomainSpecificationModel
+    from dspygen.rdddy.event_storm_domain_specification_model import (
+        EventStormingDomainSpecificationModel,
+    )
 
     lm = dspy.OpenAI(max_tokens=2000)
     dspy.settings.configure(lm=lm)

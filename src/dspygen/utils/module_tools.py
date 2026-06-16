@@ -1,7 +1,7 @@
+import inspect
 import sys
 import types
-import inspect
-from typing import Callable
+from collections.abc import Callable
 
 
 def module_to_dict(module, include_docstring=True) -> dict:

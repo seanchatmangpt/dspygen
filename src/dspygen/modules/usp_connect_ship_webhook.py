@@ -2,7 +2,8 @@
 
 """
 import dspy
-from dspygen.utils.dspy_tools import init_dspy        
+
+from dspygen.utils.dspy_tools import init_dspy
 
 
 class USPConnectShipWebhookModule(dspy.Module):
@@ -15,6 +16,7 @@ class USPConnectShipWebhookModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -79,6 +81,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/usp_connect_ship_webhook/")

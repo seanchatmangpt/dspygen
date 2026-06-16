@@ -1,17 +1,16 @@
+import json
 import typing
 
 import dspy
-import json
-
-from loguru import logger
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
+from loguru import logger
 
 from dspygen.experiments.text_to_json.json_mode_error_dataset import JsonModeErrorDataset
 from dspygen.experiments.text_to_json.json_mode_eval_dataset import JsonModeEvalDataset
+from dspygen.models.bpm_plus_domain_models import DMN, Rule
 from dspygen.utils.dspy_tools import init_ol
 from dspygen.utils.json_tools import extract, generate_from_schema, strip_non_validation_properties
-from dspygen.models.bpm_plus_domain_models import DMN, Rule
 
 Model = typing.TypeVar('Model', bound='BaseModel')
 
@@ -93,7 +92,7 @@ class PromptToJSONModule(dspy.Module):
                 raise ValidationError("JSON output is not parsing. Make sure it contains only valid JSON.")
 
             completion = json.dumps(json_output)
-            print(f"Correct Completion")
+            print("Correct Completion")
         except ValidationError as ve:
             # If validation fails, log the error and retry the prediction
             # dspy.Assert(False, f"{result.constructed_json_object} failed validation")
@@ -107,7 +106,7 @@ class PromptToJSONModule(dspy.Module):
             try:
                 # validate(instance=json_output, schema=schema)
                 completion = json.dumps(json_output)
-                print(f"Correct Retry Completion")
+                print("Correct Retry Completion")
             except ValidationError as ve2:
                 # If the retry still fails, log the error and return the original result
                 print(f"Retry failed: {ve2}")
@@ -115,7 +114,7 @@ class PromptToJSONModule(dspy.Module):
                     key = list(json_output.keys())[0]
                     json_output = json_output[key]
                     completion = json.dumps(json_output)
-                    print(f"Key recovery attempted")
+                    print("Key recovery attempted")
                 else:
                     completion = result.constructed_json_object
         except json.JSONDecodeError as je:
@@ -128,7 +127,7 @@ class PromptToJSONModule(dspy.Module):
         )
 
 
-def instance(model: typing.Type[Model], prompt: str) -> Model:
+def instance(model: type[Model], prompt: str) -> Model:
     module = PromptToJSONModule()
     result = module.forward(schema=model.model_json_schema(), prompt=prompt).completion
     return model.model_validate_json(result)

@@ -1,14 +1,16 @@
 import copy
-from typing import Optional, Dict, Any
-from sungen.typetemp.functional import render, render_native
-from dspygen.workflow.workflow_models import Workflow, Action, Job, DateTrigger, CronTrigger
-from loguru import logger
+import sys
+from datetime import datetime
+from typing import Any, Dict, Optional
+
+import pytz
 from apscheduler.schedulers.base import BaseScheduler
 from apscheduler.triggers.cron import CronTrigger as APSchedulerCronTrigger
 from apscheduler.triggers.date import DateTrigger as APSchedulerDateTrigger
-from datetime import datetime
-import pytz
-import sys
+from loguru import logger
+from sungen.typetemp.functional import render, render_native
+
+from dspygen.workflow.workflow_models import Action, CronTrigger, DateTrigger, Job, Workflow
 
 # Configure logger with timestamp and log level
 logger.remove()  # Remove default handler
@@ -24,13 +26,13 @@ logger.add(
     rotation="1 MB"
 )
 
-def initialize_context(init_ctx: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def initialize_context(init_ctx: dict[str, Any] | None = None) -> dict[str, Any]:
     """Initializes the workflow context."""
     logger.debug(f"Initializing context with: {init_ctx}")
     return copy.deepcopy(init_ctx) if init_ctx else {}
 
 
-def update_context(context: Dict[str, Any], updates: Dict[str, Any]) -> Dict[str, Any]:
+def update_context(context: dict[str, Any], updates: dict[str, Any]) -> dict[str, Any]:
     """Updates the workflow context with new values."""
     # logger.debug(f"Updating context. Current: {context}, Updates: {updates}")
     # Create a copy of context with only python primitives
@@ -61,7 +63,7 @@ def update_context(context: Dict[str, Any], updates: Dict[str, Any]) -> Dict[str
     return rendered_context
 
 
-def evaluate_condition(condition: str, context: Dict[str, Any]) -> bool:
+def evaluate_condition(condition: str, context: dict[str, Any]) -> bool:
     """Evaluates a condition within the current context."""
     logger.debug(f"Evaluating condition: '{condition}' with context: {context}")
     try:
@@ -74,7 +76,7 @@ def evaluate_condition(condition: str, context: Dict[str, Any]) -> bool:
         return False
 
 
-def execute_job(job: Job, context: Dict[str, Any]) -> Dict[str, Any]:
+def execute_job(job: Job, context: dict[str, Any]) -> dict[str, Any]:
     """Executes all actions within a job."""
     logger.info(f"Executing job: {job.name}")
     job_context = update_context(context, {})  # Isolate context for the job
@@ -91,7 +93,7 @@ def execute_job(job: Job, context: Dict[str, Any]) -> Dict[str, Any]:
     return job_context
 
 
-def execute_action(action: Action, context: Dict[str, Any]) -> Dict[str, Any]:
+def execute_action(action: Action, context: dict[str, Any]) -> dict[str, Any]:
     """Executes a single action, updating the context accordingly."""
     logger.info(f"Executing action: {action.name}")
 
@@ -117,7 +119,7 @@ def execute_action(action: Action, context: Dict[str, Any]) -> Dict[str, Any]:
     return context
 
 
-def execute_workflow(workflow: Workflow, init_ctx: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def execute_workflow(workflow: Workflow, init_ctx: dict[str, Any] | None = None) -> dict[str, Any]:
     """Executes all jobs defined in a workflow."""
     logger.info(f"Executing workflow: {workflow.name}")
     global_context = initialize_context(init_ctx)  # Initialize global context
@@ -173,11 +175,11 @@ def schedule_workflow(workflow: Workflow, scheduler: BaseScheduler):
 
 if __name__ == "__main__":
     from apscheduler.schedulers.background import BackgroundScheduler
-    
+
     workflow = Workflow.from_yaml("path/to/your/workflow.yaml")
     scheduler = BackgroundScheduler()
     scheduler.start()
-    
+
     schedule_workflow(workflow, scheduler)
 
     try:

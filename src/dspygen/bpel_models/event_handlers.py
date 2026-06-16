@@ -14,8 +14,10 @@ Event handlers enhance the reactivity of business processes to internal or exter
 and flexibility of service orchestration.
 """
 
+from typing import List, Optional
+
 from pydantic import BaseModel, Field
-from typing import Optional, List
+
 
 class OnMessageHandler(BaseModel):
     """
@@ -33,8 +35,8 @@ class OnAlarmHandler(BaseModel):
     Calculus notation: E ::= onAlarm(for|until, activity) where E represents an event handler for alarms,
     executing an activity after a certain duration (for) or at a specific point in time (until).
     """
-    for_: Optional[str] = Field(None, description="Duration after which the event handler is triggered.")
-    until: Optional[str] = Field(None, description="Specific point in time when the event handler is triggered.")
+    for_: str | None = Field(None, description="Duration after which the event handler is triggered.")
+    until: str | None = Field(None, description="Specific point in time when the event handler is triggered.")
     activity: str = Field(..., description="Identifier of the activity to be executed by the event handler.")
 
 class EventHandler(BaseModel):
@@ -43,8 +45,8 @@ class EventHandler(BaseModel):
     Calculus notation: EH ::= {E1, E2, ..., En} where EH represents the set of all event handlers defined in the process,
     and E1 through En are individual event handler definitions, either onMessage or onAlarm.
     """
-    on_message_handlers: List[OnMessageHandler] = Field([], description="List of onMessage event handlers.")
-    on_alarm_handlers: List[OnAlarmHandler] = Field([], description="List of onAlarm event handlers.")
+    on_message_handlers: list[OnMessageHandler] = Field([], description="List of onMessage event handlers.")
+    on_alarm_handlers: list[OnAlarmHandler] = Field([], description="List of onAlarm event handlers.")
 
 # The EventHandler model can be used to encapsulate multiple onMessage and onAlarm handlers within a BPEL process,
 # providing a structured approach to defining how the process should respond to asynchronous events.

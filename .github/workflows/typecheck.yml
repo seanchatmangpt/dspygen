@@ -1,0 +1,37 @@
+name: Type Check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  mypy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install mypy and type stubs
+        run: pip install "mypy>=1.2.0" types-requests pydantic
+
+      - name: Run mypy (new subsystems only)
+        run: |
+          mypy \
+            src/dspygen/mcp/ \
+            src/dspygen/lsp/ \
+            src/dspygen/testing/ \
+            src/dspygen/observability/ \
+            src/dspygen/ui/ \
+            src/dspygen/subcommands/ \
+            --ignore-missing-imports \
+            --no-strict-optional \
+            --allow-redefinition \
+            --follow-imports=skip \
+            --no-error-summary

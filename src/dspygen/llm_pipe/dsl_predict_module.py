@@ -1,9 +1,8 @@
 import dspy
+from sungen.typetemp.functional import render
 
 from dspygen.llm_pipe.dsl_pydantic_models import PipelineDSLModel
-from sungen.typetemp.functional import render
 from dspygen.utils.dspy_tools import init_dspy
-
 
 DEFAULT_SIGNATURE = "prompt -> response"
 DEFAULT_PREDICTOR = "Predict"
@@ -16,27 +15,25 @@ def _get_prediction_key(signature: dspy.Signature | str):
     if isinstance(signature, str):
         output_keys = signature.split("->")[1].strip().split(", ")
         return output_keys[0]
-    else:
-        keys = signature.output_fields.items()
-        # Get the key of the first output field
-        return next(iter(keys))
+    keys = signature.output_fields.items()
+    # Get the key of the first output field
+    return next(iter(keys))
 
 
 def _get_predictor_class(predictor):
     if predictor == "Predict":
         return dspy.Predict
-    elif predictor == "ChainOfThought":
+    if predictor == "ChainOfThought":
         return dspy.ChainOfThought
-    elif predictor == "ChainOfThoughtWithHint":
+    if predictor == "ChainOfThoughtWithHint":
         return dspy.ChainOfThoughtWithHint
-    elif predictor == "MultiChainComparison":
+    if predictor == "MultiChainComparison":
         return dspy.MultiChainComparison
-    elif predictor == "ProgramOfThought":
+    if predictor == "ProgramOfThought":
         return dspy.ProgramOfThought
-    elif predictor == "ReAct":
+    if predictor == "ReAct":
         return dspy.ReAct
-    else:
-        raise ValueError(f"Predictor {predictor} not supported.")
+    raise ValueError(f"Predictor {predictor} not supported.")
 
 
 class DSLPredictModule(dspy.Module):
@@ -76,10 +73,9 @@ class DSLPredictModule(dspy.Module):
             input_keys = self.signature.split("->")[0].strip().split(", ")
             return input_keys
         # Handle dspy.Signature object
-        elif isinstance(self.signature, dspy.SignatureMeta):
+        if isinstance(self.signature, dspy.SignatureMeta):
             return list(self.signature.input_fields.keys())
-        else:
-            raise ValueError("Unsupported signature format")
+        raise ValueError("Unsupported signature format")
 
     def __or__(self, other):
         if other.output is None and self.output is None:
@@ -119,8 +115,13 @@ class DSLPredictModule(dspy.Module):
 
     def validate_output(self, output):
         print(f"Assertions to run {self.pipeline.config.current_step.assertions}")
-        # Implement validation logic or override in subclass
-        raise NotImplementedError("Validation logic should be implemented in subclass")
+        # Default validation: ensure output is not None and not empty.
+        # Subclasses may override this method for additional validation logic.
+        if output is None:
+            raise ValueError("Output must not be None")
+        if isinstance(output, (str, list, dict)) and not output:
+            raise ValueError("Output must not be empty")
+        return output
 
     def pipe(self, input_str):
         return self.forward(prompt=input_str)
@@ -142,6 +143,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/dsl/")

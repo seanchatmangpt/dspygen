@@ -1,0 +1,69 @@
+{
+  "name": "dspygen",
+  "displayName": "DSPyGen",
+  "description": "DSPy/dspygen IDE support — AI-powered module generation, pipeline execution, and LSP integration",
+  "version": "1.0.0",
+  "publisher": "seanchatmangpt",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Programming Languages", "AI", "Other"],
+  "keywords": ["dspy", "dspygen", "ai", "llm", "python"],
+  "activationEvents": ["onLanguage:python", "onLanguage:dspy", "workspaceContains:**/*.dspy", "workspaceContains:**/*.dsg"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "dspy",
+        "aliases": ["DSPy DSL", "dspy"],
+        "extensions": [".dspy", ".dsg"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "commands": [
+      {"command": "dspygen.runModule", "title": "DSPyGen: Run Module"},
+      {"command": "dspygen.generateModule", "title": "DSPyGen: Generate Module"},
+      {"command": "dspygen.validateSignature", "title": "DSPyGen: Validate Signature"},
+      {"command": "dspygen.showModuleInfo", "title": "DSPyGen: Show Module Info"},
+      {"command": "dspygen.startLSP", "title": "DSPyGen: Start LSP Server"}
+    ],
+    "configuration": {
+      "title": "DSPyGen",
+      "properties": {
+        "dspygen.lsp.enabled": {"type": "boolean", "default": true, "description": "Enable the DSPyGen Language Server"},
+        "dspygen.lsp.path": {"type": "string", "default": "dspygen-lsp", "description": "Path to dspygen-lsp executable"},
+        "dspygen.model": {"type": "string", "default": "gpt-4o-mini", "description": "Default LM model"},
+        "dspygen.ollamaHost": {"type": "string", "default": "http://localhost:11434", "description": "Ollama host URL"}
+      }
+    },
+    "keybindings": [
+      {"command": "dspygen.runModule", "key": "ctrl+shift+d r", "mac": "cmd+shift+d r", "when": "editorTextFocus"},
+      {"command": "dspygen.generateModule", "key": "ctrl+shift+d g", "mac": "cmd+shift+d g", "when": "editorTextFocus"}
+    ],
+    "menus": {
+      "editor/context": [
+        {"command": "dspygen.runModule", "when": "editorLangId == python", "group": "dspygen"},
+        {"command": "dspygen.generateModule", "when": "editorLangId == python", "group": "dspygen"}
+      ],
+      "commandPalette": [
+        {"command": "dspygen.runModule"},
+        {"command": "dspygen.generateModule"},
+        {"command": "dspygen.validateSignature"},
+        {"command": "dspygen.showModuleInfo"},
+        {"command": "dspygen.startLSP"}
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  }
+}

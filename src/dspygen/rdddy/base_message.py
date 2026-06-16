@@ -2,10 +2,8 @@ import inspect
 import uuid
 from datetime import datetime, timezone
 
-from pydantic import Field
-
 from dslmodel import DSLModel
-
+from pydantic import Field
 
 
 class BaseMessage(DSLModel):

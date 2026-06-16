@@ -1,15 +1,36 @@
 import asyncio
 import json
 import logging
+import random
 import re
+from collections.abc import Callable
+from enum import Enum
 from functools import wraps
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import websockets
-from realtime import Callback, T_ParamSpec, NotConnectedError, T_Retval, http_endpoint_url, AsyncRealtimeChannel, \
-    DEFAULT_TIMEOUT, Message, PHOENIX_CHANNEL, ChannelEvents, RealtimeChannelOptions
+from realtime import (
+    DEFAULT_TIMEOUT,
+    PHOENIX_CHANNEL,
+    AsyncRealtimeChannel,
+    Callback,
+    ChannelEvents,
+    Message,
+    NotConnectedError,
+    RealtimeChannelOptions,
+    T_ParamSpec,
+    T_Retval,
+    http_endpoint_url,
+)
 
 logger = logging.getLogger(__name__)
+
+
+class ConnectionState(Enum):
+    DISCONNECTED = "disconnected"
+    CONNECTING = "connecting"
+    CONNECTED = "connected"
+    RECONNECTING = "reconnecting"
 
 
 def ensure_connection(func: Callback):
@@ -29,7 +50,7 @@ class AsyncRealtimeClient:
         url: str,
         token: str,
         auto_reconnect: bool = False,
-        params: Dict[str, Any] = {},
+        params: dict[str, Any] | None = None,
         hb_interval: int = 30,
         max_retries: int = 5,
         initial_backoff: float = 1.0,
@@ -48,19 +69,23 @@ class AsyncRealtimeClient:
         """
         self.url = f"{re.sub(r'https://', 'wss://', re.sub(r'http://', 'ws://', url, flags=re.IGNORECASE), flags=re.IGNORECASE)}"
         self.http_endpoint = http_endpoint_url(url)
-        self.is_connected = False
-        self.params = params
+        self._connection_state = ConnectionState.DISCONNECTED
+        self.params = params or {}
         self.apikey = token
         self.access_token = token
-        self.send_buffer: List[Callable] = []
+        self.send_buffer: list[Callable] = []
         self.hb_interval = hb_interval
-        self.ws_connection: Optional[websockets.client.WebSocketClientProtocol] = None
+        self.ws_connection: websockets.WebSocketClientProtocol | None = None
         self.ref = 0
         self.auto_reconnect = auto_reconnect
-        self.channels: Dict[str, AsyncRealtimeChannel] = {}
+        self.channels: dict[str, AsyncRealtimeChannel] = {}
         self.max_retries = max_retries
         self.initial_backoff = initial_backoff
         self.timeout = DEFAULT_TIMEOUT
+
+    @property
+    def is_connected(self) -> bool:
+        return self._connection_state == ConnectionState.CONNECTED
 
     async def _listen(self) -> None:
         """
@@ -92,10 +117,11 @@ class AsyncRealtimeClient:
 
     async def connect(self) -> None:
         """
-        Establishes a WebSocket connection with exponential backoff retry mechanism.
+        Establishes a WebSocket connection with exponential backoff and jitter retry mechanism.
 
         This method attempts to connect to the WebSocket server. If the connection fails,
-        it will retry with an exponential backoff strategy up to a maximum number of retries.
+        it will retry with an exponential backoff strategy (with random jitter) up to a
+        maximum number of retries.
 
         Returns:
             None
@@ -105,46 +131,48 @@ class AsyncRealtimeClient:
 
         Note:
             - The initial backoff time and maximum retries are set during RealtimeClient initialization.
-            - The backoff time doubles after each failed attempt, up to a maximum of 60 seconds.
+            - The backoff time doubles after each failed attempt (with jitter), up to a maximum of 60 seconds.
         """
         retries = 0
         backoff = self.initial_backoff
+        self._connection_state = ConnectionState.CONNECTING
 
         while retries < self.max_retries:
             try:
-                self.ws_connection = await websockets.connect(self.url)
-                if self.ws_connection.open:
+                async with websockets.connect(self.url) as ws:
+                    self.ws_connection = ws
                     logger.info("Connection was successful")
-                    return await self._on_connect()
-                else:
-                    raise Exception("Failed to open WebSocket connection")
+                    await self._on_connect()
+                    return
             except Exception as e:
                 retries += 1
+                self._connection_state = ConnectionState.RECONNECTING
                 if retries >= self.max_retries or not self.auto_reconnect:
+                    self._connection_state = ConnectionState.DISCONNECTED
                     logger.error(
                         f"Failed to establish WebSocket connection after {retries} attempts: {e}"
                     )
                     raise
-                else:
-                    wait_time = backoff * (2 ** (retries - 1))  # Exponential backoff
-                    logger.info(
-                        f"Connection attempt {retries} failed. Retrying in {wait_time:.2f} seconds..."
-                    )
-                    await asyncio.sleep(wait_time)
-                    backoff = min(backoff * 2, 60)  # Cap the backoff at 60 seconds
+                jitter = random.uniform(0, backoff * 0.1)
+                wait_time = min(backoff * (2 ** (retries - 1)) + jitter, 60)
+                logger.info(
+                    f"Connection attempt {retries} failed. Retrying in {wait_time:.2f} seconds..."
+                )
+                await asyncio.sleep(wait_time)
 
+        self._connection_state = ConnectionState.DISCONNECTED
         raise Exception(
             f"Failed to establish WebSocket connection after {self.max_retries} attempts"
         )
 
-    async def listen(self):
+    async def listen(self) -> None:
         await asyncio.gather(self._listen(), self._heartbeat())
 
-    async def _on_connect(self):
-        self.is_connected = True
+    async def _on_connect(self) -> None:
+        self._connection_state = ConnectionState.CONNECTED
         await self._flush_send_buffer()
 
-    async def _flush_send_buffer(self):
+    async def _flush_send_buffer(self) -> None:
         if self.is_connected and len(self.send_buffer) > 0:
             for callback in self.send_buffer:
                 await callback()
@@ -163,7 +191,7 @@ class AsyncRealtimeClient:
         """
 
         await self.ws_connection.close()
-        self.is_connected = False
+        self._connection_state = ConnectionState.DISCONNECTED
 
     async def _heartbeat(self) -> None:
         while self.is_connected:
@@ -186,18 +214,18 @@ class AsyncRealtimeClient:
 
     @ensure_connection
     def channel(
-        self, topic: str, params: RealtimeChannelOptions = {}
+        self, topic: str, params: RealtimeChannelOptions | None = None
     ) -> AsyncRealtimeChannel:
         """
         :param topic: Initializes a channel and creates a two-way association with the socket
         :return: Channel
         """
-        chan = AsyncRealtimeChannel(self, topic, params)
+        chan = AsyncRealtimeChannel(self, topic, params or {})
         self.channels[topic] = chan
 
         return chan
 
-    def get_channels(self) -> List[AsyncRealtimeChannel]:
+    def get_channels(self) -> list[AsyncRealtimeChannel]:
         return list(self.channels.values())
 
     async def remove_channel(self, channel: AsyncRealtimeChannel) -> None:
@@ -231,7 +259,7 @@ class AsyncRealtimeClient:
         for topic, channel in self.channels.items():
             print(f"Topic: {topic} | Events: {[e for e, _ in channel.listeners]}]")
 
-    async def set_auth(self, token: Union[str, None]) -> None:
+    async def set_auth(self, token: str | None) -> None:
         """
         Set the authentication token for the connection and update all joined channels.
 
@@ -254,7 +282,7 @@ class AsyncRealtimeClient:
         self.ref += 1
         return f"{self.ref}"
 
-    async def send(self, message: Dict[str, Any]) -> None:
+    async def send(self, message: dict[str, Any]) -> None:
         """
         Send a message through the WebSocket connection.
 
@@ -276,7 +304,7 @@ class AsyncRealtimeClient:
         message = json.dumps(message)
         logging.info(f"send: {message}")
 
-        async def send_message():
+        async def send_message() -> None:
             await self.ws_connection.send(message)
 
         if self.is_connected:
@@ -284,7 +312,7 @@ class AsyncRealtimeClient:
         else:
             self.send_buffer.append(send_message)
 
-    async def _leave_open_topic(self, topic: str):
+    async def _leave_open_topic(self, topic: str) -> None:
         dup_channels = [
             ch
             for ch in self.channels.values()

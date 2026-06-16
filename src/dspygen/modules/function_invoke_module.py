@@ -2,6 +2,7 @@
 
 """
 import dspy
+
 from dspygen.utils.dspy_tools import init_dspy
 
 

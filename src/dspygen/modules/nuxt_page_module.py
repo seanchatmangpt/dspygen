@@ -1,15 +1,17 @@
 """
 
 """
-import dspy
-from dspygen.utils.dspy_tools import init_dspy
 import os
 import subprocess
+
+import dspy
+
+from dspygen.utils.dspy_tools import init_dspy
 
 
 class NuxtPageModule(dspy.Module):
     """NuxtPageModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args

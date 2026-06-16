@@ -1,11 +1,25 @@
 from __future__ import annotations
 
+from typing import Dict, List, Optional
+
 import objc
-from Contacts import (CNMutableContact, CNContactStore, CNLabeledValue, CNSaveRequest,
-                      CNContact, CNPostalAddress, CNContactFormatter, CNPostalAddressFormatter, 
-                      CNLabelHome, CNLabelWork, CNPhoneNumber, CNMutablePostalAddress, CNContactFormatterStyleFullName)
-from Foundation import NSString, NSDateComponents
-from typing import Optional, List, Dict
+from Contacts import (
+    CNContact,
+    CNContactFormatter,
+    CNContactFormatterStyleFullName,
+    CNContactStore,
+    CNLabeledValue,
+    CNLabelHome,
+    CNLabelWork,
+    CNMutableContact,
+    CNMutablePostalAddress,
+    CNPhoneNumber,
+    CNPostalAddress,
+    CNPostalAddressFormatter,
+    CNSaveRequest,
+)
+from Foundation import NSDateComponents, NSString
+
 
 class ContactError(Exception):
     pass
@@ -17,11 +31,11 @@ class Contact:
 
     @classmethod
     def create(cls, given_name: str, family_name: str,
-               email_addresses: Optional[List[tuple[str, str]]] = None, 
-               phone_numbers: Optional[List[tuple[str, str]]] = None, 
-               postal_address: Optional[Dict[str, str]] = None, 
-               birthday: Optional[Dict[str, int]] = None, 
-               image_data: Optional[bytes] = None):
+               email_addresses: list[tuple[str, str]] | None = None,
+               phone_numbers: list[tuple[str, str]] | None = None,
+               postal_address: dict[str, str] | None = None,
+               birthday: dict[str, int] | None = None,
+               image_data: bytes | None = None):
         contact = cls()
         contact.given_name = given_name
         contact.family_name = family_name
@@ -60,22 +74,22 @@ class Contact:
         self.cn_contact.setFamilyName_(value)
 
     @property
-    def email_addresses(self) -> List[tuple[str, str]]:
+    def email_addresses(self) -> list[tuple[str, str]]:
         return [(str(email.label()), str(email.value())) for email in self.cn_contact.emailAddresses()]
 
     @email_addresses.setter
-    def email_addresses(self, emails: List[tuple[str, str]]):
+    def email_addresses(self, emails: list[tuple[str, str]]):
         self.cn_contact.setEmailAddresses_([CNLabeledValue.labeledValueWithLabel_value_(label, email) for label, email in emails])
 
     @property
-    def phone_numbers(self) -> List[tuple[str, str]]:
+    def phone_numbers(self) -> list[tuple[str, str]]:
         return [(str(phone.label()), str(phone.value().stringValue())) for phone in self.cn_contact.phoneNumbers()]
 
     @phone_numbers.setter
-    def phone_numbers(self, phones: List[tuple[str, str]]):
+    def phone_numbers(self, phones: list[tuple[str, str]]):
         self.cn_contact.setPhoneNumbers_([CNLabeledValue.labeledValueWithLabel_value_(label, CNPhoneNumber.phoneNumberWithStringValue_(phone)) for label, phone in phones])
 
-    def set_postal_address(self, street: str, city: str, state: str, postal_code: str, country: Optional[str] = None):
+    def set_postal_address(self, street: str, city: str, state: str, postal_code: str, country: str | None = None):
         address = CNMutablePostalAddress.alloc().init()
         address.setStreet_(street)
         address.setCity_(city)
@@ -85,7 +99,7 @@ class Contact:
             address.setCountry_(country)
         self.cn_contact.setPostalAddresses_([CNLabeledValue.labeledValueWithLabel_value_(CNLabelHome, address)])
 
-    def set_birthday(self, day: int, month: int, year: Optional[int] = None):
+    def set_birthday(self, day: int, month: int, year: int | None = None):
         birthday = NSDateComponents.alloc().init()
         birthday.setDay_(day)
         birthday.setMonth_(month)
@@ -94,11 +108,11 @@ class Contact:
         self.cn_contact.setBirthday_(birthday)
 
     @property
-    def image_data(self) -> Optional[bytes]:
+    def image_data(self) -> bytes | None:
         return self.cn_contact.imageData()
 
     @image_data.setter
-    def image_data(self, value: Optional[bytes]):
+    def image_data(self, value: bytes | None):
         self.cn_contact.setImageData_(value)
 
     def save(self) -> None:
@@ -116,7 +130,7 @@ class Contact:
             raise ContactError(f"Failed to remove contact: {error}")
 
     @classmethod
-    def fetch_contacts(cls, predicate, keys_to_fetch: List[str]):
+    def fetch_contacts(cls, predicate, keys_to_fetch: list[str]):
         try:
             cn_contacts = cls().contact_store.unifiedContactsMatchingPredicate_keysToFetch_error_(predicate, keys_to_fetch, None)
             return [cls.from_cn_contact(cn_contact) for cn_contact in cn_contacts[0]]

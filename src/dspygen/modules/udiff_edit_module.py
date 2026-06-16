@@ -3,6 +3,7 @@ from dspy import InputField, OutputField, Signature
 
 from dspygen.utils.dspy_tools import init_dspy
 
+
 class UDiffChangeGenerator(dspy.Signature):
     """
     Generates the diff content (hunk_content) between the hunk lines for a unified diff (UDiff)
@@ -57,7 +58,7 @@ def add_line_numbers(input_string):
 def udiff_edit_call(source_path, edit_instructions):
     """Utility function to generate a udiff format for the provided source code and instructions."""
     # Read the source code from the file
-    with open(source_path, 'r') as file:
+    with open(source_path) as file:
         source_code = file.read()
 
     # print(add_line_numbers(source_code))

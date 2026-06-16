@@ -172,26 +172,70 @@ def round_robin_turbo_models():
 def get_model(model):
     if model == "best":
         return next(round_robin_best_models())
-    elif model == "ok":
+    if model == "ok":
         return next(round_robin_ok_models())
-    elif model == "gpt4":
+    if model == "gpt4":
         return next(round_robin_gpt_4_models())
-    elif model == "3":
+    if model == "3":
         return "gpt-3.5-turbo-0613"
-    elif model == "3i":
+    if model == "3i":
         return "gpt-3.5-turbo-instruct"
-    elif model == "4":
+    if model == "4":
         return "gpt-4-0613"
-    elif model == "turbo":
+    if model == "turbo":
         return next(round_robin_turbo_models())
-    elif not model:
+    if not model:
         return next(round_robin_instruct_models())
-    else:
-        return model
+    return model
 
 
 async def main():
-    ...
+    """Demonstrate the model utilities defined in this module.
+
+    Exercises the round-robin generators and get_model() shorthand, then
+    instantiates the Pydantic data models with sample data so their
+    behaviour can be verified at a glance.
+    """
+    import asyncio
+
+    print("=== Round-robin model selectors ===")
+
+    # Show one result from each generator
+    print(f"best model   : {next(round_robin_best_models())}")
+    print(f"ok model     : {next(round_robin_ok_models())}")
+    print(f"instruct     : {next(round_robin_instruct_models())}")
+    print(f"turbo        : {next(round_robin_turbo_models())}")
+    print(f"gpt-4        : {next(round_robin_gpt_4_models())}")
+
+    print("\n=== get_model() shortcuts ===")
+    for alias in ("best", "ok", "gpt4", "3", "3i", "4", "turbo", ""):
+        print(f"  get_model({alias!r:8}) -> {get_model(alias)}")
+
+    print("\n=== Pydantic models ===")
+    user = User(name="Alice", email="alice@example.com")
+    print(f"User: {user}")
+
+    email = Email(
+        id="msg-001",
+        subject="Hello from dspygen",
+        body="This is a test email.",
+        from_address="alice@example.com",
+        to=["bob@example.com"],
+        cc=[],
+        bcc=[],
+        date=__import__("datetime").datetime.now(),
+    )
+    print(f"Email: {email}")
+
+    mailing_list = MailingList(name="dspygen-dev", members=[user], emails=[email])
+    print(f"MailingList: {mailing_list.name!r} with {len(mailing_list.members)} member(s)")
+
+    mail_system = UnixEmailSystem(
+        hostname="mail.example.com",
+        mailing_lists=[mailing_list],
+        users=[user],
+    )
+    print(f"UnixEmailSystem: {mail_system.hostname!r}")
 
 
 if __name__ == "__main__":

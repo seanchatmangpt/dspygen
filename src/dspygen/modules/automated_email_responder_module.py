@@ -1,6 +1,8 @@
+import io
+
 import dspy
 import pandas as pd
-import io
+
 from dspygen.rm.doc_retriever import DocRetriever
 from dspygen.utils.dspy_tools import init_dspy
 
@@ -32,7 +34,7 @@ def automated_email_call(email_message, linkedin_profile):
 
 
 def main():
-    from dspygen.utils.dspy_tools import init_ol, init_dspy
+    from dspygen.utils.dspy_tools import init_ol
     init_ol(model="mistral-nemo")
     # init_dspy()
 

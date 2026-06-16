@@ -1,7 +1,7 @@
 import threading
+from typing import List, Optional
 
 import EventKit
-from typing import Optional, List
 import inject
 from faker import Faker
 
@@ -40,7 +40,7 @@ class ReminderList:
     def get_calendar(self):
         return self.ek_calendar
 
-    def get_all_reminders(self) -> List[Reminder]:
+    def get_all_reminders(self) -> list[Reminder]:
         """Fetch all reminders in this list."""
         predicate = self.event_store.predicateForRemindersInCalendars_([self.ek_calendar])
         ek_reminders = []

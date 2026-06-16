@@ -1,7 +1,7 @@
 import datetime
+from typing import Optional
 
 from dateutil import parser
-from typing import Optional
 
 
 def parse_datetime(dt):
@@ -13,7 +13,7 @@ def parse_datetime(dt):
     """
     if isinstance(dt, str):
         return parser.parse(dt)
-    elif isinstance(dt, datetime):
+    if isinstance(dt, datetime):
         return dt
     return None
 

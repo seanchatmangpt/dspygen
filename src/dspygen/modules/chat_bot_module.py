@@ -3,10 +3,10 @@ The source code imports the necessary libraries and defines a class for a chatbo
 """
 import dspy
 from typer import Typer
+
 from dspygen.utils.dspy_tools import init_dspy
 
-
-app = Typer()        
+app = Typer()
 
 
 class ChatBotModule(dspy.Module):
@@ -27,7 +27,7 @@ def chat_bot_call(message, history, context):
 def call(message, history, context):
     """ChatBotModule"""
     init_dspy()
-    
+
     print(chat_bot_call(message=message, history=history, context=context))
 
 
@@ -35,6 +35,7 @@ def call(message, history, context):
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 
@@ -42,7 +43,7 @@ router = APIRouter()
 async def chat_bot_route(data: dict):
     # Your code generation logic here
     init_dspy()
-    
+
     print(data)
     return chat_bot_call(**data)
 
@@ -55,7 +56,7 @@ def main():
     # context = "1965 mustang manual"
     context = "Just bought a 1965 mustang. I need a 25 point instruction guide."
     print(chat_bot_call(message=message, history=history, context=context))
-    
+
 
 if __name__ == "__main__":
     main()

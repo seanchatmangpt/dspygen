@@ -8,6 +8,7 @@ import py_trees.composites
 import py_trees.console
 import py_trees.display
 import py_trees.idioms
+
 from dspygen.mixin.btrees.btree_mixin import BTMixin
 
 
@@ -27,7 +28,7 @@ class ContextSwitch(py_trees.behaviour.Behaviour):
 
     def __init__(self, name: str = "ContextSwitch"):
         """Initialise with a behaviour name."""
-        super(ContextSwitch, self).__init__(name)
+        super().__init__(name)
         self.feedback_message = "no context"
 
     def initialise(self) -> None:
@@ -89,7 +90,6 @@ class MyBehaviorTree(BTMixin):
         Registers keys on the blackboard used by behaviors in the tree.
         """
         # This demo does not use the blackboard, so this method can be empty or contain relevant keys
-        pass
 
 ##############################################################################
 # Main Execution
@@ -103,7 +103,7 @@ def main():
     tree.print_tree()  # Print the initial state of the tree
 
     for i in range(1, 6):
-        print("\n--------- Tick {0} ---------\n".format(i))
+        print(f"\n--------- Tick {i} ---------\n")
         tree.tick_tree()  # Perform a tick
         tree.print_tree()  # Print the tree after each tick
 

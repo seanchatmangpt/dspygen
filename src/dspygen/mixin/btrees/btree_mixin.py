@@ -1,5 +1,6 @@
-import py_trees
 import time
+
+import py_trees
 
 
 class BTMixin:

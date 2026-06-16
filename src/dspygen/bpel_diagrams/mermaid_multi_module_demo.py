@@ -1,5 +1,5 @@
 from dspygen.modules.business_dev_consultant import business_dev_consultant_call
-from dspygen.modules.mermaid_js_module import mermaid_js_call, MermaidDiagramType
+from dspygen.modules.mermaid_js_module import MermaidDiagramType, mermaid_js_call
 
 event_storm_model_prompt = """Generate a comprehensive MermaidJS diagram that encapsulates our entire system's 
 architecture based on Domain-Driven Design. Include the following elements, ensuring to illustrate the interactions 

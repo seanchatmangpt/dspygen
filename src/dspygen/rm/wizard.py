@@ -1,13 +1,15 @@
 # wizard.py
+import glob
 import os
-from pathlib import Path
 import subprocess
+from datetime import datetime
+from pathlib import Path
+
 from loguru import logger
+
 from dspygen.rm.chatgpt_codemaster_retriever import ChatGPTChromaDBRetriever
 from dspygen.rm.code_retriever import CodeRetriever
 from dspygen.rm.structured_code_desc_saver import save_code_snippet
-from datetime import datetime
-import glob
 
 # Configure logging
 logger.add("wizard.log", rotation="10 MB", level="ERROR")
@@ -37,7 +39,7 @@ def get_all_snippets_for_title(retriever: ChatGPTChromaDBRetriever, selected_tit
 
     print(query)
     matched_conversations = retriever.forward(query, k=10)  # Increase k to fetch more results if necessary
-    
+
     snippets = []
     for conversation in matched_conversations:
         if 'description'in conversation :# or '6edb8608-f262-4772-89b5-7c3a414a4755' in conversation or doc_id in conversation or 'description' in conversation:
@@ -54,7 +56,7 @@ def get_all_snippets_for_title(retriever: ChatGPTChromaDBRetriever, selected_tit
 def get_all_snippets_from_temp_code(retriever, selected_title):
     temp_code_directory = Path(f"data/temp_code/{selected_title}")
     files = glob.glob(f"{temp_code_directory}/**/*.py", recursive=True)
-    
+
     snippets = []
     for file_path in files:
         doc_id = Path(file_path).stem
@@ -76,7 +78,7 @@ def main():
     get_all_snippets_for_title(retriever=retriever, selected_title="", doc_id="116889e2-b2df-4d35-b49e-d5d7fe1bb481") # -> 3516c571-c26e-44f9-a125-3b8105e2be07
 
     # ask or autodetect for run this once new conv is in the data/...
-    # retriever._process_and_store_conversations() 
+    # retriever._process_and_store_conversations()
     print("Filled the vector DB AND the temp_code folder with last conversation.JSON time_stamp (TBD) ")
 
     # List all conversation titles
@@ -101,7 +103,7 @@ def main():
         if exec_it == 'yes' or exec_it == 'y':
             snippets += get_all_snippets_from_temp_code(retriever, selected_title)
             #print(temp_code_snippets)
- 
+
         if not snippets:
             print("No code snippets found in the selected conversation for selected title:", selected_title)
             continue  # Allow user to re-select
@@ -118,7 +120,7 @@ def main():
 
         # Load the code content from the file at code_path
         # only from directory
-        with open(selected_code_path, 'r') as file:
+        with open(selected_code_path) as file:
             code = file.read()
 
         save_code_snippet(temp_code_directory, selected_doc_id, code, selected_description)
@@ -155,8 +157,8 @@ def main():
                         print("selected_code_path -Ret from:", selected_code_path)
                         temp_code_directory = Path(f"data/temp_code/{selected_title}/repo")
                         temp_code_directory.mkdir(parents=True, exist_ok=True)
-            
-     
+
+
         while True:
             # Directory structure can be defined here or input by the user
             directory_structure = input("Enter the directory structure path for the new repo: ")

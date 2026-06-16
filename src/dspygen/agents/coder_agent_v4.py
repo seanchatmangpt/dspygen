@@ -3,10 +3,9 @@ import subprocess
 import tempfile
 
 from dspygen.agents.coder_agent import CoderAgentState
-from dspygen.mixin.fsm.fsm_mixin import trigger, FSMMixin
+from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 from dspygen.modules.function_invoke_module import function_invoke_call
 from dspygen.modules.python_source_code_module import python_source_code_call
-
 from dspygen.rdddy.base_inhabitant import BaseInhabitant
 
 
@@ -87,8 +86,8 @@ class CoderAgent(FSMMixin, BaseInhabitant):
 
 
 def main():
-    from dspygen.utils.dspy_tools import init_ol
     from dspygen.modules.fsm_trigger_module import fsm_trigger_call
+    from dspygen.utils.dspy_tools import init_ol
 
     init_ol(max_tokens=3000)
     agent = CoderAgent("Make a request to an API and return the response.")

@@ -1,8 +1,9 @@
 import time
 
+from dspygen.modules.comment_module import comment_call
 from dspygen.pyautomator.event_kit.reminder import Reminder
 from dspygen.utils.dspy_tools import init_dspy
-from dspygen.modules.comment_module import comment_call
+
 
 def update_message(reminder):
     """Update the message based on the current notes using comment_call"""

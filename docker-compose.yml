@@ -1,20 +1,150 @@
 version: "3.9"
 
+# Production service composition for dspygen
+# Usage: docker-compose up -d [api|mcp|lsp|chroma|redis]
+
+x-build-common: &build-common
+  context: .
+  args:
+    PYTHON_VERSION: ${PYTHON_VERSION:-3.11}
+
+x-env-common: &env-common
+  OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+  DSPYGEN_MODEL: ${DSPYGEN_MODEL:-gpt-4o-mini}
+  PYTHONPATH: /app/src
+
 services:
 
+  # ---------------------------------------------------------------------------
+  # API — FastAPI / uvicorn REST API
+  # ---------------------------------------------------------------------------
+  api:
+    build:
+      <<: *build-common
+      target: api
+    image: dspygen:api
+    ports:
+      - "8000:8000"
+    environment:
+      <<: *env-common
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+    profiles:
+      - api
+      - full
+
+  # ---------------------------------------------------------------------------
+  # MCP — Model Context Protocol server (SSE transport)
+  # ---------------------------------------------------------------------------
+  mcp:
+    build:
+      <<: *build-common
+      target: mcp
+    image: dspygen:mcp
+    ports:
+      - "8765:8765"
+    environment:
+      <<: *env-common
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.settimeout(3); s.connect(('localhost',8765)); s.close()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    profiles:
+      - mcp
+      - full
+
+  # ---------------------------------------------------------------------------
+  # LSP — Language Server Protocol server (TCP transport)
+  # ---------------------------------------------------------------------------
+  lsp:
+    build:
+      <<: *build-common
+      target: lsp
+    image: dspygen:lsp
+    ports:
+      - "2087:2087"
+    environment:
+      <<: *env-common
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.settimeout(3); s.connect(('localhost',2087)); s.close()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    profiles:
+      - lsp
+      - full
+
+  # ---------------------------------------------------------------------------
+  # ChromaDB — vector store for embeddings / retrieval
+  # ---------------------------------------------------------------------------
+  chroma:
+    image: chromadb/chroma:latest
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/.chroma
+    environment:
+      CHROMA_SERVER_AUTH_CREDENTIALS_PROVIDER: ""
+      ANONYMIZED_TELEMETRY: "false"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    profiles:
+      - retrieval
+      - full
+
+  # ---------------------------------------------------------------------------
+  # Redis — cache / message broker (e.g. for APScheduler job stores)
+  # ---------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+    profiles:
+      - cache
+      - full
+
+  # ---------------------------------------------------------------------------
+  # Dev container — full dev environment (extends original devcontainer setup)
+  # ---------------------------------------------------------------------------
   devcontainer:
     build:
-      context: .
+      <<: *build-common
       target: dev
-      args:
-        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
-        UID: ${UID:-1000}
-        GID: ${GID:-1000}
     environment:
       - POETRY_PYPI_TOKEN_PYPI
     volumes:
       - ..:/workspaces
       - command-history-volume:/home/user/.history/
+    profiles:
+      - dev
 
   dev:
     extends: devcontainer
@@ -25,7 +155,7 @@ services:
       [
         "sh",
         "-c",
-        "sudo chown user $$SSH_AUTH_SOCK && cp --update /opt/build/poetry/poetry.lock /workspaces/dspygen/ && mkdir -p /workspaces/dspygen/.git/hooks/ && cp --update /opt/build/git/* /workspaces/dspygen/.git/hooks/ && zsh"
+        "sudo chown user $$SSH_AUTH_SOCK && cp --update /opt/build/poetry/poetry.lock /workspaces/dspygen/ && mkdir -p /workspaces/dspygen/.git/hooks/ && cp --update /opt/build/git/* /workspaces/dspygen/.git/hooks/ 2>/dev/null || true && zsh"
       ]
     environment:
       - POETRY_PYPI_TOKEN_PYPI
@@ -39,15 +169,7 @@ services:
     profiles:
       - dev
 
-  app:
-    build:
-      context: .
-      target: app
-    tty: true
-    ports:
-      - "8000:8000"
-    profiles:
-      - app
-
 volumes:
+  chroma_data:
+  redis_data:
   command-history-volume:

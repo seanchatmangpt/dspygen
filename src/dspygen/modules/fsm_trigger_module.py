@@ -1,10 +1,8 @@
 import typing
 
-from loguru import logger
-
 import dspy
+from loguru import logger
 from pydantic import BaseModel, Field
-
 
 if typing.TYPE_CHECKING:
     from dspygen.mixin.fsm.fsm_mixin import FSMMixin

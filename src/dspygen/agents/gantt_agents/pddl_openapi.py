@@ -1,7 +1,5 @@
-from jinja2 import Template
 import yaml
-
-
+from jinja2 import Template
 
 # Jinja2 template string (put the Jinja template content here)
 template_str = """{% set predicates = {
@@ -68,7 +66,7 @@ def main():
     init_ol()
 
     # Load your OpenAPI YAML file
-    with open('openapi.yaml', 'r') as file:
+    with open('openapi.yaml') as file:
         openapi_data = yaml.safe_load(file)
 
     # Create a Jinja2 Template object

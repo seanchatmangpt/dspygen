@@ -2,17 +2,18 @@
 
 """
 import dspy
-from dspygen.utils.dspy_tools import init_dspy        
+
+from dspygen.utils.dspy_tools import init_dspy
 
 
 class NaturalLanguageToSQLModule(dspy.Module):
     """NaturalLanguageToSQLModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args
         self.output = None
-        
+
     def __or__(self, other):
         if other.output is None and self.output is None:
             self.forward(**self.forward_args)
@@ -25,7 +26,7 @@ class NaturalLanguageToSQLModule(dspy.Module):
         pred = dspy.Predict("natural_language, database_schema -> sql_query")
         self.output = pred(natural_language=natural_language, database_schema=database_schema).sql_query
         return self.output
-        
+
     def pipe(self, input_str):
         raise NotImplementedError("Please implement the pipe method for DSL support.")
         # Replace TODO with a keyword from you forward method
@@ -33,6 +34,7 @@ class NaturalLanguageToSQLModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -74,6 +76,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/natural_language_to_sql/")

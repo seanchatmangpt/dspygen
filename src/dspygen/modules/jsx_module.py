@@ -3,10 +3,10 @@ This code imports the necessary libraries and creates a Typer app. It also defin
 """
 import dspy
 from typer import Typer
+
 from dspygen.utils.dspy_tools import init_dspy
 
-
-app = Typer()        
+app = Typer()
 
 class GeneratePureJSX(dspy.Signature):
     """
@@ -39,18 +39,19 @@ def jsx_call(story):
 def call(story):
     """JSXModule"""
     init_dspy()
-    
+
     print(jsx_call(story=story))
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/jsx/")
 async def jsx_route(data: dict):
     # Your code generation logic here
     init_dspy(max_tokens=3000)
-    
+
     return jsx_call(**data)
 
 
@@ -58,7 +59,7 @@ def main():
     init_dspy()
     story = "Tax form input"
     print(jsx_call(story=story))
-    
+
 
 if __name__ == "__main__":
     main()

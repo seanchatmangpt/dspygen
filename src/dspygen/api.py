@@ -1,8 +1,13 @@
 """dspygen REST API."""
 import datetime as dt
+import os
+from contextlib import asynccontextmanager
+from importlib import import_module
 
-from fastapi import FastAPI, Depends
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
+
+from dspygen.llm_pipe.dsl_pipeline_executor import router as pipeline_router
 
 # from dspygen.experiments.convo_ddd.abstract_aggregate.conversation_aggregate import ConversationAggregate
 # from dspygen.experiments.convo_ddd.abstract_event.user_input_received_event import UserInputReceivedEvent
@@ -11,26 +16,23 @@ from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.utils.file_tools import dspy_modules_dir
 from dspygen.workflow.workflow_router import router as workflow_router
 
-
-app = FastAPI()
-
-
-from importlib import import_module
-import os
-
-from dspygen.llm_pipe.dsl_pipeline_executor import router as pipeline_router
+_service_colony: ServiceColony | None = None
 
 
-@app.on_event("startup")
-async def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     await get_service_colony()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 app.include_router(pipeline_router)
 app.include_router(workflow_router)
 
 
-def load_module_routers(app: FastAPI):
+def load_module_routers(app: FastAPI) -> None:
     for filename in os.listdir(dspy_modules_dir()):
         if filename.endswith(".py"):
             module_name = filename[:-3]
@@ -39,19 +41,20 @@ def load_module_routers(app: FastAPI):
                 app.include_router(module.router)
 
 
-async def get_service_colony():
-    global service_colony
+async def get_service_colony() -> ServiceColony:
+    global _service_colony
 
-    try:
-        service_colony
-    except NameError:
-        service_colony = ServiceColony(mqtt_broker="9.tcp.ngrok.io", mqtt_port=24651)
+    if _service_colony is None:
+        mqtt_url = os.environ.get("MQTT_BROKER_URL", "localhost:1883")
+        mqtt_host, mqtt_port_str = mqtt_url.rsplit(":", 1)
+        mqtt_port = int(mqtt_port_str)
+        _service_colony = ServiceColony()
 
-    return service_colony  # Assume service_colony is globally available
+    return _service_colony
 
 
 @app.get("/")
-async def read_root(user_input: str, asys: ServiceColony = Depends(get_service_colony)):
+async def read_root(user_input: str, asys: ServiceColony = Depends(get_service_colony)) -> str:
     """Read root."""
     return "Hello, world!"
     # convo_agg: ConversationAggregate = await asys.inhabitant_of(ConversationAggregate)
@@ -61,14 +64,33 @@ async def read_root(user_input: str, asys: ServiceColony = Depends(get_service_c
 
 # Define endpoint
 @app.get("/pingpong")
-def ping_pong():
+def ping_pong() -> dict:
     return {"message": "pong"}
 
 
+@app.get("/health")
+async def health() -> dict:
+    """Run all registered health checks and return aggregated status."""
+    from dspygen.observability.health import check_all
+    results = check_all()
+    status = "ok" if all(r.status != "fail" for r in results) else "degraded"
+    return {"status": status, "checks": [r.__dict__ for r in results]}
+
+
+@app.get("/metrics")
+async def metrics() -> dict:
+    """Return all collected in-memory metrics."""
+    from dspygen.observability.metrics import get_all_metrics
+    return get_all_metrics()
+
+
 # Add CORS middleware
+cors_origins_env = os.environ.get("CORS_ORIGINS", "*")
+cors_origins = [origin.strip() for origin in cors_origins_env.split(",")] if cors_origins_env != "*" else ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust this to your specific origins if needed
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # Adjust as per your requirements
     allow_headers=["*"],  # Adjust this to your specific headers if needed

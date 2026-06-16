@@ -1,23 +1,26 @@
 import json
-from prefect import flow, task
 from datetime import datetime, timedelta
-from dspygen.pyautomator.reminders.reminder_app import RemindersApp
+
+from prefect import flow, task
+
 from dspygen.modules.reminder_motivation_module import reminder_motivation_call
+from dspygen.pyautomator.reminders.reminder_app import RemindersApp
 from dspygen.utils.dspy_tools import init_dspy
+
 
 @task
 def get_pending_reminders(app: RemindersApp):
     today = datetime.now().date()
     tomorrow = today + timedelta(days=1)
-    
+
     query = f"SELECT * FROM df WHERE DueDate >= '{today}' AND DueDate < '{tomorrow}' AND Completed = 0 ORDER BY DueDate"
     reminders = app.query(query)
-    
+
     task_list = [
         {"title": r.title, "due_time": r.due_date.strftime('%I:%M %p') if r.due_date else 'No due time'}
         for r in reminders
     ]
-    
+
     return len(reminders), json.dumps(task_list)
 
 @task
@@ -39,13 +42,13 @@ def create_reminder_with_motivation(app: RemindersApp, list_name: str, num_tasks
 def hourly_reminder_flow():
     app = RemindersApp()
     app.request_access()
-    
+
     list_name = app.get_all_lists()[0]  # Use the first available list
     print(f"Using reminder list: {list_name}")
-    
+
     num_tasks, task_list_json = get_pending_reminders(app)
     print(f"Number of pending tasks: {num_tasks}")
-    
+
     create_reminder_with_motivation(app, list_name, num_tasks, task_list_json)
 
 if __name__ == "__main__":

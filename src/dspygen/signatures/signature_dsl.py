@@ -1,9 +1,9 @@
+import os
 from pathlib import Path
 
 import yaml
-from dspy.signatures.field import InputField, OutputField
 from dspy import Signature
-import os
+from dspy.signatures.field import InputField, OutputField
 
 
 def create_signature_class_from_yaml(signature_yaml_filepath_or_str: Path | str) -> type:
@@ -13,7 +13,7 @@ def create_signature_class_from_yaml(signature_yaml_filepath_or_str: Path | str)
     if not os.path.exists(signature_yaml_filepath_or_str):
         yaml_content = yaml.safe_load(signature_yaml_filepath_or_str)
     else:
-        with open(signature_yaml_filepath_or_str, 'r') as file:
+        with open(signature_yaml_filepath_or_str) as file:
             yaml_content = yaml.safe_load(file)
 
     # Prepare class creation parameters

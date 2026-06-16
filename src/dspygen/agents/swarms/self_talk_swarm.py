@@ -1,10 +1,9 @@
 from enum import Enum, auto
 
+import dspy
 from pydantic import BaseModel, Field
 
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
-import dspy
-
 from dspygen.modules.json_module import json_call
 
 text_api = []
@@ -60,8 +59,7 @@ class SalesAgent(FSMMixin):
 
     def lower_price(self, amount):
         self.current_price -= amount
-        if self.current_price < self.minimum_price:
-            self.current_price = self.minimum_price
+        self.current_price = max(self.current_price, self.minimum_price)
 
     def respond(self, prompt):
         from dspygen.modules.challenger_sales_manager_module import challenger_sales_manager_call
@@ -116,8 +114,7 @@ class CustomerAgent(FSMMixin):
 
         if sales_agent.current_price > self.budget:
             return False  # Continue negotiation
-        else:
-            return True  # Accept the price
+        return True  # Accept the price
 
 
 def simulate_conversation():

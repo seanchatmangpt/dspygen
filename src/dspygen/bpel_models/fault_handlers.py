@@ -13,8 +13,9 @@ The models defined in this module include:
 
 """
 
+from typing import List, Optional
+
 from pydantic import BaseModel, Field
-from typing import Optional, List
 
 
 class Catch(BaseModel):
@@ -24,8 +25,8 @@ class Catch(BaseModel):
     """
     id: str = Field(..., description="Unique identifier for the catch block.")
     fault_name: str = Field(..., description="Name of the fault that this catch block is designed to handle.")
-    fault_variable: Optional[str] = Field(None, description="Variable to store fault data, if applicable.")
-    activities: List[str] = Field(...,
+    fault_variable: str | None = Field(None, description="Variable to store fault data, if applicable.")
+    activities: list[str] = Field(...,
                                   description="List of activity identifiers to be executed as part of fault handling.")
 
 
@@ -35,7 +36,7 @@ class CatchAll(BaseModel):
     Calculus notation: F ::= catchAll(Activities) where Activities is a list of activities to execute in response to any uncaught fault.
     """
     id: str = Field(..., description="Unique identifier for the catchAll block.")
-    activities: List[str] = Field(...,
+    activities: list[str] = Field(...,
                                   description="List of activity identifiers to be executed as part of generic fault handling.")
 
 
@@ -56,8 +57,8 @@ class CatchMessageType(BaseModel):
     """
     id: str = Field(..., description="Unique identifier for the catch message type.")
     fault_name: str = Field(..., description="Name of the fault that this catch block is designed to handle.")
-    message_type: Optional[str] = Field(None, description="Message type associated with the fault, if applicable.")
-    activities: List[str] = Field(...,
+    message_type: str | None = Field(None, description="Message type associated with the fault, if applicable.")
+    activities: list[str] = Field(...,
                                   description="List of activity identifiers to be executed as part of fault handling.")
 
 
@@ -68,8 +69,8 @@ class CatchCondition(BaseModel):
     """
     id: str = Field(..., description="Unique identifier for the catch condition.")
     fault_name: str = Field(..., description="Name of the fault that this catch block is designed to handle.")
-    condition: Optional[str] = Field(None, description="Condition to evaluate for catching the fault.")
-    activities: List[str] = Field(...,
+    condition: str | None = Field(None, description="Condition to evaluate for catching the fault.")
+    activities: list[str] = Field(...,
                                   description="List of activity identifiers to be executed as part of fault handling.")
 
 
@@ -79,4 +80,4 @@ class CompensationHandler(BaseModel):
     Calculus notation: F ::= compensateHandler(Activities)
     """
     id: str = Field(..., description="Unique identifier for the compensation handler.")
-    activities: List[str] = Field(..., description="List of activity identifiers to be executed as part of compensation.")
+    activities: list[str] = Field(..., description="List of activity identifiers to be executed as part of compensation.")

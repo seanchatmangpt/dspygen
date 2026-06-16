@@ -3,10 +3,10 @@ This is a simple documentation for the given source code. The code imports the n
 """
 import dspy
 from typer import Typer
+
 from dspygen.utils.dspy_tools import init_dspy
 
-
-app = Typer()        
+app = Typer()
 
 
 class HTMLModule(dspy.Module):
@@ -27,7 +27,7 @@ def html_call(user_input):
 def call(user_input):
     """HTMLModule"""
     init_dspy()
-    
+
     print(html_call(user_input=user_input))
 
 
@@ -35,13 +35,14 @@ def call(user_input):
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/html/")
 async def html_route(data: dict):
     # Your code generation logic here
     init_dspy(max_tokens=3000)
-    
+
     print(data)
     return html_call(**data)
 
@@ -50,7 +51,7 @@ def main():
     init_dspy()
     user_input = "Quickbooks style input fields with document upload"
     print(html_call(user_input=user_input))
-    
+
 
 if __name__ == "__main__":
     main()

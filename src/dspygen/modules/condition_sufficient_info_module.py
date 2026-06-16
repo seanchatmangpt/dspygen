@@ -2,7 +2,9 @@
 
 """
 import dspy
-from dspygen.utils.dspy_tools import init_dspy        
+
+from dspygen.utils.dspy_tools import init_dspy
+
 
 class EvaluateInformationSufficiency(dspy.Signature):
     """
@@ -17,12 +19,12 @@ class EvaluateInformationSufficiency(dspy.Signature):
 
 class ConditionSufficientInfoModule(dspy.Module):
     """ConditionSufficientInfoModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args
         self.output = None
-        
+
     def __or__(self, other):
         if other.output is None and self.output is None:
             self.forward(**self.forward_args)
@@ -35,7 +37,7 @@ class ConditionSufficientInfoModule(dspy.Module):
         pred = dspy.Predict(EvaluateInformationSufficiency)
         self.output = pred(refined_information=refined_information).decision
         return self.output
-        
+
     def pipe(self, input_str):
         raise NotImplementedError("Please implement the pipe method for DSL support.")
         # Replace TODO with a keyword from you forward method
@@ -43,6 +45,7 @@ class ConditionSufficientInfoModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -70,6 +73,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/condition_sufficient_info/")

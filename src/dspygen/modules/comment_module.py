@@ -2,10 +2,9 @@
 
 """
 import dspy
-from dspygen.utils.dspy_tools import init_dspy        
 
+from dspygen.utils.dspy_tools import init_dspy
 
-import dspy
 
 class GenerateViralComment(dspy.Signature):
     """
@@ -22,7 +21,7 @@ class GenerateViralComment(dspy.Signature):
 
 class CommentModule(dspy.Module):
     """CommentModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args
@@ -36,6 +35,7 @@ class CommentModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -64,6 +64,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/comment/")

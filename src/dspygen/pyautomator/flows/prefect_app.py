@@ -1,23 +1,26 @@
-from typing import List, Dict, Optional
+from datetime import timedelta
+from typing import Dict, List, Optional
+
 from prefect import flow, task
-from dspygen.pyautomator.flows.flow_manager import FlowManager
 from prefect.deployments import Deployment
 from prefect.server.schemas.schedules import IntervalSchedule
-from datetime import timedelta
+
+from dspygen.pyautomator.flows.flow_manager import FlowManager
+
 
 class PrefectApp:
     def __init__(self):
         self.flow_manager = FlowManager()
 
     @task
-    def create_flow(self, name: str, description: str, tasks: List[Dict]) -> str:
+    def create_flow(self, name: str, description: str, tasks: list[dict]) -> str:
         return self.flow_manager.create_flow(name, description, tasks)
 
     @task
-    def read_flow(self, name: str) -> Optional[Dict]:
+    def read_flow(self, name: str) -> dict | None:
         return self.flow_manager.read_flow(name)
     @task
-    def update_flow(self, name: str, description: str = None, tasks: List[Dict] = None) -> str:
+    def update_flow(self, name: str, description: str = None, tasks: list[dict] = None) -> str:
         return self.flow_manager.update_flow(name, description, tasks)
 
     @task
@@ -25,11 +28,11 @@ class PrefectApp:
         return self.flow_manager.delete_flow(name)
 
     @task
-    def list_flows(self) -> List[str]:
+    def list_flows(self) -> list[str]:
         return self.flow_manager.list_flows()
 
     @task
-    def create_deployment(self, flow_name: str, deployment_name: str, schedule: Optional[IntervalSchedule] = None) -> str:
+    def create_deployment(self, flow_name: str, deployment_name: str, schedule: IntervalSchedule | None = None) -> str:
         flow_def = self.read_flow(flow_name)
         if not flow_def:
             return f"Flow '{flow_name}' not found."

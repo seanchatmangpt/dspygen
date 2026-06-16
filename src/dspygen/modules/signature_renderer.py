@@ -1,8 +1,7 @@
-from pydantic import BaseModel, Field
-
 import dspy
 from dspy import Signature
 from dspy.signatures.field import InputField, OutputField
+from pydantic import BaseModel, Field
 
 # from dspygen.dspy_modules.gen_pydantic_instance_module import gen_pydantic_instance_call
 from sungen.typetemp.template.typed_template import TypedTemplate

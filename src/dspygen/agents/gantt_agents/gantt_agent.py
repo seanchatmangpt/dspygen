@@ -3,7 +3,9 @@ from typing import List, Optional
 
 import dspy
 from pydantic import BaseModel, Field
+
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
+
 
 # Define the states for the Gantt agent
 class GanttState(Enum):
@@ -16,27 +18,27 @@ class GanttState(Enum):
 # Define the Task model
 class Task(BaseModel):
     name: str
-    status: Optional[str] = Field(None, description="Status of the task, e.g., 'done', 'active', 'crit', 'milestone'")
-    id: Optional[str] = Field(None, description="ID of the task")
-    start_date: Optional[str] = Field(None, description="Start date of the task in the format specified by dateFormat")
-    end_date: Optional[str] = Field(None, description="End date of the task in the format specified by dateFormat")
-    duration: Optional[str] = Field(None, description="Duration of the task")
-    dependencies: Optional[str] = Field(None, description="Dependencies on other tasks using 'after' keyword")
+    status: str | None = Field(None, description="Status of the task, e.g., 'done', 'active', 'crit', 'milestone'")
+    id: str | None = Field(None, description="ID of the task")
+    start_date: str | None = Field(None, description="Start date of the task in the format specified by dateFormat")
+    end_date: str | None = Field(None, description="End date of the task in the format specified by dateFormat")
+    duration: str | None = Field(None, description="Duration of the task")
+    dependencies: str | None = Field(None, description="Dependencies on other tasks using 'after' keyword")
 
 # Define the Section model
 class Section(BaseModel):
     name: str
-    tasks: List[Task]
+    tasks: list[Task]
 
 # Define the GanttChart model
 class GanttChart(BaseModel):
     date_format: str = Field(..., alias='dateFormat', description="Format of the dates used in the Gantt chart")
-    title: Optional[str] = Field(None, description="Title of the Gantt chart")
-    excludes: Optional[str] = Field(None, description="Dates or days to be excluded, e.g., 'weekends', specific dates")
-    sections: List[Section]
-    tick_interval: Optional[str] = Field(None, alias='tickInterval', description="Interval for axis ticks")
-    weekday: Optional[str] = Field(None, description="Start day of the week for tickInterval")
-    axis_format: Optional[str] = Field(None, alias='axisFormat', description="Format of the dates on the axis")
+    title: str | None = Field(None, description="Title of the Gantt chart")
+    excludes: str | None = Field(None, description="Dates or days to be excluded, e.g., 'weekends', specific dates")
+    sections: list[Section]
+    tick_interval: str | None = Field(None, alias='tickInterval', description="Interval for axis ticks")
+    weekday: str | None = Field(None, description="Start day of the week for tickInterval")
+    axis_format: str | None = Field(None, alias='axisFormat', description="Format of the dates on the axis")
 
 # Define the GanttAgent class with FSM
 class GanttAgent(FSMMixin):
@@ -69,12 +71,57 @@ class GanttAgent(FSMMixin):
     @trigger(source=GanttState.EXECUTING, dest=GanttState.MONITORING)
     def start_monitoring(self):
         print("Starting monitoring phase.")
-        raise NotImplementedError("Monitoring phase not yet implemented.")
+        if self.task is None:
+            print("No task assigned; skipping monitoring.")
+            return
+
+        task_name = self.task.name
+        task_status = self.task.status or "pending"
+        print(f"Monitoring task '{task_name}' — current status: {task_status}")
+
+        # Evaluate task readiness based on status flags
+        done_statuses = {"done", "crit, done"}
+        active_statuses = {"active", "crit, active"}
+        milestone_statuses = {"milestone"}
+
+        if task_status in done_statuses:
+            print(f"Task '{task_name}' is already completed.")
+        elif task_status in active_statuses:
+            print(f"Task '{task_name}' is in progress; tracking execution output.")
+            if self.execution:
+                print(f"Execution output snippet: {str(self.execution)[:200]}")
+        elif task_status in milestone_statuses:
+            print(f"Task '{task_name}' is a milestone; verifying date alignment.")
+            if self.task.start_date:
+                print(f"Milestone date: {self.task.start_date}")
+        else:
+            print(f"Task '{task_name}' is scheduled; awaiting activation.")
+
+        # Proceed to completion phase
+        self.complete_tasks()
 
     @trigger(source=GanttState.MONITORING, dest=GanttState.COMPLETING)
     def complete_tasks(self):
         print("Completing all tasks.")
-        raise NotImplementedError("Task completion not yet implemented.")
+        if self.task is None:
+            print("No task to complete.")
+            return
+
+        task_name = self.task.name
+        original_status = self.task.status or "pending"
+
+        # Mark the task as done if it is not already in a terminal state
+        if original_status not in {"done", "crit, done", "milestone"}:
+            self.task.status = "done"
+            print(f"Task '{task_name}' marked as done (was: {original_status}).")
+        else:
+            print(f"Task '{task_name}' was already in a terminal state: {original_status}.")
+
+        print(
+            f"Task summary — name: {task_name}, id: {self.task.id}, "
+            f"start: {self.task.start_date}, end: {self.task.end_date}, "
+            f"duration: {self.task.duration}, dependencies: {self.task.dependencies}"
+        )
 
     @trigger(source=GanttState.COMPLETING, dest=GanttState.INITIALIZING)
     def reset(self):

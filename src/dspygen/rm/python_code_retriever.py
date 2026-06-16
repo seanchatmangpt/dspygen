@@ -2,7 +2,7 @@ import ast
 import textwrap
 from pathlib import Path
 
-from dspygen.utils.file_tools import find_gitignore, parse_gitignore, is_ignored, is_binary
+from dspygen.utils.file_tools import find_gitignore, is_binary, is_ignored, parse_gitignore
 
 
 class PythonCodeRetriever:

@@ -8,9 +8,9 @@ route for generating the CLI. The gen_cli_route function uses the gen_cli_call f
 the data provided in the post request."""
 import dspy
 from pydantic import BaseModel, Field
+from sungen.typetemp.functional import render
 from typer import Typer
 
-from sungen.typetemp.functional import render
 from dspygen.utils.dspy_tools import init_dspy
 from dspygen.utils.yaml_tools import YAMLMixin
 
@@ -36,7 +36,7 @@ def gen_cli_call(cli_concept):
 def call(cli_concept):
     """GenCLIModule"""
     init_dspy()
-    
+
     print(gen_cli_call(cli_concept=cli_concept))
 
 
@@ -118,13 +118,14 @@ def main():
     print("CLI application and tests generated.")
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/gen_cli/")
 async def gen_cli_route(data: dict):
     # Your code generation logic here
     init_dspy()
-    
+
     print(data)
     return gen_cli_call(**data)
 

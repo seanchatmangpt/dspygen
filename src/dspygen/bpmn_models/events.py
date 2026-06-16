@@ -11,8 +11,9 @@ The event models defined in this module include:
 - SignalEvent: Represents an event triggered by the sending or receiving of a signal in a BPMN process.
 """
 
-from pydantic import BaseModel, Field
 from typing import Optional
+
+from pydantic import BaseModel, Field
 
 
 class Event(BaseModel):
@@ -20,7 +21,7 @@ class Event(BaseModel):
     Represents a generic event in BPMN.
     """
     id: str = Field(..., description="Unique identifier for the event.")
-    name: Optional[str] = Field(None, description="Name of the event, if any.")
+    name: str | None = Field(None, description="Name of the event, if any.")
 
 
 class BoundaryEvent(Event):

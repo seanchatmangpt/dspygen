@@ -1,10 +1,10 @@
-from datetime import datetime, timedelta
-import inject
-import EventKit
-
+import os
 import subprocess
 import tempfile
-import os
+from datetime import datetime, timedelta
+
+import EventKit
+import inject
 
 from dspygen.pyautomator.event_kit.alarm import Alarm
 from dspygen.pyautomator.event_kit.calendar_event import CalendarEvent
@@ -27,8 +27,7 @@ def read_event(event_store: EventKit.EKEventStore, event_id: str):
         event = CalendarEvent(event_store)
         event.ek_item = ek_event
         return event
-    else:
-        raise ValueError(f"Event with id '{event_id}' not found.")
+    raise ValueError(f"Event with id '{event_id}' not found.")
 
 
 def update_event(event: CalendarEvent, title: str = None, start_date: datetime = None,
@@ -38,7 +37,7 @@ def update_event(event: CalendarEvent, title: str = None, start_date: datetime =
     if start_date and end_date:
         event.set_span(start_date, end_date)
     event.save()
-    print(f"Event updated successfully.")
+    print("Event updated successfully.")
 
 
 def delete_event(event: CalendarEvent):
@@ -108,7 +107,7 @@ def eval_rfc5545(event: CalendarEvent):
     rfc5545_string = event.to_rfc5545()
     print("RFC 5545 representation of the event:")
     print(rfc5545_string)
-    
+
     # Optionally, you can add more detailed checks here
     # For example, checking if specific components are present in the string
     assert "BEGIN:VCALENDAR" in rfc5545_string

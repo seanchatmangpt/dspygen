@@ -2,7 +2,9 @@
 
 """
 import dspy
-from dspygen.utils.dspy_tools import init_dspy        
+
+from dspygen.utils.dspy_tools import init_dspy
+
 
 class FAANGSysArchNuxt(dspy.Signature):
     """
@@ -18,12 +20,12 @@ class FAANGSysArchNuxt(dspy.Signature):
 
 class FAANGSysArchNuxtModule(dspy.Module):
     """FAANGSysArchNuxtModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args
         self.output = None
-        
+
     def __or__(self, other):
         if other.output is None and self.output is None:
             self.forward(**self.forward_args)
@@ -36,7 +38,7 @@ class FAANGSysArchNuxtModule(dspy.Module):
         pred = dspy.ChainOfThought(FAANGSysArchNuxt)
         self.output = pred(faang_system_architect_requirements=requirements).page_vue_matching_requirements
         return self.output
-        
+
     def pipe(self, input_str):
         raise NotImplementedError("Please implement the pipe method for DSL support.")
         # Replace TODO with a keyword from you forward method
@@ -44,6 +46,7 @@ class FAANGSysArchNuxtModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 

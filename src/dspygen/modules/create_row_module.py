@@ -1,9 +1,11 @@
-import dspy
-from dspygen.utils.dspy_tools import init_dspy
-import logging
 import json
-import pandas as pd
+import logging
+
+import dspy
 import numpy as np
+import pandas as pd
+
+from dspygen.utils.dspy_tools import init_dspy
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -12,11 +14,11 @@ def convert_to_serializable(obj):
     if isinstance(obj, (np.int_, np.intc, np.intp, np.int8, np.int16, np.int32, np.int64,
                         np.uint8, np.uint16, np.uint32, np.uint64)):
         return int(obj)
-    elif isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):
+    if isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):
         return float(obj)
-    elif isinstance(obj, np.bool_):
+    if isinstance(obj, np.bool_):
         return bool(obj)
-    elif isinstance(obj, np.ndarray):
+    if isinstance(obj, np.ndarray):
         return obj.tolist()
     return obj
 
@@ -45,7 +47,7 @@ class CreateRowModule(dspy.Module):
 
         # Use the entire dataset as a sample
         data_sample = df.to_json(orient='records')
-        
+
         # Create schema information
         schema = {col: str(dtype) for col, dtype in df.dtypes.items()}
 
@@ -89,7 +91,7 @@ def main():
         {'name': 'Bob', 'age': 30, 'city': 'San Francisco', 'joined_date': '2023-02-01'}
     ]
     request = "Add a new person named Charlie, who is 35 years old, lives in London, and joined on March 1, 2023"
-    
+
     try:
         result_data = create_row_call(data=data, request=request)
         print(json.dumps(result_data, indent=2))

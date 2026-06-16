@@ -1,0 +1,34 @@
+name: LSP Server Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lsp-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install minimal test dependencies
+        run: |
+          pip install \
+            pytest pytest-asyncio \
+            "pygls>=2.0.0" "lsprotocol>=2024.0" \
+            pydantic hypothesis loguru
+
+      - name: Install dspygen (no deps)
+        run: pip install -e . --no-deps
+
+      - name: Run LSP tests
+        run: pytest tests/test_lsp.py -v --tb=short
+        env:
+          PYTHONPATH: src

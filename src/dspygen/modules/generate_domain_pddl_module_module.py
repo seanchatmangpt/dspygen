@@ -2,6 +2,7 @@
 
 """
 import dspy
+
 from dspygen.utils.dspy_tools import init_dspy
 
 
@@ -15,12 +16,12 @@ class GenerateDomainPDDL(dspy.Signature):
 
 class GenerateDomainPDDLModuleModule(dspy.Module):
     """GenerateDomainPDDLModuleModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args
         self.output = None
-        
+
     def __or__(self, other):
         if other.output is None and self.output is None:
             self.forward(**self.forward_args)
@@ -33,7 +34,7 @@ class GenerateDomainPDDLModuleModule(dspy.Module):
         pred = dspy.Predict(GenerateDomainPDDL)
         self.output = pred(domain_content=domain_content).domain_file
         return self.output
-        
+
     def pipe(self, input_str):
         raise NotImplementedError("Please implement the pipe method for DSL support.")
         # Replace TODO with a keyword from you forward method
@@ -41,6 +42,7 @@ class GenerateDomainPDDLModuleModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -68,6 +70,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/generate_domain_pddl_module/")

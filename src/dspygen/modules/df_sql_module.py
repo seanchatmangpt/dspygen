@@ -1,5 +1,7 @@
 import dspy
+
 from dspygen.utils.dspy_tools import init_dspy
+
 
 class TextToDFSQLSignature(dspy.Signature):
     """

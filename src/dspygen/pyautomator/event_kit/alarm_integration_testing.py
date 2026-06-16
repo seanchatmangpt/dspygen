@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
-import inject
+
 import EventKit
+import inject
 
 from dspygen.pyautomator.event_kit.alarm import Alarm
 from dspygen.pyautomator.event_kit.reminder import Reminder

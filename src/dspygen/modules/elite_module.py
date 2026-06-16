@@ -2,6 +2,7 @@
 
 """
 import dspy
+
 from dspygen.utils.dspy_tools import init_dspy
 
 
@@ -55,12 +56,12 @@ class GenerateEliteFAANGChallengeCode(dspy.Signature):
 
 class EliteModule(dspy.Module):
     """EliteModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args
         self.output = None
-        
+
     def __or__(self, other):
         if other.output is None and self.output is None:
             self.forward(**self.forward_args)
@@ -81,6 +82,7 @@ class EliteModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -108,6 +110,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/elite/")

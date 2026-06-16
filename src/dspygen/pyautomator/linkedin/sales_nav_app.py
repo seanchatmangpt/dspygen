@@ -1,8 +1,9 @@
 import json
-import pyperclip
-import time
 import logging
+import time
+
 import pandas as pd
+import pyperclip
 
 from dspygen.pyautomator.safari.safari_app import SafariApp
 

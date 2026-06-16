@@ -1,0 +1,74 @@
+version: "3.9"
+
+# Test composition — runs the test suite in an isolated container.
+# Usage:
+#   docker-compose -f docker-compose.test.yml run --rm test
+#   docker-compose -f docker-compose.test.yml run --rm test-mcp
+#   docker-compose -f docker-compose.test.yml run --rm test-lsp
+
+x-test-base: &test-base
+  build:
+    context: .
+    target: deps
+    args:
+      PYTHON_VERSION: ${PYTHON_VERSION:-3.11}
+  environment:
+    PYTHONPATH: /app/src
+    DSPYGEN_ENV: test
+  volumes:
+    - ./src:/app/src:ro
+    - ./tests:/app/tests:ro
+    - test-reports:/app/reports
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # test — run the full offline test suite (no OpenAI / Ollama required)
+  # ---------------------------------------------------------------------------
+  test:
+    <<: *test-base
+    command: >
+      python -m pytest tests/
+      -m "not requires_openai and not requires_ollama and not slow"
+      --tb=short
+      -v
+      --junitxml=reports/pytest.xml
+
+  # ---------------------------------------------------------------------------
+  # test-coverage — run tests with coverage reporting
+  # ---------------------------------------------------------------------------
+  test-coverage:
+    <<: *test-base
+    command: >
+      python -m pytest tests/
+      -m "not requires_openai and not requires_ollama and not slow"
+      --cov=src/dspygen
+      --cov-report=xml:reports/coverage.xml
+      --cov-report=term
+      --tb=short
+      -v
+
+  # ---------------------------------------------------------------------------
+  # test-mcp — run only MCP server tests
+  # ---------------------------------------------------------------------------
+  test-mcp:
+    <<: *test-base
+    command: >
+      python -m pytest tests/
+      -v -m mcp
+      --tb=short
+      --junitxml=reports/pytest-mcp.xml
+
+  # ---------------------------------------------------------------------------
+  # test-lsp — run only LSP server tests
+  # ---------------------------------------------------------------------------
+  test-lsp:
+    <<: *test-base
+    command: >
+      python -m pytest tests/
+      -v -m lsp
+      --tb=short
+      --junitxml=reports/pytest-lsp.xml
+
+volumes:
+  test-reports:

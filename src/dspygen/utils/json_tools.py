@@ -50,9 +50,9 @@ def extract(string) -> dict or None:
         return None
 
 
-from faker import Faker
-import json
 import random
+
+from faker import Faker
 
 fake = Faker()
 
@@ -73,21 +73,20 @@ def generate_instance(schema):
     schema_type = schema.get('type', 'string')
     if schema_type == 'object':
         return {k: generate_instance(v) for k, v in schema.get('properties', {}).items()}
-    elif schema_type == 'array':
+    if schema_type == 'array':
         item_schema = schema.get('items', {})
         # Assume a default size of the array if not specified
         length = schema.get('minItems', 1)
         return [generate_instance(item_schema) for _ in range(length)]
-    elif schema_type == 'string':
+    if schema_type == 'string':
         return generate_string(schema)
-    elif schema_type == 'number':
+    if schema_type == 'number':
         return fake.pyfloat(left_digits=None, right_digits=None, positive=True)
-    elif schema_type == 'integer':
+    if schema_type == 'integer':
         return fake.pyint()
-    elif schema_type == 'boolean':
+    if schema_type == 'boolean':
         return fake.pybool()
-    else:
-        return generate_default(schema)
+    return generate_default(schema)
 
 
 def generate_string(schema):
@@ -96,23 +95,21 @@ def generate_string(schema):
 
     if format_type == 'email':
         return fake.email()
-    elif format_type == 'date':
+    if format_type == 'date':
         return fake.date()
-    elif format_type == 'date-time':
+    if format_type == 'date-time':
         return fake.date_time().isoformat()
-    elif format_type == 'uri':
+    if format_type == 'uri':
         return fake.uri()
-    elif pattern:
+    if pattern:
         # Simplistic pattern handling for specific cases (demonstration purposes)
         if pattern == '^[0-1]$':
             return str(random.choice(['0', '1']))
-        elif pattern == '^[0-2]$':
+        if pattern == '^[0-2]$':
             return str(random.choice(['0', '1', '2']))
-        else:
-            # Generic handler for simple patterns
-            return generate_matching_string(pattern)
-    else:
-        return fake.word()
+        # Generic handler for simple patterns
+        return generate_matching_string(pattern)
+    return fake.word()
 
 
 def generate_matching_string(pattern):
@@ -120,7 +117,7 @@ def generate_matching_string(pattern):
     # For now, it will just return a fixed correct example for known patterns:
     if pattern == '^[0-1]$':
         return random.choice(['0', '1'])
-    elif pattern == '^[0-2]$':
+    if pattern == '^[0-2]$':
         return random.choice(['0', '1', '2'])
     # You would need to extend this to handle other patterns or write a general regex string generator
     return "0"
@@ -227,7 +224,8 @@ def main():
 
 def main3():
     import json
-    from jsonschema import validate, Draft202012Validator, exceptions
+
+    from jsonschema import Draft202012Validator, exceptions, validate
 
     schema = {"$id": "https://example.com/fstab", "$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object", "required": ["/"], "properties": {"/": {"type": "object", "properties": {"device": {"type": "string"}, "mount_point": {"type": "string"}, "file_system_type": {"type": "string"}, "options": {"type": "string"}, "dump": {"type": "string", "pattern": "^[0-1]$"}, "pass": {"type": "string", "pattern": "^[0-2]$"}}, "required": ["device", "mount_point", "file_system_type", "options", "dump", "pass"]}}, "patternProperties": {"^(/[^/]+)+$": {"type": "object", "properties": {"device": {"type": "string"}, "mount_point": {"type": "string"}, "file_system_type": {"type": "string"}, "options": {"type": "string"}, "dump": {"type": "string", "pattern": "^[0-1]$"}, "pass": {"type": "string", "pattern": "^[0-2]$"}}, "required": ["device", "mount_point", "file_system_type", "options", "dump", "pass"]}}, "additionalProperties": False}
     # Test instance

@@ -1,19 +1,16 @@
 import os
-from fastapi import APIRouter, HTTPException
-
 import tempfile
 from typing import Optional
 
 import dspy
+from fastapi import APIRouter, HTTPException
+from loguru import logger
+from munch import Munch
 from pydantic import BaseModel
 
+from dspygen.llm_pipe.dsl_pydantic_models import LanguageModelConfig, PipelineDSLModel
 from dspygen.llm_pipe.dsl_step_module import execute_step
-from dspygen.llm_pipe.dsl_pydantic_models import PipelineDSLModel, LanguageModelConfig
 from dspygen.llm_pipe.utils.dsl_signature_utils import _create_signature_from_model
-from munch import Munch
-
-
-from loguru import logger
 
 
 def execute_pipeline(file_path, init_ctx=None, **kwargs):
@@ -53,7 +50,7 @@ router = APIRouter()
 
 class PipelineRequest(BaseModel):
     yaml_content: str
-    init_ctx: Optional[dict] = None
+    init_ctx: dict | None = None
 
 
 @router.post("/execute_pipeline/")

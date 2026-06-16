@@ -1,9 +1,11 @@
-import py_trees
 import time
+
+import py_trees
+
 
 class TrafficLightSequence(py_trees.behaviour.Behaviour):
     def __init__(self, name):
-        super(TrafficLightSequence, self).__init__(name)
+        super().__init__(name)
         self.red_duration = 5
         self.yellow_duration = 2
         self.green_duration = 5

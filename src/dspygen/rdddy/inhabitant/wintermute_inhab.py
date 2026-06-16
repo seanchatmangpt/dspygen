@@ -1,7 +1,9 @@
 import logging
 from enum import Enum, auto
+
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
 from dspygen.rdddy.base_inhabitant import BaseInhabitant
+
 
 # Define the states relevant to Wintermute's operations
 class WintermuteState(Enum):
@@ -80,7 +82,7 @@ class Wintermute(FSMMixin, BaseInhabitant):
         from dspygen.modules.wintermute_manager_module import wintermute_manager_call
         print(wintermute_manager_call(prompt=prompt).split("---")[0])
 
-    
+
 
 
 def main():

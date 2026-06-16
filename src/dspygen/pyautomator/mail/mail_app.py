@@ -1,25 +1,27 @@
-import subprocess
-import os
-from typing import Dict, Any, List, Optional
-from pydantic import BaseModel, Field
-from datetime import datetime
 import json
+import os
+import subprocess
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+
+from pydantic import BaseModel, Field
 
 from dspygen.pyautomator.base_app import BaseApp
 
+
 class MailSearchParams(BaseModel):
-    for_: Optional[str] = Field(None, alias="for")
-    in_: Optional[List[str]] = Field(None, alias="in")
-    from_: Optional[str] = Field(None, alias="from")
-    to: Optional[str] = None
-    subject: Optional[str] = None
-    content: Optional[str] = None
-    date_received: Optional[datetime] = None
-    date_sent: Optional[datetime] = None
-    flagged: Optional[bool] = None
-    read: Optional[bool] = None
-    replied_to: Optional[bool] = None
-    attachment_type: Optional[str] = None
+    for_: str | None = Field(None, alias="for")
+    in_: list[str] | None = Field(None, alias="in")
+    from_: str | None = Field(None, alias="from")
+    to: str | None = None
+    subject: str | None = None
+    content: str | None = None
+    date_received: datetime | None = None
+    date_sent: datetime | None = None
+    flagged: bool | None = None
+    read: bool | None = None
+    replied_to: bool | None = None
+    attachment_type: str | None = None
 
     class Config:
         populate_by_name = True
@@ -40,7 +42,7 @@ class MailApp(BaseApp):
     def __init__(self):
         super().__init__("Mail")
 
-    def get_most_recent_email(self) -> Dict[str, Any]:
+    def get_most_recent_email(self) -> dict[str, Any]:
         """
         Retrieve the most recent email using JXA.
         
@@ -79,10 +81,10 @@ class MailApp(BaseApp):
 
         run();
         '''
-        
+
         return self._run_jxa_script(jxa_script)
 
-    def send_email(self, sender: str, recipient: str, subject: str, content: str) -> Dict[str, Any]:
+    def send_email(self, sender: str, recipient: str, subject: str, content: str) -> dict[str, Any]:
         """
         Send an email using JXA.
         
@@ -122,10 +124,10 @@ class MailApp(BaseApp):
 
         run();
         '''
-        
+
         return self._run_jxa_script(jxa_script)
 
-    def save_attachments(self, target_folder: str, mime_types: List[str]) -> Dict[str, Any]:
+    def save_attachments(self, target_folder: str, mime_types: list[str]) -> dict[str, Any]:
         """
         Save attachments from selected emails that match the specified MIME types.
         
@@ -192,10 +194,10 @@ class MailApp(BaseApp):
 
         run();
         '''
-        
+
         return self._run_jxa_script(jxa_script)
 
-    def _run_jxa_script(self, script: str) -> Dict[str, Any]:
+    def _run_jxa_script(self, script: str) -> dict[str, Any]:
         """
         Run a JXA script and return the result.
         
@@ -208,7 +210,7 @@ class MailApp(BaseApp):
         print("Executing JXA script:")
         print(script)
         try:
-            result = subprocess.run(['osascript', '-l', 'JavaScript', '-e', script], 
+            result = subprocess.run(['osascript', '-l', 'JavaScript', '-e', script],
                                     capture_output=True, text=True, check=True)
             print("JXA Script Output:", result.stdout)
             print("JXA Script Error Output:", result.stderr)
@@ -222,7 +224,7 @@ class MailApp(BaseApp):
             print("Raw output:", result.stdout)
             return {"error": f"JSON decode error: {str(e)}"}
 
-    def search_emails(self, search_params: MailSearchParams, max_results: int = 10) -> List[Dict[str, Any]]:
+    def search_emails(self, search_params: MailSearchParams, max_results: int = 10) -> list[dict[str, Any]]:
         """
         Search emails using JXA and return a specified number of results.
         
@@ -282,22 +284,21 @@ class MailApp(BaseApp):
 
         run();
         '''
-        
+
         try:
             result = self._run_jxa_script(jxa_script)
             if isinstance(result, list):
                 return result
-            elif isinstance(result, dict) and 'error' in result:
+            if isinstance(result, dict) and 'error' in result:
                 print(f"Error in JXA script: {result['error']}")
                 return []
-            else:
-                print(f"Unexpected result type: {type(result)}")
-                return []
+            print(f"Unexpected result type: {type(result)}")
+            return []
         except Exception as e:
             print(f"Error in search_emails: {e}")
             return []
 
-    def check_mail_accessibility(self) -> Dict[str, bool]:
+    def check_mail_accessibility(self) -> dict[str, bool]:
         jxa_script = '''
         function run() {
             try {
@@ -321,12 +322,12 @@ class MailApp(BaseApp):
 
         run();
         '''
-        
+
         return self._run_jxa_script(jxa_script)
 
 def main():
     app = MailApp()
-    
+
     # Check Mail accessibility
     accessibility_check = app.check_mail_accessibility()
     print("Mail Accessibility Check:")
@@ -336,7 +337,7 @@ def main():
 
     print(f"Mail Accessible: {accessibility_check.get('mailAccessible', False)}")
     print(f"Search Method Exists: {accessibility_check.get('searchMethodExists', False)}")
-    
+
     if not accessibility_check.get('mailAccessible', False) or not accessibility_check.get('searchMethodExists', False):
         print("Cannot proceed with email search due to Mail accessibility issues.")
         return
@@ -347,7 +348,7 @@ def main():
     max_results = 5
     print(f"\nSearching for emails from: {search_params.from_}")
     search_results = app.search_emails(search_params, max_results)
-    
+
     print(f"\nSearch Results (max {max_results} results):")
     if not search_results:
         print("No results found or an error occurred.")

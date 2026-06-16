@@ -1,6 +1,8 @@
 from datetime import datetime
-from typing import Optional, List
+from typing import List, Optional
+
 import EventKit
+
 
 class RecurrenceRule:
     def __init__(self, ek_recurrence_rule: EventKit.EKRecurrenceRule):
@@ -8,14 +10,14 @@ class RecurrenceRule:
 
     @classmethod
     def create(cls, frequency: EventKit.EKRecurrenceFrequency, interval: int = 1,
-               end_date: Optional[datetime] = None, occurrences: Optional[int] = None,
-               days_of_week: Optional[List[int]] = None, 
-               days_of_month: Optional[List[int]] = None,
-               months_of_year: Optional[List[int]] = None,
-               weeks_of_year: Optional[List[int]] = None,
-               days_of_year: Optional[List[int]] = None,
-               set_positions: Optional[List[int]] = None):
-        
+               end_date: datetime | None = None, occurrences: int | None = None,
+               days_of_week: list[int] | None = None,
+               days_of_month: list[int] | None = None,
+               months_of_year: list[int] | None = None,
+               weeks_of_year: list[int] | None = None,
+               days_of_year: list[int] | None = None,
+               set_positions: list[int] | None = None):
+
         recurrence_end = None
         if end_date:
             recurrence_end = EventKit.EKRecurrenceEnd.recurrenceEndWithEndDate_(end_date)
@@ -47,7 +49,7 @@ class RecurrenceRule:
 
     def to_string(self) -> str:
         components = []
-        
+
         # Frequency
         freq_map = {
             EventKit.EKRecurrenceFrequencyDaily: "DAILY",
@@ -56,11 +58,11 @@ class RecurrenceRule:
             EventKit.EKRecurrenceFrequencyYearly: "YEARLY"
         }
         components.append(f"FREQ={freq_map.get(self.ek_recurrence_rule.frequency(), 'DAILY')}")
-        
+
         # Interval
         if self.ek_recurrence_rule.interval() != 1:
             components.append(f"INTERVAL={self.ek_recurrence_rule.interval()}")
-        
+
         # End
         if self.ek_recurrence_rule.recurrenceEnd():
             end = self.ek_recurrence_rule.recurrenceEnd()
@@ -69,13 +71,13 @@ class RecurrenceRule:
                 components.append(f"UNTIL={end_date.strftime('%Y%m%dT%H%M%SZ')}")
             elif end.occurrenceCount():
                 components.append(f"COUNT={end.occurrenceCount()}")
-        
+
         # Days of the week
         if self.ek_recurrence_rule.daysOfTheWeek():
             days = [day.dayOfTheWeek() for day in self.ek_recurrence_rule.daysOfTheWeek()]
             day_map = {1: "MO", 2: "TU", 3: "WE", 4: "TH", 5: "FR", 6: "SA", 7: "SU"}
             components.append(f"BYDAY={','.join(day_map[day] for day in days)}")
-        
+
         # Other components
         if self.ek_recurrence_rule.daysOfTheMonth():
             components.append(f"BYMONTHDAY={','.join(map(str, self.ek_recurrence_rule.daysOfTheMonth()))}")
@@ -87,7 +89,7 @@ class RecurrenceRule:
             components.append(f"BYYEARDAY={','.join(map(str, self.ek_recurrence_rule.daysOfTheYear()))}")
         if self.ek_recurrence_rule.setPositions():
             components.append(f"BYSETPOS={','.join(map(str, self.ek_recurrence_rule.setPositions()))}")
-        
+
         return ";".join(components)
 
     def __str__(self):

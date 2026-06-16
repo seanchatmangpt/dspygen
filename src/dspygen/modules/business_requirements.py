@@ -2,6 +2,7 @@
 
 """
 import dspy
+
 from dspygen.utils.dspy_tools import init_dspy
 
 
@@ -25,6 +26,7 @@ class BusinessRequirementsModule(dspy.Module):
 
 
 from typer import Typer
+
 app = Typer()
 
 
@@ -58,6 +60,7 @@ def main():
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/business_requirements/")

@@ -1,7 +1,5 @@
 import dspy
 
-import dspy
-
 
 class ExtractCSSSelectorsForPlaywright(dspy.Signature):
     """
@@ -17,7 +15,7 @@ class ExtractCSSSelectorsForPlaywright(dspy.Signature):
 
 class ExtractCSSSelectorsForPlaywrightModule(dspy.Module):
     """ExtractCSSSelectorsForPlaywrightModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args

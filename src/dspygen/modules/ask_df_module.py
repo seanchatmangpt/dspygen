@@ -1,7 +1,10 @@
-import dspy
-from dspygen.utils.dspy_tools import init_dspy
-import pandas as pd
 import io
+
+import dspy
+import pandas as pd
+
+from dspygen.utils.dspy_tools import init_dspy
+
 
 class AskDFSignature(dspy.Signature):
     """
@@ -40,7 +43,7 @@ def main():
         'city': ['New York', 'San Francisco', 'London']
     })
     question = "Who is older than 30?"
-    
+
     result = ask_df_call(question=question, df=df)
     print(result)
 

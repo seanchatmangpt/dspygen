@@ -1,7 +1,28 @@
+import os
 from dataclasses import dataclass, field
 from typing import Optional
 
 import openai
+
+# Instantiate the OpenAI client using the v1 API pattern.
+# API key is read from the environment; never hardcode credentials.
+_openai_client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
+# Completion model used by create() / acreate()
+_COMPLETION_MODEL = "gpt-3.5-turbo-instruct"
+
+
+def get_model(alias: str) -> str:
+    """Resolve short model aliases to full OpenAI model identifiers."""
+    _aliases = {
+        "3i": "gpt-3.5-turbo-instruct",
+        "4": "gpt-4",
+        "4o": "gpt-4o",
+        "4o-mini": "gpt-4o-mini",
+        "chatgpt": "gpt-4o",
+        "llama": "llama",  # handled separately in acreate
+    }
+    return _aliases.get(alias, alias)
 
 
 @dataclass
@@ -13,7 +34,7 @@ class LLMConfig:
     top_p: float = 1.0
     frequency_penalty: float = 0.0
     presence_penalty: float = 0.0
-    stop: Optional[list[str]] = field(default=None)
+    stop: list[str] | None = field(default=None)
 
     def update(self, **kwargs):
         for key, value in kwargs.items():
@@ -23,7 +44,7 @@ class LLMConfig:
                 raise ValueError(f"Invalid config key: {key}")
 
 
-def create(config: Optional[LLMConfig] = None, **kwargs):
+def create(config: LLMConfig | None = None, **kwargs):
     if config:
         config.update(**kwargs)
         prompt = config.prompt
@@ -42,10 +63,11 @@ def create(config: Optional[LLMConfig] = None, **kwargs):
         top_p = kwargs.get("top_p", 1)
         frequency_penalty = kwargs.get("frequency_penalty", 0)
         presence_penalty = kwargs.get("presence_penalty", 0)
-        stop = kwargs.get("stop", None)
+        stop = kwargs.get("stop")
 
-    response = openai.Completion.create(
-        model="gpt-3.5-turbo-instruct",
+    # Use the v1 client (openai >= 1.0) instead of the deprecated class-method API
+    response = _openai_client.completions.create(
+        model=_COMPLETION_MODEL,
         prompt=prompt,
         temperature=temperature,
         max_tokens=max_tokens,
@@ -57,7 +79,7 @@ def create(config: Optional[LLMConfig] = None, **kwargs):
     return response.choices[0].text.strip()
 
 
-async def acreate(*, config: Optional[LLMConfig] = None, **kwargs):
+async def acreate(*, config: LLMConfig | None = None, **kwargs):
     if config:
         config.update(**kwargs)
         prompt = config.prompt
@@ -76,7 +98,7 @@ async def acreate(*, config: Optional[LLMConfig] = None, **kwargs):
         top_p = kwargs.get("top_p", 1)
         frequency_penalty = kwargs.get("frequency_penalty", 0)
         presence_penalty = kwargs.get("presence_penalty", 0)
-        stop = kwargs.get("stop", None)
+        stop = kwargs.get("stop")
 
     model = get_model(model)
 
@@ -102,21 +124,29 @@ async def acreate(*, config: Optional[LLMConfig] = None, **kwargs):
         return choice["text"]
 
     if model == "chatgpt":
-        return await goto_chatgpt(prompt)
-
-    else:
-        response = await client.completions.create(
-            model=model,
-            prompt=prompt,
+        # Use the async client for chat completions
+        async_client = openai.AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        chat_response = await async_client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
             temperature=temperature,
             max_tokens=max_tokens,
-            top_p=top_p,
-            frequency_penalty=frequency_penalty,
-            presence_penalty=presence_penalty,
-            stop=stop,
         )
+        return chat_response.choices[0].message.content.strip()
 
-        return response.choices[0].text.strip()
+    async_client = openai.AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    response = await async_client.completions.create(
+        model=model,
+        prompt=prompt,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        top_p=top_p,
+        frequency_penalty=frequency_penalty,
+        presence_penalty=presence_penalty,
+        stop=stop,
+    )
+
+    return response.choices[0].text.strip()
 
 
 import asyncio
@@ -151,7 +181,7 @@ def chat(
     raw_msg=False,
     write_path=None,
     mode="a+",
-) -> Union[str, dict]:
+) -> str | dict:
     """Customized completion function that interacts with the OpenAI API, capable of handling prompts, system messages,
     and specific functions. If the content length is too long, it will shorten the content and retry.
 
@@ -168,8 +198,6 @@ def chat(
         write_path (str, optional): Directory or file path to write the response.
         mode (str, optional): File opening mode if writing response to file.
     """
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-
     messages = _create_messages(sys_msg, prompt, msgs)
 
     retry = 0
@@ -187,13 +215,13 @@ def chat(
                 # res = llama.complete(prompt=prompt)
             elif funcs:
                 res = get_response(
-                    openai.chat.completions.create(**params),
+                    _openai_client.chat.completions.create(**params),
                     raw_msg=raw_msg,
                     funcs=funcs,
                 )
             else:
                 res = get_response(
-                    openai.chat.completions.create(**params),
+                    _openai_client.chat.completions.create(**params),
                     raw_msg=raw_msg,
                     funcs=funcs,
                 )
@@ -258,11 +286,11 @@ async def achat(
     raw_msg=False,
     write_path=None,
     mode="a+",
-) -> Union[str, dict]:
+) -> str | dict:
     """Customized completion function that interacts with the OpenAI API, capable of handling prompts, system messages,
     and specific functions. If the content length is too long, it will shorten the content and retry.
     """
-    openai.api_key = os.getenv("OPENAI_API_KEY")
+    _async_client = openai.AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
     messages = _create_messages(sys_msg, prompt, msgs)
 
@@ -280,13 +308,13 @@ async def achat(
 
             if funcs:
                 res = get_response(
-                    await AsyncCompletions.chat.completions.create(**params),
+                    await _async_client.chat.completions.create(**params),
                     raw_msg=raw_msg,
                     funcs=funcs,
                 )
             else:
                 res = get_response(
-                    await openai.chat.completions.create(**params),
+                    await _async_client.chat.completions.create(**params),
                     raw_msg=raw_msg,
                     funcs=funcs,
                 )
@@ -358,14 +386,12 @@ def get_response(res, raw_msg, funcs):
             error_msg = f"Invalid function response from OpenAI API {msg}"
             logger.exception(error_msg)
             raise ValueError(error_msg)
-        else:
-            return func
-    elif funcs and len(funcs) > 0:
+        return func
+    if funcs and len(funcs) > 0:
         error_msg = f"Invalid function response from OpenAI API {msg}"
         logger.exception(error_msg)
         raise ValueError(error_msg)
-    else:
-        return msg.get("content", "").strip()
+    return msg.get("content", "").strip()
 
 
 def _create_params(model, messages, funcs=None):

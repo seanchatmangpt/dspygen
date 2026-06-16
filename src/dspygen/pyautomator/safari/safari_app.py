@@ -1,8 +1,9 @@
-import os
-import requests
 import json
-import pyperclip
+import os
 import time
+
+import pyperclip
+import requests
 from html2text import HTML2Text
 
 from dspygen.pyautomator.base_app import BaseApp
@@ -101,24 +102,24 @@ class SafariApp(BaseApp):
         })()
         """
         self.execute_jxa(script)
-        
+
         # Give some time for the clipboard to be updated
         time.sleep(0.5)
-        
+
         # Get the result from the clipboard
         markdown_content = pyperclip.paste()
-        
+
         if output_file:
             with open(output_file, 'w', encoding='utf-8') as f:
                 f.write(markdown_content)
             print(f"Markdown content saved to: {output_file}")
-        
+
         return markdown_content
 
 def main():
     safari = SafariApp()
     safari.activate_app()
-    
+
     # Example usage
     current_tab = safari.get_current_tab()
     print(f"Current tab: {current_tab['name']} - {current_tab['url']}")
@@ -132,7 +133,7 @@ def main():
     # print(f"Number of links on the page: {len(links)}")
 
     # safari.search_google("Python programming")
-    
+
     # Convert to Markdown and save to file
     output_file = "converted_page.md"
     markdown = safari.convert_to_markdown(output_file=output_file)

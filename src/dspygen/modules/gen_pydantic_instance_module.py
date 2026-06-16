@@ -1,12 +1,11 @@
 import ast
-import dspy
 import inspect
 import logging
 from typing import Optional, TypeVar, cast
 
-from pydantic import BaseModel, ValidationError
-
+import dspy
 from dspy import Assert, ChainOfThought, InputField, OutputField, Signature
+from pydantic import BaseModel, ValidationError
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
@@ -70,7 +69,7 @@ class GenPydanticInstance(dspy.Module):
     def __init__(
         self,
         root_model: type[T],
-        child_models: Optional[list[type[BaseModel]]] = None,
+        child_models: list[type[BaseModel]] | None = None,
         generate_sig=PromptToPydanticInstanceSignature,
         correct_generate_sig=PromptToPydanticInstanceErrorSignature,
     ):

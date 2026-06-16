@@ -1,12 +1,12 @@
 import asyncio
-from transitions import Machine
 from enum import Enum, auto
 
 import dspy
+from transitions import Machine
 
-from dspygen.rdddy.base_inhabitant import BaseInhabitant
 from dspygen.rdddy.base_command import BaseCommand
 from dspygen.rdddy.base_event import BaseEvent
+from dspygen.rdddy.base_inhabitant import BaseInhabitant
 from dspygen.rdddy.service_colony import ServiceColony
 from dspygen.utils.dspy_tools import init_dspy
 

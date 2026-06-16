@@ -1,10 +1,10 @@
+import functools
 import inspect
 
 from transitions import Machine
 from transitions.core import State
-from dspygen.modules.fsm_trigger_module import fsm_trigger_call
 
-import functools
+from dspygen.modules.fsm_trigger_module import fsm_trigger_call
 
 
 def trigger(source, dest, conditions=None, unless=None, before=None, after=None, prepare=None):
@@ -39,7 +39,7 @@ def trigger(source, dest, conditions=None, unless=None, before=None, after=None,
                 #     [getattr(self, b)() for b in (before if isinstance(before, list) else [before])]
 
                 # Correctly trigger the transition through the state machine
-                event_trigger = getattr(self, 'trigger')
+                event_trigger = self.trigger
                 event_trigger(func.__name__)
 
                 result = func(self, *args, **kwargs)  # Execute the actual function logic

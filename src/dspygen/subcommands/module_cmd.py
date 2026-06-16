@@ -1,16 +1,15 @@
 """Generate DSPy module"""
-from importlib import import_module
-
 import os
+from importlib import import_module
 
 import inflection
 import typer
 
 from dspygen.llm_pipe.dsl_pipeline_executor import execute_pipeline
-from dspygen.modules.gen_dspy_module import  DSPyModuleTemplate, SignatureDspyModuleModule
+from dspygen.modules.gen_dspy_module import DSPyModuleTemplate, SignatureDspyModuleModule
 from dspygen.utils.cli_tools import chatbot
 from dspygen.utils.dspy_tools import init_dspy
-from dspygen.utils.file_tools import dspy_modules_dir, source_dir, get_source
+from dspygen.utils.file_tools import dspy_modules_dir, get_source, source_dir
 
 app = typer.Typer(help="Generate DSPy Modules or call exist ones.")
 

@@ -1,15 +1,15 @@
 import json
-import tiktoken
-import anyio
-import yaml
-
-from pathlib import Path
-from fnmatch import fnmatch
-
 import tempfile
 from contextlib import contextmanager
+from fnmatch import fnmatch
+from pathlib import Path
 
+import anyio
 import dspy.clients.lm
+import tiktoken
+import yaml
+
+
 def extract_code(text: str) -> str:
     # Use a regular expression to find code blocks enclosed in triple backticks.
     text_code = re.findall(r"```([\s\S]+?)```", text)
@@ -110,7 +110,7 @@ def dsl_dir(file_name="") -> Path:
 
 def get_source(filename):
     # Read the source code from the file
-    with open(filename, 'r') as file:
+    with open(filename) as file:
         source_code = file.read().replace(" ", "")
 
     return source_code
@@ -214,9 +214,8 @@ def match_gitignore_pattern(relative_path, pattern):
     if pattern.startswith("/"):
         if fnmatch(str(relative_path), pattern[1:]) or fnmatch(str(relative_path.parent), pattern[1:]):
             return True
-    else:
-        if any(fnmatch(str(path), pattern) for path in [relative_path, *relative_path.parents]):
-            return True
+    elif any(fnmatch(str(path), pattern) for path in [relative_path, *relative_path.parents]):
+        return True
     return False
 
 
@@ -224,7 +223,7 @@ def is_binary(file_path):
     try:
         with open(file_path, "rb") as file:
             return b"\x00" in file.read(1024)
-    except IOError:
+    except OSError:
         return False
 
 

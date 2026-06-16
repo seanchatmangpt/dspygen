@@ -1,7 +1,7 @@
 """lm"""
 import typer
-
 from sungen.typetemp.functional import render
+
 from dspygen.utils.file_tools import lm_dir
 
 app = typer.Typer(help="Generate Language Models")

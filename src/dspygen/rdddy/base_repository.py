@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import TypeVar, Generic, Type, List, Optional
+from typing import Generic, List, Optional, Type, TypeVar
 
 from pydantic import BaseModel
 
@@ -8,12 +8,12 @@ T = TypeVar('T', bound=BaseModel)
 
 
 class BaseRepository(Generic[T]):
-    def __init__(self, model: Type[T], storage_file: Path):
+    def __init__(self, model: type[T], storage_file: Path):
         self.model = model
         self.storage_file = storage_file
         self.storage_file.touch(exist_ok=True)  # Ensure file exists
 
-    def _read_data(self) -> List[T]:
+    def _read_data(self) -> list[T]:
         """Reads and returns all model instances from the storage file."""
         try:
             with self.storage_file.open('r', encoding='utf-8') as file:
@@ -22,7 +22,7 @@ class BaseRepository(Generic[T]):
         except (json.JSONDecodeError, FileNotFoundError):
             return []
 
-    def _write_data(self, data: List[T]) -> None:
+    def _write_data(self, data: list[T]) -> None:
         """Writes the provided list of model instances to the storage file."""
         with self.storage_file.open('w', encoding='utf-8') as file:
             json.dump([item.dict() for item in data], file, indent=4)
@@ -33,7 +33,7 @@ class BaseRepository(Generic[T]):
         items.append(item)
         self._write_data(items)
 
-    def get(self, **criteria) -> Optional[T]:
+    def get(self, **criteria) -> T | None:
         """Retrieves a single model instance that matches the provided criteria."""
         items = self._read_data()
         for item in items:
@@ -68,7 +68,7 @@ class BaseRepository(Generic[T]):
                 return
         self.add(item)
 
-    def list_all(self) -> List[T]:
+    def list_all(self) -> list[T]:
         """Returns a list of all model instances."""
         return self._read_data()
 

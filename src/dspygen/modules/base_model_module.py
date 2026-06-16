@@ -1,8 +1,7 @@
-import dspy
 import typing
 
+import dspy
 from pydantic import BaseModel, Field
-
 
 Model = typing.TypeVar('Model', bound='BaseModel')
 

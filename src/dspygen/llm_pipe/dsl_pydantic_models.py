@@ -51,7 +51,7 @@ class SignatureDSLModel(BaseModel):
 class LMModuleDSLModel(BaseModel):
     name: str = Field(..., description="Name of the language model module. Used for referencing within the pipeline.")
     signature: str = Field(..., description="Name of the signature associated with this language model module.")
-    predictor: Optional[str] = Field("Predict", description="Type of predictor to be used with this module. "
+    predictor: str | None = Field("Predict", description="Type of predictor to be used with this module. "
                                                             "Usually 'Predict' or 'ChainOfThought'.")
 
 
@@ -61,14 +61,14 @@ class RMModuleDSLModel(BaseModel):
 
 # Define PipelineStepModel for pipeline steps
 class StepDSLModel(BaseModel):
-    module: Optional[str] = Field("dspygen.llm_pipe.dsl_dspy_module.DSLModule",
+    module: str | None = Field("dspygen.llm_pipe.dsl_dspy_module.DSLModule",
                                   description="Name of the module to be executed in this step of the pipeline.")
-    signature: Optional[str] = Field(default="",
+    signature: str | None = Field(default="",
                                      description="Signature associated with this step.")
-    lm_model: Optional[str] = Field(default=["default"],
+    lm_model: str | None = Field(default=["default"],
                                     description="Identifier of the language model to be used in this step.")
-    rm_model: Optional[str] = Field(default="", description="Identifier of the retrieval model to be used in this step.")
-    args: Optional[dict] = Field(default={}, description="Arguments for the module in this step.")
+    rm_model: str | None = Field(default="", description="Identifier of the retrieval model to be used in this step.")
+    args: dict | None = Field(default={}, description="Arguments for the module in this step.")
 
 
 class LanguageModelConfig(BaseModel):
@@ -86,7 +86,7 @@ class RetrievalModelConfig(BaseModel):
 class PipelineConfigModel(BaseModel):
     global_signatures: dict = Field(default={},
                                     description="A dictionary of global signatures available in the pipeline.")
-    current_step: Optional[StepDSLModel] = Field(None,
+    current_step: StepDSLModel | None = Field(None,
                                                  description="The current step being executed in the pipeline.")
 
     class Config:

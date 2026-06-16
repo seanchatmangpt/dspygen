@@ -1,12 +1,11 @@
+import json
 import os
-from contextlib import contextmanager, asynccontextmanager
-from typing import Any, Optional, TypeVar, Union, Type, Dict
+from contextlib import asynccontextmanager, contextmanager
+from typing import Any, Dict, Optional, Type, TypeVar, Union
 
 import aiofiles
 import yaml
-import json
 from pydantic import BaseModel, ValidationError
-
 from sungen.dspy_modules.file_name_module import file_name_call
 from sungen.typetemp.template.render_funcs import render_str
 
@@ -41,7 +40,7 @@ class DSLModel(BaseModel):
         filename = file_name_call(file_content=content, extension=extension)
         return filename
 
-    def save(self, file_path: Optional[str] = None, file_format: str = "yaml", add_timestamp: bool = False) -> str:
+    def save(self, file_path: str | None = None, file_format: str = "yaml", add_timestamp: bool = False) -> str:
         """
         Saves the model to a file in the specified format. Automatically generates a filename if not provided.
 
@@ -64,7 +63,7 @@ class DSLModel(BaseModel):
 
         return file_path
 
-    async def asave(self, file_path: Optional[str] = None, file_format: str = "yaml", add_timestamp: bool = False):
+    async def asave(self, file_path: str | None = None, file_format: str = "yaml", add_timestamp: bool = False):
         """
         Asynchronously saves the model to a file in the specified format. Automatically generates a filename if not provided.
 
@@ -92,9 +91,8 @@ class DSLModel(BaseModel):
         Placeholder method for upgrading the model instance to a new version.
         Implement version-specific upgrade logic here.
         """
-        pass
 
-    def to_yaml(self, file_path: Optional[str] = None) -> str:
+    def to_yaml(self, file_path: str | None = None) -> str:
         """
         Serializes the Pydantic model instance into a YAML string and optionally writes it to a file.
 
@@ -115,10 +113,10 @@ class DSLModel(BaseModel):
                     yaml_file.write(yaml_content)
             return yaml_content
         except Exception as e:
-            raise IOError(f"Failed to serialize model to YAML: {e}")
+            raise OSError(f"Failed to serialize model to YAML: {e}")
 
     @classmethod
-    def from_yaml(cls: Type[T], file_path: str) -> T:
+    def from_yaml(cls: type[T], file_path: str) -> T:
         """
         Reads YAML content from a file and creates an instance of the Pydantic model.
 
@@ -140,7 +138,7 @@ class DSLModel(BaseModel):
         except ValidationError as ve:
             raise ValueError(f"Validation error while creating {cls.__name__} instance: {ve}")
 
-    async def ato_yaml(self, file_path: Optional[str] = None) -> str:
+    async def ato_yaml(self, file_path: str | None = None) -> str:
         """
         Asynchronously serializes the Pydantic model to YAML and writes to a file.
 
@@ -161,10 +159,10 @@ class DSLModel(BaseModel):
                     await yaml_file.write(yaml_content)
             return yaml_content
         except Exception as e:
-            raise IOError(f"Failed to serialize model to YAML asynchronously: {e}")
+            raise OSError(f"Failed to serialize model to YAML asynchronously: {e}")
 
     @classmethod
-    async def afrom_yaml(cls: Type[T], file_path: str) -> T:
+    async def afrom_yaml(cls: type[T], file_path: str) -> T:
         """
         Asynchronously reads YAML content from a file and constructs an instance of the Pydantic model.
 
@@ -174,7 +172,7 @@ class DSLModel(BaseModel):
         :raises ValueError: If there is a parsing or validation error.
         """
         try:
-            async with aiofiles.open(file_path, "r") as yaml_file:
+            async with aiofiles.open(file_path) as yaml_file:
                 data = yaml.safe_load(await yaml_file.read())
             instance = cls.model_validate(data)
             instance._post_load()
@@ -186,7 +184,7 @@ class DSLModel(BaseModel):
         except ValidationError as ve:
             raise ValueError(f"Validation error while creating {cls.__name__} instance: {ve}")
 
-    def to_json(self, file_path: Optional[str] = None, **kwargs) -> str:
+    def to_json(self, file_path: str | None = None, **kwargs) -> str:
         """
         Serializes the Pydantic model instance into a JSON string and optionally writes it to a file.
 
@@ -204,10 +202,10 @@ class DSLModel(BaseModel):
                     json_file.write(json_content)
             return json_content
         except Exception as e:
-            raise IOError(f"Failed to serialize model to JSON: {e}")
+            raise OSError(f"Failed to serialize model to JSON: {e}")
 
     @classmethod
-    def from_json(cls: Type[T], file_path: str) -> T:
+    def from_json(cls: type[T], file_path: str) -> T:
         """
         Reads JSON content from a file and creates an instance of the Pydantic model.
 
@@ -217,7 +215,7 @@ class DSLModel(BaseModel):
         :raises ValueError: If there is a parsing or validation error.
         """
         try:
-            with open(file_path, "r") as json_file:
+            with open(file_path) as json_file:
                 data = json.load(json_file)
             instance = cls.model_validate(data)
             instance._post_load()
@@ -232,9 +230,9 @@ class DSLModel(BaseModel):
     @classmethod
     @contextmanager
     def io_context(
-        cls: Type[T],
-        model_defaults: Optional[Dict[str, Any]] = None,
-        file_path: Optional[str] = None,
+        cls: type[T],
+        model_defaults: dict[str, Any] | None = None,
+        file_path: str | None = None,
         file_format: str = "yaml"
     ):
         """
@@ -275,9 +273,9 @@ class DSLModel(BaseModel):
     @classmethod
     @asynccontextmanager
     async def aio_context(
-        cls: Type[T],
-        model_defaults: Optional[Dict[str, Any]] = None,
-        file_path: Optional[str] = None,
+        cls: type[T],
+        model_defaults: dict[str, Any] | None = None,
+        file_path: str | None = None,
         file_format: str = "yaml"
     ):
         """
@@ -315,7 +313,7 @@ class DSLModel(BaseModel):
         except Exception as e:
             raise RuntimeError(f"Error in aio_context: {e}")
 
-    async def ato_json(self, file_path: Optional[str] = None, **kwargs) -> str:
+    async def ato_json(self, file_path: str | None = None, **kwargs) -> str:
         """
         Asynchronously serializes the Pydantic model to JSON and writes to a file.
 
@@ -332,10 +330,10 @@ class DSLModel(BaseModel):
                     await json_file.write(json_content)
             return json_content
         except Exception as e:
-            raise IOError(f"Failed to serialize model to JSON asynchronously: {e}")
+            raise OSError(f"Failed to serialize model to JSON asynchronously: {e}")
 
     @classmethod
-    async def afrom_json(cls: Type[T], file_path: str) -> T:
+    async def afrom_json(cls: type[T], file_path: str) -> T:
         """
         Asynchronously reads JSON content from a file and constructs an instance of the Pydantic model.
 
@@ -345,7 +343,7 @@ class DSLModel(BaseModel):
         :raises ValueError: If there is a parsing or validation error.
         """
         try:
-            async with aiofiles.open(file_path, "r") as json_file:
+            async with aiofiles.open(file_path) as json_file:
                 data = json.loads(await json_file.read())
             instance = cls.model_validate(data)
             instance._post_load()
@@ -362,14 +360,12 @@ class DSLModel(BaseModel):
         Hook method called after loading the model instance.
         Override this method to implement custom logic after loading.
         """
-        pass
 
     def _pre_save(self):
         """
         Hook method called before saving the model instance.
         Override this method to implement custom logic before saving.
         """
-        pass
 
     def generate_docs(self) -> str:
         """
@@ -393,7 +389,7 @@ class DSLModel(BaseModel):
         return render_str(model_docs, **model_data)
 
     @classmethod
-    def from_prompt(cls: Type[T], prompt: str) -> T:
+    def from_prompt(cls: type[T], prompt: str) -> T:
         """
         Creates an instance of the Pydantic model from a user prompt.
 
@@ -439,7 +435,7 @@ class PredictType:
         output_model (Type[T]): The Pydantic model to use for the prediction output.
     """
     prompt: dict
-    output_model: Type[T]
+    output_model: type[T]
 #
 # def run_dsls(type_pairs: List[PredictType], max_workers=5) -> List[BaseModel]:
 #     """

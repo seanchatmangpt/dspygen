@@ -1,61 +1,118 @@
 # syntax=docker/dockerfile:1
-ARG PYTHON_VERSION=3.10
-FROM python:$PYTHON_VERSION-slim AS base
+# Multi-stage Dockerfile for dspygen — targets: deps, app, mcp, lsp, api, dev
 
-# Remove docker-clean so we can keep the apt cache in Docker build cache.
-RUN rm /etc/apt/apt.conf.d/docker-clean
-
-# Create a non-root user and switch to it [1].
-# [1] https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
+ARG PYTHON_VERSION=3.11
+ARG POETRY_VERSION=1.8.3
 ARG UID=1000
-ARG GID=$UID
-RUN groupadd --gid $GID user && \
-    useradd --create-home --gid $GID --uid $UID user --no-log-init && \
+ARG GID=1000
+
+# ---------------------------------------------------------------------------
+# Stage 1: base — minimal Python slim image with non-root user
+# ---------------------------------------------------------------------------
+FROM python:${PYTHON_VERSION}-slim AS base
+
+# Keep apt cache available for build caching
+RUN rm -f /etc/apt/apt.conf.d/docker-clean
+
+ARG UID
+ARG GID
+RUN groupadd --gid ${GID} user && \
+    useradd --create-home --gid ${GID} --uid ${UID} user --no-log-init && \
     chown user /opt/
+
 USER user
 
-# Create and activate a virtual environments.
-ENV VIRTUAL_ENV /opt/dspygen-env
-ENV PATH $VIRTUAL_ENV/bin:$PATH
-RUN python -m venv $VIRTUAL_ENV
+# Create and activate a virtual environment
+ENV VIRTUAL_ENV=/opt/dspygen-env
+ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
+RUN python -m venv ${VIRTUAL_ENV}
 
-# Set the working directory.
-WORKDIR /workspaces/dspygen/
+WORKDIR /app
 
-
-
-FROM base as poetry
+# ---------------------------------------------------------------------------
+# Stage 2: poetry-installer — install Poetry in an isolated venv
+# ---------------------------------------------------------------------------
+FROM base AS poetry-installer
 
 USER root
 
-# Install Poetry in separate venv so it doesn't pollute the main venv.
-ENV POETRY_VERSION 1.6.1
-ENV POETRY_VIRTUAL_ENV /opt/poetry-env
+ARG POETRY_VERSION
+ENV POETRY_VIRTUAL_ENV=/opt/poetry-env
 RUN --mount=type=cache,target=/root/.cache/pip/ \
-    python -m venv $POETRY_VIRTUAL_ENV && \
-    $POETRY_VIRTUAL_ENV/bin/pip install poetry~=$POETRY_VERSION && \
-    ln -s $POETRY_VIRTUAL_ENV/bin/poetry /usr/local/bin/poetry
+    python -m venv ${POETRY_VIRTUAL_ENV} && \
+    ${POETRY_VIRTUAL_ENV}/bin/pip install "poetry==${POETRY_VERSION}" && \
+    ln -s ${POETRY_VIRTUAL_ENV}/bin/poetry /usr/local/bin/poetry
 
-# Install compilers that may be required for certain packages or platforms.
+# Build tools needed for native extensions
 RUN --mount=type=cache,target=/var/cache/apt/ \
     --mount=type=cache,target=/var/lib/apt/ \
     apt-get update && \
-    apt-get install --no-install-recommends --yes build-essential
+    apt-get install --no-install-recommends --yes build-essential curl
 
 USER user
 
-# Install the run time Python dependencies in the virtual environments.
-COPY --chown=user:user poetry.lock* pyproject.toml /workspaces/dspygen/
-RUN mkdir -p /home/user/.cache/pypoetry/ && mkdir -p /home/user/.config/pypoetry/ && \
-    mkdir -p src/dspygen/ && touch src/dspygen/__init__.py && touch README.md
-RUN --mount=type=cache,uid=$UID,gid=$GID,target=/home/user/.cache/pypoetry/ \
+# ---------------------------------------------------------------------------
+# Stage 3: deps — install only main (production) dependencies, no source
+# ---------------------------------------------------------------------------
+FROM poetry-installer AS deps
+
+COPY --chown=user:user poetry.lock pyproject.toml ./
+RUN mkdir -p src/dspygen && touch src/dspygen/__init__.py && touch README.md
+
+ARG UID
+RUN --mount=type=cache,uid=${UID},gid=${UID},target=/home/user/.cache/pypoetry/ \
+    poetry install --only main --no-root --no-interaction
+
+# ---------------------------------------------------------------------------
+# Stage 4: app — copy source and install package (editable)
+# ---------------------------------------------------------------------------
+FROM deps AS app
+
+COPY --chown=user:user src/ src/
+RUN --mount=type=cache,uid=${UID},gid=${UID},target=/home/user/.cache/pypoetry/ \
     poetry install --only main --no-interaction
 
+# ---------------------------------------------------------------------------
+# Stage 5: mcp — MCP server target
+# ---------------------------------------------------------------------------
+FROM app AS mcp
 
+EXPOSE 8765
 
-FROM poetry as dev
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD python -c "import socket; s=socket.socket(); s.settimeout(3); s.connect(('localhost',8765)); s.close()" || exit 1
 
-# Install development tools: curl, git, gpg, ssh, starship, sudo, vim, and zsh.
+CMD ["python", "-m", "dspygen.mcp.server", "--transport", "sse", "--port", "8765"]
+
+# ---------------------------------------------------------------------------
+# Stage 6: lsp — LSP server target
+# ---------------------------------------------------------------------------
+FROM app AS lsp
+
+EXPOSE 2087
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD python -c "import socket; s=socket.socket(); s.settimeout(3); s.connect(('localhost',2087)); s.close()" || exit 1
+
+CMD ["python", "-m", "dspygen.lsp.server", "--transport", "tcp", "--port", "2087"]
+
+# ---------------------------------------------------------------------------
+# Stage 7: api — FastAPI / uvicorn target  (default production target)
+# ---------------------------------------------------------------------------
+FROM app AS api
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+
+CMD ["uvicorn", "dspygen.api:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+
+# ---------------------------------------------------------------------------
+# Stage 8: dev — full dev environment with tools, zsh, pre-commit, etc.
+# ---------------------------------------------------------------------------
+FROM poetry-installer AS dev
+
 USER root
 RUN --mount=type=cache,target=/var/cache/apt/ \
     --mount=type=cache,target=/var/lib/apt/ \
@@ -64,21 +121,23 @@ RUN --mount=type=cache,target=/var/cache/apt/ \
     sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- "--yes" && \
     usermod --shell /usr/bin/zsh user && \
     echo 'user ALL=(root) NOPASSWD:ALL' > /etc/sudoers.d/user && chmod 0440 /etc/sudoers.d/user
+
 USER user
 
-# Install the development Python dependencies in the virtual environments.
-RUN --mount=type=cache,uid=$UID,gid=$GID,target=/home/user/.cache/pypoetry/ \
-    poetry install --no-interaction
+COPY --chown=user:user poetry.lock pyproject.toml ./
+RUN mkdir -p src/dspygen && touch src/dspygen/__init__.py && touch README.md
 
-# Persist output generated during docker build so that we can restore it in the dev container.
-COPY --chown=user:user .pre-commit-config.yaml /workspaces/dspygen/
+ARG UID
+RUN --mount=type=cache,uid=${UID},gid=${UID},target=/home/user/.cache/pypoetry/ \
+    poetry install --with test,dev --no-interaction
+
+COPY --chown=user:user .pre-commit-config.yaml ./
 RUN mkdir -p /opt/build/poetry/ && cp poetry.lock /opt/build/poetry/ && \
     git init && pre-commit install --install-hooks && \
-    mkdir -p /opt/build/git/ && cp .git/hooks/commit-msg .git/hooks/pre-commit /opt/build/git/
+    mkdir -p /opt/build/git/ && cp .git/hooks/pre-commit /opt/build/git/ 2>/dev/null || true
 
-# Configure the non-root user's shell.
-ENV ANTIDOTE_VERSION 1.8.6
-RUN git clone --branch v$ANTIDOTE_VERSION --depth=1 https://github.com/mattmc3/antidote.git ~/.antidote/ && \
+ENV ANTIDOTE_VERSION=1.8.6
+RUN git clone --branch v${ANTIDOTE_VERSION} --depth=1 https://github.com/mattmc3/antidote.git ~/.antidote/ && \
     echo 'zsh-users/zsh-syntax-highlighting' >> ~/.zsh_plugins.txt && \
     echo 'zsh-users/zsh-autosuggestions' >> ~/.zsh_plugins.txt && \
     echo 'source ~/.antidote/antidote.zsh' >> ~/.zshrc && \
@@ -88,21 +147,8 @@ RUN git clone --branch v$ANTIDOTE_VERSION --depth=1 https://github.com/mattmc3/a
     echo 'HISTSIZE=1000' >> ~/.zshrc && \
     echo 'SAVEHIST=1000' >> ~/.zshrc && \
     echo 'setopt share_history' >> ~/.zshrc && \
-    echo 'bindkey "^[[A" history-beginning-search-backward' >> ~/.zshrc && \
-    echo 'bindkey "^[[B" history-beginning-search-forward' >> ~/.zshrc && \
     mkdir ~/.history/ && \
     zsh -c 'source ~/.zshrc'
 
-
-
-FROM base AS app
-
-# Copy the virtual environments from the poetry stage.
-COPY --from=poetry $VIRTUAL_ENV $VIRTUAL_ENV
-
-# Copy the package source code to the working directory.
-COPY --chown=user:user . .
-
-# Expose the application.
 ENTRYPOINT ["/opt/dspygen-env/bin/poe"]
 CMD ["api"]

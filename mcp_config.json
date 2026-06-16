@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "dspygen": {
+      "command": "dspygen",
+      "args": ["mcp", "serve", "--transport", "stdio"],
+      "env": {
+        "OPENAI_API_KEY": "${OPENAI_API_KEY}",
+        "DSPYGEN_MODEL": "gpt-4o"
+      }
+    }
+  }
+}

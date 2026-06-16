@@ -1,4 +1,4 @@
-from pydantic import Field, BaseModel
+from pydantic import BaseModel, Field
 
 from dspygen.rdddy.base_event import BaseEvent
 from dspygen.utils.dspy_tools import init_dspy

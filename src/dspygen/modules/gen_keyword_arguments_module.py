@@ -3,12 +3,16 @@ The source code imports the necessary libraries and dspy_modules, including dspy
 """
 import ast
 import inspect
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 import dspy
 from typer import Typer
 
-from dspygen.experiments.function_calling.function_call import get_current_weather, get_n_day_weather_forecast
+from dspygen.experiments.function_calling.function_call import (
+    get_current_weather,
+    get_n_day_weather_forecast,
+)
 from dspygen.utils.dspy_tools import init_dspy
 
 
@@ -96,9 +100,8 @@ class GenKeywordArgumentsModule(dspy.Module):
 
             if self.validate_output(kwargs, function):
                 return kwargs
-            else:
-                raise ValueError(f"Generated keyword arguments {kwargs} do not match the function's requirements "
-                                 f"{str(function_to_dict(function))}")
+            raise ValueError(f"Generated keyword arguments {kwargs} do not match the function's requirements "
+                             f"{str(function_to_dict(function))}")
 
 
 def gen_keyword_arguments_call(prompt: str, function: Callable) -> dict:

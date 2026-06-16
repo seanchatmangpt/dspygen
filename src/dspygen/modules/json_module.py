@@ -2,14 +2,11 @@ import json
 import typing
 from datetime import datetime, timedelta
 
+import dspy
 from pydantic import BaseModel
 
 from dspygen.utils.dspy_tools import init_dspy, init_ol
-
-import dspy
-
 from dspygen.utils.json_tools import extract
-
 
 Model = typing.TypeVar('Model', bound='BaseModel')
 
@@ -71,12 +68,12 @@ class VEvent(BaseModel):
 
 class JsonModule(dspy.Module):
     """JsonModule"""
-    
+
     def __init__(self, **forward_args):
         super().__init__()
         self.forward_args = forward_args
         self.output = None
-        
+
     def __or__(self, other):
         if other.output is None and self.output is None:
             self.forward(**self.forward_args)
@@ -90,7 +87,7 @@ class JsonModule(dspy.Module):
         self.output = pred(json_schema=str(schema), text_information=text).json_object
         self.output = extract(self.output)
         return self.output
-        
+
     def pipe(self, input_str):
         raise NotImplementedError("Please implement the pipe method for DSL support.")
         # Replace TODO with a keyword from you forward method

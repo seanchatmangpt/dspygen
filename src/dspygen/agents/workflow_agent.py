@@ -1,8 +1,9 @@
+import logging
+from enum import Enum, auto
+
 from dspygen.agents.business_logic import *
 from dspygen.agents.order_payload import OrderPayload
 from dspygen.mixin.fsm.fsm_mixin import FSMMixin, trigger
-from enum import Enum, auto
-import logging
 
 # Setup basic configuration for logging
 logging.basicConfig(level=logging.INFO, format='== APP == %(asctime)s %(levelname)s: %(message)s',
@@ -50,7 +51,33 @@ class WorkflowFSMAgent(FSMMixin):
 
     @trigger(source=WorkflowAgentState.PROCESSING, dest=WorkflowAgentState.MONITORING)
     def monitor_workflow(self):
-        pass
+        logging.info(
+            f"Monitoring workflow '{self.workflow_name}' "
+            f"(instance: {self.workflow_instance_id}, component: {self.workflow_component})"
+        )
+        if self.workflow_instance_id is None:
+            logging.warning("No workflow instance ID set; cannot retrieve workflow state.")
+            return
+
+        state = self.dapr_adapter.get_workflow(self.workflow_instance_id, self.workflow_component)
+        runtime_status = getattr(state, 'runtime_status', 'Unknown')
+        logging.info(f"Workflow runtime status: {runtime_status}")
+
+        if self.order_payload is not None:
+            logging.info(
+                f"Order details — item: {self.order_payload.item_name}, "
+                f"quantity: {self.order_payload.quantity}, "
+                f"total cost: ${self.order_payload.total_cost}"
+            )
+
+        terminal_statuses = {"Completed", "Failed", "Terminated"}
+        if runtime_status in terminal_statuses:
+            logging.info(f"Workflow reached terminal status '{runtime_status}'; ready for completion.")
+        else:
+            logging.info(
+                f"Workflow is still running (status: {runtime_status}). "
+                "Call check_workflow_state() periodically to detect completion."
+            )
 
     @trigger(source=WorkflowAgentState.MONITORING, dest=WorkflowAgentState.COMPLETING)
     def complete_workflow(self, result):
@@ -72,8 +99,9 @@ class WorkflowFSMAgent(FSMMixin):
 
 
 def main():
-    from dspygen.utils.dspy_tools import init_ol
     from unittest.mock import MagicMock
+
+    from dspygen.utils.dspy_tools import init_ol
 
     init_ol(max_tokens=3000)
     from dspygen.agents.mock_dapr_adapter import MockDaprClientAdapter

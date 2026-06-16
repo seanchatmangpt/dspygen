@@ -1,7 +1,9 @@
 import os
+from io import StringIO
+
 import pandas as pd
 from pydantic import BaseModel, Field
-from io import StringIO
+
 
 class DataWriter:
     def __init__(self, data, file_path="", write_options=None):
@@ -10,32 +12,29 @@ class DataWriter:
         if write_options is None:
             write_options = {}
         self.file_path = file_path
-        
+
         # Determine file extensions
         _, file_extension = os.path.splitext(self.file_path)
         file_extension = file_extension.lower()
 
         # Handle different data formats
         if file_extension == '.csv':
-            if isinstance(data, list) and all(isinstance(item, dict) for item in data):
-                self.df = pd.DataFrame(data)
-            elif isinstance(data, dict) and all(isinstance(v, list) for v in data.values()):
+            if isinstance(data, list) and all(isinstance(item, dict) for item in data) or isinstance(data, dict) and all(isinstance(v, list) for v in data.values()):
                 self.df = pd.DataFrame(data)
             else:
                 raise ValueError("For CSV files, data must be a list of dictionaries or a dictionary of lists.")
-            
+
             # Check for any variation of 'ID' column
             id_column = next((col for col in self.df.columns if col.lower() == 'id'), None)
-            
+
             # If no ID column exists, add it
             if id_column is None:
                 self.df.insert(0, 'ID', range(len(self.df)))
-            else:
-                # If ID column exists but is not the first column, move it to the front
-                if self.df.columns.get_loc(id_column) != 0:
-                    cols = self.df.columns.tolist()
-                    cols.insert(0, cols.pop(cols.index(id_column)))
-                    self.df = self.df[cols]
+            # If ID column exists but is not the first column, move it to the front
+            elif self.df.columns.get_loc(id_column) != 0:
+                cols = self.df.columns.tolist()
+                cols.insert(0, cols.pop(cols.index(id_column)))
+                self.df = self.df[cols]
         elif file_extension == '.md':
             if isinstance(data, str):
                 self.md_content = data

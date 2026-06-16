@@ -1,17 +1,18 @@
-import inject
-import EventKit
+import csv  # Add this import
+import logging
+import os
+import tempfile
 from datetime import datetime, timedelta
 from typing import List, Optional
-from icalendar import Calendar
-import logging
-import tempfile
-import os
-import pandas as pd
-import csv  # Add this import
 
+import EventKit
+import inject
+import pandas as pd
+from icalendar import Calendar
+
+from dspygen.modules.df_sql_module import dfsql_call
 from dspygen.modules.generate_icalendar_module import generate_i_calendar_call
 from dspygen.rm.data_retriever import DataRetriever
-from dspygen.modules.df_sql_module import dfsql_call
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -33,18 +34,18 @@ class CalendarApp:
     def create_event_from_generated(self, prompt: str) -> str:
         """Generate iCalendar data from a prompt and return it for manual addition."""
         ical_string = generate_i_calendar_call(prompt)
-        
+
         logger.info("Generated iCalendar text:")
         logger.info(ical_string)
-        
+
         # Save the iCalendar data to a file for inspection
         with open('generated_event.ics', 'w') as f:
             f.write(ical_string)
         logger.info("iCalendar content saved to 'generated_event.ics'")
-        
+
         # Validate the iCalendar string
         self._validate_ical(ical_string)
-        
+
         return f"Event data generated from prompt: {prompt}\n\niCalendar data:\n{ical_string}"
 
     def _validate_ical(self, ical_string: str):
@@ -59,7 +60,7 @@ class CalendarApp:
             logger.error(f"Invalid iCalendar data: {e}")
             raise
 
-    def get_events(self, start_date: datetime, end_date: datetime) -> List[dict]:
+    def get_events(self, start_date: datetime, end_date: datetime) -> list[dict]:
         """Get events within a date range."""
         predicate = self.event_store.predicateForEventsWithStartDate_endDate_calendars_(
             start_date, end_date, [self.default_calendar]
@@ -81,12 +82,12 @@ class CalendarApp:
             'organizer': event.organizer().name() if event.organizer() else None,
         }
 
-    def query(self, query: str) -> List[dict]:
+    def query(self, query: str) -> list[dict]:
         """Perform an advanced search using SQL query and return a list of event dictionaries."""
         data_retriever = DataRetriever(file_path=self.export_events())
 
         results = data_retriever.forward(query=query)
-        
+
         events = []
         for row in results:
             event = self.event_store.eventWithIdentifier_(row['ID'])
@@ -95,21 +96,21 @@ class CalendarApp:
 
         return events
 
-    def text_query(self, text: str) -> List[dict]:
+    def text_query(self, text: str) -> list[dict]:
         """Perform a natural language query and return a list of event dictionaries."""
         csv_file = self.export_events()
-        
+
         df = pd.read_csv(csv_file)
-        
+
         df_schema = df.columns.tolist()
         df_data = df.values.tolist()
-        
+
         sql_query = dfsql_call(text=text, df_schema=df_schema, df_data=df_data)
-        
+
         events = self.query(sql_query)
-        
+
         os.unlink(csv_file)
-        
+
         return events
 
     def export_events(self, filename=None, days=30) -> str:

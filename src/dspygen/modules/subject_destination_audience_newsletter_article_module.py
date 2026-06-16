@@ -6,8 +6,8 @@ module. The main function initializes the Typer app and calls the
 "subject_destination_audience_newsletter_article_call" function with empty inputs."""
 import dspy
 from typer import Typer
-from dspygen.utils.dspy_tools import init_dspy
 
+from dspygen.utils.dspy_tools import init_dspy
 
 app = Typer()
 

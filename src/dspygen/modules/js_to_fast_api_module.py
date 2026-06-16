@@ -7,8 +7,7 @@ from typer import Typer
 from dspygen.signatures.generate_answer import JSToFastAPISig
 from dspygen.utils.dspy_tools import init_dspy
 
-
-app = Typer()        
+app = Typer()
 
 
 class JSToFastAPIModule(dspy.Module):
@@ -29,7 +28,7 @@ def js_to_fast_api_call(js_source):
 def call(js_source):
     """JSToFastAPIModule"""
     init_dspy()
-    
+
     print(js_to_fast_api_call(js_source=js_source))
 
 
@@ -37,13 +36,14 @@ def call(js_source):
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/js_to_fast_api/")
 async def js_to_fast_api_route(data: dict):
     # Your code generation logic here
     init_dspy()
-    
+
     print(data)
     return js_to_fast_api_call(**data)
 
@@ -95,7 +95,7 @@ def main():
 
     with open("fast_code.py", 'w') as f:
         f.write(result)
-    
+
 
 if __name__ == "__main__":
     main()

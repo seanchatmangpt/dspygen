@@ -1,11 +1,10 @@
 """dspygen CLI."""
 import asyncio
 import json
+import os
+import subprocess
 import sys
 from importlib import import_module, metadata
-import subprocess
-import os
-
 from pathlib import Path
 
 import typer
@@ -18,6 +17,27 @@ from dspygen.utils.file_tools import source_dir
 from dspygen.utils.module_tools import module_to_dict
 
 app = typer.Typer()
+
+
+def version_callback(value: bool):
+    if value:
+        import importlib.metadata
+        typer.echo(importlib.metadata.version("dspygen"))
+        raise typer.Exit()
+
+
+@app.callback()
+def main_callback(
+    version: bool = typer.Option(
+        None,
+        "--version",
+        "-V",
+        callback=version_callback,
+        is_eager=True,
+        help="Show the dspygen version and exit.",
+    ),
+):
+    """DSPyGen — AI development CLI powered by DSPy."""
 
 
 # Load existing subcommands
@@ -58,7 +78,7 @@ def check_or_install_packages():
 @app.command()
 def init(project_name: str = typer.Argument(...),
          author_email: str = typer.Argument("todo@todo.com"),
-         author_name: str = typer.Argument("TODO")):
+         author_name: str = typer.Argument("")):
     """Initialize the DSPygen project."""
     # If the project has underscores or spaces throw an error
     if "_" in project_name or " " in project_name:

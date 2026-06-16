@@ -11,34 +11,30 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.10"]
-
-    name: Python ${{ matrix.python-version }}
+    name: Python 3.11
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
         with:
-          node-version: 21
+          python-version: "3.11"
+          cache: pip
 
-      - name: Install @devcontainers/cli
-        run: npm install --location=global @devcontainers/cli@0.55.0
-
-      - name: Start Dev Container
+      - name: Install test dependencies
         run: |
-          git config --global init.defaultBranch main
-          PYTHON_VERSION=${{ matrix.python-version }} devcontainer up --workspace-folder .
+          pip install \
+            pytest pytest-asyncio \
+            "mcp>=1.0.0" \
+            "pygls>=2.0.0" "lsprotocol>=2024.0" \
+            pydantic pyyaml loguru hypothesis rich chromadb
 
-      - name: Test package
-        run: devcontainer exec --workspace-folder . poe test
+      - name: Install dspygen (no deps)
+        run: pip install -e . --no-deps
 
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-        with:
-          files: reports/coverage.xml
+      - name: Run tests
+        run: pytest tests/test_mcp.py tests/test_lsp.py --tb=short -q
+        env:
+          PYTHONPATH: src

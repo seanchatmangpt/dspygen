@@ -2,7 +2,7 @@ import importlib
 
 import dspy
 
-from dspygen.llm_pipe.dsl_pydantic_models import SignatureDSLModel, GenSignatureModel
+from dspygen.llm_pipe.dsl_pydantic_models import GenSignatureModel, SignatureDSLModel
 from dspygen.utils.file_tools import dsl_dir
 
 
@@ -70,7 +70,6 @@ def _load_signature_class(signature_class_name: str):
         else:
             signature_model = GenSignatureModel.from_yaml(str(dsl_dir(signature_class_name)))
         return _create_signature_from_model(signature_model)
-    else:
-        module_name, class_name = signature_class_name.rsplit('.', 1)
-        module = importlib.import_module(module_name)
-        return getattr(module, class_name)
+    module_name, class_name = signature_class_name.rsplit('.', 1)
+    module = importlib.import_module(module_name)
+    return getattr(module, class_name)

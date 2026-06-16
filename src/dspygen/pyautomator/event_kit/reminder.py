@@ -1,17 +1,17 @@
 from __future__ import annotations
 
-import objc
-import EventKit
-from Foundation import NSDateComponents
+import logging
 from datetime import datetime, timedelta
-from typing import Optional, List
+from typing import List, Optional
+
+import EventKit
 import inject
+import objc
+from Foundation import NSDateComponents
+from icalendar import Calendar
 
 from dspygen.modules.generate_icalendar_module import generate_i_calendar_call
-from icalendar import Calendar
-import logging
-
-from dspygen.pyautomator.event_kit.calendar_item import CalendarItemError, CalendarItem
+from dspygen.pyautomator.event_kit.calendar_item import CalendarItem, CalendarItemError
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -93,7 +93,7 @@ class Reminder(CalendarItem):
             raise
 
     @property
-    def due_date(self) -> Optional[datetime]:
+    def due_date(self) -> datetime | None:
         components = self.ek_item.dueDateComponents()
         if components:
             return datetime(
@@ -106,7 +106,7 @@ class Reminder(CalendarItem):
         return None
 
     @due_date.setter
-    def due_date(self, value: Optional[datetime]):
+    def due_date(self, value: datetime | None):
         if value:
             components = NSDateComponents.alloc().init()
             components.setYear_(value.year)
@@ -169,13 +169,13 @@ class Reminder(CalendarItem):
         )
 
     def set_recurrence(self, frequency: EventKit.EKRecurrenceFrequency, interval: int = 1,
-                       end_date: Optional[datetime] = None, occurrences: Optional[int] = None,
-                       days_of_week: Optional[List[int]] = None,
-                       days_of_month: Optional[List[int]] = None,
-                       months_of_year: Optional[List[int]] = None,
-                       weeks_of_year: Optional[List[int]] = None,
-                       days_of_year: Optional[List[int]] = None,
-                       set_positions: Optional[List[int]] = None) -> None:
+                       end_date: datetime | None = None, occurrences: int | None = None,
+                       days_of_week: list[int] | None = None,
+                       days_of_month: list[int] | None = None,
+                       months_of_year: list[int] | None = None,
+                       weeks_of_year: list[int] | None = None,
+                       days_of_year: list[int] | None = None,
+                       set_positions: list[int] | None = None) -> None:
         """
         Set a nuanced recurrence rule for the reminder.
 

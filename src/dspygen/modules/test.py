@@ -3,10 +3,10 @@
 """
 import dspy
 from typer import Typer
+
 from dspygen.utils.dspy_tools import init_dspy, init_ol
 
-
-app = Typer()        
+app = Typer()
 
 
 class TestModule(dspy.Module):
@@ -27,18 +27,19 @@ def test_call(a1, s2, v3):
 def call(a1, s2, v3):
     """TestModule"""
     init_dspy()
-    
+
     print(test_call(a1=a1, s2=s2, v3=v3))
 
 
 from fastapi import APIRouter
+
 router = APIRouter()
 
 @router.post("/test/")
 async def test_route(data: dict):
     # Your code generation logic here
     init_dspy()
-    
+
     print(data)
     return test_call(**data)
 
@@ -49,7 +50,7 @@ def main():
     s2 = ""
     v3 = ""
     print(test_call(a1=a1, s2=s2, v3=v3))
-    
+
 
 if __name__ == "__main__":
     main()
