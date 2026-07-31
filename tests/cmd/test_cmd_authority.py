@@ -7,6 +7,7 @@ from pathlib import Path
 
 from dspygen.architecture.cmd_entry import dispatch
 from dspygen.architecture.cmd_kernel import make_plan
+from dspygen.architecture.cmd_repository import pack_content_digest, verify_pack_lock
 from dspygen.architecture.cmd_types import (
     ArchitectureRefusal,
     Artifact,
@@ -20,6 +21,13 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class ProtocolAuthorityTests(unittest.TestCase):
+    def test_pack_lock_replays_exact_sources(self):
+        self.assertEqual(verify_pack_lock(ROOT), ())
+
+    def test_pack_digest_detects_tamper(self):
+        item = {"identity": "x", "version": "1", "content_digest": "0" * 64}
+        self.assertNotEqual(pack_content_digest(item), item["content_digest"])
+
     def test_constructed_candidate_cannot_jump_to_plan(self):
         candidate = Candidate(
             "candidate:test",
