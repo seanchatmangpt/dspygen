@@ -69,8 +69,17 @@ class ArchitectureLawTests(unittest.TestCase):
 
 class RepositoryVerifierTests(unittest.TestCase):
     def test_exact_tree_replays_to_alive(self) -> None:
-        report = verify(repository_root())
-        self.assertTrue(report.ok, json.dumps(report.to_dict(), indent=2))
+        root = repository_root()
+        report = verify(root)
+        receipt = json.loads((root / "receipts/dspygen-architecture-v1.json").read_text())
+        diagnostic = {
+            "report": report.to_dict(),
+            "remote_source_blake3": blake3_hex(
+                (root / ".specify/dspygen-architecture.ttl").read_bytes()
+            ),
+            "recorded_source_blake3": receipt["composition"]["source"]["blake3"],
+        }
+        self.assertTrue(report.ok, json.dumps(diagnostic, indent=2))
         self.assertEqual(report.standing, Standing.ALIVE)
 
     def test_projection_drift_is_refused(self) -> None:
