@@ -137,4 +137,4 @@ def observe(root: Path, freshness_limit_seconds: int = 300) -> Observation:
 
 
 def is_clean(root: Path) -> bool:
-    return not _git(root, "status", "--porcelain=v1", "--untracked-files=no").strip()
+    return not _git(root, "status", "--porcelain=v1", "--untracked-files=all").strip()
