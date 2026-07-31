@@ -1,0 +1,113 @@
+{
+  "packs": [
+    {
+      "content_digest": "99b106dacbb074fff3c6670b227a7852e10afaa7a21fbb0917b8fbbbeaf34a60",
+      "identity": "cmd-consequence",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "consequence-*",
+      "provides": ["consequence.broker"],
+      "requires": ["receipt.causal", "policy.admission"],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "32c9b8d4d05667bf311d4bbef01f60253326663f1cb8d4758cf6b434c0634e96",
+      "identity": "cmd-contract",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "contract-*",
+      "provides": ["contract.cmd"],
+      "requires": [],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "0acac4e70f8aa87960b100ea84f8881a9f626d32a33a0d5a20c1bd96326c6f4a",
+      "identity": "cmd-core",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "core-*",
+      "provides": ["cmd.kernel"],
+      "requires": ["policy.admission"],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "3d57bbebc50267c878e2c7271be438e1176d95bc58cebffb6ed7f0427a5418b9",
+      "identity": "cmd-policy",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "policy-*",
+      "provides": ["policy.admission"],
+      "requires": [],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "889b0cabe9b6a655eb95be842abff98c061630c013b977b69a0f3befb1caec60",
+      "identity": "cmd-projection",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "projection-*",
+      "provides": ["projection.cmd"],
+      "requires": ["cmd.kernel"],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "2cd55b898691815a9530d67d604eb2c7f5564d79bb042070dbde664b7872f988",
+      "identity": "cmd-receipt",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "receipt-*",
+      "provides": ["receipt.causal"],
+      "requires": ["cmd.kernel"],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "9814cb0bf92df0d4be5d1d5d44f0761f9deb9f32a51ec7767400e0d9e8229dae",
+      "identity": "cmd-runtime",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "runtime-*",
+      "provides": ["runtime.python"],
+      "requires": ["cmd.kernel"],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "70689a05a3fabc19051ef3e0918a364f2e84b72b6386fbc951cbe41851336809",
+      "identity": "cmd-surface-cli",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "surface-*",
+      "provides": ["surface.cli"],
+      "requires": ["cmd.kernel"],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "9cf48610d1be24141b940a6c59e5626dc70a9e1da8c5ddb4c2cf16e98ca87cf8",
+      "identity": "cmd-validator",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "validator-*",
+      "provides": ["validator.crown"],
+      "requires": ["cmd.kernel"],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    }
+  ],
+  "schema": "cmd.packs.v1"
+}
