@@ -1,0 +1,167 @@
+schema = "cmd.architecture.v1"
+version = "26.7.30"
+
+[resources]
+max_candidates = 8192
+max_outputs = 128
+max_output_bytes = 8388608
+max_graph_depth = 64
+max_retries = 3
+max_repair_cycles = 5
+
+[internal]
+coverage = "exhaustive"
+
+[[internal.dimensions]]
+id = "runtime"
+title = "Runtime"
+owner = "dspygen-runtime"
+options = ["native", "container"]
+risk_class = "normal"
+coverage_mode = "exhaustive"
+
+[[internal.dimensions]]
+id = "invocation"
+title = "Invocation"
+owner = "dspygen-interface"
+options = ["library", "cli", "stdio", "http"]
+risk_class = "normal"
+coverage_mode = "exhaustive"
+
+[[internal.dimensions]]
+id = "storage"
+title = "Storage"
+owner = "dspygen-state"
+options = ["memory", "file"]
+risk_class = "normal"
+coverage_mode = "exhaustive"
+
+[[internal.dimensions]]
+id = "verification"
+title = "Verification"
+owner = "verification-control-plane"
+options = ["unit", "full-ladder"]
+risk_class = "high"
+coverage_mode = "exhaustive"
+
+[[internal.dimensions]]
+id = "recovery"
+title = "Recovery"
+owner = "brce"
+options = ["inverse", "snapshot"]
+risk_class = "high"
+coverage_mode = "exhaustive"
+
+[[internal.constraints]]
+id = "http-container-or-native"
+when = { invocation = "http" }
+require = { runtime = ["native", "container"] }
+refusal_code = "CMD-CONSTRAINT-VIOLATION"
+
+[external]
+coverage = "pairwise"
+
+[[external.dimensions]]
+id = "protocol"
+title = "Protocol"
+owner = "external-boundary"
+options = ["mcp", "http", "event"]
+risk_class = "normal"
+coverage_mode = "pairwise"
+
+[[external.dimensions]]
+id = "identity"
+title = "Identity"
+owner = "identity-policy"
+options = ["user", "service"]
+risk_class = "high"
+coverage_mode = "pairwise"
+
+[[external.dimensions]]
+id = "authority"
+title = "Authority"
+owner = "brce"
+options = ["read", "propose", "approve", "actuate"]
+risk_class = "critical"
+coverage_mode = "pairwise"
+
+[[external.dimensions]]
+id = "consent"
+title = "Consent"
+owner = "consent-policy"
+options = ["absent", "action-specific", "resource-specific"]
+risk_class = "critical"
+coverage_mode = "pairwise"
+
+[[external.dimensions]]
+id = "trust"
+title = "Trust"
+owner = "trust-policy"
+options = ["untrusted", "independently-verified", "production-approved"]
+risk_class = "critical"
+coverage_mode = "pairwise"
+
+[[external.dimensions]]
+id = "jurisdiction"
+title = "Jurisdiction"
+owner = "jurisdiction-policy"
+options = ["us", "eu"]
+risk_class = "critical"
+coverage_mode = "pairwise"
+
+[[external.dimensions]]
+id = "data_class"
+title = "Data class"
+owner = "data-policy"
+options = ["public", "confidential", "regulated"]
+risk_class = "critical"
+coverage_mode = "pairwise"
+
+[[external.dimensions]]
+id = "consequence"
+title = "Consequence"
+owner = "brce"
+options = ["local-artifact", "external-reversible", "external-irreversible"]
+risk_class = "critical"
+coverage_mode = "pairwise"
+
+[[external.constraints]]
+id = "actuation-requires-specific-consent"
+when = { authority = "actuate" }
+require = { consent = ["action-specific", "resource-specific"], trust = ["independently-verified", "production-approved"] }
+refusal_code = "EXT-CONSENT-MISSING"
+
+[[external.constraints]]
+id = "regulated-requires-production-trust"
+when = { data_class = "regulated" }
+require = { trust = ["production-approved"] }
+refusal_code = "EXT-TRUST-FLOOR"
+
+[[external.constraints]]
+id = "irreversible-requires-approval"
+when = { consequence = "external-irreversible" }
+require = { authority = ["approve", "actuate"], consent = ["action-specific", "resource-specific"] }
+refusal_code = "AUTH-GRANT-MISSING"
+
+[external.control]
+retry_budget = 3
+circuit_failure_threshold = 5
+error_budget = 0.01
+idempotency_required = true
+andon_monotonic = true
+max_autonomic_cycles = 5
+
+[[external.passports]]
+identity = "dspygen-external-adapter-v1"
+conditioned_inputs = ["admitted-intent", "exact-grant", "action-matched-consent"]
+guaranteed_outputs = ["observed-consequence", "causal-receipt"]
+causal_polarity = "intent-to-observed-consequence"
+authority_ceiling = ["propose", "actuate-through-BRCE"]
+isolation_model = "injected-adapter-boundary"
+host_profile = "python-3.10-3.12"
+jurisdiction_profile = "policy-selected"
+conformity_evidence = ["integration", "security", "chaos", "replay"]
+independent_verifier = "cmd-independent-verifier-v1"
+receipt_format = "cmd.external-receipt.v1"
+replacement_law = "passport-equivalence-plus-sandbox-replay"
+retirement_law = "zero-live-consumers-plus-receipt-chain-preservation"
