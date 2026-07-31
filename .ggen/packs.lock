@@ -1,0 +1,49 @@
+{
+  "compiler_version": "dspygen-cmd-26.7.30",
+  "consequence_state": "not-actuated",
+  "content_digests": {
+    "cmd-consequence": "99b106dacbb074fff3c6670b227a7852e10afaa7a21fbb0917b8fbbbeaf34a60",
+    "cmd-contract": "32c9b8d4d05667bf311d4bbef01f60253326663f1cb8d4758cf6b434c0634e96",
+    "cmd-core": "0acac4e70f8aa87960b100ea84f8881a9f626d32a33a0d5a20c1bd96326c6f4a",
+    "cmd-policy": "3d57bbebc50267c878e2c7271be438e1176d95bc58cebffb6ed7f0427a5418b9",
+    "cmd-projection": "889b0cabe9b6a655eb95be842abff98c061630c013b977b69a0f3befb1caec60",
+    "cmd-receipt": "2cd55b898691815a9530d67d604eb2c7f5564d79bb042070dbde664b7872f988",
+    "cmd-runtime": "9814cb0bf92df0d4be5d1d5d44f0761f9deb9f32a51ec7767400e0d9e8229dae",
+    "cmd-surface-cli": "70689a05a3fabc19051ef3e0918a364f2e84b72b6386fbc951cbe41851336809",
+    "cmd-validator": "9cf48610d1be24141b940a6c59e5626dc70a9e1da8c5ddb4c2cf16e98ca87cf8"
+  },
+  "dependency_edges": {
+    "cmd-consequence": ["receipt.causal", "policy.admission"],
+    "cmd-contract": [],
+    "cmd-core": ["policy.admission"],
+    "cmd-policy": [],
+    "cmd-projection": ["cmd.kernel"],
+    "cmd-receipt": ["cmd.kernel"],
+    "cmd-runtime": ["cmd.kernel"],
+    "cmd-surface-cli": ["cmd.kernel"],
+    "cmd-validator": ["cmd.kernel"]
+  },
+  "immutable_revisions": {},
+  "ontology_digest": "118a74891b6cf3a5b5612ad173b3f131534c7e34a00715a9b1eae601573ae3cb",
+  "ownership_claims": {},
+  "parameters": {},
+  "plan_digest": null,
+  "policy_digest": "computed-at-admission",
+  "receipt_chain_head": null,
+  "resolved_atomic_pack_closure": [
+    "cmd-core",
+    "cmd-surface-cli",
+    "cmd-contract",
+    "cmd-projection",
+    "cmd-runtime",
+    "cmd-policy",
+    "cmd-validator",
+    "cmd-receipt",
+    "cmd-consequence"
+  ],
+  "root_requests": ["cmd-dspygen-complete@26.7.30"],
+  "schema": "cmd.packs-lock.v1",
+  "signatures": {},
+  "source_identities": ["repository:.specify/cmd/repository.ttl"],
+  "variants": {}
+}
