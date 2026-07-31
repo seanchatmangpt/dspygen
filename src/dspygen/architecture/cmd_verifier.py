@@ -3,14 +3,22 @@ from __future__ import annotations
 
 import inspect
 import json
+import os
+import subprocess
 import tempfile
+import time
 from dataclasses import asdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from dspygen.architecture.cmd_broker import execute as broker_execute
-from dspygen.architecture.cmd_kernel import coverage_report, deterministic, enumerate_candidates, resolve_bblock
+from dspygen.architecture.cmd_kernel import (
+    coverage_report,
+    deterministic,
+    enumerate_candidates,
+    resolve_bblock,
+)
 from dspygen.architecture.cmd_materializer import InjectedFailure, materialize, replay_materialization
 from dspygen.architecture.cmd_observer import is_clean, observe
 from dspygen.architecture.cmd_repository import (
@@ -19,6 +27,7 @@ from dspygen.architecture.cmd_repository import (
     load_dimensions,
     load_packs,
     policy_digest,
+    verify_pack_lock,
 )
 from dspygen.architecture.cmd_types import (
     ArchitectureRefusal,
@@ -34,16 +43,12 @@ from dspygen.architecture.cmd_types import (
     Reversal,
     Standing,
     canonical_json,
+    content_id,
 )
+from dspygen.architecture.digest import blake3_hex
 
 
-def _checkpoint(
-    name: str,
-    checks: dict[str, bool],
-    refusals: list[str] | None = None,
-    metrics: dict[str, Any] | None = None,
-    target: Standing = Standing.ALIVE,
-) -> CheckpointReport:
+def _checkpoint(name: str, checks: dict[str, bool], refusals: list[str] | None = None, metrics: dict[str, Any] | None = None, target: Standing = Standing.ALIVE) -> CheckpointReport:
     refusals = refusals or []
     evidence = EvidenceSet(
         witness=all(checks.values()) if checks else False,
@@ -52,7 +57,7 @@ def _checkpoint(
         receipt_verifier=checks.get("receipt", True),
         replay=checks.get("replay", True),
     )
-    blocking = [key for key, value in checks.items() if not value and key != "falsifier"]
+    blocking = [key for key, value in checks.items() if not value and key not in {"falsifier"}]
     standing = target if not blocking else Standing.BUILD_BROKEN
     return CheckpointReport(name, standing, checks, evidence, tuple(refusals), metrics or {})
 
@@ -69,16 +74,7 @@ def _g0(root: Path):
         "authority_total": not observation.unresolved,
         "falsifier": True,
     }
-    return (
-        _checkpoint(
-            "G0",
-            checks,
-            ["OBS-DIGEST-MISMATCH:falsifier-proven"],
-            {"tracked_paths": len(observation.entries)},
-            Standing.PARTIAL_ALIVE,
-        ),
-        observation,
-    )
+    return _checkpoint("G0", checks, ["OBS-DIGEST-MISMATCH:falsifier-proven"], {"tracked_paths": len(observation.entries)}, Standing.PARTIAL_ALIVE), observation
 
 
 def _g1(observation):
@@ -131,12 +127,7 @@ def _g3(root: Path, observation):
     dimensions, constraints, candidates, coverage = _lattice(root, "internal", observation.tree_digest)
     invalid_refused = False
     try:
-        enumerate_candidates(
-            (dimensions[0].__class__("empty", "empty", "owner", ()),),
-            (),
-            observation.tree_digest,
-            policy_digest(root),
-        )
+        enumerate_candidates((dimensions[0].__class__("empty", "empty", "owner", ()),), (), observation.tree_digest, policy_digest(root))
     except ArchitectureRefusal as exc:
         invalid_refused = exc.code == "CMD-DIMENSION-MISSING"
     checks = {
@@ -148,21 +139,12 @@ def _g3(root: Path, observation):
         "invalid_refused": invalid_refused,
         "falsifier": invalid_refused,
     }
-    return (
-        _checkpoint(
-            "G3",
-            checks,
-            ["CMD-DIMENSION-MISSING:falsifier-proven"],
-            {"candidate_count": len(candidates)},
-        ),
-        candidates,
-    )
+    return _checkpoint("G3", checks, ["CMD-DIMENSION-MISSING:falsifier-proven"], {"candidate_count": len(candidates)}), candidates
 
 
 def _g4(root: Path, observation):
-    dimensions, _, candidates, coverage = _lattice(root, "external", observation.tree_digest)
+    dimensions, constraints, candidates, coverage = _lattice(root, "external", observation.tree_digest)
     from dspygen.architecture.cmd_repository import load_cmd_config
-
     external_config = load_cmd_config(root)["external"]
     consent_dimension = next(d for d in dimensions if d.dimension_id == "consent")
     authority_dimension = next(d for d in dimensions if d.dimension_id == "authority")
@@ -179,36 +161,21 @@ def _g4(root: Path, observation):
         "coverage": bool(coverage["covered"]),
         "unauthorized_is_inert": inert_refusal,
         "part_passports": bool(external_config.get("passports")),
-        "broker_controls": all(
-            key in external_config.get("control", {})
-            for key in (
-                "retry_budget",
-                "circuit_failure_threshold",
-                "error_budget",
-                "idempotency_required",
-                "max_autonomic_cycles",
-            )
-        ),
+        "broker_controls": all(key in external_config.get("control", {}) for key in ("retry_budget", "circuit_failure_threshold", "error_budget", "idempotency_required", "max_autonomic_cycles")),
         "falsifier": inert_refusal,
     }
-    return (
-        _checkpoint(
-            "G4",
-            checks,
-            ["EXT-CONSENT-MISSING:falsifier-proven"],
-            {"candidate_count": len(candidates)},
-        ),
-        candidates,
-    )
+    return _checkpoint("G4", checks, ["EXT-CONSENT-MISSING:falsifier-proven"], {"candidate_count": len(candidates)}), candidates
 
 
 def _g5(root: Path):
     packs = load_packs(root)
     blocks = load_bblocks(root)
     resolutions = [resolve_bblock(block, packs) for block in blocks]
+    lock_failures = verify_pack_lock(root)
     checks = {
         "nine_pack_classes": len({p.pack_class for p in packs.values()}) >= 9,
-        "immutable_digests": all(len(p.content_digest) == 64 for p in packs.values()),
+        "immutable_digests": not lock_failures,
+        "lockfile_replay": not lock_failures,
         "bblocks": bool(blocks),
         "dependency_closure": all(r["closure"] for r in resolutions),
         "lockfile": (root / ".ggen/packs.lock").is_file(),
@@ -218,12 +185,12 @@ def _g5(root: Path):
     return _checkpoint(
         "G5",
         checks,
-        ["CMD-CAPABILITY-AMBIGUOUS:falsifier-proven"],
+        ["CMD-CAPABILITY-AMBIGUOUS:falsifier-proven", *lock_failures],
         {"packs": len(packs), "bblocks": len(blocks)},
     )
 
 
-def _g6(internal_candidates):
+def _g6(root: Path, internal_candidates):
     import dspygen.architecture.cmd_kernel as kernel
 
     source = inspect.getsource(kernel)
@@ -243,21 +210,8 @@ def _g6(internal_candidates):
 def _sample_plan(observation_digest: str):
     from dspygen.architecture.cmd_types import Candidate, Plan
 
-    candidate = Candidate(
-        "candidate:test",
-        (("runtime", "native"),),
-        observation_digest,
-        "policy",
-        "0" * 64,
-        CandidateState.VERIFIED,
-    )
-    artifact = Artifact(
-        "catalog/result.json",
-        '{"ok":true}\n',
-        Ownership.EXCLUSIVE,
-        "cmd-kernel",
-        Reversal.REVERSIBLE_WITH_SNAPSHOT,
-    )
+    candidate = Candidate("candidate:test", (("runtime", "native"),), observation_digest, "policy", "0" * 64, CandidateState.VERIFIED)
+    artifact = Artifact("catalog/result.json", '{"ok":true}\n', Ownership.EXCLUSIVE, "cmd-kernel", Reversal.REVERSIBLE_WITH_SNAPSHOT)
     return Plan("plan:test", observation_digest, "policy", candidate.candidate_id, (artifact,), ())
 
 
@@ -270,21 +224,8 @@ def _g7(observation):
         pointer = root / ".ggen/current.json"
         result_path = next((root / ".ggen/receipts").glob("receipt-*.json"))
         replay_ok, _ = replay_materialization(root, result_path)
-        checks.update(
-            {
-                "staging": pointer.is_file(),
-                "receipt": bool(receipt.receipt_id),
-                "replay": replay_ok,
-                "ownership": True,
-            }
-        )
-        for boundary in (
-            "after_intent_receipt",
-            "after_stage",
-            "after_validation",
-            "after_result_receipt",
-            "before_publish",
-        ):
+        checks.update({"staging": pointer.is_file(), "receipt": bool(receipt.receipt_id), "replay": replay_ok, "ownership": True})
+        for boundary in ("after_intent_receipt", "after_stage", "after_validation", "after_result_receipt", "before_publish"):
             chaos_root = root / boundary
             chaos_root.mkdir()
             try:
@@ -301,70 +242,15 @@ def _future(minutes: int = 10) -> str:
 
 
 def _g8(observation):
-    intent = Intent(
-        "intent:test",
-        "candidate:test",
-        "external.echo",
-        {"value": 1},
-        observation.tree_digest,
-        {"echoed": True},
-        ("external.echo",),
-        {"max_calls": 1},
-        _future(),
-        "idem-1",
-    )
-    grant = Grant(
-        "grant:test",
-        intent.intent_id,
-        "policy",
-        "p" * 64,
-        ("external.echo",),
-        ("echo",),
-        {"max_calls": 1},
-        _future(),
-        observation.tree_digest,
-    )
-    consent = Consent(
-        "subject",
-        "external.echo",
-        ("echo",),
-        "test",
-        "subject",
-        datetime.now(timezone.utc).isoformat(),
-        _future(),
-        "active",
-        "e" * 64,
-    )
+    intent = Intent("intent:test", "candidate:test", "external.echo", {"value": 1}, observation.tree_digest, {"echoed": True}, ("external.echo",), {"max_calls": 1}, _future(), "idem-1")
+    grant = Grant("grant:test", intent.intent_id, "policy", "p" * 64, ("external.echo",), ("echo",), {"max_calls": 1}, _future(), observation.tree_digest)
+    consent = Consent("subject", "external.echo", ("echo",), "test", "subject", datetime.now(timezone.utc).isoformat(), _future(), "active", "e" * 64)
     ledger: dict[str, str] = {}
-    receipt = broker_execute(
-        intent,
-        grant,
-        consent,
-        adapter=lambda i: {"echoed": True},
-        observe_postcondition=lambda i, result: result == {"echoed": True},
-        idempotency_ledger=ledger,
-    )
+    receipt = broker_execute(intent, grant, consent, adapter=lambda i: {"echoed": True}, observe_postcondition=lambda i, result: result == {"echoed": True}, idempotency_ledger=ledger)
     missing_consent_refused = False
     try:
-        bad = Consent(
-            "subject",
-            "wrong",
-            (),
-            "test",
-            "subject",
-            datetime.now(timezone.utc).isoformat(),
-            _future(),
-            "active",
-            "e" * 64,
-        )
-        broker_execute(
-            Intent(**{**asdict(intent), "idempotency_key": "idem-2"}),
-            grant,
-            bad,
-            adapter=lambda i: {},
-            observe_postcondition=lambda i, r: True,
-            idempotency_ledger=ledger,
-        )
+        bad = Consent("subject", "wrong", (), "test", "subject", datetime.now(timezone.utc).isoformat(), _future(), "active", "e" * 64)
+        broker_execute(Intent(**{**asdict(intent), "idempotency_key": "idem-2"}), grant, bad, adapter=lambda i: {}, observe_postcondition=lambda i, r: True, idempotency_ledger=ledger)
     except ArchitectureRefusal as exc:
         missing_consent_refused = exc.code == "EXT-CONSENT-SCOPE"
     checks = {
@@ -381,15 +267,12 @@ def _g8(observation):
 
 
 def _g9(root: Path, observation, exact_head: bool, detached_replay: bool, clean: bool):
-    manufactured = canonical_json(
-        {"tree": observation.tree_digest, "entries": [asdict(e) for e in observation.entries]}
-    )
+    manufactured = canonical_json({"tree": observation.tree_digest, "entries": [asdict(e) for e in observation.entries]})
     checks = {
         "exact_tree_observer": bool(observation.entries),
         "self_owned_manifest": (root / "ggen.toml").is_file(),
         "no_unowned_diff": clean,
-        "second_manufacture_identity": manufactured
-        == canonical_json({"tree": observation.tree_digest, "entries": [asdict(e) for e in observation.entries]}),
+        "second_manufacture_identity": manufactured == canonical_json({"tree": observation.tree_digest, "entries": [asdict(e) for e in observation.entries]}),
         "complete_report": True,
         "detached_replay": detached_replay,
         "exact_head": exact_head,
@@ -401,27 +284,13 @@ def _g9(root: Path, observation, exact_head: bool, detached_replay: bool, clean:
     return _checkpoint("G9", checks, ["RPL-SOURCE-DIVERGENCE:falsifier-proven"], target=target)
 
 
-def verify_crown(
-    root: Path,
-    *,
-    exact_head_sha: str | None = None,
-    detached_replay: bool = False,
-) -> CrownReport:
+def verify_crown(root: Path, *, exact_head_sha: str | None = None, detached_replay: bool = False) -> CrownReport:
     root = root.resolve()
     g0, observation = _g0(root)
     checkpoints = [g0, _g1(observation), _g2(root)]
     g3, internal_candidates = _g3(root, observation)
     g4, _ = _g4(root, observation)
-    checkpoints.extend(
-        [
-            g3,
-            g4,
-            _g5(root),
-            _g6(internal_candidates),
-            _g7(observation),
-            _g8(observation),
-        ]
-    )
+    checkpoints.extend([g3, g4, _g5(root), _g6(root, internal_candidates), _g7(observation), _g8(observation)])
     exact_head = exact_head_sha is not None and exact_head_sha == observation.revision
     clean = is_clean(root)
     checkpoints.append(_g9(root, observation, exact_head, detached_replay, clean))
