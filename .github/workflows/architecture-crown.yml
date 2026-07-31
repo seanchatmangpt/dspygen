@@ -5,14 +5,19 @@ on:
     paths:
       - 'AGENTS.md'
       - '.chatmangpt/**'
+      - '.ggen/packs.lock'
       - '.specify/**'
+      - 'bblocks/**'
+      - 'packs/**'
       - 'ggen.toml'
       - 'src/dspygen/architecture/**'
       - 'src/dspygen/subcommands/architecture_cmd.py'
       - 'docs/architecture/**'
       - 'receipts/**'
       - 'scripts/verify_architecture.py'
+      - 'scripts/run_cmd_verifier.py'
       - 'tests/architecture/**'
+      - 'tests/cmd/**'
       - '.github/workflows/architecture-crown.yml'
   workflow_dispatch:
 
@@ -63,10 +68,90 @@ jobs:
           grep -n 'class Standing' src/dspygen/architecture/model.py
           ! sed -n '/class Standing/,/class ArchitectureRefusal/p' src/dspygen/architecture/model.py | grep -q RETIRED
 
-      - name: Prove the deterministic kernel has no direct actuation imports
+      - name: Prove the deterministic kernels have no direct actuation imports
         run: |
           ! grep -nE 'subprocess|socket|requests|urllib|os\.system' src/dspygen/architecture/model.py
+          ! grep -nE 'subprocess|socket|requests|urllib|os\.system|boto|kubernetes' src/dspygen/architecture/cmd_kernel.py
           grep -n 'REQUIRED_BROKER = "BRCE"' src/dspygen/architecture/model.py
+          grep -n 'REQUIRED_BROKER = "BRCE"' src/dspygen/architecture/cmd_kernel.py
+
+  cmd-verifier-ladder:
+    runs-on: ubuntu-24.04
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Prove exact candidate SHA
+        env:
+          CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+
+      - name: Protocol and unit
+        run: python3 -m unittest discover -s tests/cmd -p 'test_cmd_suites.py' -k ProtocolTests -v
+
+      - name: Property and fuzz
+        run: python3 -m unittest discover -s tests/cmd -p 'test_cmd_suites.py' -k PropertyTests -v
+
+      - name: Git and filesystem integration
+        run: python3 -m unittest discover -s tests/cmd -p 'test_cmd_suites.py' -k IntegrationTests -v
+
+      - name: Black-box CLI E2E
+        run: python3 -m unittest discover -s tests/cmd -p 'test_cmd_suites.py' -k E2ETests -v
+
+      - name: Security sabotage
+        run: python3 -m unittest discover -s tests/cmd -p 'test_cmd_suites.py' -k SecurityTests -v
+
+      - name: Chaos atomicity
+        run: python3 -m unittest discover -s tests/cmd -p 'test_cmd_suites.py' -k ChaosTests -v
+
+      - name: Stress
+        run: python3 -m unittest discover -s tests/cmd -p 'test_cmd_suites.py' -k StressTests -v
+
+      - name: Benchmark
+        run: python3 -m unittest discover -s tests/cmd -p 'test_cmd_suites.py' -k BenchmarkTests -v
+
+      - name: Receipt replay
+        run: python3 -m unittest discover -s tests/cmd -p 'test_cmd_suites.py' -k ReplayTests -v
+
+      - name: G0-G9 verifier report before detached replay
+        env:
+          CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          python3 scripts/run_cmd_verifier.py \
+            --exact-head-sha "$CANDIDATE_SHA" \
+            --output /tmp/dspygen-cmd-checkpoint-report.json
+          python3 - <<'PY'
+          import json
+          report = json.load(open('/tmp/dspygen-cmd-checkpoint-report.json'))
+          assert report['external_standing'] == 'UNKNOWN'
+          assert [item['checkpoint'] for item in report['checkpoints']] == [f'G{i}' for i in range(10)]
+          PY
+
+      - name: Detached exact-head replay and local crown
+        env:
+          CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          git worktree add --detach ../dspygen-cmd-replay "$CANDIDATE_SHA"
+          cd ../dspygen-cmd-replay
+          PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 \
+            python3 scripts/run_cmd_verifier.py \
+              --exact-head-sha "$CANDIDATE_SHA" \
+              --detached-replay \
+              --output /tmp/dspygen-cmd-exact-head-report.json
+          python3 - <<'PY'
+          import json
+          report = json.load(open('/tmp/dspygen-cmd-exact-head-report.json'))
+          assert report['aggregate_standing'] == 'ALIVE', report
+          assert report['external_standing'] == 'UNKNOWN', report
+          assert report['exact_head'] is True
+          assert report['detached_replay'] is True
+          assert report['clean_tree'] is True
+          PY
 
   ggen-contract-admission:
     runs-on: ubuntu-24.04
