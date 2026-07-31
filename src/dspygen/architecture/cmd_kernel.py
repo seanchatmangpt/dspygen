@@ -175,7 +175,7 @@ def make_plan(
     artifacts: Sequence[Any],
     external_intents: Sequence[Intent] = (),
 ) -> Plan:
-    if candidate.state not in {CandidateState.CONSTRUCTED, CandidateState.VERIFIED, CandidateState.AUTHORIZED}:
+    if candidate.state not in {CandidateState.VERIFIED, CandidateState.AUTHORIZED}:
         raise ArchitectureRefusal("AUTH-CANDIDATE-NOT-VERIFIED", candidate.state.value)
     plan_payload = {
         "candidate": candidate.candidate_id,
