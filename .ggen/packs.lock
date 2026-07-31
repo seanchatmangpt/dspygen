@@ -13,37 +13,56 @@
     "cmd-validator": "9cf48610d1be24141b940a6c59e5626dc70a9e1da8c5ddb4c2cf16e98ca87cf8"
   },
   "dependency_edges": {
-    "cmd-consequence": ["receipt.causal", "policy.admission"],
+    "cmd-consequence": [
+      "receipt.causal",
+      "policy.admission"
+    ],
     "cmd-contract": [],
-    "cmd-core": ["policy.admission"],
+    "cmd-core": [
+      "policy.admission"
+    ],
     "cmd-policy": [],
-    "cmd-projection": ["cmd.kernel"],
-    "cmd-receipt": ["cmd.kernel"],
-    "cmd-runtime": ["cmd.kernel"],
-    "cmd-surface-cli": ["cmd.kernel"],
-    "cmd-validator": ["cmd.kernel"]
+    "cmd-projection": [
+      "cmd.kernel"
+    ],
+    "cmd-receipt": [
+      "cmd.kernel"
+    ],
+    "cmd-runtime": [
+      "cmd.kernel"
+    ],
+    "cmd-surface-cli": [
+      "cmd.kernel"
+    ],
+    "cmd-validator": [
+      "cmd.kernel"
+    ]
   },
   "immutable_revisions": {},
   "ontology_digest": "118a74891b6cf3a5b5612ad173b3f131534c7e34a00715a9b1eae601573ae3cb",
   "ownership_claims": {},
   "parameters": {},
   "plan_digest": null,
-  "policy_digest": "computed-at-admission",
+  "policy_digest": "286c57816c12028a0c5b4091e2083a8a1c5c82550b2518eb409e74af37910374",
   "receipt_chain_head": null,
   "resolved_atomic_pack_closure": [
+    "cmd-policy",
     "cmd-core",
-    "cmd-surface-cli",
+    "cmd-receipt",
+    "cmd-consequence",
     "cmd-contract",
     "cmd-projection",
     "cmd-runtime",
-    "cmd-policy",
-    "cmd-validator",
-    "cmd-receipt",
-    "cmd-consequence"
+    "cmd-surface-cli",
+    "cmd-validator"
   ],
-  "root_requests": ["cmd-dspygen-complete@26.7.30"],
+  "root_requests": [
+    "cmd-dspygen-complete@26.7.30"
+  ],
   "schema": "cmd.packs-lock.v1",
   "signatures": {},
-  "source_identities": ["repository:.specify/cmd/repository.ttl"],
+  "source_identities": [
+    "repository:.specify/cmd/repository.ttl"
+  ],
   "variants": {}
 }
