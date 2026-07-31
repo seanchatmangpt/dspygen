@@ -1,0 +1,39 @@
+{
+  "base_sha": "b9cfcd42c46f2136204ac7d4c022f02611759156",
+  "composition": {
+    "outputs": {
+      "docs/architecture/CATALOG.md": "dc17b189b3d2a686a32bbdd6b4d0ccfbd91c8bc98949e438dfb345c4728a696c",
+      "src/dspygen/architecture/catalog.py": "d852a7461404c118875becf02bd12351d5a817c0267148f89301132f7248720b"
+    },
+    "required_broker": "BRCE",
+    "required_evidence": [
+      "witness",
+      "falsifier",
+      "independent_verifier",
+      "receipt_verifier",
+      "replay"
+    ],
+    "schema": "dspygen.architecture.receipt.v1",
+    "source": {
+      "blake3": "3f177f5e6a5d7213af522a7c74371fa905ea24bcf6213a345faf07949cd2a293",
+      "path": ".specify/dspygen-architecture.ttl"
+    }
+  },
+  "evidence": {
+    "falsifier": true,
+    "independent_verifier": true,
+    "receipt_verifier": true,
+    "replay": true,
+    "witness": true
+  },
+  "exclusions": [
+    "No direct DSPy or external-system actuation",
+    "No alternate execution or recovery broker",
+    "No generated directory",
+    "No claim that existing DSPyGen subsystems are ALIVE without their own evidence"
+  ],
+  "ggen_compiler_commit": "68952593c40214ac1a681073d65f3902a9cdfce4",
+  "receipt_root": "6c9bfa4db139c86df33033e32e1c865d3cfdb2352dd15a0b5e8cd103bee8f9e8",
+  "schema": "dspygen.architecture.receipt.v1",
+  "standing": "ALIVE"
+}
