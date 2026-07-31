@@ -29,6 +29,13 @@ jobs:
     steps:
       - name: Checkout exact candidate
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Prove exact candidate SHA
+        env:
+          CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
 
       - name: Execute positive witnesses and negative falsifiers
         env:
@@ -66,6 +73,13 @@ jobs:
     steps:
       - name: Checkout exact candidate
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Prove exact candidate SHA
+        env:
+          CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
 
       - name: Checkout exact ggen source contract
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
