@@ -37,10 +37,11 @@ python -m dspygen.architecture.cmd_entry ontology-validate
 python -m dspygen.architecture.cmd_entry candidates-enumerate --domain internal
 python -m dspygen.architecture.cmd_entry candidates-coverage --domain external
 python -m dspygen.architecture.cmd_entry plan --domain internal
+python -m dspygen.architecture.cmd_entry materialize --domain internal --grant local-filesystem-broker --output-root <directory>
 python -m dspygen.architecture.cmd_entry receipt-verify --receipt <receipt.json>
 python -m dspygen.architecture.cmd_entry replay --receipt <receipt.json>
 python -m dspygen.architecture.cmd_entry verifier-report
 python -m dspygen.architecture.cmd_entry crown
 ```
 
-Every command emits machine-readable JSON. Planning and candidate enumeration are non-mutating. Local mutation is confined to the transactional materializer. External mutation is impossible without an injected BRCE adapter, exact grant, scoped consent, resource closure, idempotency, postcondition observation, and causal receipt.
+Every command emits machine-readable JSON. Planning and candidate enumeration are non-mutating. Local mutation is confined to the transactional materializer and requires the exact local broker grant. External mutation is impossible without an injected BRCE adapter, exact grant, scoped consent, resource closure, idempotency, postcondition observation, and causal receipt.
