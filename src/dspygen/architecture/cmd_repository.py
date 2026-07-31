@@ -6,7 +6,13 @@ import tomllib
 from pathlib import Path
 from typing import Any
 
-from dspygen.architecture.cmd_types import AtomicPack, BuildingBlock, Constraint, Dimension
+from dspygen.architecture.cmd_types import (
+    AtomicPack,
+    BuildingBlock,
+    Constraint,
+    Dimension,
+    canonical_json,
+)
 from dspygen.architecture.digest import blake3_hex
 
 
@@ -53,6 +59,48 @@ def policy_digest(root: Path) -> str:
         root / ".specify/cmd/shapes/cmd-shapes.ttl",
     ]
     return blake3_hex(b"".join(path.read_bytes() for path in files))
+
+
+def pack_content_digest(item: dict[str, Any]) -> str:
+    payload = {key: value for key, value in item.items() if key != "content_digest"}
+    return blake3_hex(canonical_json(payload).encode())
+
+
+def verify_pack_lock(root: Path) -> tuple[str, ...]:
+    failures: list[str] = []
+    lock_path = root / ".ggen/packs.lock"
+    if not lock_path.is_file():
+        return ("RCP-MISSING:packs.lock",)
+    lock = json.loads(lock_path.read_text())
+    raw_items: dict[str, dict[str, Any]] = {}
+    for path in sorted((root / "packs").glob("cmd-*.json")):
+        document = json.loads(path.read_text())
+        for item in document.get("packs", [document]):
+            raw_items[item["identity"]] = item
+            if item.get("content_digest") != pack_content_digest(item):
+                failures.append(f"RCP-ARTIFACT-TAMPER:{item['identity']}")
+    expected_digests = {
+        identity: item["content_digest"] for identity, item in sorted(raw_items.items())
+    }
+    if lock.get("content_digests") != expected_digests:
+        failures.append("RPL-ARTIFACT-DIVERGENCE:pack-digests")
+    ontology = root / ".specify/cmd/repository.ttl"
+    if not ontology.is_file() or lock.get("ontology_digest") != blake3_hex(ontology.read_bytes()):
+        failures.append("RPL-SOURCE-DIVERGENCE:ontology")
+    if lock.get("policy_digest") != policy_digest(root):
+        failures.append("RPL-POLICY-DIVERGENCE")
+    packs = load_packs(root)
+    blocks = load_bblocks(root)
+    if blocks:
+        from dspygen.architecture.cmd_kernel import resolve_bblock
+
+        closure = list(resolve_bblock(blocks[0], packs)["closure"])
+        if lock.get("resolved_atomic_pack_closure") != closure:
+            failures.append("RPL-ARTIFACT-DIVERGENCE:pack-closure")
+        expected_root = f"{blocks[0].identity}@{blocks[0].version}"
+        if lock.get("root_requests") != [expected_root]:
+            failures.append("RPL-SOURCE-DIVERGENCE:root-request")
+    return tuple(sorted(failures))
 
 
 def load_packs(root: Path) -> dict[str, AtomicPack]:
