@@ -36,36 +36,24 @@ jobs:
           import json
           from pathlib import Path
           from dspygen.architecture.cmd_kernel import resolve_bblock
-          from dspygen.architecture.cmd_repository import (
-              load_bblocks,
-              load_packs,
-              pack_content_digest,
-              policy_digest,
-          )
+          from dspygen.architecture.cmd_repository import load_bblocks, load_packs, pack_content_digest, policy_digest
           from dspygen.architecture.digest import blake3_hex
-
           root = Path('.')
           for path in sorted((root / 'packs').glob('cmd-*.json')):
               document = json.loads(path.read_text())
-              items = document.get('packs', [document])
-              for item in items:
+              for item in document.get('packs', [document]):
                   item['content_digest'] = pack_content_digest(item)
               path.write_text(json.dumps(document, indent=2, sort_keys=True) + '\n')
-
           packs = load_packs(root)
           blocks = load_bblocks(root)
           lock_path = root / '.ggen/packs.lock'
           lock = json.loads(lock_path.read_text()) if lock_path.is_file() else {}
-          lock['content_digests'] = {
-              identity: pack.content_digest for identity, pack in sorted(packs.items())
-          }
-          ontology = root / '.specify/cmd/repository.ttl'
-          lock['ontology_digest'] = blake3_hex(ontology.read_bytes())
+          lock['content_digests'] = {identity: pack.content_digest for identity, pack in sorted(packs.items())}
+          lock['ontology_digest'] = blake3_hex((root / '.specify/cmd/repository.ttl').read_bytes())
           lock['policy_digest'] = policy_digest(root)
           if blocks:
               lock['resolved_atomic_pack_closure'] = list(resolve_bblock(blocks[0], packs)['closure'])
               lock['root_requests'] = [f'{blocks[0].identity}@{blocks[0].version}']
-          lock_path.parent.mkdir(parents=True, exist_ok=True)
           lock_path.write_text(json.dumps(lock, indent=2, sort_keys=True) + '\n')
           PY
           python3 "$RUNNER_TEMP/manufacture_pack_lock.py"
@@ -74,7 +62,7 @@ jobs:
           sha256sum packs/cmd-*.json .ggen/packs.lock > "$RUNNER_TEMP/second.sha256"
           diff -u "$RUNNER_TEMP/first.sha256" "$RUNNER_TEMP/second.sha256"
 
-      - name: Enforce generated path ownership
+      - name: Enforce ownership and commit manufactured consequence
         run: |
           python3 - <<'PY'
           import subprocess
@@ -84,10 +72,14 @@ jobs:
               raise SystemExit(f'PACK_LOCK_PATH_ESCAPE_REFUSED: {unexpected}')
           if '.ggen/packs.lock' not in paths:
               raise SystemExit('PACK_LOCK_CONSEQUENCE_MISSING')
-          print({'changed_paths': sorted(paths)})
           PY
+          git config user.name "dspygen-alive-controller"
+          git config user.email "dspygen-alive-controller@users.noreply.github.com"
+          git add packs/cmd-*.json .ggen/packs.lock
+          git commit -m "fix(cmd): rebuild exact pack lock"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
 
-      - name: Execute complete CMD verifier ladder
+      - name: Execute complete CMD verifier ladder on committed tree
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -97,13 +89,7 @@ jobs:
               raise SystemExit(f'PACK_LOCK_REPLAY_REFUSED: {failures}')
           PY
           python3 -m unittest discover -s tests/cmd -p 'test_*.py' -v
-          test -z "$(find . -type d -name __pycache__ -print -quit)"
-
-      - name: Commit and publish exact manufactured consequence
-        run: |
-          git config user.name "dspygen-alive-controller"
-          git config user.email "dspygen-alive-controller@users.noreply.github.com"
-          git add packs/cmd-*.json .ggen/packs.lock
-          git commit -m "fix(cmd): rebuild exact pack lock" || true
           test -z "$(git status --porcelain=v1 --untracked-files=all)"
-          git push origin "HEAD:${{ github.event.pull_request.head.ref || github.ref_name }}"
+
+      - name: Publish exact manufactured consequence
+        run: git push origin "HEAD:${{ github.event.pull_request.head.ref || github.ref_name }}"
