@@ -2,15 +2,15 @@
   "compiler_version": "dspygen-cmd-26.7.30",
   "consequence_state": "not-actuated",
   "content_digests": {
-    "cmd-consequence": "99b106dacbb074fff3c6670b227a7852e10afaa7a21fbb0917b8fbbbeaf34a60",
-    "cmd-contract": "32c9b8d4d05667bf311d4bbef01f60253326663f1cb8d4758cf6b434c0634e96",
-    "cmd-core": "0acac4e70f8aa87960b100ea84f8881a9f626d32a33a0d5a20c1bd96326c6f4a",
-    "cmd-policy": "3d57bbebc50267c878e2c7271be438e1176d95bc58cebffb6ed7f0427a5418b9",
-    "cmd-projection": "889b0cabe9b6a655eb95be842abff98c061630c013b977b69a0f3befb1caec60",
-    "cmd-receipt": "2cd55b898691815a9530d67d604eb2c7f5564d79bb042070dbde664b7872f988",
-    "cmd-runtime": "9814cb0bf92df0d4be5d1d5d44f0761f9deb9f32a51ec7767400e0d9e8229dae",
-    "cmd-surface-cli": "70689a05a3fabc19051ef3e0918a364f2e84b72b6386fbc951cbe41851336809",
-    "cmd-validator": "9cf48610d1be24141b940a6c59e5626dc70a9e1da8c5ddb4c2cf16e98ca87cf8"
+    "cmd-consequence": "9131302d99d6800717f3b1772866f77baa9552cf01ca1324599d03927afb7838",
+    "cmd-contract": "3de935c196b33d252aca94a49431ce324c24bf87be49f76b4fe09ae59d49d1a9",
+    "cmd-core": "84488aa71a4dd978e6b2cee63ff6cf35df9cc308611bb216af393f02de41bba1",
+    "cmd-policy": "43df74db0d7e9aabd5d1b8cc94cbeb71c188772fe521fc0a68ede082a50a5183",
+    "cmd-projection": "bb34633a6f5bceea03b5f9b6e92c642a8443f50837d2edf5cdd4bf778fc8c1e5",
+    "cmd-receipt": "6ef2d779148681eefcc360370a8d99e619a42176e2f0d1ded7ec630989403554",
+    "cmd-runtime": "aa725de2854d0ed4f7d2c93285934806db9c5cde5b10f18d05083ffbbc22b388",
+    "cmd-surface-cli": "8eb3b4c937e8638e40fc4f8b8391fb88f33ffa65adbbe7faab0dc69a4c03e288",
+    "cmd-validator": "a57ac323b1bbd7ab1e9445f771129b9fcaca4411ad7a11e3067370e38781644e"
   },
   "dependency_edges": {
     "cmd-consequence": [
@@ -39,11 +39,11 @@
     ]
   },
   "immutable_revisions": {},
-  "ontology_digest": "118a74891b6cf3a5b5612ad173b3f131534c7e34a00715a9b1eae601573ae3cb",
+  "ontology_digest": "6650404bae2eeb2c0181bb5a594179e62677dcf4a35ba317c9ac2ccaf01e5c4f",
   "ownership_claims": {},
   "parameters": {},
   "plan_digest": null,
-  "policy_digest": "286c57816c12028a0c5b4091e2083a8a1c5c82550b2518eb409e74af37910374",
+  "policy_digest": "cebf8ca01b5546617b3b5f18ee5283d3f4d266352464300924a099b9f44e8337",
   "receipt_chain_head": null,
   "resolved_atomic_pack_closure": [
     "cmd-policy",
