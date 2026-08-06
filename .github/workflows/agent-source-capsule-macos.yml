@@ -1,0 +1,36 @@
+name: Agent Source Capsule macOS
+
+on:
+  push:
+    branches:
+      - agent/errc-modernize-features
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capsule:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Record identity
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > SOURCE_HEAD
+          git rev-parse HEAD^{tree} > SOURCE_TREE
+      - name: Build exact source capsule
+        run: |
+          set -euo pipefail
+          tar --exclude=.git --exclude=dspygen-source.tar.gz -czf dspygen-source.tar.gz .
+          shasum -a 256 dspygen-source.tar.gz > dspygen-source.tar.gz.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dspygen-source-capsule-macos
+          path: |
+            dspygen-source.tar.gz
+            dspygen-source.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 1
