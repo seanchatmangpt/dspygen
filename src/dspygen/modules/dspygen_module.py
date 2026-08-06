@@ -1,8 +1,15 @@
+"""Composable DSPyGen module base classes and examples."""
+from __future__ import annotations
+
+from abc import ABC, abstractmethod
+
 import dspy
 
+from dspygen.modules.pipeline import pipe_forward, pipe_modules
 
-class DGModule(dspy.Module):
-    """DGModule that supports pipe operator with string processing convention."""
+
+class DGModule(dspy.Module, ABC):
+    """DSPy module with deterministic ``|`` composition."""
 
     def __init__(self, **forward_args):
         super().__init__()
@@ -10,98 +17,72 @@ class DGModule(dspy.Module):
         self.output = None
 
     def __or__(self, other: "DGModule"):
-        print(
-            f"Operation between {self.__class__.__name__} and {other.__class__.__name__}"
-        )
+        return pipe_modules(self, other)
 
-        if other.output is None and self.output is None:
-            self.forward(**self.forward_args)
-
-        other.pipe(self.output)
-
-        return other
-
+    @abstractmethod
     def forward(self, **kwargs):
-        """Processes a string input. Override in subclasses for specific behavior."""
-        raise NotImplementedError(
-            "Please implement the forward method in your subclass."
-        )
+        """Execute the module's pure model-program boundary."""
 
-    def pipe(self, dg_module):
-        """Pipes the output of one module to the input of another. Override in subclasses for specific behavior."""
-        raise NotImplementedError("Please implement the pipe method in your subclass.")
+    def pipe(self, input_value):
+        return pipe_forward(self, input_value)
 
 
 class TweetDGModule(DGModule):
-    """TweetModule"""
+    """Turn an insight into a short styled tweet."""
 
     def __init__(self, style, **forward_args):
         self.style = style
         forward_args.update({"style": style})
         super().__init__(**forward_args)
 
-    def forward(self, insight):
+    def forward(self, insight, style=None):
+        style = style or self.style
         pred = dspy.ChainOfThought("insight, style -> tweet_with_length_of_100_chars")
-        self.output = pred(
-            insight=insight, style=self.style
-        ).tweet_with_length_of_100_chars
-        print(f"{self.__class__.__name__} output: {self.output}")
+        self.output = pred(insight=insight, style=style).tweet_with_length_of_100_chars
         return self.output
-
-    def pipe(self, input_str):
-        return self.forward(insight=input_str)
 
 
 class BusinessDevConsultantDGModule(DGModule):
-    """BusinessDevConsultantModule"""
+    """Generate business-development advice."""
 
     def forward(self, prompt):
         pred = dspy.ChainOfThought("prompt -> advice")
         self.output = pred(prompt=prompt).advice
-        print(f"{self.__class__.__name__} output: {self.output}")
         return self.output
-
-    def pipe(self, input_str):
-        return self.forward(prompt=input_str)
 
 
 class TextSummaryDGModule(DGModule):
-    """A DSPy Module that takes in text and produces a summary."""
+    """Summarize text."""
 
     def forward(self, text):
         pred = dspy.Predict("text -> summary")
         self.output = pred(text=text).summary
-        print(f"{self.__class__.__name__} output: {self.output}")
         return self.output
-
-    def pipe(self, input_str):
-        return self.forward(text=input_str)
 
 
 class ReactJsxDGModule(DGModule):
-    """This is a DSPy Module that converts a prompt into react_jsx"""
+    """Convert a prompt and requirements into React JSX."""
+
     def __init__(self, reqs="", **forward_args):
         self.reqs = reqs
         forward_args.update({"reqs": reqs})
         super().__init__(**forward_args)
 
-    def forward(self, prompt):
+    def forward(self, prompt, reqs=None):
+        reqs = self.reqs if reqs is None else reqs
         pred = dspy.ChainOfThought("prompt, reqs -> react_jsx")
-        self.output = pred(prompt=prompt, reqs=self.reqs).react_jsx
-        print(f"{self.__class__.__name__} output: {self.output}")
+        self.output = pred(prompt=prompt, reqs=reqs).react_jsx
         return self.output
-
-    def pipe(self, input_str):
-        return self.forward(prompt=input_str)
 
 
 def main():
     from dspygen.utils.dspy_tools import init_dspy
 
     init_dspy()
-
     result_module = (
-        BusinessDevConsultantDGModule(prompt="3 Paragraph example speech on the future of a company")
+        BusinessDevConsultantDGModule(
+            prompt="3 Paragraph example speech on the future of a company"
+        )
         | TextSummaryDGModule()
         | TweetDGModule(style="business with a hint of humor and 5 hashtags")
         | ReactJsxDGModule(reqs="React, TypeScript, Material-UI, Axios")
