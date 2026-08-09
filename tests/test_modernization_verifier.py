@@ -24,6 +24,7 @@ class VerifierTests(unittest.TestCase):
             MODULE.EXCLUDED_PYTHON_ROOTS,
             ("src/dspygen/experiments/", "src/dspygen/wip/"),
         )
+        self.assertEqual(MODULE.EXPECTED_ADMITTED_LEGACY_PLACEHOLDERS, 43)
         self.assertFalse(
             MODULE._is_admitted_python(
                 ROOT, ROOT / "src/dspygen/experiments/example.py"
