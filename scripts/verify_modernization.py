@@ -20,6 +20,7 @@ DSPY_MODULE_BLOB = '10f0923937df828f9fd0260f4045a97ee33150fc'
 DSPY_PREDICT_BLOB = '2018cffaab8f3b0b834fd990cff9312d29b59744'
 MCP_RUNTIME = ">=1.28,<2"
 MCP_CI_PIN = "mcp==1.29.0"
+EXPECTED_ADMITTED_LEGACY_PLACEHOLDERS = 43
 EXCLUDED_PYTHON_ROOTS = (
     "src/dspygen/experiments/",
     "src/dspygen/wip/",
@@ -148,7 +149,7 @@ def verify(root: Path, expected_legacy_placeholders: int | None = None) -> dict[
             and "--only-binary=:all:" in workflow_text
             and "sha256sum --check --strict" in workflow_text
             and "test_*runtime*.py" in workflow_text
-            and "--expected-legacy-placeholders 45" in workflow_text
+            and f"--expected-legacy-placeholders {EXPECTED_ADMITTED_LEGACY_PLACEHOLDERS}" in workflow_text
         ),
         "mcp_v1_dependency_is_bounded": dependencies.get("mcp") == MCP_RUNTIME,
         "mcp_ci_pin_is_deterministic": MCP_CI_PIN in workflow_text,
