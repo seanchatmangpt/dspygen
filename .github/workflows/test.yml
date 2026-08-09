@@ -81,7 +81,7 @@ jobs:
         run: |
           python scripts/verify_modernization.py \
             --root . \
-            --expected-legacy-placeholders 45 \
+            --expected-legacy-placeholders 43 \
             --output /tmp/dspygen-modernization.json
       - name: Upload verifier receipt
         uses: actions/upload-artifact@v4
