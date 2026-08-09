@@ -30,7 +30,7 @@ class LifecycleState(str, Enum):
     RETIRED = "retired"
     ARCHIVED = "archived"
 
-    def allows(self, target: "LifecycleState") -> bool:
+    def allows(self, target: LifecycleState) -> bool:
         if self is target:
             return True
         transitions = {
