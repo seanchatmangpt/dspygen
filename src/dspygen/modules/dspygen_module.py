@@ -16,7 +16,7 @@ class DGModule(dspy.Module, ABC):
         self.forward_args = forward_args
         self.output = None
 
-    def __or__(self, other: "DGModule"):
+    def __or__(self, other: DGModule):
         return pipe_modules(self, other)
 
     @abstractmethod
