@@ -2,9 +2,10 @@
 from __future__ import annotations
 
 import subprocess
-import tomllib
 from pathlib import Path, PurePosixPath
 from typing import Any
+
+import tomllib
 
 from dspygen.architecture.cmd_types import Observation, TreeEntry, content_id, utc_now
 
