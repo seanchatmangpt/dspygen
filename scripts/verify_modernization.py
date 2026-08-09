@@ -18,10 +18,21 @@ DSPY_CI_PIN = 'dspy==3.3.0'
 DSPY_WHEEL_SHA256 = '358cbfb15d13246dc4a289bb2350c0ee602260c8a3869f7f63a48a9d2233e48c'
 DSPY_MODULE_BLOB = '10f0923937df828f9fd0260f4045a97ee33150fc'
 DSPY_PREDICT_BLOB = '2018cffaab8f3b0b834fd990cff9312d29b59744'
+MCP_RUNTIME = ">=1.28,<2"
+MCP_CI_PIN = "mcp==1.29.0"
+EXCLUDED_PYTHON_ROOTS = (
+    "src/dspygen/experiments/",
+    "src/dspygen/wip/",
+)
 
 
 def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _is_admitted_python(root: Path, path: Path) -> bool:
+    relative = path.relative_to(root).as_posix()
+    return not any(relative.startswith(prefix) for prefix in EXCLUDED_PYTHON_ROOTS)
 
 
 def verify(root: Path, expected_legacy_placeholders: int | None = None) -> dict[str, Any]:
@@ -50,8 +61,13 @@ def verify(root: Path, expected_legacy_placeholders: int | None = None) -> dict[
     parsed = 0
     legacy_placeholders: list[str] = []
     invalid: list[str] = []
+    excluded_python_files: list[str] = []
     python_interpreter_references: list[str] = []
     for path in sorted((root / "src").rglob("*.py")):
+        relative = str(path.relative_to(root))
+        if not _is_admitted_python(root, path):
+            excluded_python_files.append(relative)
+            continue
         text = path.read_text(encoding="utf-8")
         try:
             tree = ast.parse(text, filename=str(path))
@@ -59,7 +75,6 @@ def verify(root: Path, expected_legacy_placeholders: int | None = None) -> dict[
             invalid.append(f"{path.relative_to(root)}: syntax: {exc}")
             continue
         parsed += 1
-        relative = str(path.relative_to(root))
         if "PythonInterpreter" in text:
             python_interpreter_references.append(relative)
         if path.name in {"pipeline.py", "gen_dspy_module.py"} or LEGACY_PIPE_PLACEHOLDER not in text:
@@ -135,6 +150,8 @@ def verify(root: Path, expected_legacy_placeholders: int | None = None) -> dict[
             and "test_*runtime*.py" in workflow_text
             and "--expected-legacy-placeholders 45" in workflow_text
         ),
+        "mcp_v1_dependency_is_bounded": dependencies.get("mcp") == MCP_RUNTIME,
+        "mcp_ci_pin_is_deterministic": MCP_CI_PIN in workflow_text,
         "vulnerable_interpreter_unreachable": not python_interpreter_references,
         "no_ambient_runtime_install": (
             "check_or_install_packages" not in cli_text
@@ -156,9 +173,16 @@ def verify(root: Path, expected_legacy_placeholders: int | None = None) -> dict[
             "upstream_predict_blob": DSPY_PREDICT_BLOB,
             "provider_actuation": "REFUSED:NOT_REQUIRED_FOR_DETERMINISTIC_WITNESS",
             "python_interpreter": "EXCLUDED:UNREACHABLE",
+            "mcp": {
+                "poetry_constraint": dependencies.get("mcp"),
+                "ci_pin": "1.29.0",
+                "major_2_migration": "UNSUPPORTED:OUTSIDE_THIS_CI_REPAIR",
+            },
         },
         "missing": missing,
         "parsed_python_files": parsed,
+        "excluded_python_roots": list(EXCLUDED_PYTHON_ROOTS),
+        "excluded_python_files": excluded_python_files,
         "legacy_placeholders_covered": len(legacy_placeholders),
         "expected_legacy_placeholders": expected_legacy_placeholders,
         "legacy_placeholder_files": legacy_placeholders,

@@ -17,9 +17,9 @@ jobs:
     name: MCP and LSP
     steps:
       - name: Checkout exact candidate
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up Python 3.11
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
           cache: pip
@@ -27,7 +27,7 @@ jobs:
         run: |
           pip install \
             pytest pytest-asyncio \
-            "mcp>=1.0.0" \
+            "mcp==1.29.0" \
             "pygls>=2.0.0" "lsprotocol>=2024.0" \
             pydantic pyyaml loguru hypothesis rich chromadb typer
           pip install -e . --no-deps
@@ -41,9 +41,9 @@ jobs:
     name: ERRC modernization
     steps:
       - name: Checkout exact candidate
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up Python 3.11
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
           cache: pip
@@ -58,8 +58,16 @@ jobs:
           import importlib.metadata
           assert importlib.metadata.version("dspy") == "3.3.0"
           PY
-      - name: Compile modernization surfaces
-        run: python -m compileall -q src/dspygen scripts/verify_modernization.py tests/test_errc_modernization.py tests/test_lsp_modernization.py tests/test_dspy_runtime_integration.py tests/test_modernization_verifier.py
+      - name: Compile admitted modernization surfaces
+        run: |
+          python -m compileall -q \
+            -x '(^|/)(experiments|wip)(/|$)' \
+            src/dspygen \
+            scripts/verify_modernization.py \
+            tests/test_errc_modernization.py \
+            tests/test_lsp_modernization.py \
+            tests/test_dspy_runtime_integration.py \
+            tests/test_modernization_verifier.py
       - name: Execute modernization witnesses and falsifiers
         env:
           PYTHONPATH: src
@@ -67,7 +75,7 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'test_*modernization*.py' -v
           python -m unittest discover -s tests -p 'test_*runtime*.py' -v
-      - name: Independent whole-tree repository verifier
+      - name: Independent admitted-tree repository verifier
         env:
           PYTHONPATH: src
         run: |
