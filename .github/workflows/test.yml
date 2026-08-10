@@ -52,6 +52,27 @@ jobs:
           PYTHONPATH: src
         run: uv run --no-project --with pytest pytest tests/test_meta_framework.py -q
 
+  powl-dspy:
+    runs-on: ubuntu-latest
+    name: dspy.Powl POWL 2.0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.10.0"
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile POWL surfaces
+        run: python -m compileall -q src/dspygen/powl tests/test_dspy_powl.py
+      - name: Execute POWL algebra, bounded workflow, and real DSPy extension witnesses
+        env:
+          PYTHONPATH: src
+        run: >-
+          uv run --no-project --with pytest --with 'dspy==3.3.0'
+          pytest tests/test_dspy_powl.py -q
+
   protocol-surfaces:
     runs-on: ubuntu-latest
     name: MCP and LSP
