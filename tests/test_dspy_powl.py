@@ -123,6 +123,7 @@ def test_real_dspy_module_surface_when_dspy_is_installed() -> None:
     dspy = pytest.importorskip("dspy")
     import dspygen.powl.dspy_module as dm
 
+    dm = importlib.reload(dm)
     # In a real environment the module is a first-class DSPy program.
     assert issubclass(dm.Powl, dspy.Module)
     assert not hasattr(dspy, "Powl") or dspy.Powl is dm.Powl
