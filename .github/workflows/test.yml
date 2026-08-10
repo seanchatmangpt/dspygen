@@ -2,9 +2,7 @@ name: Test
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [main, master]
   pull_request:
 
 concurrency:
@@ -12,71 +10,100 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  dependency-lock:
+    runs-on: ubuntu-latest
+    name: uv dependency receipt
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.10.0"
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Resolve newest compatible dependency graph
+        run: uv lock --upgrade
+      - name: Validate lock against project metadata
+        run: uv lock --check
+      - name: Upload exact dependency receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: uv-lock
+          path: uv.lock
+          if-no-files-found: error
+
+  meta-framework:
+    runs-on: ubuntu-latest
+    name: DSPy meta-framework
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.10.0"
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile meta-framework
+        run: python -m compileall -q src/dspygen/meta tests/test_meta_framework.py
+      - name: Run bounded meta-framework witnesses
+        env:
+          PYTHONPATH: src
+        run: uv run --no-project --with pytest pytest tests/test_meta_framework.py -q
+
   protocol-surfaces:
     runs-on: ubuntu-latest
     name: MCP and LSP
     steps:
-      - name: Checkout exact candidate
-        uses: actions/checkout@v4
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.10.0"
+          enable-cache: true
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: pip
-      - name: Install focused dependencies
-        run: |
-          pip install \
-            pytest pytest-asyncio \
-            "mcp>=1.0.0" \
-            "pygls>=2.0.0" "lsprotocol>=2024.0" \
-            pydantic pyyaml loguru hypothesis rich chromadb typer
-          pip install -e . --no-deps
-      - name: Run protocol tests
+      - name: Run protocol tests with focused modern dependencies
         env:
           PYTHONPATH: src
-        run: pytest tests/test_mcp.py tests/test_lsp.py --tb=short -q
+        run: >-
+          uv run --no-project
+          --with pytest --with pytest-asyncio --with mcp --with pygls
+          --with lsprotocol --with pydantic --with pyyaml --with loguru
+          --with hypothesis --with rich --with chromadb --with typer
+          pytest tests/test_mcp.py tests/test_lsp.py --tb=short -q
 
   errc-modernization:
     runs-on: ubuntu-latest
     name: ERRC modernization
     steps:
-      - name: Checkout exact candidate
-        uses: actions/checkout@v4
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.10.0"
+          enable-cache: true
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: pip
-      - name: Download exact admitted DSPy wheel
-        run: |
-          python -m pip download --no-deps --only-binary=:all: "dspy==3.3.0" --dest /tmp/dspy-wheel
-          echo "358cbfb15d13246dc4a289bb2350c0ee602260c8a3869f7f63a48a9d2233e48c  /tmp/dspy-wheel/dspy-3.3.0-py3-none-any.whl" | sha256sum --check --strict
-      - name: Install exact admitted runtime
-        run: |
-          pip install /tmp/dspy-wheel/dspy-3.3.0-py3-none-any.whl pydantic typer
-          python - <<'PY'
-          import importlib.metadata
-          assert importlib.metadata.version("dspy") == "3.3.0"
-          PY
-      - name: Compile modernization surfaces
-        run: python -m compileall -q src/dspygen scripts/verify_modernization.py tests/test_errc_modernization.py tests/test_lsp_modernization.py tests/test_dspy_runtime_integration.py tests/test_modernization_verifier.py
       - name: Execute modernization witnesses and falsifiers
         env:
           PYTHONPATH: src
           PYTHONDONTWRITEBYTECODE: "1"
         run: |
-          python -m unittest discover -s tests -p 'test_*modernization*.py' -v
-          python -m unittest discover -s tests -p 'test_*runtime*.py' -v
+          uv run --no-project --with 'dspy==3.3.0' --with pydantic --with typer \
+            python -m unittest discover -s tests -p 'test_*modernization*.py' -v
+          uv run --no-project --with 'dspy==3.3.0' --with pydantic --with typer \
+            python -m unittest discover -s tests -p 'test_*runtime*.py' -v
       - name: Independent whole-tree repository verifier
         env:
           PYTHONPATH: src
-        run: |
-          python scripts/verify_modernization.py \
-            --root . \
-            --expected-legacy-placeholders 45 \
-            --output /tmp/dspygen-modernization.json
-      - name: Upload verifier receipt
-        uses: actions/upload-artifact@v4
+        run: >-
+          uv run --no-project --with 'dspy==3.3.0' --with pydantic --with typer
+          python scripts/verify_modernization.py
+          --root . --expected-legacy-placeholders 45
+          --output /tmp/dspygen-modernization.json
+      - uses: actions/upload-artifact@v4
         with:
           name: dspygen-modernization-receipt
           path: /tmp/dspygen-modernization.json
