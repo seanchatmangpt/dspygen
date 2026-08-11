@@ -1,0 +1,40 @@
+name: DSPy Pack ERRC Max
+
+on:
+  push:
+    branches:
+      - agent/dspy-pack-errc-max
+  pull_request:
+    paths:
+      - 'experiments/dspy-errc-max/**'
+      - '.github/workflows/dspy-pack-errc-max.yml'
+
+jobs:
+  construct:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkout exact ggen constructor and DSPy pack source
+        uses: actions/checkout@v4
+        with:
+          repository: seanchatmangpt/ggen
+          ref: 306ff6903bf53e08d4237ec2cacbe8dab553ae83
+          path: .constructor/ggen
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Build exact ggen constructor
+        run: cargo build --release -p ggen-cli --bin ggen --manifest-path .constructor/ggen/Cargo.toml
+      - name: Construct portfolio from consumer ontology
+        working-directory: experiments/dspy-errc-max
+        run: ../../.constructor/ggen/target/release/ggen sync run
+      - name: Syntax-check manufactured Python projections
+        run: |
+          python -m py_compile \
+            experiments/dspy-errc-max/src/dspy_program.py \
+            experiments/dspy-errc-max/src/dspy_optimize.py
+      - name: Verify 80/20 combinatorial portfolio
+        run: python experiments/dspy-errc-max/verify.py
+      - name: Refuse unexpected generated directory convention
+        run: |
+          test ! -d experiments/dspy-errc-max/generated
+          test ! -f experiments/dspy-errc-max/generated.py
