@@ -1,193 +1,151 @@
-[build-system]  # https://python-poetry.org/docs/pyproject/#poetry-and-pep-517
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
 
-[tool.poetry]  # https://python-poetry.org/docs/pyproject/
+[project]
 name = "dspygen"
-version = "2024.9.14"
-description = "A Ruby on Rails style framework for the DSPy (Demonstrate, Search, Predict) project for Language Models like GPT, BERT, and LLama."
-authors = ["Sean Chatman <info@chatmangpt.com>"]
+version = "2026.8.9"
+description = "A meta-framework for DSPy programs: process inference, combinatorial optimization, bounded execution, and evidence receipts."
 readme = "README.md"
-repository = "https://github.com/seanchatmangpt/dspygen"
+requires-python = ">=3.11,<3.14"
+license = { text = "MIT" }
+authors = [{ name = "Sean Chatman", email = "info@chatmangpt.com" }]
+dependencies = [
+  "anyio>=4.3",
+  "apscheduler>=3.10.4",
+  "asyncer>=0.0.7",
+  "chromadb>=1.5.9",
+  "clingo>=5.7.1",
+  "coloredlogs>=15.0.1",
+  "confz>=2.0.1",
+  "docutils>=0.21",
+  "dspy>=3.3.0",
+  "duckduckgo-search>=8.1.1",
+  "ebooklib>=0.18",
+  "factory-boy>=3.3.0",
+  "fastapi[all]>=0.137.0",
+  "groq>=1.4.0",
+  "gspread>=6.1.2",
+  "gunicorn>=20.1.0; platform_system != 'Windows'",
+  "html2text>=2024.2.26",
+  "httpx>=0.28.1",
+  "icalendar>=5.0.13",
+  "icontract>=2.6.6",
+  "ijson>=3.2.3",
+  "inflection>=0.5.1",
+  "inject>=5.2.1",
+  "jinja2>=3.1.3",
+  "jinja2-ext>=0.1",
+  "jinja2-time>=0.2.0",
+  "loguru>=0.7.3",
+  "lsprotocol>=2024.0",
+  "mcp>=1.0.0",
+  "munch>=4.0.0",
+  "numpy>=2.2.6",
+  "ollama>=0.6.2",
+  "openai>=2.41.1",
+  "osascript>=2020.12.3; platform_system == 'Darwin'",
+  "paho-mqtt>=2.0.0",
+  "pandasql>=0.7.3",
+  "pddlpy>=0.4.4",
+  "playwright>=1.41.2",
+  "pm4py>=2.7.11.11",
+  "poethepoet>=0.20.0",
+  "prefect>=3.7.4",
+  "protobuf>=5.0",
+  "psutil>=5.9.8",
+  "py-trees>=2.2.3",
+  "pydantic>=2.13.4",
+  "pydantic-settings>=2.14.1",
+  "pygame>=2.5.2",
+  "pygls>=2.0.0",
+  "pykka>=4.0.2",
+  "pyobjc>=10.3.1; platform_system == 'Darwin'",
+  "pyobjc-framework-contacts>=10.3.1; platform_system == 'Darwin'",
+  "pyobjc-framework-eventkit>=10.3.1; platform_system == 'Darwin'",
+  "pyperclip>=1.8.2",
+  "pypdf>=6.0.0",
+  "python-docx>=1.1.0",
+  "python-dotenv>=1.0.1",
+  "python-pptx>=1.0.0",
+  "pytz>=2025.1",
+  "reactivex>=4.0.4",
+  "realtime>=2.31.0",
+  "rich>=13.0",
+  "sentify>=0.7.4",
+  "sqlmodel>=0.0.38",
+  "st-pages>=0.4.5",
+  "streamlit>=1.19.0",
+  "sungen>=2024.9.28",
+  "tpot>=0.12.2",
+  "trafilatura>=2.1.0",
+  "transitions>=0.9.0",
+  "typer[all]>=0.26.7",
+  "tzlocal>=5.2",
+  "uvicorn[standard]>=0.20.0",
+  "websockets>=15.0.1",
+]
 
-[tool.poetry.scripts]  # https://python-poetry.org/docs/pyproject/#scripts
+[project.urls]
+Repository = "https://github.com/seanchatmangpt/dspygen"
+
+[project.scripts]
 dspygen = "dspygen.cli:app"
 dspygen-mcp = "dspygen.mcp.server:run_stdio"
 dspygen-lsp = "dspygen.lsp.server:run_stdio"
 dspygen-jupyter = "dspygen.jupyter.kernel:load_ipython_extension"
 
-[tool.poetry.plugins."pytest11"]
+[project.entry-points.pytest11]
 dspygen = "dspygen.pytest_plugin"
 
-[tool.poetry.dependencies]  # https://python-poetry.org/docs/dependency-specification/
-coloredlogs = ">=15.0.1"
-fastapi = { extras = ["all"], version = "^0.137.0" }
-gunicorn = ">=20.1.0"
-poethepoet = ">=0.20.0"
-pydantic = "^2.13.4"
-python = ">=3.10,<3.13"
-streamlit = ">=1.19.0"
-typer = { extras = ["all"], version = ">=0.26.7" }
-uvicorn = { extras = ["standard"], version = ">=0.20.0" }
-jinja2 = "^3.1.3"
-inflection = "^0.5.1"
-jinja2-time = "^0.2.0"
-jinja2-ext = "^0.1"
-openai = "^2.41.1"
-pyperclip = "^1.8.2"
-asyncer = "^0.0.7"
-loguru = "^0.7.3"
-groq = "^1.4.0"
-reactivex = "^4.0.4"
-pytest-asyncio = "^1.4.0"
-playwright = "^1.41.2"
-python-dotenv = "^1.0.1"
-paho-mqtt = "^2.0.0"
-psutil = "^5.9.8"
-st-pages = "^0.4.5"
-pykka = "^4.0.2"
-ijson = "^3.2.3"
-munch = "^4.0.0"
-pandasql = "^0.7.3"
-sentify = "^0.7.4"
-ebooklib = "^0.18"
-python-docx = "^1.1.0"
-pypdf = "^4.3.1"
-sqlmodel = "^0.0.38"
-icontract = "^2.6.6"
-tzlocal = "^5.2"
-pydantic-settings = "^2.14.1"
-anyio = "^4.3.0"
-docutils = "0.21"
-transitions = "^0.9.0"
-pygame = "^2.5.2"
-py-trees = "^2.2.3"
-chromadb = "^1.5.9"
-html2text = "^2024.2.26"
-duckduckgo-search = "^8.1.1"
-factory-boy = "^3.3.0"
-gspread = "^6.1.2"
-pytest-httpx = "^0.36.2"
-httpx = "^0.28.1"
-inject = "^5.2.1"
-pddlpy = "^0.4.4"
-clingo = "^5.7.1"
-sungen = "^2024.9.28"
-numpy = "^2.2.6"
-confz = "^2.0.1"
-python-pptx = "^0.6.23"
-pm4py = "^2.7.11.11"
-protobuf = ">=3.20"
-osascript = "^2020.12.3"
-websockets = ">=15.0.1,<16.0"
-realtime = "^2.31.0"
-trafilatura = "^2.1.0"
-pyobjc = "^10.3.1"
-pyobjc-framework-eventkit = "^10.3.1"
-icalendar = "^5.0.13"
-pyobjc-framework-contacts = "^10.3.1"
-pytz = "^2024.1"
-apscheduler = "^3.10.4"
-prefect = "^3.7.4"
-ollama = "^0.6.2"
-dspy = "^3.2.1"
-tpot = "^0.12.2"
-mcp = ">=1.0.0"
-pygls = ">=2.0.0"
-lsprotocol = ">=2024.0"
-rich = ">=13.0"
+[project.optional-dependencies]
+llm = ["anthropic>=0.40", "cohere>=5.0", "mistralai>=1.0"]
+retrieval = ["faiss-cpu>=1.8", "qdrant-client>=1.9", "pinecone>=5.0"]
+jupyter = ["jupyter>=1.0", "jupyterlab>=4.0", "ipykernel>=6.0", "ipywidgets>=8.0", "nbformat>=5.9"]
+docs = ["sphinx>=7.0", "myst-parser>=3.0", "sphinx-rtd-theme>=2.0", "sphinx-autodoc-typehints>=1.25", "sphinxcontrib-mermaid>=0.9"]
 
-[tool.poetry.group.test.dependencies]  # https://python-poetry.org/docs/master/managing-dependencies/
-coverage = { extras = ["toml"], version = ">=7.2.5" }
-mypy = ">=1.2.0"
-pre-commit = ">=3.3.1"
-pytest = ">=9.1.0"
-pytest-clarity = ">=1.0.1"
-pytest-mock = ">=3.10.0"
-pytest-xdist = ">=3.2.1"
-ruff = ">=0.2.1"
+[dependency-groups]
+test = [
+  "coverage[toml]>=7.2.5",
+  "mypy>=1.2.0",
+  "pre-commit>=3.3.1",
+  "pytest>=9.1.0",
+  "pytest-asyncio>=1.4.0",
+  "pytest-clarity>=1.0.1",
+  "pytest-httpx>=0.36.2",
+  "pytest-mock>=3.10.0",
+  "pytest-xdist>=3.2.1",
+  "ruff>=0.2.1",
+]
+dev = ["cruft>=2.14.0", "jupyterlab>=4.0", "pdoc>=13.1.1"]
 
-[tool.poetry.group.dev.dependencies]  # https://python-poetry.org/docs/master/managing-dependencies/
-cruft = ">=2.14.0"
-jupyterlab = ">=3.6.3"
-pdoc = ">=13.1.1"
+[tool.uv]
+default-groups = ["test"]
+resolution = "highest"
+prerelease = "if-necessary-or-explicit"
 
-[tool.poetry.group.docs.dependencies]
-sphinx = ">=7.0"
-myst-parser = ">=3.0"
-sphinx-rtd-theme = ">=2.0"
-sphinx-autodoc-typehints = ">=1.25"
-sphinxcontrib-mermaid = ">=0.9"
+[tool.hatch.build.targets.wheel]
+packages = ["src/dspygen"]
 
-[tool.poetry.group.jupyter.dependencies]
-jupyter = ">=1.0"
-jupyterlab = ">=4.0"
-ipykernel = ">=6.0"
-ipywidgets = ">=8.0"
-nbformat = ">=5.9"
-
-[tool.poetry.group.llm.dependencies]
-anthropic = ">=0.40"
-cohere = ">=5.0"
-mistralai = ">=1.0"
-
-[tool.poetry.group.retrieval.dependencies]
-faiss-cpu = ">=1.8"
-qdrant-client = ">=1.9"
-pinecone-client = ">=3.0"
-
-[tool.poetry.group.all.dependencies]
-# Meta-group: install all optional dependency groups together
-sphinx = ">=7.0"
-myst-parser = ">=3.0"
-sphinx-rtd-theme = ">=2.0"
-sphinx-autodoc-typehints = ">=1.25"
-sphinxcontrib-mermaid = ">=0.9"
-jupyter = ">=1.0"
-jupyterlab = ">=4.0"
-ipykernel = ">=6.0"
-ipywidgets = ">=8.0"
-nbformat = ">=5.9"
-anthropic = ">=0.40"
-cohere = ">=5.0"
-mistralai = ">=1.0"
-faiss-cpu = ">=1.8"
-qdrant-client = ">=1.9"
-pinecone-client = ">=3.0"
-
-[tool.poetry.extras]
-mcp = ["mcp"]
-lsp = ["pygls", "lsprotocol"]
-all = ["mcp", "pygls", "lsprotocol"]
-
-[tool.coverage.report]  # https://coverage.readthedocs.io/en/latest/config.html#report
+[tool.coverage.report]
 precision = 1
 show_missing = true
 skip_covered = false
 fail_under = 30
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "raise NotImplementedError",
-    "if __name__",
-]
+exclude_lines = ["pragma: no cover", "def __repr__", "raise NotImplementedError", "if __name__"]
 
-[tool.coverage.run]  # https://coverage.readthedocs.io/en/latest/config.html#run
+[tool.coverage.run]
 branch = true
 command_line = "--module pytest"
 data_file = "reports/.coverage"
 source = ["src/dspygen"]
-omit = [
-    "*/experiments/*",
-    "*/tests/*",
-    "*/__pycache__/*",
-]
+omit = ["*/experiments/*", "*/tests/*", "*/__pycache__/*"]
 
-[tool.coverage.xml]  # https://coverage.readthedocs.io/en/latest/config.html#xml
+[tool.coverage.xml]
 output = "reports/coverage.xml"
 
-[tool.mypy]  # https://mypy.readthedocs.io/en/latest/config_file.html
-python_version = "3.10"
+[tool.mypy]
+python_version = "3.11"
 strict = false
 warn_return_any = true
 warn_unused_configs = true
@@ -201,7 +159,7 @@ show_error_context = true
 warn_unreachable = true
 exclude = ["experiments/", "tests/", "wip/"]
 
-[tool.pytest.ini_options]  # https://docs.pytest.org/en/latest/reference/reference.html#ini-options-ref
+[tool.pytest.ini_options]
 asyncio_mode = "auto"
 addopts = "-p no:warnings --tb=short -q -m 'not slow and not benchmark and not requires_openai and not requires_ollama'"
 testpaths = ["tests"]
@@ -210,58 +168,32 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 xfail_strict = true
 markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration tests (multi-component workflows)",
-    "mcp: marks tests for the dspygen MCP server and tools (deselect with '-m \"not mcp\"')",
-    "lsp: marks tests related to the DSPygen LSP server implementation",
-    "dspy_module: marks tests needing LM configuration",
-    "requires_openai: marks tests needing OPENAI_API_KEY",
-    "requires_ollama: marks tests needing Ollama running",
-    "property_based: marks property-based hypothesis tests",
-    "benchmark: marks performance benchmark tests",
-    "requires_llm: mark test as requiring a real LLM API key",
-    "dspygen_requires_openai: skip when OPENAI_API_KEY is not set",
+  "slow: marks tests as slow",
+  "integration: marks multi-component integration tests",
+  "mcp: marks DSPyGen MCP tests",
+  "lsp: marks DSPyGen LSP tests",
+  "dspy_module: marks tests needing LM configuration",
+  "requires_openai: marks tests needing OPENAI_API_KEY",
+  "requires_ollama: marks tests needing Ollama",
+  "property_based: marks hypothesis tests",
+  "benchmark: marks performance benchmarks",
+  "requires_llm: marks tests requiring a real LLM API key",
+  "dspygen_requires_openai: skip when OPENAI_API_KEY is not set",
 ]
 
-[tool.ruff]  # https://github.com/charliermarsh/ruff
+[tool.ruff]
 fix = true
 line-length = 100
 src = ["src", "tests"]
-target-version = "py310"
-exclude = [
-    "src/dspygen/experiments",
-    "src/dspygen/wip",
-    ".venv",
-    "__pycache__",
-]
+target-version = "py311"
+exclude = ["src/dspygen/experiments", "src/dspygen/wip", ".venv", "__pycache__"]
 
 [tool.ruff.lint]
-ignore-init-module-imports = true
 select = ["E", "F", "I", "B", "UP", "N", "W", "PLE", "PLC"]
 ignore = [
-    "E501",    # line too long
-    "E402",    # module import not at top (lazy imports are intentional)
-    "B008",    # function call in argument defaults
-    "N999",    # invalid module name
-    "N806", "N803", "N815", "N802", "N818",
-    "F401",    # unused imports (pre-existing throughout codebase)
-    "F841",    # unused variable
-    "F405",    # may be undefined from star import
-    "F403",    # star import used
-    "F402",    # import from line shadowed by loop variable
-    "F811",    # redefinition of unused name
-    "F821",    # undefined name (false positives from star imports)
-    "PLC0415", # import-outside-toplevel (lazy imports are intentional)
-    "UP035",   # deprecated typing imports
-    "UP031",   # old-style % formatting
-    "UP007",   # use X | Y instead of Optional[X]
-    "B904",    # exception chaining
-    "B007",    # loop control variable not used
-    "B005",    # .strip() with multi-char string
-    "B905",    # zip without explicit strict
-    "E741",    # ambiguous variable name
-    "W291",    # trailing whitespace (pre-existing, unsafe fix)
-    "W293",    # whitespace before comment (pre-existing, unsafe fix)
+  "E501", "E402", "B008", "N999", "N806", "N803", "N815", "N802", "N818",
+  "F401", "F841", "F405", "F403", "F402", "F811", "F821", "PLC0415",
+  "UP035", "UP031", "UP007", "B904", "B007", "B005", "B905", "E741", "W291", "W293",
 ]
 unfixable = []
 
@@ -273,133 +205,9 @@ unfixable = []
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
 
-[tool.ruff.lint.pydocstyle]
-convention = "google"
-
-[tool.poe.tasks]  # https://github.com/nat-n/poethepoet
-lock = "poetry lock"
-inst = "poetry install"
-pub = "poetry publish --build"
-
-  [tool.poe.tasks.api]
-  help = "Serve a REST API"
-  shell = """
-    if [ $dev ]
-    then {
-      uvicorn \
-        --host $host \
-        --port $port \
-        --timeout-keep-alive 30
-        --timeout 30 \
-        --reload \
-        dspygen.api:app
-    } else {
-      gunicorn \
-        --access-logfile - \
-        --bind $host:$port \
-        --timeout-keep-alive 30 \
-        --log-file - \
-        --timeout 30 \
-        --worker-class uvicorn.workers.UvicornWorker \
-        --workers 1 \
-        dspygen.api:app
-    } fi
-    """
-
-    [[tool.poe.tasks.api.args]]
-    help = "Bind socket to this host (default: 0.0.0.0)"
-    name = "host"
-    options = ["--host"]
-    default = "0.0.0.0"
-
-    [[tool.poe.tasks.api.args]]
-    help = "Bind socket to this port (default: 8000)"
-    name = "port"
-    options = ["--port"]
-    default = "8000"
-
-    [[tool.poe.tasks.api.args]]
-    help = "Enable development mode"
-    type = "boolean"
-    name = "dev"
-    options = ["--dev"]
-
-  [tool.poe.tasks.app]
-  help = "Serve a Streamlit app"
-  cmd = """
-    streamlit run
-      --browser.gatherUsageStats false
-      --server.address $host
-      --server.port $port
-      --theme.base light
-      src/dspygen/app.py
-    """
-  use_exec = true
-
-    [[tool.poe.tasks.app.args]]
-    help = "Bind socket to this host (default: 0.0.0.0)"
-    name = "host"
-    options = ["--host"]
-    default = "0.0.0.0"
-
-    [[tool.poe.tasks.app.args]]
-    help = "Bind socket to this port (default: 80)"
-    name = "port"
-    options = ["--port"]
-    default = "80"
-
-  [tool.poe.tasks.docs]
-  help = "Generate this package's docs"
-  cmd = """
-    pdoc
-      --docformat $docformat
-      --output-directory $outputdirectory
-      dspygen
-    """
-
-    [[tool.poe.tasks.docs.args]]
-    help = "The docstring style (default: google)"
-    name = "docformat"
-    options = ["--docformat"]
-    default = "google"
-
-    [[tool.poe.tasks.docs.args]]
-    help = "The output directory (default: docs)"
-    name = "outputdirectory"
-    options = ["--output-directory"]
-    default = "docs"
-
-  [tool.poe.tasks.lab]
-  help = "Run Jupyter Lab"
-
-    [[tool.poe.tasks.lab.sequence]]
-    cmd = "mkdir -p notebooks"
-
-    [[tool.poe.tasks.lab.sequence]]
-    cmd = """
-      jupyter lab
-        --allow-root
-        --notebook-dir notebooks
-      """
-
-  [tool.poe.tasks.lint]
-  help = "Lint this package"
-
-    [[tool.poe.tasks.lint.sequence]]
-    cmd = """
-      pre-commit run
-        --all-files
-        --color always
-      """
-
-  [tool.poe.tasks.test]
-  help = "Test this package"
-
-    [[tool.poe.tasks.test.sequence]]
-    cmd = "coverage run"
-
-    [[tool.poe.tasks.test.sequence]]
-    cmd = "coverage report"
-
-    [[tool.poe.tasks.test.sequence]]
-    cmd = "coverage xml"
+[tool.poe.tasks]
+lock = "uv lock --upgrade"
+inst = "uv sync --all-groups"
+pub = "uv build"
+test = "uv run coverage run && uv run coverage report && uv run coverage xml"
+lint = "uv run pre-commit run --all-files --color always"

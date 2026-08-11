@@ -16,9 +16,11 @@
 
 from importlib.metadata import PackageNotFoundError, version
 
+from dspygen.powl import Powl, install_dspy_extension
+
 try:
     __version__ = version("dspygen")
 except PackageNotFoundError:
     __version__ = "0.0.0-dev"
 
-__all__ = ["__version__"]
+__all__ = ["Powl", "__version__", "install_dspy_extension"]
