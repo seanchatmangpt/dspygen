@@ -16,7 +16,7 @@ jobs:
   dspy-ggen-pack:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    name: dspy-pack v0.2.0 exact-pin render
+    name: dspy-pack v0.5.0 exact-pin render
     steps:
       - name: Checkout exact DSPyGen subject
         uses: actions/checkout@v4
@@ -35,7 +35,7 @@ jobs:
           --project .specify/dspy-pack
           --output "${RUNNER_TEMP}/dspy-pack-static-receipt.json"
 
-      - name: Install qualifying ggen v26.8.8 binary
+      - name: Install marketplace-qualified ggen v26.8.8 binary
         shell: bash
         run: |
           set -euo pipefail
@@ -51,7 +51,7 @@ jobs:
           echo "GGEN_BIN=$ggen_bin" >> "$GITHUB_ENV"
           "$ggen_bin" --version
 
-      - name: Manufacture DSPyGen projection through the exact git-pinned pack
+      - name: Manufacture DSPyGen projection through dspy-pack 0.5.0
         shell: bash
         run: |
           set -euo pipefail

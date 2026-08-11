@@ -10,9 +10,9 @@ import tomllib
 from pathlib import Path
 
 PACK_REPO = "https://github.com/seanchatmangpt/ggen-marketplace.git"
-PACK_COMMIT = "465e9462747e489be842c7107fdf537735de5d65"
+PACK_COMMIT = "95fc2d097d7536baf1d628961cbfd22e1ca449df"
 PACK_SUBDIR = "packs/dspy-pack"
-PACK_VERSION = "0.2.0"
+PACK_VERSION = "0.5.0"
 EXPECTED_MODULE = "powl_planner"
 EXPECTED_SIGNATURE = "PowlPlanner"
 
@@ -75,6 +75,8 @@ def verify_project(project: Path, rendered: Path | None) -> dict[str, object]:
             "generated_output_is_projection": True,
             "react_admitted": False,
             "do_path": "BRCE",
+            "pack_is_pure_law": True,
+            "consumer_owns_individuals": True,
         },
     }
 
@@ -90,10 +92,6 @@ def verify_project(project: Path, rendered: Path | None) -> dict[str, object]:
         missing_code = [needle for needle in required_code if needle not in code]
         if missing_code:
             refuse("DSPY_PACK_RENDER_MISMATCH", ",".join(missing_code))
-
-        # The pack itself contains a worked ReAct example, so a complete pack
-        # render may include ReAct code. DSPyGen's authority is its consumer
-        # ontology above, which deliberately contains no ReAct declaration.
         compile(code, str(rendered), "exec")
 
         pack_cache = project / ".ggen-v2" / "git-packs" / "dspy-pack"
