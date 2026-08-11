@@ -1,0 +1,35 @@
+@prefix dspy: <http://seanchatmangpt.github.io/packs/dspy#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+# DSPyGen consumes dspy-pack as a CONSTRUCT-only compiler surface.
+# The generated module proposes candidate POWL text; admission and execution
+# remain owned by dspygen.powl and consequential DO remains BRCE-only.
+dspy:powl-planner-signature a dspy:Signature ;
+    dcterms:title "PowlPlanner" ;
+    dcterms:description "Propose a candidate POWL process from admitted observation and objective text." ;
+    dspy:className "PowlPlanner" ;
+    dspy:hasInput dspy:powl-observation-input, dspy:powl-objective-input ;
+    dspy:hasOutput dspy:powl-candidate-output .
+
+dspy:powl-observation-input a dspy:InputField ;
+    dcterms:description "Admitted observation O* serialized for cognition only." ;
+    dspy:name "observation" ;
+    dspy:pythonType "str" .
+
+dspy:powl-objective-input a dspy:InputField ;
+    dcterms:description "Bounded objective the candidate process should satisfy." ;
+    dspy:name "objective" ;
+    dspy:pythonType "str" .
+
+dspy:powl-candidate-output a dspy:OutputField ;
+    dcterms:description "Candidate POWL description; not admitted, executable, or authorized merely by generation." ;
+    dspy:name "candidate_powl" ;
+    dspy:pythonType "str" .
+
+dspy:powl-planner-module a dspy:Module ;
+    dcterms:description "Chain-of-thought constructor for candidate POWL; no tool or actuator authority." ;
+    prov:wasDerivedFrom dspy:powl-planner-signature ;
+    dspy:name "powl_planner" ;
+    dspy:kind "ChainOfThought" ;
+    dspy:signature dspy:powl-planner-signature .

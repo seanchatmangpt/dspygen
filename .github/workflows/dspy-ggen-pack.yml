@@ -1,0 +1,80 @@
+name: DSPy ggen pack
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dspygen-ggen-pack-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dspy-ggen-pack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    name: dspy-pack v0.2.0 exact-pin render
+    steps:
+      - name: Checkout exact DSPyGen subject
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Verify pack identity and DSPyGen authority fence before manufacture
+        run: >-
+          python scripts/verify_dspy_ggen_pack.py
+          --project .specify/dspy-pack
+          --output "${RUNNER_TEMP}/dspy-pack-static-receipt.json"
+
+      - name: Install qualifying ggen v26.8.8 binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="${RUNNER_TEMP}/ggen.tar.gz"
+          curl -fsSL \
+            "https://github.com/seanchatmangpt/ggen/releases/download/v26.8.8/ggen-x86_64-unknown-linux-gnu.tar.gz" \
+            -o "$archive"
+          echo "c651d873c2aeb6bd71c3d5356634f0b3f4adafd2454ee354c817a7079c2ea802  $archive" | sha256sum -c -
+          mkdir -p "${RUNNER_TEMP}/ggen-bin"
+          tar -xzf "$archive" -C "${RUNNER_TEMP}/ggen-bin"
+          ggen_bin="$(find "${RUNNER_TEMP}/ggen-bin" -type f -name ggen -perm -u+x | head -n1)"
+          test -n "$ggen_bin"
+          echo "GGEN_BIN=$ggen_bin" >> "$GITHUB_ENV"
+          "$ggen_bin" --version
+
+      - name: Manufacture DSPyGen projection through the exact git-pinned pack
+        shell: bash
+        run: |
+          set -euo pipefail
+          project="${RUNNER_TEMP}/dspygen-dspy-pack"
+          cp -a .specify/dspy-pack "$project"
+          (
+            cd "$project"
+            "$GGEN_BIN" sync run
+          )
+          python scripts/verify_dspy_ggen_pack.py \
+            --project "$project" \
+            --rendered "$project/src/dspy_program.py" \
+            --output "${RUNNER_TEMP}/dspy-pack-render-receipt.json"
+          python -m py_compile "$project/src/dspy_program.py"
+          test "$(git status --porcelain --untracked-files=all)" = ""
+
+      - name: Preserve connection receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dspygen-dspy-pack-receipts
+          path: |
+            ${{ runner.temp }}/dspy-pack-static-receipt.json
+            ${{ runner.temp }}/dspy-pack-render-receipt.json
+            ${{ runner.temp }}/dspygen-dspy-pack/.ggen-v2/receipt.json
+          if-no-files-found: warn
