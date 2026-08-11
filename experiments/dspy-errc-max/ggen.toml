@@ -1,0 +1,15 @@
+[project]
+name = "dspygen-errc-max"
+
+[ontology]
+source = "ontology.ttl"
+
+[ontology.prefixes]
+dspy = "http://seanchatmangpt.github.io/packs/dspy#"
+dcterms = "http://purl.org/dc/terms/"
+
+[packs]
+dspy-pack = { git = "https://github.com/seanchatmangpt/ggen.git", version = "306ff6903bf53e08d4237ec2cacbe8dab553ae83", subdir = "packs/dspy-pack" }
+
+[templates]
+dir = "templates"
