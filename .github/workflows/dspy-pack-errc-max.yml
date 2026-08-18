@@ -1,4 +1,4 @@
-name: DSPy Pack ERRC Max
+name: DSPy Pack DfCM Full Closure
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
       - name: Build exact ggen constructor
-        run: cargo build --release -p ggen-cli --bin ggen --manifest-path .constructor/ggen/Cargo.toml
+        run: cargo build --release -p ggen-cli-lib --bin ggen --manifest-path .constructor/ggen/Cargo.toml
       - name: Construct portfolio from consumer ontology
         working-directory: experiments/dspy-errc-max
         run: ../../.constructor/ggen/target/release/ggen sync run
@@ -32,7 +32,7 @@ jobs:
           python -m py_compile \
             experiments/dspy-errc-max/src/dspy_program.py \
             experiments/dspy-errc-max/src/dspy_optimize.py
-      - name: Verify 80/20 combinatorial portfolio
+      - name: Verify complete admitted combinatorial portfolio
         run: python experiments/dspy-errc-max/verify.py
       - name: Refuse unexpected generated directory convention
         run: |
