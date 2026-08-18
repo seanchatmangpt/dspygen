@@ -92,7 +92,7 @@ prefect = "^3.7.4"
 ollama = "^0.6.2"
 dspy = "^3.2.1"
 tpot = "^0.12.2"
-mcp = ">=1.0.0"
+mcp = ">=1.28,<2"
 pygls = ">=2.0.0"
 lsprotocol = ">=2024.0"
 rich = ">=13.0"
@@ -269,6 +269,9 @@ unfixable = []
 "tests/**" = ["S101", "ARG", "FBT", "F401"]
 "src/dspygen/experiments/**" = ["ALL"]
 "src/dspygen/wip/**" = ["ALL"]
+# Formatting-only import-order waivers on bounded legacy/intentional import boundaries.
+"src/dspygen/architecture/cmd_verifier.py" = ["I001"]
+"src/dspygen/mcp/tools/extended_retrieval_tools.py" = ["I001"]
 
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"

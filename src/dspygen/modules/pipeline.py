@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from inspect import Parameter, Signature, signature
-from typing import Any, Callable
+from typing import Any, Callable, cast
 
 LEGACY_PIPE_PLACEHOLDER = "Please implement the pipe method for DSL support."
 
@@ -114,7 +114,7 @@ def pipe_forward(module: object, input_value: Any) -> Any:
     kwargs[parameter] = input_value
     invoke = module if callable(module) else module.forward
     result = invoke(**kwargs)
-    setattr(module, "output", result)
+    cast(Any, module).output = result
     return result
 
 
@@ -132,14 +132,14 @@ def pipe_modules(left: object, right: object) -> object:
             )
         invoke = left if callable(left) else left.forward
         left_output = invoke(**forward_args)
-        setattr(left, "output", left_output)
+        cast(Any, left).output = left_output
 
     pipe = getattr(right, "pipe", None)
     if callable(pipe) and not is_legacy_pipe_placeholder(pipe):
         result = pipe(left_output)
     else:
         result = pipe_forward(right, left_output)
-    setattr(right, "output", result)
+    cast(Any, right).output = result
     return right
 
 
@@ -164,8 +164,8 @@ def repair_legacy_pipe_class(cls: type[Any]) -> bool:
     _pipe.__name__ = "pipe"
     _pipe.__qualname__ = f"{cls.__qualname__}.pipe"
     _pipe.__doc__ = "Pipe an upstream value into the uniquely admitted forward input."
-    setattr(cls, "pipe", _pipe)
-    setattr(cls, "__dspygen_legacy_pipe_repaired__", True)
+    cast(Any, cls).pipe = _pipe
+    cast(Any, cls).__dspygen_legacy_pipe_repaired__ = True
     return True
 
 

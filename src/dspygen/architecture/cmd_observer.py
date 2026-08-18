@@ -2,9 +2,10 @@
 from __future__ import annotations
 
 import subprocess
-import tomllib
 from pathlib import Path, PurePosixPath
 from typing import Any
+
+import tomllib
 
 from dspygen.architecture.cmd_types import Observation, TreeEntry, content_id, utc_now
 
@@ -13,8 +14,7 @@ def _git(root: Path, *args: str) -> str:
     result = subprocess.run(
         ["git", "-C", str(root), *args],
         check=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
     )
     return result.stdout.decode("utf-8", errors="surrogateescape")
 
@@ -58,8 +58,7 @@ def observe(root: Path, freshness_limit_seconds: int = 300) -> Observation:
     raw = subprocess.run(
         ["git", "-C", str(root), "ls-tree", "-r", "-z", "--full-tree", "HEAD"],
         check=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
     ).stdout
     entries: list[TreeEntry] = []
     unresolved: list[str] = []

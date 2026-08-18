@@ -25,7 +25,7 @@ jobs:
       PYTHONPATH: src
     steps:
       - name: Checkout exact repair branch
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
           fetch-depth: 0
@@ -62,7 +62,8 @@ jobs:
           sha256sum packs/cmd-*.json .ggen/packs.lock > "$RUNNER_TEMP/second.sha256"
           diff -u "$RUNNER_TEMP/first.sha256" "$RUNNER_TEMP/second.sha256"
 
-      - name: Enforce ownership and commit manufactured consequence
+      - name: Enforce ownership and record manufactured consequence
+        id: consequence
         run: |
           python3 - <<'PY'
           import subprocess
@@ -70,13 +71,17 @@ jobs:
           unexpected = sorted(path for path in paths if path != '.ggen/packs.lock' and not path.startswith('packs/cmd-'))
           if unexpected:
               raise SystemExit(f'PACK_LOCK_PATH_ESCAPE_REFUSED: {unexpected}')
-          if '.ggen/packs.lock' not in paths:
-              raise SystemExit('PACK_LOCK_CONSEQUENCE_MISSING')
           PY
-          git config user.name "dspygen-alive-controller"
-          git config user.email "dspygen-alive-controller@users.noreply.github.com"
-          git add packs/cmd-*.json .ggen/packs.lock
-          git commit -m "fix(cmd): rebuild exact pack lock"
+          if git diff --quiet -- packs/cmd-*.json .ggen/packs.lock; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "PACK_LOCK_ALREADY_CANONICAL"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git config user.name "dspygen-alive-controller"
+            git config user.email "dspygen-alive-controller@users.noreply.github.com"
+            git add packs/cmd-*.json .ggen/packs.lock
+            git commit -m "fix(cmd): rebuild exact pack lock"
+          fi
           test -z "$(git status --porcelain=v1 --untracked-files=all)"
 
       - name: Execute complete CMD verifier ladder on committed tree
@@ -92,4 +97,5 @@ jobs:
           test -z "$(git status --porcelain=v1 --untracked-files=all)"
 
       - name: Publish exact manufactured consequence
+        if: steps.consequence.outputs.changed == 'true'
         run: git push origin "HEAD:${{ github.event.pull_request.head.ref || github.ref_name }}"
