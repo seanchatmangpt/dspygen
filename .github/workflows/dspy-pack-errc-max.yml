@@ -20,10 +20,12 @@ jobs:
           repository: seanchatmangpt/ggen
           ref: 306ff6903bf53e08d4237ec2cacbe8dab553ae83
           path: .constructor/ggen
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+      - name: Install exact ggen toolchain
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          toolchain: nightly-2026-06-22
       - name: Build exact ggen constructor
-        run: cargo build --release -p ggen-cli-lib --bin ggen --manifest-path .constructor/ggen/Cargo.toml
+        run: cargo +nightly-2026-06-22 build --release -p ggen-cli-lib --bin ggen --manifest-path .constructor/ggen/Cargo.toml
       - name: Construct portfolio from consumer ontology
         working-directory: experiments/dspy-errc-max
         run: ../../.constructor/ggen/target/release/ggen sync run
