@@ -1954,21 +1954,6 @@ wrapt = ">=1.10,<2"
 dev = ["PyTest", "PyTest-Cov", "bump2version (<1)", "sphinx (<2)", "tox"]
 
 [[package]]
-name = "deprecation"
-version = "2.1.0"
-description = "A library to handle automated deprecations"
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "deprecation-2.1.0-py2.py3-none-any.whl", hash = "sha256:a10811591210e1fb0e768a8c25517cabeabcba6f0bf96564f8ff45189f90b14a"},
-    {file = "deprecation-2.1.0.tar.gz", hash = "sha256:72b3bde64e5d778694b0cf68178aed03d15e15477116add3fb773e581f9518ff"},
-]
-
-[package.dependencies]
-packaging = "*"
-
-[[package]]
 name = "detect-installer"
 version = "0.1.0"
 description = "Detect how a Python package was installed and get the correct upgrade command"
@@ -3841,20 +3826,6 @@ files = [
     {file = "inject-5.2.1-py2.py3-none-any.whl", hash = "sha256:e40a5b1bebd8a4050b6f98f3396f3de6e9e2e411ad2a2145f16f351cb6f54e51"},
     {file = "inject-5.2.1.tar.gz", hash = "sha256:f7c305a75cc4e3a331d248e996f25783ba784b88d5a9b9f73c53eacaa6d76985"},
 ]
-
-[[package]]
-name = "intervaltree"
-version = "3.1.0"
-description = "Editable interval tree data structure for Python 2 and 3"
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "intervaltree-3.1.0.tar.gz", hash = "sha256:902b1b88936918f9b2a19e0e5eb7ccb430ae45cde4f39ea4b36932920d33952d"},
-]
-
-[package.dependencies]
-sortedcontainers = ">=2.0,<3.0"
 
 [[package]]
 name = "invoke"
@@ -6859,27 +6830,24 @@ testing = ["coverage", "pytest", "pytest-benchmark"]
 
 [[package]]
 name = "pm4py"
-version = "2.7.11.12"
+version = "2.7.22.4"
 description = "Process mining for Python"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "pm4py-2.7.11.12-py3-none-any.whl", hash = "sha256:750248cc5c3ba390db60f59c4aa4e669df7c677b1e3b9e552e47747be57decc2"},
-    {file = "pm4py-2.7.11.12.tar.gz", hash = "sha256:97ac337a9ce8f1bbd5a91e38378f3dc19521dd604f3741d2c4f7b7c8a50eaa42"},
+    {file = "pm4py-2.7.22.4-py3-none-any.whl", hash = "sha256:30b92a9d8ed0b58741f56c1310ba1c4fdbacabd0cd3db04a829df58ca21f2d05"},
+    {file = "pm4py-2.7.22.4.tar.gz", hash = "sha256:c43223871fd1642a65ed43136ee346a4bcecda926ddff80e4e0d811ab7de0db7"},
 ]
 
 [package.dependencies]
-cvxopt = {version = "*", markers = "python_version < \"3.13\""}
-deprecation = "*"
+cvxopt = {version = "*", markers = "python_version < \"3.15\""}
 graphviz = "*"
-intervaltree = "*"
 lxml = "*"
 matplotlib = "*"
 networkx = "*"
 numpy = "*"
 pandas = "*"
-pydotplus = "*"
 pytz = "*"
 scipy = "*"
 setuptools = "*"
@@ -7863,20 +7831,6 @@ pyparsing = ">=3.0.9"
 dev = ["chardet", "parameterized", "ruff"]
 release = ["zest.releaser[recommended]"]
 tests = ["chardet", "parameterized", "ruff", "tox", "unittest-parallel"]
-
-[[package]]
-name = "pydotplus"
-version = "2.0.2"
-description = "Python interface to Graphviz's Dot language"
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "pydotplus-2.0.2.tar.gz", hash = "sha256:91e85e9ee9b85d2391ead7d635e3d9c7f5f44fd60a60e59b13e2403fa66505c4"},
-]
-
-[package.dependencies]
-pyparsing = ">=2.0.1"
 
 [[package]]
 name = "pyee"
@@ -12968,18 +12922,6 @@ groups = ["all", "docs"]
 files = [
     {file = "snowballstemmer-3.1.1-py3-none-any.whl", hash = "sha256:7e207fa178741da09cdee59d3ecec3827ad5f92b1fc5c9ff3755b639f71f5752"},
     {file = "snowballstemmer-3.1.1.tar.gz", hash = "sha256:e07bbc54a0d798fe6010a12398422e62a8bfbba95c394fd0956ef58cb4d3e260"},
-]
-
-[[package]]
-name = "sortedcontainers"
-version = "2.4.0"
-description = "Sorted Containers -- Sorted List, Sorted Dict, Sorted Set"
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "sortedcontainers-2.4.0-py2.py3-none-any.whl", hash = "sha256:a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0"},
-    {file = "sortedcontainers-2.4.0.tar.gz", hash = "sha256:25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88"},
 ]
 
 [[package]]
