@@ -1,0 +1,13 @@
+PREFIX dspygen: <https://chatmangpt.com/programs/dspygen#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+SELECT ?id ?label ?description ?lifecycle ?standing
+WHERE {
+  ?capability a dspygen:Capability ;
+              dspygen:capabilityId ?id ;
+              rdfs:label ?label ;
+              dcterms:description ?description ;
+              dspygen:lifecycle ?lifecycle ;
+              dspygen:standing ?standing .
+}
+ORDER BY ?id

@@ -1,0 +1,68 @@
+{
+  "compiler_version": "dspygen-cmd-26.7.30",
+  "consequence_state": "not-actuated",
+  "content_digests": {
+    "cmd-consequence": "9131302d99d6800717f3b1772866f77baa9552cf01ca1324599d03927afb7838",
+    "cmd-contract": "3de935c196b33d252aca94a49431ce324c24bf87be49f76b4fe09ae59d49d1a9",
+    "cmd-core": "84488aa71a4dd978e6b2cee63ff6cf35df9cc308611bb216af393f02de41bba1",
+    "cmd-policy": "43df74db0d7e9aabd5d1b8cc94cbeb71c188772fe521fc0a68ede082a50a5183",
+    "cmd-projection": "bb34633a6f5bceea03b5f9b6e92c642a8443f50837d2edf5cdd4bf778fc8c1e5",
+    "cmd-receipt": "6ef2d779148681eefcc360370a8d99e619a42176e2f0d1ded7ec630989403554",
+    "cmd-runtime": "aa725de2854d0ed4f7d2c93285934806db9c5cde5b10f18d05083ffbbc22b388",
+    "cmd-surface-cli": "8eb3b4c937e8638e40fc4f8b8391fb88f33ffa65adbbe7faab0dc69a4c03e288",
+    "cmd-validator": "a57ac323b1bbd7ab1e9445f771129b9fcaca4411ad7a11e3067370e38781644e"
+  },
+  "dependency_edges": {
+    "cmd-consequence": [
+      "receipt.causal",
+      "policy.admission"
+    ],
+    "cmd-contract": [],
+    "cmd-core": [
+      "policy.admission"
+    ],
+    "cmd-policy": [],
+    "cmd-projection": [
+      "cmd.kernel"
+    ],
+    "cmd-receipt": [
+      "cmd.kernel"
+    ],
+    "cmd-runtime": [
+      "cmd.kernel"
+    ],
+    "cmd-surface-cli": [
+      "cmd.kernel"
+    ],
+    "cmd-validator": [
+      "cmd.kernel"
+    ]
+  },
+  "immutable_revisions": {},
+  "ontology_digest": "6650404bae2eeb2c0181bb5a594179e62677dcf4a35ba317c9ac2ccaf01e5c4f",
+  "ownership_claims": {},
+  "parameters": {},
+  "plan_digest": null,
+  "policy_digest": "cebf8ca01b5546617b3b5f18ee5283d3f4d266352464300924a099b9f44e8337",
+  "receipt_chain_head": null,
+  "resolved_atomic_pack_closure": [
+    "cmd-policy",
+    "cmd-core",
+    "cmd-receipt",
+    "cmd-consequence",
+    "cmd-contract",
+    "cmd-projection",
+    "cmd-runtime",
+    "cmd-surface-cli",
+    "cmd-validator"
+  ],
+  "root_requests": [
+    "cmd-dspygen-complete@26.7.30"
+  ],
+  "schema": "cmd.packs-lock.v1",
+  "signatures": {},
+  "source_identities": [
+    "repository:.specify/cmd/repository.ttl"
+  ],
+  "variants": {}
+}
