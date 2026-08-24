@@ -7,34 +7,85 @@ on:
       - master
   pull_request:
 
+concurrency:
+  group: dspygen-test-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
+  protocol-surfaces:
     runs-on: ubuntu-latest
-
-    name: Python 3.11
-
+    name: MCP and LSP
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
+      - name: Checkout exact candidate
+        uses: actions/checkout@v7
       - name: Set up Python 3.11
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
           cache: pip
-
-      - name: Install test dependencies
+      - name: Install focused dependencies
         run: |
           pip install \
             pytest pytest-asyncio \
-            "mcp>=1.0.0" \
+            "mcp==1.29.0" \
             "pygls>=2.0.0" "lsprotocol>=2024.0" \
-            pydantic pyyaml loguru hypothesis rich chromadb
-
-      - name: Install dspygen (no deps)
-        run: pip install -e . --no-deps
-
-      - name: Run tests
-        run: pytest tests/test_mcp.py tests/test_lsp.py --tb=short -q
+            pydantic pyyaml loguru hypothesis rich chromadb typer
+          pip install -e . --no-deps
+      - name: Run protocol tests
         env:
           PYTHONPATH: src
+        run: pytest tests/test_mcp.py tests/test_lsp.py --tb=short -q
+
+  errc-modernization:
+    runs-on: ubuntu-latest
+    name: ERRC modernization
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v7
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Download exact admitted DSPy wheel
+        run: |
+          python -m pip download --no-deps --only-binary=:all: "dspy==3.3.0" --dest /tmp/dspy-wheel
+          echo "358cbfb15d13246dc4a289bb2350c0ee602260c8a3869f7f63a48a9d2233e48c  /tmp/dspy-wheel/dspy-3.3.0-py3-none-any.whl" | sha256sum --check --strict
+      - name: Install exact admitted runtime
+        run: |
+          pip install /tmp/dspy-wheel/dspy-3.3.0-py3-none-any.whl pydantic typer
+          python - <<'PY'
+          import importlib.metadata
+          assert importlib.metadata.version("dspy") == "3.3.0"
+          PY
+      - name: Compile admitted modernization surfaces
+        run: |
+          python -m compileall -q \
+            -x '(^|/)(experiments|wip)(/|$)' \
+            src/dspygen \
+            scripts/verify_modernization.py \
+            tests/test_errc_modernization.py \
+            tests/test_lsp_modernization.py \
+            tests/test_dspy_runtime_integration.py \
+            tests/test_modernization_verifier.py
+      - name: Execute modernization witnesses and falsifiers
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          python -m unittest discover -s tests -p 'test_*modernization*.py' -v
+          python -m unittest discover -s tests -p 'test_*runtime*.py' -v
+      - name: Independent admitted-tree repository verifier
+        env:
+          PYTHONPATH: src
+        run: |
+          python scripts/verify_modernization.py \
+            --root . \
+            --expected-legacy-placeholders 43 \
+            --output /tmp/dspygen-modernization.json
+      - name: Upload verifier receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: dspygen-modernization-receipt
+          path: /tmp/dspygen-modernization.json
+          if-no-files-found: error

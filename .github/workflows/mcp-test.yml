@@ -7,27 +7,22 @@ on:
 jobs:
   mcp-tests:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
           cache: pip
-
       - name: Install minimal test dependencies
         run: |
           pip install \
             pytest pytest-asyncio \
-            "mcp>=1.0.0" \
+            "mcp==1.29.0" \
             pydantic pyyaml loguru hypothesis
-
       - name: Install dspygen (no deps)
         run: pip install -e . --no-deps
-
       - name: Run MCP tests
         run: pytest tests/test_mcp.py -v --tb=short
         env:
