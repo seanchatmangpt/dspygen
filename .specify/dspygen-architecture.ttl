@@ -1,0 +1,110 @@
+@prefix dspygen: <https://chatmangpt.com/programs/dspygen#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+
+<https://chatmangpt.com/canon/dspygen-architecture>
+    a owl:Ontology, prov:Entity ;
+    dcterms:title "DSPyGen Architecture Canon" ;
+    dcterms:description "Admitted architecture for ontology-governed DSPy manufacturing, evidence, receipts, replay, and BRCE-only intents." ;
+    dcterms:creator <https://chatmangpt.com/people/sean-chatman> ;
+    dcterms:issued "2026-07-30"^^xsd:date ;
+    owl:versionInfo "26.7.30" .
+
+dspygen:Capability a owl:Class ; rdfs:subClassOf skos:Concept .
+dspygen:EvidenceObligation a owl:Class ; rdfs:subClassOf odrl:Duty .
+dspygen:Projection a owl:Class ; rdfs:subClassOf prov:Entity .
+dspygen:Broker a owl:Class ; rdfs:subClassOf prov:Agent .
+
+dspygen:capabilityId a owl:DatatypeProperty ; rdfs:domain dspygen:Capability ; rdfs:range xsd:string .
+dspygen:lifecycle a owl:DatatypeProperty ; rdfs:domain dspygen:Capability ; rdfs:range xsd:string .
+dspygen:standing a owl:DatatypeProperty ; rdfs:range xsd:string .
+dspygen:requiresEvidence a owl:ObjectProperty ; rdfs:domain dspygen:Capability ; rdfs:range dspygen:EvidenceObligation .
+dspygen:projectionPath a owl:DatatypeProperty ; rdfs:domain dspygen:Projection ; rdfs:range xsd:string .
+dspygen:requiresBroker a owl:ObjectProperty ; rdfs:range dspygen:Broker .
+
+dspygen:Witness a dspygen:EvidenceObligation ; skos:prefLabel "positive witness" .
+dspygen:Falsifier a dspygen:EvidenceObligation ; skos:prefLabel "negative falsifier" .
+dspygen:IndependentVerifier a dspygen:EvidenceObligation ; skos:prefLabel "independent verifier" .
+dspygen:ReceiptVerifier a dspygen:EvidenceObligation ; skos:prefLabel "receipt verifier" .
+dspygen:Replay a dspygen:EvidenceObligation ; skos:prefLabel "replay" .
+
+dspygen:BRCE a dspygen:Broker ;
+    skos:prefLabel "Bounded Receipt-Carrying Executor" ;
+    dcterms:description "The sole authorized DO path for effectful DSPyGen intents." .
+
+dspygen:SignatureManufacturing a dspygen:Capability ;
+    dspygen:capabilityId "signature-manufacturing" ;
+    rdfs:label "Signature manufacturing" ;
+    dcterms:description "Manufacture typed DSPy signatures and modules from admitted semantic declarations." ;
+    dspygen:lifecycle "admitted" ;
+    dspygen:standing "PARTIAL_ALIVE" ;
+    dspygen:requiresEvidence dspygen:Witness, dspygen:Falsifier, dspygen:IndependentVerifier, dspygen:ReceiptVerifier, dspygen:Replay .
+
+dspygen:PipelineComposition a dspygen:Capability ;
+    dspygen:capabilityId "pipeline-composition" ;
+    rdfs:label "Pipeline composition" ;
+    dcterms:description "Compose dependency-closed DSPy programs with deterministic ordering and typed refusal." ;
+    dspygen:lifecycle "admitted" ;
+    dspygen:standing "PARTIAL_ALIVE" ;
+    dspygen:requiresEvidence dspygen:Witness, dspygen:Falsifier, dspygen:IndependentVerifier, dspygen:ReceiptVerifier, dspygen:Replay .
+
+dspygen:MCPBoundary a dspygen:Capability ;
+    dspygen:capabilityId "mcp-boundary" ;
+    rdfs:label "MCP resource and tool boundary" ;
+    dcterms:description "Separate read-only resources from broker-addressed tools and preserve typed failures." ;
+    dspygen:lifecycle "active" ;
+    dspygen:standing "PARTIAL_ALIVE" ;
+    dspygen:requiresEvidence dspygen:Witness, dspygen:Falsifier, dspygen:IndependentVerifier, dspygen:ReceiptVerifier, dspygen:Replay .
+
+dspygen:LSPVerification a dspygen:Capability ;
+    dspygen:capabilityId "lsp-verification" ;
+    rdfs:label "LSP verification" ;
+    dcterms:description "Project admitted semantic constraints into diagnostics, navigation, and refactoring evidence." ;
+    dspygen:lifecycle "active" ;
+    dspygen:standing "PARTIAL_ALIVE" ;
+    dspygen:requiresEvidence dspygen:Witness, dspygen:Falsifier, dspygen:IndependentVerifier, dspygen:ReceiptVerifier, dspygen:Replay .
+
+dspygen:EvaluationOptimization a dspygen:Capability ;
+    dspygen:capabilityId "evaluation-optimization" ;
+    rdfs:label "Evaluation and optimization" ;
+    dcterms:description "Evaluate DSPy programs against admitted datasets and bounded metrics before promotion." ;
+    dspygen:lifecycle "qualified" ;
+    dspygen:standing "UNKNOWN" ;
+    dspygen:requiresEvidence dspygen:Witness, dspygen:Falsifier, dspygen:IndependentVerifier, dspygen:ReceiptVerifier, dspygen:Replay .
+
+dspygen:GgenProjection a dspygen:Capability ;
+    dspygen:capabilityId "ggen-projection" ;
+    rdfs:label "ggen semantic projection" ;
+    dcterms:description "Project admitted RDF law into canonical Python and documentation surfaces without a generated directory." ;
+    dspygen:lifecycle "admitted" ;
+    dspygen:standing "ALIVE" ;
+    dspygen:requiresEvidence dspygen:Witness, dspygen:Falsifier, dspygen:IndependentVerifier, dspygen:ReceiptVerifier, dspygen:Replay .
+
+dspygen:ReceiptReplay a dspygen:Capability ;
+    dspygen:capabilityId "receipt-replay" ;
+    rdfs:label "Receipt and replay" ;
+    dcterms:description "Bind source and projections with canonical BLAKE3 receipts that can be independently replayed." ;
+    dspygen:lifecycle "admitted" ;
+    dspygen:standing "ALIVE" ;
+    dspygen:requiresEvidence dspygen:Witness, dspygen:Falsifier, dspygen:IndependentVerifier, dspygen:ReceiptVerifier, dspygen:Replay .
+
+dspygen:BrokerIntent a dspygen:Capability ;
+    dspygen:capabilityId "brce-intent" ;
+    rdfs:label "BRCE intent construction" ;
+    dcterms:description "Construct bounded effect intents addressed exclusively to BRCE; DSPyGen performs no direct actuation." ;
+    dspygen:lifecycle "admitted" ;
+    dspygen:standing "ALIVE" ;
+    dspygen:requiresBroker dspygen:BRCE ;
+    dspygen:requiresEvidence dspygen:Witness, dspygen:Falsifier, dspygen:IndependentVerifier, dspygen:ReceiptVerifier, dspygen:Replay .
+
+dspygen:CatalogPython a dspygen:Projection ;
+    dspygen:projectionPath "src/dspygen/architecture/catalog.py" .
+
+dspygen:CatalogDocs a dspygen:Projection ;
+    dspygen:projectionPath "docs/architecture/CATALOG.md" .

@@ -1,0 +1,48 @@
+@prefix cmd: <https://chatmangpt.com/canon/cmd#> .
+@prefix dspygen: <https://chatmangpt.com/programs/dspygen#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+
+<https://chatmangpt.com/canon/dspygen-cmd>
+  a owl:Ontology, prov:Entity ;
+  dcterms:title "DSPyGen Internal and External Combinatorial Maximalism" ;
+  dcterms:identifier "GGEN-STANDARDS-7D-2026-07-30" ;
+  owl:versionInfo "26.7.30" .
+
+cmd:Observation a owl:Class .
+cmd:Dimension a owl:Class .
+cmd:Option a owl:Class .
+cmd:Constraint a owl:Class .
+cmd:Candidate a owl:Class .
+cmd:AtomicPack a owl:Class .
+cmd:BuildingBlock a owl:Class .
+cmd:PartPassport a owl:Class .
+cmd:Intent a owl:Class ; rdfs:subClassOf prov:Entity .
+cmd:Grant a owl:Class ; rdfs:subClassOf odrl:Policy .
+cmd:Receipt a owl:Class ; rdfs:subClassOf prov:Entity .
+cmd:VerifierReport a owl:Class ; rdfs:subClassOf prov:Entity .
+cmd:BRCE a prov:Agent ; skos:prefLabel "Bounded Receipt-Carrying Executor" .
+
+cmd:PARTIAL_ALIVE a skos:Concept ; skos:prefLabel "PARTIAL_ALIVE" .
+cmd:ALIVE a skos:Concept ; skos:prefLabel "ALIVE" .
+cmd:BLOCKED a skos:Concept ; skos:prefLabel "BLOCKED" .
+cmd:BUILD_BROKEN a skos:Concept ; skos:prefLabel "BUILD_BROKEN" .
+cmd:UNKNOWN a skos:Concept ; skos:prefLabel "UNKNOWN" .
+cmd:UNSUPPORTED a skos:Concept ; skos:prefLabel "UNSUPPORTED" .
+
+cmd:CandidateNotVerified a skos:Concept ; skos:notation "AUTH-CANDIDATE-NOT-VERIFIED" .
+cmd:ConstraintViolation a skos:Concept ; skos:notation "CMD-CONSTRAINT-VIOLATION" .
+cmd:ConsentMissing a skos:Concept ; skos:notation "EXT-CONSENT-MISSING" .
+cmd:MultipleExclusiveOwners a skos:Concept ; skos:notation "OWN-MULTIPLE-EXCLUSIVE" .
+cmd:ArtifactTamper a skos:Concept ; skos:notation "RCP-ARTIFACT-TAMPER" .
+
+cmd:preserveLaw a odrl:Duty ; skos:prefLabel "Preserve before replacement" .
+cmd:brokerLaw a odrl:Duty ; skos:prefLabel "Actuate only through BRCE" .
+cmd:receiptLaw a odrl:Duty ; skos:prefLabel "Zero unreceipted actuation" .
+cmd:replayLaw a odrl:Duty ; skos:prefLabel "Replay before standing" .
