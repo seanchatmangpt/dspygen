@@ -84,7 +84,7 @@ jobs:
             --expected-legacy-placeholders 43 \
             --output /tmp/dspygen-modernization.json
       - name: Upload verifier receipt
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dspygen-modernization-receipt
           path: /tmp/dspygen-modernization.json
