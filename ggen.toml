@@ -1,0 +1,41 @@
+[project]
+name = "dspygen"
+version = "26.7.30"
+description = "Ontology-governed DSPy manufacturing with evidence, receipts, and replay — A = μ(O*)"
+authors = ["Sean Chatman <info@chatmangpt.com>"]
+license = "MIT"
+repository = "https://github.com/seanchatmangpt/dspygen"
+
+[ontology]
+source = ".specify/dspygen-architecture.ttl"
+base_iri = "https://chatmangpt.com/programs/dspygen#"
+
+[ontology.prefixes]
+dspygen = "https://chatmangpt.com/programs/dspygen#"
+rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+rdfs = "http://www.w3.org/2000/01/rdf-schema#"
+owl = "http://www.w3.org/2002/07/owl#"
+xsd = "http://www.w3.org/2001/XMLSchema#"
+dcterms = "http://purl.org/dc/terms/"
+skos = "http://www.w3.org/2004/02/skos/core#"
+prov = "http://www.w3.org/ns/prov#"
+odrl = "http://www.w3.org/ns/odrl/2/"
+
+[generation]
+output_dir = "."
+
+[[generation.rules]]
+name = "dspygen-architecture-catalog-python"
+query = { file = ".specify/queries/architecture-capabilities.rq" }
+template = { file = ".specify/templates/architecture/catalog.py.tera" }
+output_file = "src/dspygen/architecture/catalog.py"
+skip_empty = false
+mode = "Overwrite"
+
+[[generation.rules]]
+name = "dspygen-architecture-catalog-docs"
+query = { file = ".specify/queries/architecture-capabilities.rq" }
+template = { file = ".specify/templates/architecture/catalog.md.tera" }
+output_file = "docs/architecture/CATALOG.md"
+skip_empty = false
+mode = "Overwrite"
