@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout exact candidate
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
@@ -82,7 +82,7 @@ jobs:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
       - name: Checkout exact candidate
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
@@ -157,7 +157,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout exact candidate
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
@@ -167,7 +167,7 @@ jobs:
         run: test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
 
       - name: Checkout exact ggen source contract
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: seanchatmangpt/ggen
           ref: 68952593c40214ac1a681073d65f3902a9cdfce4

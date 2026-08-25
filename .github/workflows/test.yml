@@ -17,7 +17,7 @@ jobs:
     name: MCP and LSP
     steps:
       - name: Checkout exact candidate
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
       - name: Set up Python 3.11
         uses: actions/setup-python@v7
         with:
@@ -41,7 +41,7 @@ jobs:
     name: ERRC modernization
     steps:
       - name: Checkout exact candidate
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
       - name: Set up Python 3.11
         uses: actions/setup-python@v7
         with:
