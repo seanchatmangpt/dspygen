@@ -40,7 +40,7 @@ jobs:
           coverage report --fail-under=0 || true
           coverage xml -o reports/coverage.xml || true
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           files: reports/coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
