@@ -29,11 +29,12 @@ jobs:
       - name: Construct portfolio from consumer ontology
         working-directory: experiments/dspy-errc-max
         run: ../../.constructor/ggen/target/release/ggen sync run
-      - name: Syntax-check manufactured Python projections
+      - name: Syntax-check all manufactured Python projections
         run: |
           python -m py_compile \
             experiments/dspy-errc-max/src/dspy_program.py \
-            experiments/dspy-errc-max/src/dspy_optimize.py
+            experiments/dspy-errc-max/src/dspy_optimize.py \
+            experiments/dspy-errc-max/src/dspy_shacl_signatures.py
       - name: Verify complete admitted combinatorial portfolio
         run: python experiments/dspy-errc-max/verify.py
       - name: Refuse unexpected generated directory convention
