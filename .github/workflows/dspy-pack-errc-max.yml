@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: seanchatmangpt/ggen
-          ref: 306ff6903bf53e08d4237ec2cacbe8dab553ae83
+          ref: ddfa602bfbab57b7ed5150f61b0acac7a41e3020
           path: .constructor/ggen
       - name: Install exact ggen toolchain
         uses: dtolnay/rust-toolchain@nightly
