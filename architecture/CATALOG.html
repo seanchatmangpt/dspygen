@@ -1,0 +1,190 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DSPyGen Architecture Catalog &mdash; DSPyGen 2024.9.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=769f078a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            DSPyGen
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Concepts</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">DSPyGen Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rdddy.html">Reactive Domain-Driven Design (RDDDY)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Integrations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../mcp.html">MCP Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lsp.html">LSP Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture Decisions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../adr/0001-use-dspy-as-llm-framework.html">ADR-0001: Use DSPy as the Core LLM Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adr/0002-mcp-for-tool-integration.html">ADR-0002: Use MCP for Claude Desktop Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adr/0003-pygls-for-lsp.html">ADR-0003: Use pygls for the Language Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adr/0004-rdddy-for-domain-modeling.html">ADR-0004: RDDDY for Domain Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adr/0005-poetry-for-packaging.html">ADR-0005: Poetry for Package Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">Modules API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/agents.html">Agents API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/rdddy.html">RDDDY API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/mcp.html">MCP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/lsp.html">LSP API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">DSPyGen</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">DSPyGen Architecture Catalog</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/architecture/CATALOG.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- Auto-generated by ggen rule `dspygen-architecture-catalog-docs`. -->
+<!-- DO NOT EDIT. Edit `.specify/dspygen-architecture.ttl`, then run `ggen sync run`. -->
+<section id="dspygen-architecture-catalog">
+<h1>DSPyGen Architecture Catalog<a class="headerlink" href="#dspygen-architecture-catalog" title="Link to this heading"></a></h1>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Capability</p></th>
+<th class="head"><p>Lifecycle</p></th>
+<th class="head"><p>Standing</p></th>
+<th class="head"><p>Contract</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">brce-intent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admitted</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ALIVE</span></code></p></td>
+<td><p>Construct bounded effect intents addressed exclusively to BRCE; DSPyGen performs no direct actuation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">evaluation-optimization</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">qualified</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></p></td>
+<td><p>Evaluate DSPy programs against admitted datasets and bounded metrics before promotion.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ggen-projection</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admitted</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ALIVE</span></code></p></td>
+<td><p>Project admitted RDF law into canonical Python and documentation surfaces without a generated directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lsp-verification</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">active</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PARTIAL_ALIVE</span></code></p></td>
+<td><p>Project admitted semantic constraints into diagnostics, navigation, and refactoring evidence.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mcp-boundary</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">active</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PARTIAL_ALIVE</span></code></p></td>
+<td><p>Separate read-only resources from broker-addressed tools and preserve typed failures.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline-composition</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admitted</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PARTIAL_ALIVE</span></code></p></td>
+<td><p>Compose dependency-closed DSPy programs with deterministic ordering and typed refusal.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">receipt-replay</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admitted</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ALIVE</span></code></p></td>
+<td><p>Bind source and projections with canonical BLAKE3 receipts that can be independently replayed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">signature-manufacturing</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admitted</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PARTIAL_ALIVE</span></code></p></td>
+<td><p>Manufacture typed DSPy signatures and modules from admitted semantic declarations.</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">ALIVE</span></code> requires a positive witness, negative falsifier, independent verifier, receipt verifier, and replay. Lifecycle and standing are orthogonal. All effectful intents are addressed to <code class="docutils literal notranslate"><span class="pre">BRCE</span></code>.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sean Chatman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

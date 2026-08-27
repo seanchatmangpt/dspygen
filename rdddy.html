@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reactive Domain-Driven Design (RDDDY) &mdash; DSPyGen 2024.9.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=769f078a"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MCP Server" href="mcp.html" />
+    <link rel="prev" title="DSPyGen Modules" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DSPyGen
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Concepts</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">DSPyGen Modules</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Reactive Domain-Driven Design (RDDDY)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#core-concepts">Core Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aggregates">Aggregates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#commands">Commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#events">Events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sagas">Sagas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#policies">Policies</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#the-actor-system">The Actor System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ai-augmented-decision-making">AI-Augmented Decision Making</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-rdddy-components">Testing RDDDY Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api-reference">API Reference</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Integrations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mcp.html">MCP Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">LSP Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture Decisions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adr/0001-use-dspy-as-llm-framework.html">ADR-0001: Use DSPy as the Core LLM Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0002-mcp-for-tool-integration.html">ADR-0002: Use MCP for Claude Desktop Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0003-pygls-for-lsp.html">ADR-0003: Use pygls for the Language Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0004-rdddy-for-domain-modeling.html">ADR-0004: RDDDY for Domain Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0005-poetry-for-packaging.html">ADR-0005: Poetry for Package Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">Modules API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/agents.html">Agents API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/rdddy.html">RDDDY API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/mcp.html">MCP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/lsp.html">LSP API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DSPyGen</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Reactive Domain-Driven Design (RDDDY)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/rdddy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reactive-domain-driven-design-rdddy">
+<h1>Reactive Domain-Driven Design (RDDDY)<a class="headerlink" href="#reactive-domain-driven-design-rdddy" title="Link to this heading"></a></h1>
+<p>DSPyGen’s <code class="docutils literal notranslate"><span class="pre">rdddy</span></code> package provides a lightweight Reactive Domain-Driven Design (RDDDY) framework
+that combines classical DDD building blocks with reactive event-driven programming and AI-powered
+decision making via DSPy.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Traditional Domain-Driven Design structures complex business domains using Aggregates, Value Objects,
+Domain Events, and Services. RDDDY extends this model with:</p>
+<ul class="simple">
+<li><p><strong>Reactive message passing</strong> — components communicate via immutable events and commands rather
+than direct method calls.</p></li>
+<li><p><strong>AI-augmented policies and sagas</strong> — DSPy language models can evaluate conditions, generate
+commands, and drive long-running workflows.</p></li>
+<li><p><strong>Async-first architecture</strong> — all inter-component communication is asynchronous, enabling
+high-throughput event-driven systems.</p></li>
+</ul>
+</section>
+<section id="core-concepts">
+<h2>Core Concepts<a class="headerlink" href="#core-concepts" title="Link to this heading"></a></h2>
+<section id="aggregates">
+<h3>Aggregates<a class="headerlink" href="#aggregates" title="Link to this heading"></a></h3>
+<p>An Aggregate is the central consistency boundary in DDD. In RDDDY, aggregates receive commands,
+validate business rules, and emit domain events:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.rdddy.base_aggregate</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseAggregate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.rdddy.base_command</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseCommand</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.rdddy.base_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEvent</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CreateOrderCommand</span><span class="p">(</span><span class="n">BaseCommand</span><span class="p">):</span>
+    <span class="n">customer_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">OrderCreatedEvent</span><span class="p">(</span><span class="n">BaseEvent</span><span class="p">):</span>
+    <span class="n">order_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">customer_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">OrderAggregate</span><span class="p">(</span><span class="n">BaseAggregate</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_create_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">CreateOrderCommand</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OrderCreatedEvent</span><span class="p">:</span>
+        <span class="c1"># Business logic and validation here</span>
+        <span class="k">return</span> <span class="n">OrderCreatedEvent</span><span class="p">(</span>
+            <span class="n">order_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">customer_id</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">customer_id</span><span class="p">,</span>
+            <span class="n">items</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">items</span><span class="p">,</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="commands">
+<h3>Commands<a class="headerlink" href="#commands" title="Link to this heading"></a></h3>
+<p>Commands express intent — they ask the system to do something. Each command is an immutable
+Pydantic model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.rdddy.base_command</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseCommand</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ShipOrderCommand</span><span class="p">(</span><span class="n">BaseCommand</span><span class="p">):</span>
+    <span class="n">order_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">shipping_address</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">carrier</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"UPS"</span>
+</pre></div>
+</div>
+</section>
+<section id="events">
+<h3>Events<a class="headerlink" href="#events" title="Link to this heading"></a></h3>
+<p>Events record facts — something that has already happened. They are the source of truth in an
+event-sourced system:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.rdddy.base_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEvent</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">OrderShippedEvent</span><span class="p">(</span><span class="n">BaseEvent</span><span class="p">):</span>
+    <span class="n">order_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tracking_number</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">estimated_delivery</span><span class="p">:</span> <span class="nb">str</span>
+</pre></div>
+</div>
+</section>
+<section id="sagas">
+<h3>Sagas<a class="headerlink" href="#sagas" title="Link to this heading"></a></h3>
+<p>Sagas coordinate multi-step workflows that span multiple aggregates. They react to events and
+emit commands:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.rdddy.base_saga</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseSaga</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">OrderFulfillmentSaga</span><span class="p">(</span><span class="n">BaseSaga</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_order_created</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">OrderCreatedEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Trigger payment processing</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChargeCustomerCommand</span><span class="p">(</span>
+            <span class="n">customer_id</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">customer_id</span><span class="p">,</span>
+            <span class="n">amount</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">calculate_total</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">items</span><span class="p">),</span>
+        <span class="p">))</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_payment_succeeded</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PaymentSucceededEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Trigger shipping</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ShipOrderCommand</span><span class="p">(</span>
+            <span class="n">order_id</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">order_id</span><span class="p">,</span>
+            <span class="n">shipping_address</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">shipping_address</span><span class="p">,</span>
+        <span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="policies">
+<h3>Policies<a class="headerlink" href="#policies" title="Link to this heading"></a></h3>
+<p>Policies are stateless reactive rules that map a single domain event to zero or more commands.
+They are ideal for simple cause-and-effect business rules:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.rdddy.base_policy</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasePolicy</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LowInventoryPolicy</span><span class="p">(</span><span class="n">BasePolicy</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_inventory_depleted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">InventoryDepletedEvent</span><span class="p">):</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ReorderStockCommand</span><span class="p">(</span>
+            <span class="n">product_id</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">product_id</span><span class="p">,</span>
+            <span class="n">quantity</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="the-actor-system">
+<h2>The Actor System<a class="headerlink" href="#the-actor-system" title="Link to this heading"></a></h2>
+<p>All components run inside an actor system that manages message routing and lifecycle:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.rdddy.actor_system</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActorSystem</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">system</span> <span class="o">=</span> <span class="n">ActorSystem</span><span class="p">()</span>
+
+    <span class="c1"># Spawn an aggregate</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="k">await</span> <span class="n">system</span><span class="o">.</span><span class="n">actor_of</span><span class="p">(</span><span class="n">OrderAggregate</span><span class="p">)</span>
+
+    <span class="c1"># Send a command</span>
+    <span class="k">await</span> <span class="n">system</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">CreateOrderCommand</span><span class="p">(</span>
+        <span class="n">customer_id</span><span class="o">=</span><span class="s2">"cust-123"</span><span class="p">,</span>
+        <span class="n">items</span><span class="o">=</span><span class="p">[</span><span class="s2">"widget"</span><span class="p">,</span> <span class="s2">"gadget"</span><span class="p">],</span>
+    <span class="p">))</span>
+
+    <span class="c1"># Allow events to propagate</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="ai-augmented-decision-making">
+<h2>AI-Augmented Decision Making<a class="headerlink" href="#ai-augmented-decision-making" title="Link to this heading"></a></h2>
+<p>RDDDY integrates with DSPy so that policies and sagas can delegate complex decisions to language
+models:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.rdddy.base_policy</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasePolicy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.utils.dspy_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_dspy</span>
+
+<span class="n">init_dspy</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FraudDetectionSignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Evaluate whether a transaction is fraudulent."""</span>
+    <span class="n">transaction_details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">()</span>
+    <span class="n">is_fraud</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">()</span>
+    <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FraudDetectionPolicy</span><span class="p">(</span><span class="n">BasePolicy</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">FraudDetectionSignature</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_transaction_submitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">TransactionSubmittedEvent</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">(</span><span class="n">transaction_details</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">is_fraud</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">BlockTransactionCommand</span><span class="p">(</span>
+                <span class="n">transaction_id</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">transaction_id</span><span class="p">,</span>
+                <span class="n">reason</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">reason</span><span class="p">,</span>
+            <span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="testing-rdddy-components">
+<h2>Testing RDDDY Components<a class="headerlink" href="#testing-rdddy-components" title="Link to this heading"></a></h2>
+<p>RDDDY components are designed for testability. Use <code class="docutils literal notranslate"><span class="pre">pytest-asyncio</span></code> for async tests:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.rdddy.actor_system</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActorSystem</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_order_creation</span><span class="p">():</span>
+    <span class="n">system</span> <span class="o">=</span> <span class="n">ActorSystem</span><span class="p">()</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="k">await</span> <span class="n">system</span><span class="o">.</span><span class="n">actor_of</span><span class="p">(</span><span class="n">OrderAggregate</span><span class="p">)</span>
+
+    <span class="k">await</span> <span class="n">system</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">CreateOrderCommand</span><span class="p">(</span>
+        <span class="n">customer_id</span><span class="o">=</span><span class="s2">"cust-001"</span><span class="p">,</span>
+        <span class="n">items</span><span class="o">=</span><span class="p">[</span><span class="s2">"item-A"</span><span class="p">],</span>
+    <span class="p">))</span>
+
+    <span class="c1"># Assert the aggregate's state was updated</span>
+    <span class="k">assert</span> <span class="n">order</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s2">"created"</span>
+</pre></div>
+</div>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<p>See <a class="reference internal" href="api/rdddy.html"><span class="doc">RDDDY API</span></a> for full API documentation.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="DSPyGen Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mcp.html" class="btn btn-neutral float-right" title="MCP Server" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sean Chatman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

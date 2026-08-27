@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cookbook &mdash; DSPyGen 2024.9.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=769f078a"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Frequently Asked Questions" href="faq.html" />
+    <link rel="prev" title="LSP Server" href="lsp.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DSPyGen
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Concepts</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">DSPyGen Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdddy.html">Reactive Domain-Driven Design (RDDDY)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Integrations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mcp.html">MCP Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">LSP Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-module-generation">Basic Module Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sql-from-natural-language">SQL from Natural Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chain-of-thought-reasoning">Chain of Thought Reasoning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mcp-tool-integration">MCP Tool Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#batch-processing-with-pipelines">Batch Processing with Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rdddy-domain-modeling">RDDDY Domain Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lsp-in-vs-code">LSP in VS Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#health-check">Health Check</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture Decisions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adr/0001-use-dspy-as-llm-framework.html">ADR-0001: Use DSPy as the Core LLM Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0002-mcp-for-tool-integration.html">ADR-0002: Use MCP for Claude Desktop Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0003-pygls-for-lsp.html">ADR-0003: Use pygls for the Language Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0004-rdddy-for-domain-modeling.html">ADR-0004: RDDDY for Domain Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0005-poetry-for-packaging.html">ADR-0005: Poetry for Package Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">Modules API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/agents.html">Agents API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/rdddy.html">RDDDY API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/mcp.html">MCP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/lsp.html">LSP API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DSPyGen</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Cookbook</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cookbook.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cookbook">
+<h1>Cookbook<a class="headerlink" href="#cookbook" title="Link to this heading"></a></h1>
+<p>Practical recipes for common dspygen tasks.</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#basic-module-generation" id="id1">Basic Module Generation</a></p></li>
+<li><p><a class="reference internal" href="#sql-from-natural-language" id="id2">SQL from Natural Language</a></p></li>
+<li><p><a class="reference internal" href="#chain-of-thought-reasoning" id="id3">Chain of Thought Reasoning</a></p></li>
+<li><p><a class="reference internal" href="#mcp-tool-integration" id="id4">MCP Tool Integration</a></p></li>
+<li><p><a class="reference internal" href="#batch-processing-with-pipelines" id="id5">Batch Processing with Pipelines</a></p></li>
+<li><p><a class="reference internal" href="#rdddy-domain-modeling" id="id6">RDDDY Domain Modeling</a></p></li>
+<li><p><a class="reference internal" href="#lsp-in-vs-code" id="id7">LSP in VS Code</a></p></li>
+<li><p><a class="reference internal" href="#health-check" id="id8">Health Check</a></p></li>
+</ul>
+</nav>
+<section id="basic-module-generation">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Basic Module Generation</a><a class="headerlink" href="#basic-module-generation" title="Link to this heading"></a></h2>
+<p>Generate a DSPy signature and module from a natural language description:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.convenience</span><span class="w"> </span><span class="kn">import</span> <span class="n">quick_predict</span><span class="p">,</span> <span class="n">init_dspy</span>
+
+<span class="n">init_dspy</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"gpt-4o"</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">quick_predict</span><span class="p">(</span><span class="s2">"question -&gt; answer"</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="s2">"What is DSPy?"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="sql-from-natural-language">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">SQL from Natural Language</a><a class="headerlink" href="#sql-from-natural-language" title="Link to this heading"></a></h2>
+<p>Convert plain English to SQL using the built-in module:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.utils.dspy_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_dspy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+
+<span class="n">init_dspy</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">NLToSQL</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Convert a natural language query to SQL."""</span>
+    <span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">()</span>
+    <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">"Database schema DDL"</span><span class="p">)</span>
+    <span class="n">sql</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">()</span>
+
+<span class="n">predict</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">NLToSQL</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">predict</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">"Show all users created this week"</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="s2">"CREATE TABLE users (id INT, name TEXT, created_at TIMESTAMP)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">sql</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="chain-of-thought-reasoning">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Chain of Thought Reasoning</a><a class="headerlink" href="#chain-of-thought-reasoning" title="Link to this heading"></a></h2>
+<p>Use ChainOfThought for complex reasoning tasks:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Reasoning</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Solve a multi-step problem."""</span>
+    <span class="n">problem</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">()</span>
+    <span class="n">solution</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">()</span>
+
+<span class="n">cot</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="n">Reasoning</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">cot</span><span class="p">(</span><span class="n">problem</span><span class="o">=</span><span class="s2">"If a train travels 60 mph for 2.5 hours, how far does it go?"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">solution</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="mcp-tool-integration">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">MCP Tool Integration</a><a class="headerlink" href="#mcp-tool-integration" title="Link to this heading"></a></h2>
+<p>Use dspygen tools from Claude Desktop:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># mcp_config.json</span>
+<span class="p">{</span>
+  <span class="s2">"mcpServers"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"dspygen"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">"command"</span><span class="p">:</span> <span class="s2">"dspygen-mcp"</span><span class="p">,</span>
+      <span class="s2">"env"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"OPENAI_API_KEY"</span><span class="p">:</span> <span class="s2">"sk-..."</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Then in Claude, ask: <em>“List all dspygen modules”</em> or <em>“Generate a DSPy module for sentiment analysis”</em>.</p>
+</section>
+<section id="batch-processing-with-pipelines">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Batch Processing with Pipelines</a><a class="headerlink" href="#batch-processing-with-pipelines" title="Link to this heading"></a></h2>
+<p>Run multiple modules in sequence using YAML pipelines:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># pipeline.yaml</span>
+<span class="n">steps</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">module</span><span class="p">:</span> <span class="n">natural_language_to_sql_module</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="p">{</span><span class="n">query</span><span class="p">:</span> <span class="s2">"Find active users"</span><span class="p">}</span>
+  <span class="o">-</span> <span class="n">module</span><span class="p">:</span> <span class="n">document_summarizer_module</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="p">{</span><span class="n">text</span><span class="p">:</span> <span class="s2">"{{previous.sql}}"</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Run with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dspygen</span> <span class="n">pipeline</span> <span class="n">run</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</section>
+<section id="rdddy-domain-modeling">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">RDDDY Domain Modeling</a><a class="headerlink" href="#rdddy-domain-modeling" title="Link to this heading"></a></h2>
+<p>Model a domain using Reactive Domain-Driven Design:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.rdddy.base_command</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseCommand</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.rdddy.base_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEvent</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CreateUser</span><span class="p">(</span><span class="n">BaseCommand</span><span class="p">):</span>
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UserCreated</span><span class="p">(</span><span class="n">BaseEvent</span><span class="p">):</span>
+    <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="c1"># Use the MCP tool to scaffold a full domain:</span>
+<span class="c1"># dspygen-mcp → scaffold_domain(domain_name="user_management")</span>
+</pre></div>
+</div>
+</section>
+<section id="lsp-in-vs-code">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">LSP in VS Code</a><a class="headerlink" href="#lsp-in-vs-code" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Install the VS Code extension:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">code</span> <span class="o">--</span><span class="n">install</span><span class="o">-</span><span class="n">extension</span> <span class="n">dspygen</span><span class="o">.</span><span class="n">vscode</span><span class="o">-</span><span class="n">dspygen</span>
+</pre></div>
+</div>
+</li>
+<li><p>Open a Python file with DSPy code.</p></li>
+<li><p>Hover over a <code class="docutils literal notranslate"><span class="pre">dspy.Signature</span></code> string to see field documentation.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">Ctrl+Space</span></code> inside <code class="docutils literal notranslate"><span class="pre">dspy.Predict(...)</span></code> to get signature completions.</p></li>
+</ol>
+</section>
+<section id="health-check">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Health Check</a><a class="headerlink" href="#health-check" title="Link to this heading"></a></h2>
+<p>Verify your installation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dspygen</span> <span class="n">doctor</span>
+</pre></div>
+</div>
+<p>Expected output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>✓ Python 3.11.9
+✓ dspygen 2024.9.14
+✓ dspy-ai installed
+✓ OPENAI_API_KEY set
+✓ MCP server importable
+✓ LSP server importable
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lsp.html" class="btn btn-neutral float-left" title="LSP Server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="faq.html" class="btn btn-neutral float-right" title="Frequently Asked Questions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sean Chatman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
