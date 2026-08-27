@@ -2,7 +2,7 @@
 """Fail closed when a tracked ngrok config embeds credential material.
 
 The repository permits ngrok configuration, but credentials must arrive through the
-process environment or an external secret store.  This verifier intentionally checks
+process environment or an external secret store. This verifier intentionally checks
 source text rather than attempting to contact ngrok or inspect any credential value.
 """
 from __future__ import annotations
@@ -47,6 +47,14 @@ def tracked_ngrok_configs() -> tuple[Path, ...]:
     return tuple(sorted(paths))
 
 
+def display_path(path: Path) -> str:
+    """Return a stable non-sensitive source label for a candidate config."""
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return path.name
+
+
 def inspect(path: Path) -> tuple[Finding, ...]:
     findings: list[Finding] = []
     for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
@@ -57,7 +65,7 @@ def inspect(path: Path) -> tuple[Finding, ...]:
         if value not in INERT_VALUES:
             findings.append(
                 Finding(
-                    path=str(path.relative_to(ROOT)),
+                    path=display_path(path),
                     line=line_number,
                     reason="NGROK_AUTHTOKEN_EMBEDDED",
                 )
@@ -71,7 +79,7 @@ def main() -> int:
     payload = {
         "status": "REFUSED" if findings else "ALIVE",
         "policy": "NGROK_CREDENTIALS_EXTERNAL_ONLY",
-        "checked_files": [str(path.relative_to(ROOT)) for path in configs],
+        "checked_files": [display_path(path) for path in configs],
         "findings": [asdict(finding) for finding in findings],
     }
     print(json.dumps(payload, indent=2, sort_keys=True))
