@@ -13,9 +13,9 @@ jobs:
   construct:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Checkout exact ggen constructor and DSPy pack source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: seanchatmangpt/ggen
           ref: ddfa602bfbab57b7ed5150f61b0acac7a41e3020
