@@ -1,0 +1,204 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DSPyGen Combinatorial Maximalism &mdash; DSPyGen 2024.9.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=769f078a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            DSPyGen
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Concepts</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">DSPyGen Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rdddy.html">Reactive Domain-Driven Design (RDDDY)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Integrations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../mcp.html">MCP Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lsp.html">LSP Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture Decisions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../adr/0001-use-dspy-as-llm-framework.html">ADR-0001: Use DSPy as the Core LLM Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adr/0002-mcp-for-tool-integration.html">ADR-0002: Use MCP for Claude Desktop Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adr/0003-pygls-for-lsp.html">ADR-0003: Use pygls for the Language Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adr/0004-rdddy-for-domain-modeling.html">ADR-0004: RDDDY for Domain Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adr/0005-poetry-for-packaging.html">ADR-0005: Poetry for Package Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">Modules API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/agents.html">Agents API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/rdddy.html">RDDDY API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/mcp.html">MCP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/lsp.html">LSP API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">DSPyGen</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">DSPyGen Combinatorial Maximalism</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/architecture/COMBINATORIAL_MAXIMALISM.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dspygen-combinatorial-maximalism">
+<h1>DSPyGen Combinatorial Maximalism<a class="headerlink" href="#dspygen-combinatorial-maximalism" title="Link to this heading"></a></h1>
+<p>Normative profile: <code class="docutils literal notranslate"><span class="pre">GGEN-STANDARDS-7D-2026-07-30</span></code>.</p>
+<p>The implementation preserves existing DSPyGen runtime surfaces and adds one bounded rail:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Git exact tree → admitted observation O* → ontology and policy
+→ internal/external candidate lattices → pure kernel → plan
+→ transactional local materializer or BRCE intent
+→ consequence observation → causal receipt → replay → external verifier standing
+</pre></div>
+</div>
+<section id="gall-checkpoints">
+<h2>Gall checkpoints<a class="headerlink" href="#gall-checkpoints" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Checkpoint</p></th>
+<th class="head"><p>Executable proof</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>G0</p></td>
+<td><p>Git-object census with revision/tree/path/workflow/package/entry-point inventories</p></td>
+</tr>
+<tr class="row-odd"><td><p>G1</p></td>
+<td><p>Total Chesterton-fence and authority classification for every tracked path</p></td>
+</tr>
+<tr class="row-even"><td><p>G2</p></td>
+<td><p>RDF authority, SHACL contract, standing vocabulary, typed refusals</p></td>
+</tr>
+<tr class="row-odd"><td><p>G3</p></td>
+<td><p>Bounded internal dimensions, constraints, candidates, exhaustive coverage</p></td>
+</tr>
+<tr class="row-even"><td><p>G4</p></td>
+<td><p>External identity/consent/trust/jurisdiction/consequence lattice and pairwise coverage</p></td>
+</tr>
+<tr class="row-odd"><td><p>G5</p></td>
+<td><p>Nine immutable pack classes, deterministic Building Block closure, lockfile</p></td>
+</tr>
+<tr class="row-even"><td><p>G6</p></td>
+<td><p>IO-free shared kernel, deterministic plans, typed refusals</p></td>
+</tr>
+<tr class="row-odd"><td><p>G7</p></td>
+<td><p>Immutable payload transaction, durable intent/result receipts, atomic pointer, chaos boundaries</p></td>
+</tr>
+<tr class="row-even"><td><p>G8</p></td>
+<td><p>BRCE grant/consent/idempotency/budget/postcondition enforcement</p></td>
+</tr>
+<tr class="row-odd"><td><p>G9</p></td>
+<td><p>Exact-tree self-observation, second-manufacture identity, clean-tree and detached replay crown</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">ALIVE</span></code> requires all five evidence surfaces. External standing remains <code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code> until an external verifier admits external consequence evidence.</p>
+</section>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading"></a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python -m dspygen.architecture.cmd_entry observe
+python -m dspygen.architecture.cmd_entry fence-verify
+python -m dspygen.architecture.cmd_entry ontology-validate
+python -m dspygen.architecture.cmd_entry candidates-enumerate --domain internal
+python -m dspygen.architecture.cmd_entry candidates-coverage --domain external
+python -m dspygen.architecture.cmd_entry plan --domain internal
+python -m dspygen.architecture.cmd_entry materialize --domain internal --grant local-filesystem-broker --output-root &lt;directory&gt;
+python -m dspygen.architecture.cmd_entry receipt-verify --receipt &lt;receipt.json&gt;
+python -m dspygen.architecture.cmd_entry replay --receipt &lt;receipt.json&gt;
+python -m dspygen.architecture.cmd_entry verifier-report
+python -m dspygen.architecture.cmd_entry crown
+</pre></div>
+</div>
+<p>Every command emits machine-readable JSON. Planning and candidate enumeration are non-mutating. Local mutation is confined to the transactional materializer and requires the exact local broker grant. External mutation is impossible without an injected BRCE adapter, exact grant, scoped consent, resource closure, idempotency, postcondition observation, and causal receipt.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sean Chatman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

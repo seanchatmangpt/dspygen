@@ -1,0 +1,346 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MCP Server &mdash; DSPyGen 2024.9.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=769f078a"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="LSP Server" href="lsp.html" />
+    <link rel="prev" title="Reactive Domain-Driven Design (RDDDY)" href="rdddy.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DSPyGen
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Concepts</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">DSPyGen Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdddy.html">Reactive Domain-Driven Design (RDDDY)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Integrations</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MCP Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-mcp">What is MCP?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-the-mcp-server">Starting the MCP Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tools-exposed">Tools Exposed</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-execution">Module Execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pipeline-execution">Pipeline Execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dspy-configuration">DSPy Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#resources">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prompts">Prompts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#claude-desktop">Claude Desktop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cursor">Cursor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#continue-vs-code">Continue (VS Code)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#security-considerations">Security Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">LSP Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture Decisions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adr/0001-use-dspy-as-llm-framework.html">ADR-0001: Use DSPy as the Core LLM Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0002-mcp-for-tool-integration.html">ADR-0002: Use MCP for Claude Desktop Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0003-pygls-for-lsp.html">ADR-0003: Use pygls for the Language Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0004-rdddy-for-domain-modeling.html">ADR-0004: RDDDY for Domain Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0005-poetry-for-packaging.html">ADR-0005: Poetry for Package Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">Modules API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/agents.html">Agents API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/rdddy.html">RDDDY API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/mcp.html">MCP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/lsp.html">LSP API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DSPyGen</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">MCP Server</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mcp.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mcp-server">
+<h1>MCP Server<a class="headerlink" href="#mcp-server" title="Link to this heading"></a></h1>
+<p>DSPyGen ships with a built-in <a class="reference external" href="https://modelcontextprotocol.io/">Model Context Protocol (MCP)</a>
+server that exposes DSPyGen’s capabilities as callable tools to any MCP-compatible client
+(Claude Desktop, Cursor, Continue, etc.).</p>
+<section id="what-is-mcp">
+<h2>What is MCP?<a class="headerlink" href="#what-is-mcp" title="Link to this heading"></a></h2>
+<p>The Model Context Protocol is an open standard that defines how AI applications discover and
+call external tools, read resources (files, databases, APIs), and inject structured prompts.
+By running DSPyGen’s MCP server, language model clients can:</p>
+<ul class="simple">
+<li><p>Invoke DSPyGen modules as tools.</p></li>
+<li><p>Read project resources (pipelines, module definitions).</p></li>
+<li><p>Use pre-built prompt templates for common AI tasks.</p></li>
+</ul>
+</section>
+<section id="starting-the-mcp-server">
+<h2>Starting the MCP Server<a class="headerlink" href="#starting-the-mcp-server" title="Link to this heading"></a></h2>
+<p>Start the server with the CLI:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dspygen<span class="w"> </span>mcp<span class="w"> </span>serve
+</pre></div>
+</div>
+<p>By default the server listens on <code class="docutils literal notranslate"><span class="pre">stdio</span></code> (standard input/output), which is the transport used
+by Claude Desktop and most MCP clients. To use a TCP socket instead:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dspygen<span class="w"> </span>mcp<span class="w"> </span>serve<span class="w"> </span>--transport<span class="w"> </span>sse<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
+</pre></div>
+</div>
+<p>You can also start the server programmatically:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.mcp.server</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_server</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+<span class="n">server</span> <span class="o">=</span> <span class="n">create_server</span><span class="p">()</span>
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">run_stdio</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="tools-exposed">
+<h2>Tools Exposed<a class="headerlink" href="#tools-exposed" title="Link to this heading"></a></h2>
+<p>The MCP server exposes the following tool categories:</p>
+<section id="module-execution">
+<h3>Module Execution<a class="headerlink" href="#module-execution" title="Link to this heading"></a></h3>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">run_module</span></code></dt><dd><p>Execute any registered DSPyGen module by name.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">module_name</span></code> (string) — Fully qualified module class name, e.g.
+<code class="docutils literal notranslate"><span class="pre">&quot;dspygen.modules.blog_module.BlogModule&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kwargs</span></code> (object) — Keyword arguments passed to the module’s <code class="docutils literal notranslate"><span class="pre">forward</span></code> method.</p></li>
+</ul>
+<p><strong>Returns:</strong> The module’s prediction as a JSON object.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">list_modules</span></code></dt><dd><p>List all available DSPyGen modules with their signatures and descriptions.</p>
+<p><strong>Returns:</strong> Array of module descriptors.</p>
+</dd>
+</dl>
+</section>
+<section id="pipeline-execution">
+<h3>Pipeline Execution<a class="headerlink" href="#pipeline-execution" title="Link to this heading"></a></h3>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">run_pipeline</span></code></dt><dd><p>Execute a DSPyGen YAML pipeline.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pipeline_yaml</span></code> (string) — Pipeline definition as a YAML string.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inputs</span></code> (object) — Template variables for the pipeline.</p></li>
+</ul>
+<p><strong>Returns:</strong> Final pipeline outputs as a JSON object.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">load_pipeline</span></code></dt><dd><p>Load a pipeline from a file path on the server’s filesystem.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">path</span></code> (string) — Absolute path to a <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> pipeline file.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="dspy-configuration">
+<h3>DSPy Configuration<a class="headerlink" href="#dspy-configuration" title="Link to this heading"></a></h3>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">init_lm</span></code></dt><dd><p>Initialize the language model backend.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model</span></code> (string) — Model identifier, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;openai/gpt-4o&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api_key</span></code> (string, optional) — Override the API key from environment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_tokens</span></code> (integer, optional) — Maximum tokens per response.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<p>The MCP server exposes the following resource URIs:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">dspygen://modules</span></code></dt><dd><p>A JSON list of all available modules, their input/output signatures, and docstrings.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">dspygen://pipelines/{name}</span></code></dt><dd><p>The YAML source of a named pipeline stored in the server’s pipeline registry.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">dspygen://config</span></code></dt><dd><p>The current DSPyGen and DSPy configuration as JSON.</p>
+</dd>
+</dl>
+</section>
+<section id="prompts">
+<h2>Prompts<a class="headerlink" href="#prompts" title="Link to this heading"></a></h2>
+<p>The server provides these reusable prompt templates:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">blog_post</span></code></dt><dd><p>Generate a structured blog post on any topic.</p>
+<p><strong>Arguments:</strong> <code class="docutils literal notranslate"><span class="pre">topic</span></code>, <code class="docutils literal notranslate"><span class="pre">tone</span></code>, <code class="docutils literal notranslate"><span class="pre">length</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">summarize</span></code></dt><dd><p>Summarize a long piece of text.</p>
+<p><strong>Arguments:</strong> <code class="docutils literal notranslate"><span class="pre">text</span></code>, <code class="docutils literal notranslate"><span class="pre">max_sentences</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">code_review</span></code></dt><dd><p>Review a code snippet and suggest improvements.</p>
+<p><strong>Arguments:</strong> <code class="docutils literal notranslate"><span class="pre">code</span></code>, <code class="docutils literal notranslate"><span class="pre">language</span></code>, <code class="docutils literal notranslate"><span class="pre">focus</span></code></p>
+</dd>
+</dl>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<section id="claude-desktop">
+<h3>Claude Desktop<a class="headerlink" href="#claude-desktop" title="Link to this heading"></a></h3>
+<p>Add the following to your <code class="docutils literal notranslate"><span class="pre">claude_desktop_config.json</span></code>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"mcpServers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"dspygen"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dspygen"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"mcp"</span><span class="p">,</span><span class="w"> </span><span class="s2">"serve"</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"OPENAI_API_KEY"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sk-..."</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="cursor">
+<h3>Cursor<a class="headerlink" href="#cursor" title="Link to this heading"></a></h3>
+<p>Add to <code class="docutils literal notranslate"><span class="pre">.cursor/mcp.json</span></code> in your project root:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"mcpServers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"dspygen"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dspygen"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"mcp"</span><span class="p">,</span><span class="w"> </span><span class="s2">"serve"</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"OPENAI_API_KEY"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sk-..."</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="continue-vs-code">
+<h3>Continue (VS Code)<a class="headerlink" href="#continue-vs-code" title="Link to this heading"></a></h3>
+<p>Add to <code class="docutils literal notranslate"><span class="pre">~/.continue/config.json</span></code>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"experimental"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"modelContextProtocolServers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"transport"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stdio"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dspygen"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"mcp"</span><span class="p">,</span><span class="w"> </span><span class="s2">"serve"</span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="security-considerations">
+<h2>Security Considerations<a class="headerlink" href="#security-considerations" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The MCP server inherits the permissions of the process running it. Run it with a
+least-privilege user in production.</p></li>
+<li><p>Avoid exposing the TCP transport (<code class="docutils literal notranslate"><span class="pre">--transport</span> <span class="pre">sse</span></code>) on a public interface without
+authentication.</p></li>
+<li><p>API keys are read from environment variables; never pass them as tool arguments in
+multi-user environments.</p></li>
+</ul>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<p>See <a class="reference internal" href="api/mcp.html"><span class="doc">MCP API</span></a> for full API documentation.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rdddy.html" class="btn btn-neutral float-left" title="Reactive Domain-Driven Design (RDDDY)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lsp.html" class="btn btn-neutral float-right" title="LSP Server" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sean Chatman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
