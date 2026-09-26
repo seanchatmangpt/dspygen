@@ -25,7 +25,7 @@ jobs:
       PYTHONPATH: src
     steps:
       - name: Checkout exact repair branch
-        uses: actions/checkout@v7.0.1
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
           fetch-depth: 0
