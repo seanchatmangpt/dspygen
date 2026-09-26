@@ -1,0 +1,45 @@
+{
+  "dependent_bblocks": [],
+  "downstream_intents": ["BRCE.external-intent"],
+  "exclusions": [
+    "direct provider SDK actuation",
+    "self-assigned external ALIVE",
+    "unreceipted emergency path"
+  ],
+  "exclusive_capabilities": [
+    "cmd.kernel",
+    "policy.admission",
+    "receipt.causal",
+    "consequence.broker"
+  ],
+  "identity": "cmd-dspygen-complete",
+  "member_packs": [
+    "cmd-core",
+    "cmd-surface-cli",
+    "cmd-contract",
+    "cmd-projection",
+    "cmd-runtime",
+    "cmd-policy",
+    "cmd-validator",
+    "cmd-receipt",
+    "cmd-consequence"
+  ],
+  "migration_law": "preserve legacy commands through thin adapters until black-box equivalence and replay",
+  "owner": "dspygen-cmd",
+  "policy_profile": "GGEN-STANDARDS-7D-2026-07-30",
+  "purpose": "Complete G0-G9 internal and external combinatorial-maximalism rail",
+  "removal_law": "retire only after exact-tree census, consumer closure, replay, and external verifier receipt",
+  "required_capabilities": [
+    "cmd.kernel",
+    "surface.cli",
+    "contract.cmd",
+    "projection.cmd",
+    "runtime.python",
+    "policy.admission",
+    "validator.crown",
+    "receipt.causal",
+    "consequence.broker"
+  ],
+  "verifier_profile": "cmd-crown-v1",
+  "version": "26.7.30"
+}

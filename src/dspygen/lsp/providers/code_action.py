@@ -5,7 +5,7 @@ Handles textDocument/codeAction.
 
 Provides quick fixes and refactors:
 1. Invalid signature diagnostic → "Fix signature: add output field"
-2. Missing forward() → "Add forward() method stub"
+2. Missing forward() → "Add deterministic forward() implementation"
 3. Non-snake_case field → "Convert to snake_case"
 4. Module instantiation without init_dspy() → "Add init_dspy() call"
 5. dspy.Predict → "Convert to ChainOfThought"
@@ -48,9 +48,9 @@ def _to_snake_case(name: str) -> str:
 
 def _find_class_end_for_forward(source: str) -> int | None:
     """
-    Find the best insertion line for a forward() stub.
+    Find the best insertion line for a forward() implementation.
     Returns the line number (0-based) after the last line of the first
-    dspy.Module subclass body.  Returns None if not found.
+    dspy.Module subclass body. Returns None if not found.
     """
     try:
         tree = ast.parse(source)
@@ -65,7 +65,6 @@ def _find_class_end_for_forward(source: str) -> int | None:
                 or (isinstance(base, ast.Attribute) and base.attr == "Module")
             )
             if is_module:
-                # Insert at end of class body
                 end_line = getattr(node, "end_lineno", None)
                 if end_line is not None:
                     return end_line - 1  # type: ignore[no-any-return]
@@ -109,8 +108,6 @@ def _action_fix_signature_output(
     for m in _SIG_LITERAL_RE.finditer(line_text):
         sig_str = m.group(2)
         if "->" in sig_str and not sig_str.split("->", 1)[1].strip():
-            # Append 'output' to the signature
-            col_end = m.end(2)
             new_sig = sig_str.rstrip() + " output"
             edit = lsp_types.TextEdit(
                 range=_range_at(line_no, m.start(2), m.end(2)),
@@ -130,20 +127,24 @@ def _action_add_forward_stub(
     diag: lsp_types.Diagnostic,
     source: str,
 ) -> lsp_types.CodeAction | None:
-    """Offer to add a forward() stub to a dspy.Module class missing one."""
+    """Offer a complete deterministic identity implementation for missing forward()."""
     if "forward()" not in diag.message:
         return None
     insert_line = _find_class_end_for_forward(source)
     if insert_line is None:
         return None
-    stub = "\n    def forward(self, *args, **kwargs):\n        raise NotImplementedError\n"
+    implementation = (
+        "\n    def forward(self, **inputs):\n"
+        "        \"\"\"Return an identity prediction until domain logic is added.\"\"\"\n"
+        "        return dspy.Prediction(**inputs)\n"
+    )
     insert_pos = lsp_types.Position(line=insert_line, character=0)
     edit = lsp_types.TextEdit(
         range=lsp_types.Range(start=insert_pos, end=insert_pos),
-        new_text=stub,
+        new_text=implementation,
     )
     return lsp_types.CodeAction(
-        title="Add forward() method stub",
+        title="Add deterministic forward() implementation",
         kind=lsp_types.CodeActionKind.QuickFix,
         diagnostics=[diag],
         edit=lsp_types.WorkspaceEdit(changes={uri: [edit]}),
@@ -158,7 +159,6 @@ def _action_snake_case_field(
     """Convert a non-snake_case field name to snake_case."""
     if "snake_case" not in diag.message.lower():
         return None
-    # Extract the field name from the diagnostic message
     m = re.search(r"Field name '(\w+)'", diag.message)
     if not m:
         return None
@@ -221,8 +221,6 @@ def _actions_for_range(
 
     for line_no in range(start_line, min(end_line + 1, len(source_lines))):
         line_text = source_lines[line_no]
-
-        # dspy.Predict → Convert to ChainOfThought
         for m in _PREDICT_RE.finditer(line_text):
             edit = lsp_types.TextEdit(
                 range=_range_at(line_no, m.start(), m.end()),
@@ -267,30 +265,26 @@ def register_code_action(server: LanguageServer) -> None:
             diagnostics = params.context.diagnostics or []
 
             actions: list[lsp_types.CodeAction] = []
-
-            # Actions tied to diagnostics
             for diag in diagnostics:
                 if diag.source != "dspygen-lsp":
                     continue
-                a = _action_fix_signature_output(uri, diag, source_lines)
-                if a:
-                    actions.append(a)
+                action = _action_fix_signature_output(uri, diag, source_lines)
+                if action:
+                    actions.append(action)
 
-                a = _action_add_forward_stub(uri, diag, source)
-                if a:
-                    actions.append(a)
+                action = _action_add_forward_stub(uri, diag, source)
+                if action:
+                    actions.append(action)
 
-                a = _action_snake_case_field(uri, diag, source_lines)
-                if a:
-                    actions.append(a)
+                action = _action_snake_case_field(uri, diag, source_lines)
+                if action:
+                    actions.append(action)
 
-                a = _action_add_init_dspy(uri, diag, source)
-                if a:
-                    actions.append(a)
+                action = _action_add_init_dspy(uri, diag, source)
+                if action:
+                    actions.append(action)
 
-            # Context-dependent refactors
             actions.extend(_actions_for_range(uri, source, params.range))
-
             return actions
         except Exception as exc:  # noqa: BLE001
             logger.exception(f"code_action handler error: {exc}")

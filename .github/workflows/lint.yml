@@ -7,22 +7,17 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
           cache: pip
-
-      - name: Install ruff
-        run: pip install "ruff>=0.2.1"
-
-      - name: Ruff check
-        run: ruff check src/
-
+      - name: Install Ruff
+        run: pip install "ruff==0.16.1"
+      - name: Ruff check (non-mutating)
+        run: ruff check --no-fix src/
       - name: Ruff format (advisory)
         run: ruff format --check src/ || echo "::warning::Some files would be reformatted. Run 'ruff format src/' locally to fix."

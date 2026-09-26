@@ -18,7 +18,7 @@ class BaseRepository(Generic[T]):
         try:
             with self.storage_file.open('r', encoding='utf-8') as file:
                 data = json.load(file)
-            return [self.model.parse_obj(item) for item in data]
+            return [self.model.model_validate(item) for item in data]
         except (json.JSONDecodeError, FileNotFoundError):
             return []
 

@@ -1,0 +1,146 @@
+{
+  "packs": [
+    {
+      "content_digest": "9131302d99d6800717f3b1772866f77baa9552cf01ca1324599d03927afb7838",
+      "identity": "cmd-consequence",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "consequence-*",
+      "provides": [
+        "consequence.broker"
+      ],
+      "requires": [
+        "receipt.causal",
+        "policy.admission"
+      ],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "3de935c196b33d252aca94a49431ce324c24bf87be49f76b4fe09ae59d49d1a9",
+      "identity": "cmd-contract",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "contract-*",
+      "provides": [
+        "contract.cmd"
+      ],
+      "requires": [],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "84488aa71a4dd978e6b2cee63ff6cf35df9cc308611bb216af393f02de41bba1",
+      "identity": "cmd-core",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "core-*",
+      "provides": [
+        "cmd.kernel"
+      ],
+      "requires": [
+        "policy.admission"
+      ],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "43df74db0d7e9aabd5d1b8cc94cbeb71c188772fe521fc0a68ede082a50a5183",
+      "identity": "cmd-policy",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "policy-*",
+      "provides": [
+        "policy.admission"
+      ],
+      "requires": [],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "bb34633a6f5bceea03b5f9b6e92c642a8443f50837d2edf5cdd4bf778fc8c1e5",
+      "identity": "cmd-projection",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "projection-*",
+      "provides": [
+        "projection.cmd"
+      ],
+      "requires": [
+        "cmd.kernel"
+      ],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "6ef2d779148681eefcc360370a8d99e619a42176e2f0d1ded7ec630989403554",
+      "identity": "cmd-receipt",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "receipt-*",
+      "provides": [
+        "receipt.causal"
+      ],
+      "requires": [
+        "cmd.kernel"
+      ],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "aa725de2854d0ed4f7d2c93285934806db9c5cde5b10f18d05083ffbbc22b388",
+      "identity": "cmd-runtime",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "runtime-*",
+      "provides": [
+        "runtime.python"
+      ],
+      "requires": [
+        "cmd.kernel"
+      ],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "8eb3b4c937e8638e40fc4f8b8391fb88f33ffa65adbbe7faab0dc69a4c03e288",
+      "identity": "cmd-surface-cli",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "surface-*",
+      "provides": [
+        "surface.cli"
+      ],
+      "requires": [
+        "cmd.kernel"
+      ],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    },
+    {
+      "content_digest": "a57ac323b1bbd7ab1e9445f771129b9fcaca4411ad7a11e3067370e38781644e",
+      "identity": "cmd-validator",
+      "owner": "dspygen-cmd",
+      "ownership_claims": [],
+      "pack_class": "validator-*",
+      "provides": [
+        "validator.crown"
+      ],
+      "requires": [
+        "cmd.kernel"
+      ],
+      "trust_floor": "LOCALLY_ADMITTED",
+      "verifier": "cmd-independent-verifier-v1",
+      "version": "26.7.30"
+    }
+  ],
+  "schema": "cmd.packs.v1"
+}

@@ -1,0 +1,189 @@
+@prefix dspy:    <http://seanchatmangpt.github.io/packs/dspy#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+# Consumer-owned possibility portfolio. The dspy-pack remains unchanged.
+# Five reasoning/composition topologies and ten optimizer candidates preserve
+# reversible alternatives instead of selecting one architecture up front.
+
+dspy:errc-signature a dspy:Signature ;
+    dcterms:title "SolveBoundedTask" ;
+    dcterms:description "Solve a bounded task from admitted context and return an answer with rationale." ;
+    dspy:className "SolveBoundedTask" ;
+    dspy:hasInput dspy:errc-context-input , dspy:errc-question-input ;
+    dspy:hasOutput dspy:errc-answer-output , dspy:errc-rationale-output .
+
+dspy:errc-context-input a dspy:InputField ;
+    dspy:name "context" ; dspy:pythonType "str" ;
+    dcterms:description "Admitted context for the bounded task." .
+
+dspy:errc-question-input a dspy:InputField ;
+    dspy:name "question" ; dspy:pythonType "str" ;
+    dcterms:description "Question or objective to solve." .
+
+dspy:errc-answer-output a dspy:OutputField ;
+    dspy:name "answer" ; dspy:pythonType "str" ;
+    dcterms:description "Candidate answer." .
+
+dspy:errc-rationale-output a dspy:OutputField ;
+    dspy:name "rationale" ; dspy:pythonType "str" ;
+    dcterms:description "Concise evidence-grounded rationale." .
+
+# ── Reasoning topology portfolio ─────────────────────────────────────────────
+
+dspy:errc-predict a dspy:Module ;
+    dcterms:description "Low-cost direct prediction baseline." ;
+    dspy:name "predict_candidate" ; dspy:kind "Predict" ; dspy:signature dspy:errc-signature .
+
+dspy:errc-cot a dspy:Module ;
+    dcterms:description "Chain-of-thought candidate for explicit reasoning." ;
+    dspy:name "cot_candidate" ; dspy:kind "ChainOfThought" ; dspy:signature dspy:errc-signature .
+
+dspy:errc-pot a dspy:Module ;
+    dcterms:description "Program-of-thought candidate for computation-oriented reasoning." ;
+    dspy:name "pot_candidate" ; dspy:kind "ProgramOfThought" ; dspy:signature dspy:errc-signature ;
+    dspy:maxIters 5 .
+
+dspy:errc-rlm a dspy:Module ;
+    dcterms:description "RLM candidate for iterative long-context reasoning." ;
+    dspy:name "rlm_candidate" ; dspy:kind "RLM" ; dspy:signature dspy:errc-signature ;
+    dspy:maxIterations 8 ; dspy:maxLlmCalls 16 ; dspy:maxOutputChars 8000 ; dspy:verboseFlag false .
+
+# Retrieval + reasoning composition using the pack's verified Pipeline vocabulary.
+dspy:rag-pipeline-signature a dspy:Signature ;
+    dcterms:title "RetrieveThenSolve" ;
+    dcterms:description "Question in, retrieval-grounded answer out." ;
+    dspy:className "RetrieveThenSolve" ;
+    dspy:hasInput dspy:rag-question-input ;
+    dspy:hasOutput dspy:rag-answer-output .
+
+dspy:rag-question-input a dspy:InputField ;
+    dspy:name "question" ; dspy:pythonType "str" ;
+    dcterms:description "Question to retrieve evidence for." .
+
+dspy:rag-answer-output a dspy:OutputField ;
+    dspy:name "answer" ; dspy:pythonType "str" ;
+    dcterms:description "Retrieval-grounded answer." .
+
+dspy:rag-answer-signature a dspy:Signature ;
+    dcterms:title "AnswerFromEvidence" ;
+    dcterms:description "Answer from retrieved evidence." ;
+    dspy:className "AnswerFromEvidence" ;
+    dspy:hasInput dspy:rag-context-input , dspy:rag-inner-question-input ;
+    dspy:hasOutput dspy:rag-inner-answer-output .
+
+dspy:rag-context-input a dspy:InputField ;
+    dspy:name "context" ; dspy:pythonType "str" ;
+    dcterms:description "Retrieved passages." .
+
+dspy:rag-inner-question-input a dspy:InputField ;
+    dspy:name "question" ; dspy:pythonType "str" ;
+    dcterms:description "Question to answer." .
+
+dspy:rag-inner-answer-output a dspy:OutputField ;
+    dspy:name "answer" ; dspy:pythonType "str" ;
+    dcterms:description "Grounded answer." .
+
+dspy:rag-retrieve-step a dspy:PipelineStep ;
+    dspy:stepIndex 0 ; dspy:stepVarName "retrieve" ; dspy:stepKind "Retrieve" ; dspy:retrieveK 5 ;
+    dspy:hasArgBinding dspy:rag-retrieve-arg .
+
+dspy:rag-retrieve-arg a dspy:ArgBinding ;
+    dspy:argName "query" ; dspy:argSourceKind "PipelineInput" ; dspy:argSourceField "question" .
+
+dspy:rag-answer-step a dspy:PipelineStep ;
+    dspy:stepIndex 1 ; dspy:stepVarName "generate_answer" ; dspy:stepKind "ChainOfThought" ;
+    dspy:stepSignature dspy:rag-answer-signature ;
+    dspy:hasArgBinding dspy:rag-answer-context-arg , dspy:rag-answer-question-arg .
+
+dspy:rag-answer-context-arg a dspy:ArgBinding ;
+    dspy:argName "context" ; dspy:argSourceKind "StepOutput" ;
+    dspy:argSourceField "passages" ; dspy:argSourceStep dspy:rag-retrieve-step .
+
+dspy:rag-answer-question-arg a dspy:ArgBinding ;
+    dspy:argName "question" ; dspy:argSourceKind "PipelineInput" ; dspy:argSourceField "question" .
+
+dspy:errc-rag a dspy:Module ;
+    dcterms:description "Retrieve-then-reason candidate preserving evidence retrieval as a distinct topology." ;
+    dspy:name "rag_candidate" ; dspy:kind "Pipeline" ;
+    dspy:pipelineSignature dspy:rag-pipeline-signature ;
+    dspy:hasStep dspy:rag-retrieve-step , dspy:rag-answer-step .
+
+# ── LM configurations are explicit variation points ──────────────────────────
+
+dspy:errc-cheap-lm a dspy:LMConfig ;
+    dspy:modelName "openai/gpt-4o-mini" ; dspy:temperature 0.2 ;
+    dspy:maxTokens 4000 ; dspy:lmCache true ; dspy:numRetries 2 .
+
+dspy:errc-strong-lm a dspy:LMConfig ;
+    dspy:modelName "openai/gpt-5" ; dspy:temperature 0.7 ;
+    dspy:maxTokens 16000 ; dspy:lmCache true ; dspy:numRetries 3 .
+
+# ── Optimizer portfolio over Predict ─────────────────────────────────────────
+
+dspy:predict-copro a dspy:Optimizer ;
+    dcterms:description "COPRO over direct prediction." ;
+    dspy:name "predict_copro" ; dspy:kind "COPRO" ;
+    dspy:optimizes dspy:errc-predict ; dspy:metricFunction "quality_metric" ;
+    dspy:promptModel dspy:errc-cheap-lm ; dspy:breadth 8 ; dspy:depth 2 ; dspy:initTemperature 1.0 .
+
+dspy:predict-mipro a dspy:Optimizer ;
+    dcterms:description "MIPROv2 over direct prediction." ;
+    dspy:name "predict_mipro" ; dspy:kind "MIPROv2" ;
+    dspy:optimizes dspy:errc-predict ; dspy:metricFunction "quality_metric" ;
+    dspy:promptModel dspy:errc-cheap-lm ; dspy:taskModel dspy:errc-strong-lm ;
+    dspy:maxBootstrappedDemos 4 ; dspy:maxLabeledDemos 4 ; dspy:numCandidates 6 ;
+    dspy:optimizerMaxErrors 2 ; dspy:seedInt 17 ; dspy:logDir "/tmp/dspygen-errc-predict-mipro" .
+
+dspy:predict-simba a dspy:Optimizer ;
+    dcterms:description "SIMBA over direct prediction." ;
+    dspy:name "predict_simba" ; dspy:kind "SIMBA" ;
+    dspy:optimizes dspy:errc-predict ; dspy:metricFunction "quality_metric" ;
+    dspy:bsize 16 ; dspy:numCandidates 6 ; dspy:maxSteps 8 ; dspy:maxDemos 4 ;
+    dspy:promptModel dspy:errc-cheap-lm ; dspy:demoInputFieldMaxlen 50000 ;
+    dspy:numThreads 4 ; dspy:temperatureForSampling 0.3 ; dspy:temperatureForCandidates 0.25 .
+
+dspy:predict-rules a dspy:Optimizer ;
+    dcterms:description "InferRules over direct prediction." ;
+    dspy:name "predict_rules" ; dspy:kind "InferRules" ;
+    dspy:optimizes dspy:errc-predict ; dspy:metricFunction "quality_metric" ;
+    dspy:numCandidates 8 ; dspy:numRules 6 ; dspy:numThreads 4 .
+
+dspy:predict-fewshot a dspy:Optimizer ;
+    dcterms:description "LabeledFewShot over direct prediction." ;
+    dspy:name "predict_fewshot" ; dspy:kind "LabeledFewShot" ;
+    dspy:optimizes dspy:errc-predict ; dspy:metricFunction "quality_metric" ; dspy:kValue 8 .
+
+# ── Same optimizer families over CoT: architecture x optimizer discrimination ─
+
+dspy:cot-copro a dspy:Optimizer ;
+    dcterms:description "COPRO over chain-of-thought." ;
+    dspy:name "cot_copro" ; dspy:kind "COPRO" ;
+    dspy:optimizes dspy:errc-cot ; dspy:metricFunction "quality_metric" ;
+    dspy:promptModel dspy:errc-cheap-lm ; dspy:breadth 8 ; dspy:depth 2 ; dspy:initTemperature 1.0 .
+
+dspy:cot-mipro a dspy:Optimizer ;
+    dcterms:description "MIPROv2 over chain-of-thought." ;
+    dspy:name "cot_mipro" ; dspy:kind "MIPROv2" ;
+    dspy:optimizes dspy:errc-cot ; dspy:metricFunction "quality_metric" ;
+    dspy:promptModel dspy:errc-cheap-lm ; dspy:taskModel dspy:errc-strong-lm ;
+    dspy:maxBootstrappedDemos 4 ; dspy:maxLabeledDemos 4 ; dspy:numCandidates 6 ;
+    dspy:optimizerMaxErrors 2 ; dspy:seedInt 23 ; dspy:logDir "/tmp/dspygen-errc-cot-mipro" .
+
+dspy:cot-simba a dspy:Optimizer ;
+    dcterms:description "SIMBA over chain-of-thought." ;
+    dspy:name "cot_simba" ; dspy:kind "SIMBA" ;
+    dspy:optimizes dspy:errc-cot ; dspy:metricFunction "quality_metric" ;
+    dspy:bsize 16 ; dspy:numCandidates 6 ; dspy:maxSteps 8 ; dspy:maxDemos 4 ;
+    dspy:promptModel dspy:errc-cheap-lm ; dspy:demoInputFieldMaxlen 50000 ;
+    dspy:numThreads 4 ; dspy:temperatureForSampling 0.3 ; dspy:temperatureForCandidates 0.25 .
+
+dspy:cot-rules a dspy:Optimizer ;
+    dcterms:description "InferRules over chain-of-thought." ;
+    dspy:name "cot_rules" ; dspy:kind "InferRules" ;
+    dspy:optimizes dspy:errc-cot ; dspy:metricFunction "quality_metric" ;
+    dspy:numCandidates 8 ; dspy:numRules 6 ; dspy:numThreads 4 .
+
+dspy:cot-fewshot a dspy:Optimizer ;
+    dcterms:description "LabeledFewShot over chain-of-thought." ;
+    dspy:name "cot_fewshot" ; dspy:kind "LabeledFewShot" ;
+    dspy:optimizes dspy:errc-cot ; dspy:metricFunction "quality_metric" ; dspy:kValue 8 .

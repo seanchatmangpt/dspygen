@@ -1,0 +1,16 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix cmd: <https://chatmangpt.com/canon/cmd#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+cmd:CandidateShape a sh:NodeShape ;
+  sh:targetClass cmd:Candidate ;
+  sh:closed false .
+
+cmd:IntentShape a sh:NodeShape ;
+  sh:targetClass cmd:Intent ;
+  sh:property [ sh:path cmd:requiredBroker ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue cmd:BRCE ] .
+
+cmd:ReceiptShape a sh:NodeShape ;
+  sh:targetClass cmd:Receipt ;
+  sh:property [ sh:path cmd:preStateDigest ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path cmd:postStateDigest ; sh:minCount 1 ; sh:maxCount 1 ] .

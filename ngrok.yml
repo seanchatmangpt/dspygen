@@ -1,6 +1,7 @@
 version: 2
 
-authtoken: 2aY8SAMNlfjdNVsra7Yb9AoguQO_NpAEWEQQTXwss7rwdHgk
+# Credentials are supplied through the NGROK_AUTHTOKEN environment variable.
+# Never commit an ngrok authtoken to this repository.
 
 tunnels:
   app:

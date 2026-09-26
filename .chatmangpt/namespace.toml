@@ -1,0 +1,15 @@
+schema = "chatmangpt.namespace.v1"
+repository = "https://github.com/seanchatmangpt/dspygen"
+repository_role = "provenance-edge"
+canonical_program = "https://chatmangpt.com/programs/dspygen"
+canonical_ontology = "https://chatmangpt.com/canon/dspygen-architecture"
+receipt_route = "https://chatmangpt.com/receipts/{blake3}"
+admission_is_standing = false
+
+[implementation]
+name = "dspygen"
+replaceable = true
+
+[authority]
+actuation_broker = "BRCE"
+zero_unreceipted_actuation = true

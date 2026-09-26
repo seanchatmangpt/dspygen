@@ -1,0 +1,62 @@
+schema = "cmd.authority.v1"
+
+[default]
+semantic_owner = "dspygen-core"
+operational_owner = "repository-maintainers"
+mutation_authority = "git-reviewed-change"
+evidence_authority = "cmd-independent-verifier"
+retirement_dependency = "black-box-equivalence-and-replay"
+
+[[rules]]
+name = "automation"
+patterns = [".github/workflows/**"]
+semantic_owner = "ci-control-plane"
+operational_owner = "repository-maintainers"
+mutation_authority = "git-reviewed-change"
+evidence_authority = "github-actions-exact-head"
+retirement_dependency = "workflow-output-owner-migrated"
+
+[[rules]]
+name = "canonical-authority"
+patterns = [".specify/**", "ggen.toml", ".chatmangpt/**"]
+semantic_owner = "architecture-ontology"
+operational_owner = "ggen"
+mutation_authority = "ontology-reviewed-change"
+evidence_authority = "cmd-independent-verifier"
+retirement_dependency = "projection-equivalence"
+
+[[rules]]
+name = "source"
+patterns = ["src/**"]
+semantic_owner = "dspygen-runtime"
+operational_owner = "repository-maintainers"
+mutation_authority = "git-reviewed-change"
+evidence_authority = "test-and-verifier-ladder"
+retirement_dependency = "consumer-and-load-path-proof"
+
+[[rules]]
+name = "verification"
+patterns = ["tests/**", "fixtures/**", "scripts/verify*", "scripts/run_cmd_verifier.py"]
+semantic_owner = "verification-control-plane"
+operational_owner = "repository-maintainers"
+mutation_authority = "git-reviewed-change"
+evidence_authority = "external-verifier"
+retirement_dependency = "replacement-falsifier-and-replay"
+
+[[rules]]
+name = "capability-packs"
+patterns = ["packs/**", "bblocks/**", ".ggen/packs.lock"]
+semantic_owner = "cmd-pack-resolver"
+operational_owner = "ggen"
+mutation_authority = "content-addressed-pack-admission"
+evidence_authority = "cmd-pack-verifier"
+retirement_dependency = "dependency-closure-and-substitution-proof"
+
+[[rules]]
+name = "evidence"
+patterns = ["receipts/**", "reports/**", "docs/architecture/**"]
+semantic_owner = "evidence-projection"
+operational_owner = "cmd-verifier"
+mutation_authority = "receipted-projection"
+evidence_authority = "independent-replay"
+retirement_dependency = "receipt-chain-preservation"
