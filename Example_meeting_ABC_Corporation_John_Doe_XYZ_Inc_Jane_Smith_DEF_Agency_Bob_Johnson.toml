@@ -1,0 +1,16 @@
+name = "Example meeting"
+[[participants]]
+name = "John Doe"
+role = "Manager"
+company = "ABC Corporation"
+
+[[participants]]
+name = "Jane Smith"
+role = "Developer"
+company = "XYZ Inc."
+
+[[participants]]
+name = "Bob Johnson"
+role = "Designer"
+company = "DEF Agency"
+
