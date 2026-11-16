@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frequently Asked Questions &mdash; DSPyGen 2024.9.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=769f078a"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ADR-0001: Use DSPy as the Core LLM Framework" href="adr/0001-use-dspy-as-llm-framework.html" />
+    <link rel="prev" title="Cookbook" href="cookbook.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DSPyGen
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Concepts</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">DSPyGen Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdddy.html">Reactive Domain-Driven Design (RDDDY)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Integrations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mcp.html">MCP Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">LSP Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modules">Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mcp-server">MCP Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lsp-server">LSP Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rdddy">RDDDY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance">Performance</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture Decisions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adr/0001-use-dspy-as-llm-framework.html">ADR-0001: Use DSPy as the Core LLM Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0002-mcp-for-tool-integration.html">ADR-0002: Use MCP for Claude Desktop Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0003-pygls-for-lsp.html">ADR-0003: Use pygls for the Language Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0004-rdddy-for-domain-modeling.html">ADR-0004: RDDDY for Domain Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0005-poetry-for-packaging.html">ADR-0005: Poetry for Package Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">Modules API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/agents.html">Agents API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/rdddy.html">RDDDY API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/mcp.html">MCP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/lsp.html">LSP API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DSPyGen</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Frequently Asked Questions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/faq.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="frequently-asked-questions">
+<h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#installation" id="id1">Installation</a></p></li>
+<li><p><a class="reference internal" href="#modules" id="id2">Modules</a></p></li>
+<li><p><a class="reference internal" href="#mcp-server" id="id3">MCP Server</a></p></li>
+<li><p><a class="reference internal" href="#lsp-server" id="id4">LSP Server</a></p></li>
+<li><p><a class="reference internal" href="#testing" id="id5">Testing</a></p></li>
+<li><p><a class="reference internal" href="#rdddy" id="id6">RDDDY</a></p></li>
+<li><p><a class="reference internal" href="#performance" id="id7">Performance</a></p></li>
+</ul>
+</nav>
+<section id="installation">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Installation</a><a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p><strong>Q: Which Python versions are supported?</strong></p>
+<p>Python 3.10, 3.11, and 3.12. Python 3.13+ is not yet supported due to upstream dependencies.</p>
+<p><strong>Q: Do I need an OpenAI API key?</strong></p>
+<p>For most features, yes. Set <code class="docutils literal notranslate"><span class="pre">OPENAI_API_KEY</span></code> in your environment or <code class="docutils literal notranslate"><span class="pre">.env</span></code> file.
+You can also use Ollama for local inference — see <a class="reference internal" href="quickstart.html"><span class="doc">Quick Start</span></a>.</p>
+<p><strong>Q: How do I install only the MCP server?</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"dspygen[mcp]"</span>
+dspygen-mcp<span class="w">  </span><span class="c1"># runs stdio server</span>
+</pre></div>
+</div>
+</section>
+<section id="modules">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
+<p><strong>Q: What’s the difference between a DSPy Signature and a Module?</strong></p>
+<p>A <em>Signature</em> declares what a module does (inputs → outputs). A <em>Module</em> implements how it does it, wrapping one or more Signatures with <code class="docutils literal notranslate"><span class="pre">dspy.Predict</span></code>, <code class="docutils literal notranslate"><span class="pre">dspy.ChainOfThought</span></code>, etc.</p>
+<p><strong>Q: How do I add a new module?</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dspygen<span class="w"> </span>gen<span class="w"> </span>module<span class="w"> </span>my_module_name
+</pre></div>
+</div>
+<p>This scaffolds <code class="docutils literal notranslate"><span class="pre">src/dspygen/modules/my_module_name.py</span></code>.</p>
+<p><strong>Q: My module’s forward() raises a TypeError</strong></p>
+<p>Ensure your Signature fields are declared as class-level annotations with <code class="docutils literal notranslate"><span class="pre">dspy.InputField()</span></code> / <code class="docutils literal notranslate"><span class="pre">dspy.OutputField()</span></code>, not as <code class="docutils literal notranslate"><span class="pre">__init__</span></code> arguments.</p>
+</section>
+<section id="mcp-server">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">MCP Server</a><a class="headerlink" href="#mcp-server" title="Link to this heading"></a></h2>
+<p><strong>Q: The MCP server isn’t showing up in Claude Desktop</strong></p>
+<ol class="arabic simple">
+<li><p>Confirm <code class="docutils literal notranslate"><span class="pre">dspygen-mcp</span></code> is on your PATH: <code class="docutils literal notranslate"><span class="pre">which</span> <span class="pre">dspygen-mcp</span></code></p></li>
+<li><p>Check your <code class="docutils literal notranslate"><span class="pre">mcp_config.json</span></code> is saved to <code class="docutils literal notranslate"><span class="pre">~/Library/Application</span> <span class="pre">Support/Claude/claude_desktop_config.json</span></code> (macOS)</p></li>
+<li><p>Restart Claude Desktop after config changes</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">dspygen</span> <span class="pre">doctor</span></code> to verify all dependencies are installed</p></li>
+</ol>
+<p><strong>Q: How do I see MCP server logs?</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># MCP logs go to stderr; capture with:</span>
+dspygen-mcp<span class="w"> </span><span class="m">2</span>&gt;~/dspygen-mcp.log
+</pre></div>
+</div>
+</section>
+<section id="lsp-server">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">LSP Server</a><a class="headerlink" href="#lsp-server" title="Link to this heading"></a></h2>
+<p><strong>Q: How do I enable the LSP in VS Code?</strong></p>
+<p>Install the dspygen VS Code extension, which auto-starts <code class="docutils literal notranslate"><span class="pre">dspygen-lsp</span></code>.
+Or add to <code class="docutils literal notranslate"><span class="pre">settings.json</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">"dspygen.lsp.enabled"</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+<p><strong>Q: Completions aren’t appearing</strong></p>
+<p>Ensure the file is recognized as Python and <code class="docutils literal notranslate"><span class="pre">dspy</span></code> is imported at the top.
+Completions trigger after <code class="docutils literal notranslate"><span class="pre">dspy.Predict(</span></code>, <code class="docutils literal notranslate"><span class="pre">dspy.ChainOfThought(</span></code>, etc.</p>
+<p><strong>Q: Where are LSP logs?</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>~/.cache/dspygen/lsp.log
+</pre></div>
+</div>
+</section>
+<section id="testing">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Testing</a><a class="headerlink" href="#testing" title="Link to this heading"></a></h2>
+<p><strong>Q: How do I run only the fast tests?</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w">  </span><span class="c1"># uses default addopts: excludes slow/benchmark/requires_openai</span>
+</pre></div>
+</div>
+<p><strong>Q: How do I run the full test suite?</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-m<span class="w"> </span><span class="s2">""</span><span class="w">  </span><span class="c1"># remove mark filters</span>
+<span class="c1"># or:</span>
+pytest<span class="w"> </span>--co<span class="w"> </span>-q<span class="w">  </span><span class="c1"># see what would run</span>
+</pre></div>
+</div>
+<p><strong>Q: Tests fail with “No module named ‘dspygen’”</strong></p>
+<p>Ensure the package is installed: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code>
+Or run via <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">pytest</span></code>.</p>
+</section>
+<section id="rdddy">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">RDDDY</a><a class="headerlink" href="#rdddy" title="Link to this heading"></a></h2>
+<p><strong>Q: What is RDDDY?</strong></p>
+<p>Reactive Domain-Driven Design with Inhabitants — a framework for building event-driven systems with explicit domain models (Commands, Events, Queries, Aggregates, Sagas, Policies).</p>
+<p><strong>Q: How does RDDDY relate to DSPy?</strong></p>
+<p>RDDDY provides the <em>structural</em> layer (domain objects, message passing). DSPy provides the <em>intelligence</em> layer (LLM predictions). They compose naturally — a RDDDY Command handler can call a DSPy Module.</p>
+</section>
+<section id="performance">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Performance</a><a class="headerlink" href="#performance" title="Link to this heading"></a></h2>
+<p><strong>Q: Module imports are slow</strong></p>
+<p>Use lazy imports. The dspygen modules are designed to import quickly; the LLM call happens only when <code class="docutils literal notranslate"><span class="pre">forward()</span></code> is invoked.</p>
+<p><strong>Q: How do I profile a pipeline?</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>cProfile<span class="w"> </span>-s<span class="w"> </span>cumulative<span class="w"> </span>-m<span class="w"> </span>dspygen<span class="w"> </span>pipeline<span class="w"> </span>run<span class="w"> </span>pipeline.yaml
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cookbook.html" class="btn btn-neutral float-left" title="Cookbook" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="adr/0001-use-dspy-as-llm-framework.html" class="btn btn-neutral float-right" title="ADR-0001: Use DSPy as the Core LLM Framework" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sean Chatman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

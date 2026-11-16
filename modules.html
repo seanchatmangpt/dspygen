@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DSPyGen Modules &mdash; DSPyGen 2024.9.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=769f078a"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Reactive Domain-Driven Design (RDDDY)" href="rdddy.html" />
+    <link rel="prev" title="Quick Start" href="quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DSPyGen
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Concepts</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DSPyGen Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-custom-module">Creating a Custom Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#available-modules">Available Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#content-generation">Content Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#classification-and-analysis">Classification and Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lifecycle">Module Lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optimization">Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rdddy.html">Reactive Domain-Driven Design (RDDDY)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Integrations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mcp.html">MCP Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">LSP Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture Decisions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adr/0001-use-dspy-as-llm-framework.html">ADR-0001: Use DSPy as the Core LLM Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0002-mcp-for-tool-integration.html">ADR-0002: Use MCP for Claude Desktop Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0003-pygls-for-lsp.html">ADR-0003: Use pygls for the Language Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0004-rdddy-for-domain-modeling.html">ADR-0004: RDDDY for Domain Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0005-poetry-for-packaging.html">ADR-0005: Poetry for Package Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">Modules API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/agents.html">Agents API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/rdddy.html">RDDDY API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/mcp.html">MCP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/lsp.html">LSP API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DSPyGen</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">DSPyGen Modules</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dspygen-modules">
+<h1>DSPyGen Modules<a class="headerlink" href="#dspygen-modules" title="Link to this heading"></a></h1>
+<p>DSPyGen modules are self-contained DSPy programs that encapsulate a specific language model task.
+Each module defines typed input and output fields, an optional few-shot signature, and a <code class="docutils literal notranslate"><span class="pre">forward</span></code>
+method that executes the task against the configured language model.</p>
+<p id="module-dspygen.modules">DSPyGen module package and bounded legacy compatibility admission.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Modules follow a consistent interface:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.utils.dspy_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.modules.blog_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlogModule</span>
+
+<span class="n">init_dspy</span><span class="p">()</span>
+
+<span class="n">module</span> <span class="o">=</span> <span class="n">BlogModule</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">"My Topic"</span><span class="p">,</span> <span class="n">tone</span><span class="o">=</span><span class="s2">"professional"</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="s2">"medium"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">blog_post</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Every module also exposes a top-level <code class="docutils literal notranslate"><span class="pre">invoke()</span></code> helper for one-liner usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.modules.blog_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">invoke</span>
+
+<span class="n">post</span> <span class="o">=</span> <span class="n">invoke</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">"My Topic"</span><span class="p">,</span> <span class="n">tone</span><span class="o">=</span><span class="s2">"professional"</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="s2">"medium"</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="creating-a-custom-module">
+<h2>Creating a Custom Module<a class="headerlink" href="#creating-a-custom-module" title="Link to this heading"></a></h2>
+<p>Use the CLI to scaffold a new module:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dspygen<span class="w"> </span>modules<span class="w"> </span>new<span class="w"> </span>my_task_module
+</pre></div>
+</div>
+<p>This generates <code class="docutils literal notranslate"><span class="pre">src/dspygen/modules/my_task_module.py</span></code> with a class stub, typed signature,
+and <code class="docutils literal notranslate"><span class="pre">invoke</span></code> entry point you can fill in.</p>
+<p>Alternatively, subclass <code class="docutils literal notranslate"><span class="pre">dspy.Module</span></code> directly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.utils.dspy_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_dspy</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MySignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Perform my custom task."""</span>
+    <span class="n">input_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">"The input text"</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">"The processed result"</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyModule</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predict</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">MySignature</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">input_text</span><span class="o">=</span><span class="n">input_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="available-modules">
+<h2>Available Modules<a class="headerlink" href="#available-modules" title="Link to this heading"></a></h2>
+<p>DSPyGen provides over 127 pre-built modules organized by task domain.</p>
+<section id="content-generation">
+<h3>Content Generation<a class="headerlink" href="#content-generation" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+</tbody>
+</table>
+</section>
+<section id="classification-and-analysis">
+<h3>Classification and Analysis<a class="headerlink" href="#classification-and-analysis" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+</tbody>
+</table>
+</section>
+<section id="utilities">
+<h3>Utilities<a class="headerlink" href="#utilities" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+</tbody>
+</table>
+</section>
+</section>
+<section id="module-lifecycle">
+<h2>Module Lifecycle<a class="headerlink" href="#module-lifecycle" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Instantiation</strong> — The module is created and its internal DSPy predictor(s) are initialized.</p></li>
+<li><p><strong>Forward call</strong> — <code class="docutils literal notranslate"><span class="pre">forward(**kwargs)</span></code> is invoked with typed keyword arguments.</p></li>
+<li><p><strong>Prediction</strong> — The underlying <code class="docutils literal notranslate"><span class="pre">dspy.Predict</span></code> or <code class="docutils literal notranslate"><span class="pre">dspy.ChainOfThought</span></code> sends a prompt to the LM.</p></li>
+<li><p><strong>Result</strong> — A <code class="docutils literal notranslate"><span class="pre">dspy.Prediction</span></code> object is returned with output fields as attributes.</p></li>
+</ol>
+</section>
+<section id="optimization">
+<h2>Optimization<a class="headerlink" href="#optimization" title="Link to this heading"></a></h2>
+<p>Modules are compatible with DSPy’s built-in optimizers (<code class="docutils literal notranslate"><span class="pre">BootstrapFewShot</span></code>, <code class="docutils literal notranslate"><span class="pre">MIPROv2</span></code>, etc.).
+Wrap your module in an optimizer to automatically improve its few-shot demonstrations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompt</span><span class="w"> </span><span class="kn">import</span> <span class="n">BootstrapFewShot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.modules.blog_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlogModule</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">prediction</span><span class="o">.</span><span class="n">blog_post</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">200</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">BootstrapFewShot</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">)</span>
+<span class="n">compiled_module</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">BlogModule</span><span class="p">(),</span> <span class="n">trainset</span><span class="o">=</span><span class="n">my_trainset</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quick Start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rdddy.html" class="btn btn-neutral float-right" title="Reactive Domain-Driven Design (RDDDY)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sean Chatman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

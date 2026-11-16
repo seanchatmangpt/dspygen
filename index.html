@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DSPyGen Documentation &mdash; DSPyGen 2024.9.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=769f078a"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            DSPyGen
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Concepts</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">DSPyGen Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdddy.html">Reactive Domain-Driven Design (RDDDY)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Integrations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mcp.html">MCP Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">LSP Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture Decisions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adr/0001-use-dspy-as-llm-framework.html">ADR-0001: Use DSPy as the Core LLM Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0002-mcp-for-tool-integration.html">ADR-0002: Use MCP for Claude Desktop Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0003-pygls-for-lsp.html">ADR-0003: Use pygls for the Language Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0004-rdddy-for-domain-modeling.html">ADR-0004: RDDDY for Domain Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0005-poetry-for-packaging.html">ADR-0005: Poetry for Package Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">Modules API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/agents.html">Agents API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/rdddy.html">RDDDY API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/mcp.html">MCP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/lsp.html">LSP API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">DSPyGen</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">DSPyGen Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dspygen-documentation">
+<h1>DSPyGen Documentation<a class="headerlink" href="#dspygen-documentation" title="Link to this heading"></a></h1>
+<p>A Ruby on Rails style framework for DSPy (Demonstrate, Search, Predict) for Language Models.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#shell-completions">Shell Completions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#initialize-dspy">1. Initialize DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#run-a-module">2. Run a Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#end-to-end-example">3. End-to-End Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#run-a-pipeline-with-yaml">4. Run a Pipeline with YAML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#use-dspygen-in-jupyter">5. Use DSPyGen in Jupyter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#use-the-cli">6. Use the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Core Concepts</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">DSPyGen Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#creating-a-custom-module">Creating a Custom Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#available-modules">Available Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-lifecycle">Module Lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#optimization">Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rdddy.html">Reactive Domain-Driven Design (RDDDY)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rdddy.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdddy.html#core-concepts">Core Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdddy.html#the-actor-system">The Actor System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdddy.html#ai-augmented-decision-making">AI-Augmented Decision Making</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdddy.html#testing-rdddy-components">Testing RDDDY Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdddy.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Integrations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mcp.html">MCP Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mcp.html#what-is-mcp">What is MCP?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mcp.html#starting-the-mcp-server">Starting the MCP Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mcp.html#tools-exposed">Tools Exposed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mcp.html#resources">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mcp.html#prompts">Prompts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mcp.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mcp.html#security-considerations">Security Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mcp.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">LSP Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lsp.html#what-is-lsp">What is LSP?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lsp.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lsp.html#starting-the-server">Starting the Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lsp.html#ide-configuration">IDE Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lsp.html#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lsp.html#configuration-options">Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lsp.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#basic-module-generation">Basic Module Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#sql-from-natural-language">SQL from Natural Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#chain-of-thought-reasoning">Chain of Thought Reasoning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#mcp-tool-integration">MCP Tool Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#batch-processing-with-pipelines">Batch Processing with Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#rdddy-domain-modeling">RDDDY Domain Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#lsp-in-vs-code">LSP in VS Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#health-check">Health Check</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#modules">Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#mcp-server">MCP Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#lsp-server">LSP Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#rdddy">RDDDY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#performance">Performance</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Architecture Decisions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adr/0001-use-dspy-as-llm-framework.html">ADR-0001: Use DSPy as the Core LLM Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0002-mcp-for-tool-integration.html">ADR-0002: Use MCP for Claude Desktop Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0003-pygls-for-lsp.html">ADR-0003: Use pygls for the Language Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0004-rdddy-for-domain-modeling.html">ADR-0004: RDDDY for Domain Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0005-poetry-for-packaging.html">ADR-0005: Poetry for Package Management</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">Modules API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/modules.html#individual-modules">Individual Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/agents.html">Agents API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/rdddy.html">RDDDY API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/rdddy.html#base-classes">Base Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/rdddy.html#actor-system">Actor System</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/mcp.html">MCP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/lsp.html">LSP API</a></li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sean Chatman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

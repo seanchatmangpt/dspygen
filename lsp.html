@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LSP Server &mdash; DSPyGen 2024.9.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=769f078a"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Cookbook" href="cookbook.html" />
+    <link rel="prev" title="MCP Server" href="mcp.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DSPyGen
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Concepts</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">DSPyGen Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdddy.html">Reactive Domain-Driven Design (RDDDY)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Integrations</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="mcp.html">MCP Server</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">LSP Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-lsp">What is LSP?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-the-server">Starting the Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ide-configuration">IDE Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vs-code">VS Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neovim">Neovim</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#emacs">Emacs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sublime-text">Sublime Text</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#auto-completion">Auto-Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hover-documentation">Hover Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#go-to-definition">Go-to Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inline-diagnostics">Inline Diagnostics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-actions">Code Actions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-options">Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api-reference">API Reference</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture Decisions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adr/0001-use-dspy-as-llm-framework.html">ADR-0001: Use DSPy as the Core LLM Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0002-mcp-for-tool-integration.html">ADR-0002: Use MCP for Claude Desktop Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0003-pygls-for-lsp.html">ADR-0003: Use pygls for the Language Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0004-rdddy-for-domain-modeling.html">ADR-0004: RDDDY for Domain Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0005-poetry-for-packaging.html">ADR-0005: Poetry for Package Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">Modules API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/agents.html">Agents API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/rdddy.html">RDDDY API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/mcp.html">MCP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/lsp.html">LSP API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DSPyGen</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">LSP Server</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/lsp.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lsp-server">
+<h1>LSP Server<a class="headerlink" href="#lsp-server" title="Link to this heading"></a></h1>
+<p>DSPyGen includes a <a class="reference external" href="https://microsoft.github.io/language-server-protocol/">Language Server Protocol (LSP)</a>
+server that provides AI-powered code intelligence for DSPy and DSPyGen projects directly inside
+your editor.</p>
+<section id="what-is-lsp">
+<h2>What is LSP?<a class="headerlink" href="#what-is-lsp" title="Link to this heading"></a></h2>
+<p>The Language Server Protocol is an open standard that defines how editors and IDEs communicate
+with language servers to provide features such as auto-completion, hover documentation, go-to
+definition, and inline diagnostics — all without editor-specific plugins.</p>
+<p>DSPyGen’s LSP server understands DSPy module signatures, pipeline YAML schemas, and dspygen
+configuration files, offering intelligent assistance as you write AI-powered code.</p>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>The LSP server is an optional extra. Install it with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"dspygen[lsp]"</span>
+</pre></div>
+</div>
+<p>Or with Poetry:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>add<span class="w"> </span><span class="s2">"dspygen[lsp]"</span>
+</pre></div>
+</div>
+</section>
+<section id="starting-the-server">
+<h2>Starting the Server<a class="headerlink" href="#starting-the-server" title="Link to this heading"></a></h2>
+<p>Start the LSP server from the command line:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dspygen<span class="w"> </span>lsp<span class="w"> </span>serve
+</pre></div>
+</div>
+<p>By default the server communicates over <code class="docutils literal notranslate"><span class="pre">stdio</span></code>. For TCP mode:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dspygen<span class="w"> </span>lsp<span class="w"> </span>serve<span class="w"> </span>--tcp<span class="w"> </span>--host<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>--port<span class="w"> </span><span class="m">2087</span>
+</pre></div>
+</div>
+<p>You can also start it programmatically:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.lsp.server</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_lsp_server</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+<span class="n">server</span> <span class="o">=</span> <span class="n">create_lsp_server</span><span class="p">()</span>
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">start_io</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="ide-configuration">
+<h2>IDE Configuration<a class="headerlink" href="#ide-configuration" title="Link to this heading"></a></h2>
+<section id="vs-code">
+<h3>VS Code<a class="headerlink" href="#vs-code" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Install the <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=seanchatmangpt.dspygen">DSPyGen VS Code extension</a>
+from the marketplace, <strong>or</strong> configure the generic <code class="docutils literal notranslate"><span class="pre">vscode-lsp-client</span></code> manually.</p></li>
+<li><p>Add to your VS Code <code class="docutils literal notranslate"><span class="pre">settings.json</span></code>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"dspygen.lsp.enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"dspygen.lsp.command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dspygen"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"dspygen.lsp.args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"lsp"</span><span class="p">,</span><span class="w"> </span><span class="s2">"serve"</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"dspygen.lsp.filetypes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"python"</span><span class="p">,</span><span class="w"> </span><span class="s2">"yaml"</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Reload the window. The status bar should show <strong>DSPyGen LSP: running</strong>.</p></li>
+</ol>
+</section>
+<section id="neovim">
+<h3>Neovim<a class="headerlink" href="#neovim" title="Link to this heading"></a></h3>
+<p>Using <code class="docutils literal notranslate"><span class="pre">nvim-lspconfig</span></code>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">lspconfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="p">(</span><span class="s2">"lspconfig"</span><span class="p">)</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">configs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="p">(</span><span class="s2">"lspconfig.configs"</span><span class="p">)</span>
+
+<span class="kr">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="nv">configs</span><span class="p">.</span><span class="py">dspygen</span><span class="w"> </span><span class="kr">then</span>
+<span class="w">  </span><span class="nv">configs</span><span class="p">.</span><span class="py">dspygen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">default_config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nv">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"dspygen"</span><span class="p">,</span><span class="w"> </span><span class="s2">"lsp"</span><span class="p">,</span><span class="w"> </span><span class="s2">"serve"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nv">filetypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"python"</span><span class="p">,</span><span class="w"> </span><span class="s2">"yaml"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nv">root_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">lspconfig</span><span class="p">.</span><span class="py">util</span><span class="p">.</span><span class="nf">root_pattern</span><span class="p">(</span><span class="s2">"pyproject.toml"</span><span class="p">,</span><span class="w"> </span><span class="s2">".git"</span><span class="p">),</span>
+<span class="w">      </span><span class="nv">settings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{},</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="kr">end</span>
+
+<span class="nv">lspconfig</span><span class="p">.</span><span class="py">dspygen</span><span class="p">.</span><span class="nf">setup</span><span class="p">({</span>
+<span class="w">  </span><span class="nv">on_attach</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="nv">client</span><span class="p">,</span><span class="w"> </span><span class="nv">bufnr</span><span class="p">)</span>
+<span class="w">    </span><span class="c1">-- your on_attach keybindings here</span>
+<span class="w">  </span><span class="kr">end</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>Using <code class="docutils literal notranslate"><span class="pre">mason.nvim</span></code>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="nb">require</span><span class="p">(</span><span class="s2">"mason-lspconfig"</span><span class="p">).</span><span class="nf">setup</span><span class="p">({</span>
+<span class="w">  </span><span class="nv">ensure_installed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"dspygen"</span><span class="w"> </span><span class="p">},</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</section>
+<section id="emacs">
+<h3>Emacs<a class="headerlink" href="#emacs" title="Link to this heading"></a></h3>
+<p>Using <code class="docutils literal notranslate"><span class="pre">eglot</span></code> (built-in since Emacs 29):</p>
+<div class="highlight-emacs-lisp notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="nb">with-eval-after-load</span><span class="w"> </span><span class="ss">'eglot</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">add-to-list</span><span class="w"> </span><span class="ss">'eglot-server-programs</span>
+<span class="w">               </span><span class="o">'</span><span class="p">((</span><span class="nv">python-mode</span><span class="w"> </span><span class="nv">python-ts-mode</span><span class="w"> </span><span class="nv">yaml-mode</span><span class="p">)</span>
+<span class="w">                 </span><span class="o">.</span><span class="w"> </span><span class="p">(</span><span class="s">"dspygen"</span><span class="w"> </span><span class="s">"lsp"</span><span class="w"> </span><span class="s">"serve"</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nv">add-hook</span><span class="w"> </span><span class="ss">'python-mode-hook</span><span class="w"> </span><span class="ss">'eglot-ensure</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">add-hook</span><span class="w"> </span><span class="ss">'yaml-mode-hook</span><span class="w"> </span><span class="ss">'eglot-ensure</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using <code class="docutils literal notranslate"><span class="pre">lsp-mode</span></code>:</p>
+<div class="highlight-emacs-lisp notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="nb">use-package</span><span class="w"> </span><span class="nv">lsp-mode</span>
+<span class="w">  </span><span class="nb">:hook</span><span class="w"> </span><span class="p">((</span><span class="nv">python-mode</span><span class="w"> </span><span class="o">.</span><span class="w"> </span><span class="nv">lsp-deferred</span><span class="p">)</span>
+<span class="w">         </span><span class="p">(</span><span class="nv">yaml-mode</span><span class="w">   </span><span class="o">.</span><span class="w"> </span><span class="nv">lsp-deferred</span><span class="p">))</span>
+<span class="w">  </span><span class="nb">:config</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">lsp-register-client</span>
+<span class="w">   </span><span class="p">(</span><span class="nv">make-lsp-client</span>
+<span class="w">    </span><span class="nb">:new-connection</span><span class="w"> </span><span class="p">(</span><span class="nv">lsp-stdio-connection</span><span class="w"> </span><span class="o">'</span><span class="p">(</span><span class="s">"dspygen"</span><span class="w"> </span><span class="s">"lsp"</span><span class="w"> </span><span class="s">"serve"</span><span class="p">))</span>
+<span class="w">    </span><span class="nb">:major-modes</span><span class="w"> </span><span class="o">'</span><span class="p">(</span><span class="nv">python-mode</span><span class="w"> </span><span class="nv">yaml-mode</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">:server-id</span><span class="w"> </span><span class="ss">'dspygen</span><span class="p">)))</span>
+</pre></div>
+</div>
+</section>
+<section id="sublime-text">
+<h3>Sublime Text<a class="headerlink" href="#sublime-text" title="Link to this heading"></a></h3>
+<p>Install the <code class="docutils literal notranslate"><span class="pre">LSP</span></code> package via Package Control, then add to <code class="docutils literal notranslate"><span class="pre">LSP.sublime-settings</span></code>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"clients"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"dspygen"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"dspygen"</span><span class="p">,</span><span class="w"> </span><span class="s2">"lsp"</span><span class="p">,</span><span class="w"> </span><span class="s2">"serve"</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"selector"</span><span class="p">:</span><span class="w"> </span><span class="s2">"source.python, source.yaml"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<section id="auto-completion">
+<h3>Auto-Completion<a class="headerlink" href="#auto-completion" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Module class names and their <code class="docutils literal notranslate"><span class="pre">forward()</span></code> parameter names.</p></li>
+<li><p>Pipeline YAML keys and allowed values.</p></li>
+<li><p>DSPy signature field types (<code class="docutils literal notranslate"><span class="pre">dspy.InputField</span></code>, <code class="docutils literal notranslate"><span class="pre">dspy.OutputField</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">init_dspy()</span></code> / <code class="docutils literal notranslate"><span class="pre">init_ol()</span></code> keyword arguments.</p></li>
+</ul>
+</section>
+<section id="hover-documentation">
+<h3>Hover Documentation<a class="headerlink" href="#hover-documentation" title="Link to this heading"></a></h3>
+<p>Hovering over a module class, signature field, or pipeline key shows:</p>
+<ul class="simple">
+<li><p>The class or field docstring.</p></li>
+<li><p>Accepted types and default values.</p></li>
+<li><p>Links to the online API documentation.</p></li>
+</ul>
+</section>
+<section id="go-to-definition">
+<h3>Go-to Definition<a class="headerlink" href="#go-to-definition" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Jump from a module import to its source file.</p></li>
+<li><p>Jump from a pipeline step name to the corresponding module class.</p></li>
+</ul>
+</section>
+<section id="inline-diagnostics">
+<h3>Inline Diagnostics<a class="headerlink" href="#inline-diagnostics" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Missing required pipeline fields highlighted as errors.</p></li>
+<li><p>Deprecated module names shown as warnings.</p></li>
+<li><p>Type mismatches between pipeline outputs and module inputs.</p></li>
+</ul>
+</section>
+<section id="code-actions">
+<h3>Code Actions<a class="headerlink" href="#code-actions" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Generate module stub</strong> — right-click a <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">TODO</span></code> comment inside a module file to scaffold
+the missing <code class="docutils literal notranslate"><span class="pre">forward()</span></code> implementation.</p></li>
+<li><p><strong>Optimize module</strong> — trigger a DSPy optimizer run directly from the editor.</p></li>
+</ul>
+</section>
+</section>
+<section id="configuration-options">
+<h2>Configuration Options<a class="headerlink" href="#configuration-options" title="Link to this heading"></a></h2>
+<p>All LSP settings can be placed in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> under <code class="docutils literal notranslate"><span class="pre">[tool.dspygen.lsp]</span></code>:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[tool.dspygen.lsp]</span>
+<span class="c1"># Log level: "debug" | "info" | "warning" | "error"</span>
+<span class="n">log_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"info"</span>
+
+<span class="c1"># Additional paths to search for modules</span>
+<span class="n">module_search_paths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"src/my_custom_modules"</span><span class="p">]</span>
+
+<span class="c1"># Disable specific diagnostics</span>
+<span class="n">disabled_diagnostics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"deprecated-module"</span><span class="p">]</span>
+
+<span class="c1"># Maximum number of completions to return</span>
+<span class="n">max_completions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span>
+</pre></div>
+</div>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<p>See <a class="reference internal" href="api/lsp.html"><span class="doc">LSP API</span></a> for full API documentation.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mcp.html" class="btn btn-neutral float-left" title="MCP Server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cookbook.html" class="btn btn-neutral float-right" title="Cookbook" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sean Chatman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

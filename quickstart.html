@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Start &mdash; DSPyGen 2024.9.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=769f078a"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="DSPyGen Modules" href="modules.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DSPyGen
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initialize-dspy">1. Initialize DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-a-module">2. Run a Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#end-to-end-example">3. End-to-End Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-a-pipeline-with-yaml">4. Run a Pipeline with YAML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-dspygen-in-jupyter">5. Use DSPyGen in Jupyter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-the-cli">6. Use the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Concepts</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">DSPyGen Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdddy.html">Reactive Domain-Driven Design (RDDDY)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Integrations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mcp.html">MCP Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">LSP Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture Decisions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adr/0001-use-dspy-as-llm-framework.html">ADR-0001: Use DSPy as the Core LLM Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0002-mcp-for-tool-integration.html">ADR-0002: Use MCP for Claude Desktop Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0003-pygls-for-lsp.html">ADR-0003: Use pygls for the Language Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0004-rdddy-for-domain-modeling.html">ADR-0004: RDDDY for Domain Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adr/0005-poetry-for-packaging.html">ADR-0005: Poetry for Package Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">Modules API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/agents.html">Agents API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/rdddy.html">RDDDY API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/mcp.html">MCP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/lsp.html">LSP API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DSPyGen</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quick Start</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h1>
+<p>This guide walks you through the most common DSPyGen workflows so you can be productive in minutes.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<p>Make sure DSPyGen is installed and your API key is set:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>dspygen
+<span class="nb">export</span><span class="w"> </span><span class="nv">OPENAI_API_KEY</span><span class="o">=</span><span class="s2">"sk-..."</span>
+</pre></div>
+</div>
+</section>
+<section id="initialize-dspy">
+<h2>1. Initialize DSPy<a class="headerlink" href="#initialize-dspy" title="Link to this heading"></a></h2>
+<p>DSPyGen wraps DSPy’s language model configuration with sensible defaults. The <code class="docutils literal notranslate"><span class="pre">init_dspy()</span></code> helper
+configures a language model and makes it globally available:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.utils.dspy_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_dspy</span>
+
+<span class="c1"># Use the default model (gpt-4o-mini)</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">init_dspy</span><span class="p">()</span>
+
+<span class="c1"># Specify a model explicitly</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">init_dspy</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"gpt-4o"</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To use a local Ollama model instead:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.utils.dspy_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_ol</span>
+
+<span class="c1"># Connect to a locally running Ollama instance</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">init_ol</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"llama3"</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">2048</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="run-a-module">
+<h2>2. Run a Module<a class="headerlink" href="#run-a-module" title="Link to this heading"></a></h2>
+<p>DSPyGen modules are self-contained DSPy programs that perform a specific task. Here is an example
+using the built-in <code class="docutils literal notranslate"><span class="pre">BlogModule</span></code> to generate a blog post:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.utils.dspy_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.modules.blog_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlogModule</span>
+
+<span class="c1"># Initialize the language model</span>
+<span class="n">init_dspy</span><span class="p">()</span>
+
+<span class="c1"># Instantiate and call the module</span>
+<span class="n">blog</span> <span class="o">=</span> <span class="n">BlogModule</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">blog</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">"Introduction to DSPy"</span><span class="p">,</span> <span class="n">tone</span><span class="o">=</span><span class="s2">"informative"</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="s2">"short"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">blog_post</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also use the <code class="docutils literal notranslate"><span class="pre">invoke</span></code> helper for a one-liner:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.modules.blog_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">invoke</span>
+
+<span class="n">post</span> <span class="o">=</span> <span class="n">invoke</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">"Introduction to DSPy"</span><span class="p">,</span> <span class="n">tone</span><span class="o">=</span><span class="s2">"informative"</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="s2">"short"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="end-to-end-example">
+<h2>3. End-to-End Example<a class="headerlink" href="#end-to-end-example" title="Link to this heading"></a></h2>
+<p>The following example shows a complete, self-contained workflow — from initialising
+the language model to running a module and composing modules with the pipe operator.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.utils.dspy_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_dspy</span>
+<span class="n">init_dspy</span><span class="p">()</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.modules.gen_dspy_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenDspyModule</span>
+
+<span class="c1"># Run the module end-to-end</span>
+<span class="n">module</span> <span class="o">=</span> <span class="n">GenDspyModule</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span>
+    <span class="n">signature</span><span class="o">=</span><span class="s2">"text -&gt; summary"</span><span class="p">,</span>
+    <span class="n">instructions</span><span class="o">=</span><span class="s2">"Summarize the input text in one sentence."</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Modules support the <strong>pipe operator</strong> (<code class="docutils literal notranslate"><span class="pre">|</span></code>) for left-to-right composition.
+The output of the left module is forwarded as the input to the right module:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.utils.dspy_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_dspy</span>
+<span class="n">init_dspy</span><span class="p">()</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.modules.blog_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlogModule</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.modules.summarize_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">SummarizeModule</span>
+
+<span class="c1"># Compose two modules with the | operator</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">BlogModule</span><span class="p">()</span> <span class="o">|</span> <span class="n">SummarizeModule</span><span class="p">()</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span>
+    <span class="n">topic</span><span class="o">=</span><span class="s2">"The future of AI-assisted software development"</span><span class="p">,</span>
+    <span class="n">tone</span><span class="o">=</span><span class="s2">"professional"</span><span class="p">,</span>
+    <span class="n">length</span><span class="o">=</span><span class="s2">"medium"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Each module’s <code class="docutils literal notranslate"><span class="pre">forward()</span></code> return value is passed directly to the next module’s
+first positional argument.  The final result is the output of the rightmost module.</p>
+</section>
+<section id="run-a-pipeline-with-yaml">
+<h2>4. Run a Pipeline with YAML<a class="headerlink" href="#run-a-pipeline-with-yaml" title="Link to this heading"></a></h2>
+<p>DSPyGen supports declarative pipelines defined in YAML. Create a file called <code class="docutils literal notranslate"><span class="pre">my_pipeline.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">pipeline</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">blog_pipeline</span>
+<span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dspygen.modules.blog_module.BlogModule</span>
+<span class="w">      </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">topic</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">        </span><span class="nt">tone</span><span class="p">:</span><span class="w"> </span><span class="s">"informative"</span>
+<span class="w">        </span><span class="nt">length</span><span class="p">:</span><span class="w"> </span><span class="s">"medium"</span>
+<span class="w">      </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">blog_post</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dspygen.modules.summarize_module.SummarizeModule</span>
+<span class="w">      </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">blog_post</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">      </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">summary</span>
+</pre></div>
+</div>
+<p>Then run it from Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspygen.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="s2">"my_pipeline.yaml"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">"Reactive Domain-Driven Design"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">"summary"</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Or from the CLI:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dspygen<span class="w"> </span>pipeline<span class="w"> </span>run<span class="w"> </span>my_pipeline.yaml<span class="w"> </span>--topic<span class="w"> </span><span class="s2">"Reactive Domain-Driven Design"</span>
+</pre></div>
+</div>
+</section>
+<section id="use-dspygen-in-jupyter">
+<h2>5. Use DSPyGen in Jupyter<a class="headerlink" href="#use-dspygen-in-jupyter" title="Link to this heading"></a></h2>
+<p>DSPyGen provides a Jupyter magic extension for interactive exploration. Load it in a notebook:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">load_ext</span> <span class="n">dspygen</span><span class="o">.</span><span class="n">jupyter_extension</span>
+</pre></div>
+</div>
+<p>Then use the <code class="docutils literal notranslate"><span class="pre">%%dspygen</span></code> cell magic to run a module inline:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">dspygen</span> <span class="n">BlogModule</span>
+<span class="n">topic</span><span class="p">:</span> <span class="s2">"Getting started with AI frameworks"</span>
+<span class="n">tone</span><span class="p">:</span> <span class="s2">"friendly"</span>
+<span class="n">length</span><span class="p">:</span> <span class="s2">"short"</span>
+</pre></div>
+</div>
+<p>The output is automatically displayed in the notebook and stored in the <code class="docutils literal notranslate"><span class="pre">_dspygen_result</span></code> variable.</p>
+</section>
+<section id="use-the-cli">
+<h2>6. Use the CLI<a class="headerlink" href="#use-the-cli" title="Link to this heading"></a></h2>
+<p>DSPyGen ships with a Typer-based CLI. Explore available commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dspygen<span class="w"> </span>--help
+</pre></div>
+</div>
+<p>List all available modules:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dspygen<span class="w"> </span>modules<span class="w"> </span>list
+</pre></div>
+</div>
+<p>Generate a new module scaffold:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dspygen<span class="w"> </span>modules<span class="w"> </span>new<span class="w"> </span>my_custom_module
+</pre></div>
+</div>
+<p>Run a specific module from the command line:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dspygen<span class="w"> </span>modules<span class="w"> </span>run<span class="w"> </span>blog_module<span class="w"> </span>--topic<span class="w"> </span><span class="s2">"AI trends"</span><span class="w"> </span>--tone<span class="w"> </span><span class="s2">"professional"</span>
+</pre></div>
+</div>
+<p>Start the MCP server:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dspygen<span class="w"> </span>mcp<span class="w"> </span>serve
+</pre></div>
+</div>
+<p>Start the LSP server:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dspygen<span class="w"> </span>lsp<span class="w"> </span>serve
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Read the <a class="reference internal" href="modules.html"><span class="doc">DSPyGen Modules</span></a> page to explore the full library of 127+ pre-built modules.</p></li>
+<li><p>Read the <a class="reference internal" href="rdddy.html"><span class="doc">Reactive Domain-Driven Design (RDDDY)</span></a> page to learn about the Reactive Domain-Driven Design framework.</p></li>
+<li><p>Read the <a class="reference internal" href="mcp.html"><span class="doc">MCP Server</span></a> page to integrate DSPyGen with AI tool-calling clients.</p></li>
+<li><p>Read the <a class="reference internal" href="lsp.html"><span class="doc">LSP Server</span></a> page to set up IDE support.</p></li>
+<li><p>Browse the <a class="reference internal" href="api/modules.html"><span class="doc">Modules API</span></a> reference for full API documentation.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="DSPyGen Modules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sean Chatman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

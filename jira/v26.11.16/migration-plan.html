@@ -1,0 +1,199 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dspygen migration plan v26.11.16 &mdash; DSPyGen 2024.9.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=769f078a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DSPyGen
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Concepts</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">DSPyGen Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdddy.html">Reactive Domain-Driven Design (RDDDY)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Integrations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../mcp.html">MCP Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lsp.html">LSP Server</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cookbook.html">Cookbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture Decisions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../adr/0001-use-dspy-as-llm-framework.html">ADR-0001: Use DSPy as the Core LLM Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adr/0002-mcp-for-tool-integration.html">ADR-0002: Use MCP for Claude Desktop Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adr/0003-pygls-for-lsp.html">ADR-0003: Use pygls for the Language Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adr/0004-rdddy-for-domain-modeling.html">ADR-0004: RDDDY for Domain Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adr/0005-poetry-for-packaging.html">ADR-0005: Poetry for Package Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">Modules API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/agents.html">Agents API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/rdddy.html">RDDDY API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/mcp.html">MCP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/lsp.html">LSP API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DSPyGen</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">dspygen migration plan v26.11.16</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/jira/v26.11.16/migration-plan.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dspygen-migration-plan-v26-11-16">
+<h1>dspygen migration plan v26.11.16<a class="headerlink" href="#dspygen-migration-plan-v26-11-16" title="Link to this heading"></a></h1>
+<p>Standing: UNVERIFIED</p>
+<section id="identity">
+<h2>Identity<a class="headerlink" href="#identity" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Path: /Users/sac/dev/dspygen</p></li>
+<li><p>Remote: https://github.com/seanchatmangpt/dspygen.git</p></li>
+<li><p>Branch: main&#64;5827495 (upstream origin/main)</p></li>
+<li><p>Last commit: 2026-09-26 (dependabot merges); commits: 295; size: 1631 MB</p></li>
+<li><p>Languages/build: Python (pyproject.toml, poetry.lock), Makefile, Docker, ggen.toml</p></li>
+<li><p>Nested repos: none</p></li>
+</ul>
+</section>
+<section id="observed-state">
+<h2>Observed state<a class="headerlink" href="#observed-state" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Dirty: 0; untracked: 0; ahead/behind: 0/0; stash: 0</p></li>
+<li><p>Unpushed local branches (1): modep/preserve-20260926T1256Z-dspygen (a “preserve: dirty
+worktree snapshot” branch — intentionally created to hold old dirt)</p></li>
+<li><p>Large tracked/untracked content: data/ 1.0G, codebase.md 411M, .git 134M, .lh 5.1M</p></li>
+<li><p>Local-only files: credentials.json, Chinook.db, .envDemo, .env.example, ngrok.yml,
+mcp_config.json, local_cache/, many *.log files, stray dirs (<code class="docutils literal notranslate"><span class="pre">pygame.quit()</span></code>, <code class="docutils literal notranslate"><span class="pre">path</span></code>)</p></li>
+<li><p>Submodules: none</p></li>
+</ul>
+</section>
+<section id="what-it-is">
+<h2>What it is<a class="headerlink" href="#what-it-is" title="Link to this heading"></a></h2>
+<p>DSPyGen: a Rails-inspired CLI for creating and deploying DSPy language-model pipelines.</p>
+</section>
+<section id="classification">
+<h2>Classification<a class="headerlink" href="#classification" title="Link to this heading"></a></h2>
+<p>ACTIVE (census) — recent activity is dependabot only; WARM would also be defensible.</p>
+</section>
+<section id="migration-risk">
+<h2>Migration risk<a class="headerlink" href="#migration-risk" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Unpushed preserve branch modep/preserve-20260926T1256Z-dspygen</p></li>
+<li><p>credentials.json (name only — likely an OAuth/service secret; never commit)</p></li>
+<li><p>data/ 1G and Chinook.db may be local-only datasets; codebase.md 411M is regenerable
+Rating: MEDIUM</p></li>
+</ul>
+</section>
+<section id="recommended-action">
+<h2>Recommended action<a class="headerlink" href="#recommended-action" title="Link to this heading"></a></h2>
+<p>COMMIT-PUSH</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/Users/sac/dev/dspygen</span> <span class="pre">&amp;&amp;</span> <span class="pre">git</span> <span class="pre">push</span> <span class="pre">-u</span> <span class="pre">origin</span> <span class="pre">modep/preserve-20260926T1256Z-dspygen</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">check-ignore</span> <span class="pre">-v</span> <span class="pre">credentials.json</span> <span class="pre">Chinook.db</span> <span class="pre">data</span> <span class="pre">codebase.md</span></code> — confirm ignored</p></li>
+<li><p>DECISION: credentials.json — move to password manager; do not rsync in plain form</p></li>
+<li><p>DECISION: data/ (1G) — rsync to archive volume if not re-downloadable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-f</span> <span class="pre">codebase.md</span> <span class="pre">*.log</span> <span class="pre">file_2024-*.log</span></code> and <code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-rf</span> <span class="pre">.venv</span> <span class="pre">local_cache</span> <span class="pre">.lh</span></code> before copy</p></li>
+<li><p>On new machine: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/seanchatmangpt/dspygen.git</span></code></p></li>
+</ol>
+</section>
+<section id="first-commands-on-the-new-machine">
+<h2>First commands on the new machine<a class="headerlink" href="#first-commands-on-the-new-machine" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">install</span> <span class="pre">&amp;&amp;</span> <span class="pre">make</span> <span class="pre">test</span></code> (or <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">pytest</span></code>)</p>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>/Users/sac/docs/jira/v26.11.16/README.md</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sean Chatman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
